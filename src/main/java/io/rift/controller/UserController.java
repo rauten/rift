@@ -1,24 +1,37 @@
 package io.rift.controller;
 
 
-import io.rift.model.User;
-import io.rift.service.UserService;
+import io.rift.model.Usertable;
+import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UsertableService usertableService;
 
+    @GetMapping
     @RequestMapping(method=RequestMethod.GET, value="/user/{id}")
-    public User getUser(@PathVariable Integer id) {
-        return userService.getUser(id);
+    public Usertable getUser(@PathVariable Integer id) throws SQLException {
+        return usertableService.getUserById(id);
     }
+
+    @PostMapping("/post")
+    public String helloPost(@RequestBody final String hello) {
+        return hello;
+    }
+
+    @PutMapping("/put")
+    public String helloPut(@RequestBody final String hello) {
+        return hello;
+    }
+
 
 
 }
