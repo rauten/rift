@@ -17,21 +17,9 @@ public class UserController {
     UsertableService usertableService;
 
     @GetMapping
-    @RequestMapping(method=RequestMethod.GET, value="/user/{id}")
-    public Usertable getUser(@PathVariable Integer id) throws SQLException {
+    @RequestMapping(method=RequestMethod.GET, value="/{id}")
+    public Usertable getUser(@PathVariable Integer id) {
         return usertableService.getUserById(id);
     }
-
-    @PostMapping("/post")
-    public String helloPost(@RequestBody final String hello) {
-        return hello;
-    }
-
-    @PutMapping("/put")
-    public String helloPut(@RequestBody final String hello) {
-        return hello;
-    }
-
-
 
 }

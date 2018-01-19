@@ -38,6 +38,8 @@ public class GameRequest {
         this.accepted = accepted;
     }
 
+    public GameRequest() {}
+
     public GameRequest(Integer rifteeId, Integer sessionId, boolean accepted) {
         this.rifteeId = rifteeId;
         this.sessionId = sessionId;

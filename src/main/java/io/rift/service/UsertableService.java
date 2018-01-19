@@ -72,7 +72,7 @@ public class UsertableService {
         System.out.println("**********");
     }
 
-    public Usertable getUserById(Integer id) throws SQLException {
+    public Usertable getUserById(Integer id) {
         return usertableRepository.findById(id);
     }
 
