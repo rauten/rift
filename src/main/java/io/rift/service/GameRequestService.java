@@ -6,6 +6,8 @@ import io.rift.repository.GameRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameRequestService {
 
@@ -16,12 +18,12 @@ public class GameRequestService {
         return gameRequestRepository.getGameRequestByRifteeIdAndSessionId(rifteeId, sessionId);
     }
 
-    public GameRequest getGameRequestByRifteeId(Integer rifteeId) {
-        return gameRequestRepository.getGameRequestByRifteeId(rifteeId);
+    public List<GameRequest> getGameRequestsByRifteeId(Integer rifteeId) {
+        return gameRequestRepository.getGameRequestsByRifteeId(rifteeId);
     }
 
-    public GameRequest getGameRequesetBySessionId(Integer sessionId) {
-        return gameRequestRepository.getGameRequestBySessionId(sessionId);
+    public List<GameRequest> getGameRequestsBySessionId(Integer sessionId) {
+        return gameRequestRepository.getGameRequestsByRifteeId(sessionId);
     }
 
 

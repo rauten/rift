@@ -6,6 +6,8 @@ import io.rift.service.GameRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/request")
 public class GameRequestController {
@@ -19,10 +21,11 @@ public class GameRequestController {
         return gameRequestService.getGameRequestByRifteeAndSessionId(rifteeId, sessionId);
     }
 
+
     @GetMapping
     @RequestMapping(method = RequestMethod.GET, value = "/{rifteeId}")
-    public GameRequest getGameRequestByRifteeId(@PathVariable Integer rifteeId) {
-        return gameRequestService.getGameRequestByRifteeId(rifteeId);
+    public List<GameRequest> getGameRequestsByRifteeId(@PathVariable Integer rifteeId) {
+        return gameRequestService.getGameRequestsByRifteeId(rifteeId);
     }
 
 

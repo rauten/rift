@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GameRequestRepository extends CrudRepository<GameRequest, Integer> {
 
@@ -14,9 +16,9 @@ public interface GameRequestRepository extends CrudRepository<GameRequest, Integ
     @Query("SELECT um FROM GameRequest um WHERE rifteeId = :rifteeId AND sessionId = :sessionId")
     GameRequest getGameRequestByRifteeIdAndSessionId(@Param("rifteeId") int rifteeId, @Param("sessionId") int sessionId);
 
-    GameRequest getGameRequestByRifteeId(Integer rifteeId);
+    List<GameRequest> getGameRequestsByRifteeId(Integer rifteeId);
 
-    GameRequest getGameRequestBySessionId(Integer sessionId);
+    List<GameRequest> getGameRequestsBySessionId(Integer sessionId);
 
 
 }
