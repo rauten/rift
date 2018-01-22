@@ -6,6 +6,8 @@ import io.rift.repository.GameRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 @Service
@@ -25,6 +27,7 @@ public class GameRequestService {
     public List<GameRequest> getGameRequestsBySessionId(Integer sessionId) {
         return gameRequestRepository.getGameRequestsByRifteeId(sessionId);
     }
+
 
 
 

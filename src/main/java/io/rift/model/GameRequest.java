@@ -1,5 +1,7 @@
 package io.rift.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -7,10 +9,13 @@ import javax.persistence.Id;
 public class GameRequest {
 
     @Id
+    @JsonProperty("riftee_id")
     private Integer rifteeId;
 
+    @JsonProperty("session_id")
     private Integer sessionId;
 
+    @JsonProperty("accepted")
     private boolean accepted;
 
 
