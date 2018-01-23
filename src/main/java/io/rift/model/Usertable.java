@@ -1,14 +1,28 @@
 package io.rift.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
+import javax.persistence.*;
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name = "usertable")
 public class Usertable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
     private String firstName;
@@ -24,13 +38,15 @@ public class Usertable {
     private Boolean isSuspended;
     private String profilePicturePath;
 
+    @OneToMany(mappedBy = "rifterGame", cascade = CascadeType.ALL)
+    @JsonSerialize(using = CustomListSerializer.class)
+    private List<Notification> notificationSet;
+
     public Usertable() {}
-
-
 
     public Usertable(Integer id, String firstName, String lastName, String riftTag, Timestamp birthdate, Boolean gender,
                 String twitchAccount, String youtubeAccount, Double rifterRating, Double rifteeRating,
-                Boolean isPrivate, Boolean isSuspended, String profilePicturePath) {
+                Boolean isPrivate, Boolean isSuspended, String profilePicturePath, List notificationSet) {
 
         this.id = id;
         this.firstName = firstName;
@@ -45,6 +61,7 @@ public class Usertable {
         this.isPrivate = isPrivate;
         this.isSuspended = isSuspended;
         this.profilePicturePath = profilePicturePath;
+        this.notificationSet = notificationSet;
     }
 
     public Integer getId() {
@@ -150,6 +167,10 @@ public class Usertable {
     public void setProfilePicturePath(String profilePicturePath) {
         this.profilePicturePath = profilePicturePath;
     }
+
+    public List getNotificationSet() { return notificationSet; }
+
+    public void setNotificationSet(List notificationSet) { this.notificationSet = notificationSet; }
 
 
 

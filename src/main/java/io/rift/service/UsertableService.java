@@ -47,6 +47,20 @@ public class UsertableService {
         return gameRequest;
     }
 
+    public ResultSet getUserNotifications(Integer rifteeId) throws SQLException {
+        String query = "SELECT * FROM usertable JOIN notification ON usertable.id = notification.user_id AND usertable.id = ?";
+        Connection connection = connectionService.connection;
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setObject(1, 1);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int i = 1;
+        while (resultSet.next()) {
+            System.out.println(resultSet.getObject(i).toString());
+            i++;
+        }
+        return resultSet;
+    }
+
 
     /*
     public User getUser(Integer id) {

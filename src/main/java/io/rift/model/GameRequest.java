@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import java.io.Serializable;
 
-@Entity
+@Entity @IdClass(GameRequest.GameRequestId.class)
 public class GameRequest {
 
     @Id
-    @JsonProperty("riftee_id")
     private Integer rifteeId;
 
-    @JsonProperty("session_id")
+    @Id
     private Integer sessionId;
 
-    @JsonProperty("accepted")
     private boolean accepted;
 
 
@@ -31,7 +31,7 @@ public class GameRequest {
         return sessionId;
     }
 
-    public void setSessionId(Integer sessionId) {
+    public void setSessionId(Integer session_id) {
         this.sessionId = sessionId;
     }
 
@@ -49,6 +49,11 @@ public class GameRequest {
         this.rifteeId = rifteeId;
         this.sessionId = sessionId;
         this.accepted = accepted;
+    }
+
+    class GameRequestId implements Serializable {
+        private Integer rifteeId;
+        private Integer sessionId;
     }
 
 
