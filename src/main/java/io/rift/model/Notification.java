@@ -1,9 +1,8 @@
 package io.rift.model;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -14,26 +13,54 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    @JsonView(Views.Public.class)
     private Integer id;
 
+    /*
+    @Column(name = "user_id")
+    private Integer userId;
+    */
+
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotification.class)
     private Usertable usertable;
 
+    @Column(name = "notification_type")
+    @JsonView(Views.Public.class)
     private String notificationType;
-    private String notificationContent;
-    private Timestamp datetime;
 
+    @Column(name = "notification_content")
+    @JsonView(Views.Public.class)
+    private String notificationContent;
+
+    //private String datetime;
+
+
+    @Column(name = "game_id")
+    @JsonView(Views.Public.class)
+    private Integer gameId;
+
+    /*
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private RifterGame rifterGame;
+    */
+
+    public Notification() {}
 
     public Notification(Integer id, Usertable usertable, String notificationType, String notificationContent,
-                        Timestamp datetime, RifterGame rifterGame) {
+                        Integer gameId) {
+        super();
         this.id = id;
+        //this.userId = userId;
         this.usertable = usertable;
         this.notificationType = notificationType;
         this.notificationContent = notificationContent;
-        this.datetime = datetime;
-        this.rifterGame = rifterGame;
+        //this.datetime = datetime;
+        this.gameId = gameId;
+        //this.rifterGame = rifterGame;
     }
 
     public Integer getId() {
@@ -44,13 +71,30 @@ public class Notification {
         this.id = id;
     }
 
+
+    /*
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+    */
+
+
+
     public Usertable getUsertable() {
         return usertable;
     }
 
+
     public void setUsertable(Usertable usertable) {
         this.usertable = usertable;
     }
+
+
+
 
     public String getNotificationType() {
         return notificationType;
@@ -68,14 +112,27 @@ public class Notification {
         this.notificationContent = notificationContent;
     }
 
-    public Timestamp getDatetime() {
+    /*
+    public String getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(Timestamp datetime) {
+    public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
+    */
 
+
+    public Integer getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(Integer gameId) {
+        this.gameId = gameId;
+    }
+
+
+    /*
     public RifterGame getRifterGame() {
         return rifterGame;
     }
@@ -83,4 +140,7 @@ public class Notification {
     public void setRifterGame(RifterGame rifterGame) {
         this.rifterGame = rifterGame;
     }
+    */
+
+
 }

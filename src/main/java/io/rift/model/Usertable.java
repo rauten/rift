@@ -2,6 +2,7 @@ package io.rift.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -22,37 +23,74 @@ public class Usertable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
+    @JsonView(Views.Public.class)
     private Integer id;
 
+    @Column(name = "first_name")
+    @JsonView(Views.Public.class)
     private String firstName;
+
+    @Column(name = "last_name")
+    @JsonView(Views.Public.class)
     private String lastName;
+
+    @Column(name = "rift_tag")
+    @JsonView(Views.Public.class)
     private String riftTag;
-    private Timestamp birthdate;
+
+    //private Timestamp birthdate;
+
+    @JsonView(Views.Public.class)
     private Boolean gender;
+
+    @Column(name = "twitch_account")
+    @JsonView(Views.Public.class)
     private String twitchAccount;
+
+    @Column(name = "youtube_account")
+    @JsonView(Views.Public.class)
     private String youtubeAccount;
+
+    @Column(name = "rifter_rating")
+    @JsonView(Views.Public.class)
     private Double rifterRating;
+
+    @Column(name = "riftee_rating")
+    @JsonView(Views.Public.class)
     private Double rifteeRating;
+
+    @Column(name = "is_private")
+    @JsonView(Views.Public.class)
     private Boolean isPrivate;
+
+    @Column(name = "is_suspended")
+    @JsonView(Views.Public.class)
     private Boolean isSuspended;
+
+    @Column(name = "profile_picture_path")
+    @JsonView(Views.Public.class)
     private String profilePicturePath;
 
-    @OneToMany(mappedBy = "rifterGame", cascade = CascadeType.ALL)
-    @JsonSerialize(using = CustomListSerializer.class)
-    private List<Notification> notificationSet;
+
+    @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user_id", referencedColumnName = "id")
+    //@JsonSerialize(using = CustomListSerializer.class)
+    @JsonView(Views.InternalUsertable.class)
+    private List<Notification> notificationList;
+
 
     public Usertable() {}
 
-    public Usertable(Integer id, String firstName, String lastName, String riftTag, Timestamp birthdate, Boolean gender,
+    public Usertable(Integer id, String firstName, String lastName, String riftTag, Boolean gender,
                 String twitchAccount, String youtubeAccount, Double rifterRating, Double rifteeRating,
-                Boolean isPrivate, Boolean isSuspended, String profilePicturePath, List notificationSet) {
-
+                Boolean isPrivate, Boolean isSuspended, String profilePicturePath) {
+        super();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.riftTag = riftTag;
-        this.birthdate = birthdate;
+        //this.birthdate = birthdate;
         this.gender = gender;
         this.twitchAccount = twitchAccount;
         this.youtubeAccount = youtubeAccount;
@@ -61,7 +99,16 @@ public class Usertable {
         this.isPrivate = isPrivate;
         this.isSuspended = isSuspended;
         this.profilePicturePath = profilePicturePath;
-        this.notificationSet = notificationSet;
+    }
+
+    public void addNotification(Notification notification) {
+        notificationList.add(notification);
+        notification.setUsertable(this);
+    }
+
+    public void removeNotification(Notification notification) {
+        notificationList.remove(notification);
+        notification.setUsertable(null);
     }
 
     public Integer getId() {
@@ -96,6 +143,7 @@ public class Usertable {
         this.riftTag = riftTag;
     }
 
+    /*
     public Timestamp getBirthdate() {
         return birthdate;
     }
@@ -103,6 +151,7 @@ public class Usertable {
     public void setBirthdate(Timestamp birthdate) {
         this.birthdate = birthdate;
     }
+    */
 
     public Boolean isGender() {
         return gender;
@@ -168,9 +217,10 @@ public class Usertable {
         this.profilePicturePath = profilePicturePath;
     }
 
-    public List getNotificationSet() { return notificationSet; }
+    public List getNotificationSet() { return notificationList; }
 
-    public void setNotificationSet(List notificationSet) { this.notificationSet = notificationSet; }
+    public void setNotificationSet(List notificationSet) { this.notificationList = notificationSet; }
+
 
 
 

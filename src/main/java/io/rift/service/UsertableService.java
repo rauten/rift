@@ -18,19 +18,22 @@ import java.util.HashMap;
 public class UsertableService {
 
     @Autowired
-    UsertableRepository usertableRepository;
+    private UsertableRepository usertableRepository;
 
+    /*
     @Autowired
     private SwaggerConfig swaggerConfig;
 
     @Autowired
     private ConnectionService connectionService;
+    */
 
     public Usertable getUserById(Integer id) {
         return usertableRepository.findById(id);
     }
 
 
+    /*
     public GameRequest getUserGameRequest(Integer rifteeId) throws SQLException {
         String query = "SELECT * FROM gamerequest WHERE rifteeid = ?";
         //String query = "SELECT * FROM Usertable NATURAL JOIN GameRequest WHERE "
