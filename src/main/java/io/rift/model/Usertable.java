@@ -74,10 +74,12 @@ public class Usertable {
 
 
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
-    //@JoinColumn(name = "user_id", referencedColumnName = "id")
-    //@JsonSerialize(using = CustomListSerializer.class)
-    @JsonView(Views.InternalUsertable.class)
+    @JsonView(Views.InternalUsertableUser.class)
     private List<Notification> notificationList;
+
+    @OneToMany(mappedBy = "creatorUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableCreator.class)
+    private List<Notification> creatorActivityList;
 
 
     public Usertable() {}
@@ -222,6 +224,11 @@ public class Usertable {
     public void setNotificationSet(List notificationSet) { this.notificationList = notificationSet; }
 
 
+    public List<Notification> getCreatorActivityList() {
+        return creatorActivityList;
+    }
 
-
+    public void setCreatorActivityList(List<Notification> creatorActivityList) {
+        this.creatorActivityList = creatorActivityList;
+    }
 }

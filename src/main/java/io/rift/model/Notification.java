@@ -17,26 +17,25 @@ public class Notification {
     @JsonView(Views.Public.class)
     private Integer id;
 
-    /*
-    @Column(name = "user_id")
-    private Integer userId;
-    */
-
+    /**
+     * User Id represents the user who is RECEIVING the notification
+     */
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @JsonView(Views.InternalNotification.class)
+    @JsonView(Views.InternalNotificationUser.class)
     private Usertable usertable;
 
-    @Column(name = "notification_type")
+    @Column(name = "user_id")
+    @JsonView(Views.InternalUsertableCreator.class)
+    private Integer userId;
+
+    @Column(name = "notification_type", nullable = false)
     @JsonView(Views.Public.class)
     private String notificationType;
 
-    @Column(name = "notification_content")
+    @Column(name = "notification_content", nullable = false)
     @JsonView(Views.Public.class)
     private String notificationContent;
-
-    //private String datetime;
-
 
     @Column(name = "game_id")
     @JsonView(Views.Public.class)
@@ -47,6 +46,19 @@ public class Notification {
     @JsonIgnore
     private RifterGame rifterGame;
     */
+
+    @Column(name = "created_time")
+    @JsonView(Views.Public.class)
+    private Timestamp createdTime;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotificationCreator.class)
+    private Usertable creatorUsertable;
+
+    @Column(name = "creator_id")
+    @JsonView(Views.InternalUsertableUser.class)
+    private Integer creatorId;
 
     public Notification() {}
 
@@ -129,6 +141,38 @@ public class Notification {
 
     public void setGameId(Integer gameId) {
         this.gameId = gameId;
+    }
+
+    public Integer getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public Timestamp getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Timestamp createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Usertable getCreatorUsertable() {
+        return creatorUsertable;
+    }
+
+    public void setCreatorUsertable(Usertable creatorUsertable) {
+        this.creatorUsertable = creatorUsertable;
     }
 
 

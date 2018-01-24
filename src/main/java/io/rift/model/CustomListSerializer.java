@@ -25,19 +25,16 @@ public class CustomListSerializer extends StdSerializer<List<Notification>> {
         List<Integer> ids = new ArrayList<>();
         List<String> notificationTypes = new ArrayList<>();
         List<String> notificationContents = new ArrayList<>();
-        List<Timestamp> datetimes = new ArrayList<>();
 
         for (Notification notification : notifications) {
             ids.add(notification.getId());
             notificationTypes.add(notification.getNotificationType());
             notificationContents.add(notification.getNotificationContent());
-            datetimes.add(notification.getDatetime());
         }
 
         generator.writeObject(ids);
         generator.writeObject(notificationTypes);
         generator.writeObject(notificationContents);
-        generator.writeObject(datetimes);
     }
 
 }

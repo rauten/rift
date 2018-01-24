@@ -24,12 +24,22 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object with notifications
      */
-    @JsonView(Views.InternalUsertable.class)
+    @JsonView(Views.InternalUsertableUser.class)
     @RequestMapping(method=RequestMethod.GET, value="/user/notifications/{id}")
     public Usertable getUserAndNotifications(@PathVariable Integer id) {
         return usertableService.getUserById(id);
     }
 
+    /**
+     * The result of a Usertable NATURAL JOIN Notification query (looking for activity)
+     * @param id The user id we want to get activity information for
+     * @return A User object with activities
+     */
+    @JsonView(Views.InternalUsertableCreator.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/activity/{id}")
+    public Usertable getUserAndActivity(@PathVariable Integer id) {
+        return usertableService.getUserById(id);
+    }
     /**
      * Just data from the usertable on query by id
      * @param id The user id we want to get information for
