@@ -40,6 +40,7 @@ public class UsertableController {
     public Usertable getUserAndActivity(@PathVariable Integer id) {
         return usertableService.getUserById(id);
     }
+
     /**
      * Just data from the usertable on query by id
      * @param id The user id we want to get information for
@@ -49,17 +50,17 @@ public class UsertableController {
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
     public Usertable getUser(@PathVariable Integer id) { return usertableService.getUserById(id); }
 
-    /*
-    @RequestMapping(method = RequestMethod.GET, value = "/gamerequest/{id}")
-    public GameRequest getUserGameRequest(@PathVariable Integer id) throws SQLException {
-        return usertableService.getUserGameRequest(id);
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}")
+    public Usertable findUserByFirstName(@PathVariable String firstName) {
+        return usertableService.getUserByFirstName(firstName);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/notification/{id}")
-    public ResultSet getUserNotifications(@PathVariable Integer id) throws SQLException {
-        ResultSet resultSet = usertableService.getUserNotifications(id);
-        return resultSet;
+    @JsonView(Views.InternalUsertableRG.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterGame")
+    public Usertable findUserAndGamesByFirstName(@PathVariable String firstName) {
+        return usertableService.getUserByFirstName(firstName);
     }
-    */
 
 }

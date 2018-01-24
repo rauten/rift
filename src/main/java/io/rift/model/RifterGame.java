@@ -1,10 +1,10 @@
 package io.rift.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.postgresql.util.PGInterval;
 
 @Entity
@@ -12,21 +12,65 @@ import org.postgresql.util.PGInterval;
 public class RifterGame {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    @JsonView(Views.Public.class)
     private Integer id;
 
+    @Column(name = "host_id")
+    @JsonView(Views.Public.class)
     private Integer hostId;
+
+    @Column(name = "num_slots")
+    @JsonView(Views.Public.class)
     private Integer numSlots;
+
+    @Column(name = "expiration_time")
+    @JsonView(Views.Public.class)
     private Timestamp expirationTime;
-    private Float gameCost;
+
+    @Column(name = "game_cost")
+    @JsonView(Views.Public.class)
+    private Double gameCost;
+
+    @Column(name = "method_of_contact")
+    @JsonView(Views.Public.class)
     private String methodOfContact;
+
+    @Column(name = "game_type")
+    @JsonView(Views.Public.class)
     private String gameType;
-    private PGInterval interval;
+
+    /*
+    @Column(name = "game_duration")
+    @JsonView(Views.Public.class)
+    private PGInterval gameDuration;
+    */
+
+
+    @JsonView(Views.Public.class)
     private String title;
+
+    @JsonView(Views.Public.class)
     private Integer hits;
+
+    @OneToMany(mappedBy = "rifterGameGR", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalRifterGameGR.class)
+    private List<GameRequest> gameRequests;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "host_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalRifterGameUsertable.class)
+    private Usertable usertable;
+
+
+    @OneToMany(mappedBy = "rifterGame", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalRifterGameNotification.class)
+    private List<Notification> notifications;
 
     public RifterGame() {}
 
-    public RifterGame(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Float gameCost, String methodOfContact, String gameType, PGInterval interval, String title, Integer hits) {
+    public RifterGame(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Double gameCost, String methodOfContact, String gameType, PGInterval gameDuration, String title, Integer hits) {
         this.id = id;
         this.hostId = hostId;
         this.numSlots = numSlots;
@@ -34,10 +78,22 @@ public class RifterGame {
         this.gameCost = gameCost;
         this.methodOfContact = methodOfContact;
         this.gameType = gameType;
-        this.interval = interval;
+        //this.gameDuration = gameDuration;
         this.title = title;
         this.hits = hits;
     }
+
+
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+        notification.setRifterGame(this);
+    }
+
+    public void removeNotification(Notification notification) {
+        notifications.remove(notification);
+        notification.setUsertable(null);
+    }
+
 
     public Integer getId() {
         return id;
@@ -71,11 +127,11 @@ public class RifterGame {
         this.expirationTime = expirationTime;
     }
 
-    public Float getGameCost() {
+    public Double getGameCost() {
         return gameCost;
     }
 
-    public void setGameCost(Float gameCost) {
+    public void setGameCost(Double gameCost) {
         this.gameCost = gameCost;
     }
 
@@ -95,13 +151,16 @@ public class RifterGame {
         this.gameType = gameType;
     }
 
-    public PGInterval getInterval() {
-        return interval;
+    /*
+    public PGInterval getGameDuration() {
+        return gameDuration;
     }
 
-    public void setInterval(PGInterval interval) {
-        this.interval = interval;
+    public void setGameDuration(PGInterval gameDuration) {
+        this.gameDuration = gameDuration;
     }
+    */
+
 
     public String getTitle() {
         return title;
@@ -118,4 +177,33 @@ public class RifterGame {
     public void setHits(Integer hits) {
         this.hits = hits;
     }
+
+    /*
+    public Set<GameRequest> getGameRequests() {
+        return gameRequests;
+    }
+
+    public void setGameRequests(Set<GameRequest> gameRequests) {
+        this.gameRequests = gameRequests;
+    }
+    */
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    /*
+    public Usertable getUsertable() {
+        return usertable;
+    }
+
+    public void setUsertable(Usertable usertable) {
+        this.usertable = usertable;
+    }
+    */
+
 }

@@ -1,21 +1,10 @@
 package io.rift.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import javax.persistence.*;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "usertable")
@@ -72,7 +61,6 @@ public class Usertable {
     @JsonView(Views.Public.class)
     private String profilePicturePath;
 
-
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableUser.class)
     private List<Notification> notificationList;
@@ -81,9 +69,18 @@ public class Usertable {
     @JsonView(Views.InternalUsertableCreator.class)
     private List<Notification> creatorActivityList;
 
+    @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableGR.class)
+    private List<GameRequest> gameRequests;
+
+    @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableRG.class)
+    private List<RifterGame> rifterGames;
+
 
     public Usertable() {}
 
+    /*
     public Usertable(Integer id, String firstName, String lastName, String riftTag, Boolean gender,
                 String twitchAccount, String youtubeAccount, Double rifterRating, Double rifteeRating,
                 Boolean isPrivate, Boolean isSuspended, String profilePicturePath) {
@@ -102,6 +99,7 @@ public class Usertable {
         this.isSuspended = isSuspended;
         this.profilePicturePath = profilePicturePath;
     }
+    */
 
     public void addNotification(Notification notification) {
         notificationList.add(notification);
@@ -231,4 +229,22 @@ public class Usertable {
     public void setCreatorActivityList(List<Notification> creatorActivityList) {
         this.creatorActivityList = creatorActivityList;
     }
+
+
+    public List<GameRequest> getGameRequests() {
+        return gameRequests;
+    }
+
+    public void setGameRequests(List<GameRequest> gameRequests) {
+        this.gameRequests = gameRequests;
+    }
+
+    public List<RifterGame> getRifterGames() {
+        return rifterGames;
+    }
+
+    public void setRifterGames(List<RifterGame> rifterGames) {
+        this.rifterGames = rifterGames;
+    }
+
 }

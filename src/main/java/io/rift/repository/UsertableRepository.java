@@ -14,4 +14,6 @@ public interface UsertableRepository extends JpaRepository<Usertable, Integer> {
 
     Usertable findById(Integer id);
 
+    Usertable findByFirstName(String firstName);
+
 }

@@ -141,6 +141,12 @@
             <version>5.2.12.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+        </dependency>
+
+
     </dependencies>
 
 

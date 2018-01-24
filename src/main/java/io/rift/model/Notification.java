@@ -1,9 +1,6 @@
 package io.rift.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -16,14 +13,6 @@ public class Notification {
     @Column(name = "id", nullable = false)
     @JsonView(Views.Public.class)
     private Integer id;
-
-    /**
-     * User Id represents the user who is RECEIVING the notification
-     */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @JsonView(Views.InternalNotificationUser.class)
-    private Usertable usertable;
 
     @Column(name = "user_id")
     @JsonView(Views.InternalUsertableCreator.class)
@@ -41,28 +30,37 @@ public class Notification {
     @JsonView(Views.Public.class)
     private Integer gameId;
 
-    /*
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    private RifterGame rifterGame;
-    */
-
     @Column(name = "created_time")
     @JsonView(Views.Public.class)
     private Timestamp createdTime;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "creator_id", insertable = false, updatable = false)
-    @JsonView(Views.InternalNotificationCreator.class)
-    private Usertable creatorUsertable;
 
     @Column(name = "creator_id")
     @JsonView(Views.InternalUsertableUser.class)
     private Integer creatorId;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotificationCreator.class)
+    private Usertable creatorUsertable;
+
+    /**
+     * User Id represents the user who is RECEIVING the notification
+     */
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotificationUser.class)
+    private Usertable usertable;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "game_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotificationRG.class)
+    private RifterGame rifterGame;
+
+
     public Notification() {}
 
-    public Notification(Integer id, Usertable usertable, String notificationType, String notificationContent,
+    /*
+    public Notification(Integer id, Usertable usertable, String notificationType, String notificationContent, Timestamp createdTime,
                         Integer gameId) {
         super();
         this.id = id;
@@ -74,6 +72,7 @@ public class Notification {
         this.gameId = gameId;
         //this.rifterGame = rifterGame;
     }
+    */
 
     public Integer getId() {
         return id;
@@ -104,9 +103,6 @@ public class Notification {
     public void setUsertable(Usertable usertable) {
         this.usertable = usertable;
     }
-
-
-
 
     public String getNotificationType() {
         return notificationType;
@@ -176,7 +172,6 @@ public class Notification {
     }
 
 
-    /*
     public RifterGame getRifterGame() {
         return rifterGame;
     }
@@ -184,7 +179,8 @@ public class Notification {
     public void setRifterGame(RifterGame rifterGame) {
         this.rifterGame = rifterGame;
     }
-    */
+
+
 
 
 }
