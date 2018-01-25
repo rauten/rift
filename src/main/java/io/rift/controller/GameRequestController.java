@@ -13,7 +13,7 @@ import java.util.List;
 public class GameRequestController {
 
     @Autowired
-    GameRequestService gameRequestService;
+    private GameRequestService gameRequestService;
 
     @GetMapping
     @RequestMapping(method = RequestMethod.GET, value = "/{rifteeId}-{sessionId}")

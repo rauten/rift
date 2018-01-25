@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class UsertableController {
 
     @Autowired
-    UsertableService usertableService;
+    private UsertableService usertableService;
 
     /**
      * The result of a Usertable NATURAL JOIN Notification query
@@ -49,6 +49,24 @@ public class UsertableController {
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
     public Usertable getUser(@PathVariable Integer id) { return usertableService.getUserById(id); }
+
+    @JsonView(Views.InternalUsertableFollowingFollowing.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followings")
+    public Usertable getUserAndFollowings(@PathVariable Integer id) {
+        return usertableService.getUserById(id);
+    }
+
+    @JsonView(Views.InternalUsertableFollowingFollower.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followers")
+    public Usertable getUserAndFollowers(@PathVariable Integer id) {
+        return usertableService.getUserById(id);
+    }
+
+    @JsonView(Views.InternalUsertableFollowingFollowerAndFollowing.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers")
+    public Usertable getUserAndFollowersAndFollowings(@PathVariable Integer id) {
+        return usertableService.getUserById(id);
+    }
 
 
     @JsonView(Views.Public.class)

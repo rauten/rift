@@ -29,5 +29,31 @@ public class Views {
 
     public interface InternalUsertableRG extends Public {}
 
-    public interface InternalNotificationUserCreator extends InternalNotificationUser, InternalNotificationCreator {}
+    public interface InternalUsertableFollowingFollower extends Public {}
+
+    public interface InternalUsertableFollowingFollowing extends Public {}
+
+    public interface InternalFollowingUsertableFollower extends Public {}
+
+    public interface InternalFollowingUsertableFollowing extends Public {}
+
+    public interface InternalUsertableFollowingFollowerAndFollowing extends Public {}
+
+    public interface InternalUsertableUserComplaintReceiver extends Public {}
+
+    public interface InternalUsertableUserComplaintSubmitter extends Public {}
+
+    public interface InternalUsertableUserRatingReceiver extends Public {}
+
+    public interface InternalUsertableUserRatingSubmitter extends Public {}
+
+    public interface InternalUserComplaintUsertableReceiver extends Public {}
+
+    public interface InternalUserComplaintUsertableSubmitter extends Public {}
+
+    public interface InternalUserRatingUsertableReceiver extends Public {}
+
+    public interface InternalUserRatingUsertableSubmitter extends Public {}
+
+
 }

@@ -15,7 +15,7 @@ public class Notification {
     private Integer id;
 
     @Column(name = "user_id")
-    @JsonView(Views.InternalUsertableCreator.class)
+    @JsonView(Views.Public.class)
     private Integer userId;
 
     @Column(name = "notification_type", nullable = false)
@@ -35,7 +35,7 @@ public class Notification {
     private Timestamp createdTime;
 
     @Column(name = "creator_id")
-    @JsonView(Views.InternalUsertableUser.class)
+    @JsonView(Views.Public.class)
     private Integer creatorId;
 
     @ManyToOne(cascade = CascadeType.ALL)

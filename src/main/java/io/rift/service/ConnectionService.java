@@ -31,42 +31,6 @@ public class ConnectionService {
         } catch (SQLException e) {
             System.out.println("SQLException io.swagger.DAOs.AndrewDAO.java line 32:\n " + e.getMessage());
         }
-        /*String query = "SELECT * FROM gamerequest WHERE rifteeid = ?";
-        //String query = "SELECT * FROM Usertable NATURAL JOIN GameRequest WHERE "
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setObject(1, 1);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        System.out.println(resultSet);*/
-        //xml parsing for sql queries
-        /*Document doc = null;
-
-        try {
-            System.out.println("Parsing sql.xml");
-
-            InputStream f = Thread.currentThread().getContextClassLoader().getResourceAsStream(sqlFile);
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            doc = dBuilder.parse(f);
-
-            doc.getDocumentElement().normalize();
-        } catch (Exception e) {
-            System.out.println("XML parsing error: " + e.getMessage());
-        }
-        //populating query hashmap for efficiency
-        try {
-            System.out.println("Preparing Statements");
-            queryDict = new HashMap<String, PreparedStatement>();
-            NodeList nl = doc.getElementsByTagName("*");
-            for (int i = 0; i < nl.getLength(); i++) {
-                Node n = nl.item(i);
-                System.out.println("Query: " + n.getNodeName());
-                queryDict.put(n.getNodeName(), connection.prepareStatement(n.getTextContent()));
-            }
-        } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
-        }
-        System.out.println("**********");
-        */
     }
 
 }

@@ -1,21 +1,43 @@
 package io.rift.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.crsh.cli.Man;
+
+import javax.persistence.*;
+import javax.swing.text.View;
 import java.io.Serializable;
 
-@Entity @IdClass(Following.FollowingId.class)
+@Entity
+@IdClass(Following.FollowingId.class)
+@Table(name = "following")
 public class Following {
 
     @Id
+    @Column(name = "follower_id")
+    @JsonView(Views.Public.class)
     private Integer followerId;
 
     @Id
+    @Column(name = "following_id")
+    @JsonView(Views.Public.class)
     private Integer followingId;
 
+    @JsonView(Views.Public.class)
     private boolean accepted;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "follower_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalFollowingUsertableFollower.class)
+    private Usertable followerUsertable;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "following_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalFollowingUsertableFollowing.class)
+    private Usertable followingUsertable;
+
+
+    public Following() {}
 
     public Following(Integer followerId, Integer followingId, boolean accepted) {
         this.followerId = followerId;
@@ -45,6 +67,22 @@ public class Following {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public Usertable getFollowingUsertable() {
+        return followingUsertable;
+    }
+
+    public void setFollowingUsertable(Usertable followingUsertable) {
+        this.followingUsertable = followingUsertable;
+    }
+
+    public Usertable getFollowerUsertable() {
+        return followerUsertable;
+    }
+
+    public void setFollowerUsertable(Usertable followerUsertable) {
+        this.followerUsertable = followerUsertable;
     }
 
     class FollowingId implements Serializable {

@@ -3,6 +3,7 @@ package io.rift.model;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import javax.swing.text.View;
 import java.util.List;
 
 
@@ -76,6 +77,30 @@ public class Usertable {
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableRG.class)
     private List<RifterGame> rifterGames;
+
+    @OneToMany(mappedBy = "followerUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableFollowingFollower.class)
+    private List<Following> followers;
+
+    @OneToMany(mappedBy = "followingUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableFollowingFollowing.class)
+    private List<Following> followings;
+
+    @OneToMany(mappedBy = "receiverUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableUserComplaintReceiver.class)
+    private List<UserComplaint> receiverComplaints;
+
+    @OneToMany(mappedBy = "submitterUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableUserComplaintSubmitter.class)
+    private List<UserComplaint> submitterComplaints;
+
+    @OneToMany(mappedBy = "riftUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableUserRatingReceiver.class)
+    private List<UserRating> riftReviews;
+
+    @OneToMany(mappedBy = "reviewerUsertable", cascade = CascadeType.ALL)
+    @JsonView(Views.InternalUsertableUserRatingSubmitter.class)
+    private List<UserRating> reviewerReviews;
 
 
     public Usertable() {}
@@ -247,4 +272,51 @@ public class Usertable {
         this.rifterGames = rifterGames;
     }
 
+    public List<Following> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Following> followers) {
+        this.followers = followers;
+    }
+
+    public List<Following> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(List<Following> followings) {
+        this.followings = followings;
+    }
+
+    public List<UserComplaint> getReceiverComplaints() {
+        return receiverComplaints;
+    }
+
+    public void setReceiverComplaints(List<UserComplaint> receiverComplaints) {
+        this.receiverComplaints = receiverComplaints;
+    }
+
+    public List<UserComplaint> getSubmitterComplaints() {
+        return submitterComplaints;
+    }
+
+    public void setSubmitterComplaints(List<UserComplaint> submitterComplaints) {
+        this.submitterComplaints = submitterComplaints;
+    }
+
+    public List<UserRating> getRiftReviews() {
+        return riftReviews;
+    }
+
+    public void setRiftReviews(List<UserRating> riftReviews) {
+        this.riftReviews = riftReviews;
+    }
+
+    public List<UserRating> getReviewerReviews() {
+        return reviewerReviews;
+    }
+
+    public void setReviewerReviews(List<UserRating> reviewerReviews) {
+        this.reviewerReviews = reviewerReviews;
+    }
 }

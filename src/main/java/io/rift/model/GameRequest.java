@@ -70,7 +70,7 @@ public class GameRequest {
         this.accepted = accepted;
     }
 
-    /*
+
     public Usertable getUsertable() {
         return usertable;
     }
@@ -78,9 +78,9 @@ public class GameRequest {
     public void setUsertable(Usertable usertable) {
         this.usertable = usertable;
     }
-    */
 
-    /*
+
+
     public RifterGame getRifterGame() {
         return rifterGameGR;
     }
@@ -88,7 +88,7 @@ public class GameRequest {
     public void setRifterGame(RifterGame rifterGame) {
         this.rifterGameGR = rifterGame;
     }
-    */
+
 
     class GameRequestId implements Serializable {
         private Integer rifteeId;
