@@ -1,9 +1,9 @@
 package io.rift.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import javax.swing.text.View;
 import java.util.List;
 
 
@@ -13,7 +13,7 @@ public class Usertable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     @JsonView(Views.Public.class)
     private Integer id;
 
@@ -62,6 +62,10 @@ public class Usertable {
     @JsonView(Views.Public.class)
     private String profilePicturePath;
 
+    //TODO: Should this be Public? I feel like we only want bio for Profile Page. It's also a huge field to retrieve
+    @JsonView(Views.ProfilePageView.class)
+    private String bio;
+
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableUser.class)
     private List<Notification> notificationList;
@@ -69,6 +73,7 @@ public class Usertable {
     @OneToMany(mappedBy = "creatorUsertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableCreator.class)
     private List<Notification> creatorActivityList;
+
 
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableGR.class)
@@ -101,6 +106,34 @@ public class Usertable {
     @OneToMany(mappedBy = "reviewerUsertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableUserRatingSubmitter.class)
     private List<UserRating> reviewerReviews;
+
+
+    /**
+     * Equivalent to:
+     * SELECT COUNT(*)
+     * FROM (
+     *      SELECT *
+     *      FROM gamerequest GR JOIN riftergame RG
+     *      ON GR.session_id = RG.id
+     *      WHERE RG.expiration_time <= current_timestamp) AS foo
+     * WHERE foo.accepted = true AND foo.riftee_id = ?
+     *
+     * Counts the number of games played
+     * TODO: Change expiration_time to game_time
+     */
+    @Formula("(select count(*) from gamerequest g join riftergame r on g.session_id = r.id" +
+            " where g.accepted = true and g.riftee_id = id and r.expiration_time <= current_timestamp)")
+    @JsonView(Views.ProfilePageView.class)
+    private Integer gamesPlayed;
+
+    @Formula("(select count(*) from following f where f.following_id = id)")
+    @JsonView(Views.ProfilePageView.class)
+    private Integer numberFollowing;
+
+    @Formula("(select count(*) from following f where f.follower_id = id)")
+    @JsonView(Views.ProfilePageView.class)
+    private Integer numberFollowers;
+
 
 
     public Usertable() {}
@@ -319,4 +352,23 @@ public class Usertable {
     public void setReviewerReviews(List<UserRating> reviewerReviews) {
         this.reviewerReviews = reviewerReviews;
     }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+
+    /*
+
+    SELECT COUNT(*)
+FROM (
+    SELECT *
+    FROM riftergame AS RG JOIN gamerequest AS GR
+    ON RG.id = GR.session_id
+    WHERE RG.expiration_time <= current_timestamp) AS foo
+     */
 }

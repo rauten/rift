@@ -47,7 +47,6 @@ public class RifterGame {
     private PGInterval gameDuration;
     */
 
-
     @JsonView(Views.Public.class)
     private String title;
 
@@ -178,15 +177,15 @@ public class RifterGame {
         this.hits = hits;
     }
 
-    /*
-    public Set<GameRequest> getGameRequests() {
+
+    public List<GameRequest> getGameRequests() {
         return gameRequests;
     }
 
-    public void setGameRequests(Set<GameRequest> gameRequests) {
+    public void setGameRequests(List<GameRequest> gameRequests) {
         this.gameRequests = gameRequests;
     }
-    */
+
 
     public List<Notification> getNotifications() {
         return notifications;
@@ -196,7 +195,7 @@ public class RifterGame {
         this.notifications = notifications;
     }
 
-    /*
+
     public Usertable getUsertable() {
         return usertable;
     }
@@ -204,6 +203,6 @@ public class RifterGame {
     public void setUsertable(Usertable usertable) {
         this.usertable = usertable;
     }
-    */
+
 
 }

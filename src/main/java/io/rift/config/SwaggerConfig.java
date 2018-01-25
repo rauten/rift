@@ -18,7 +18,6 @@ public class SwaggerConfig {
     @Bean
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
-        //return DataSourceBuilder.create().type(BasicDataSource.class).build();
         return DataSourceBuilder.create().build();
     }
 

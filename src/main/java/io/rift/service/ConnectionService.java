@@ -24,7 +24,6 @@ public class ConnectionService {
 
     @PostConstruct
     public void init() throws SQLException {
-        //Database connection
         try {
             System.out.println("**********\nConnecting to database");
             connection = swaggerConfig.dataSource().getConnection();

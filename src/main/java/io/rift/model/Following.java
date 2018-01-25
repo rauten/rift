@@ -2,10 +2,8 @@ package io.rift.model;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.crsh.cli.Man;
 
 import javax.persistence.*;
-import javax.swing.text.View;
 import java.io.Serializable;
 
 @Entity
@@ -85,7 +83,7 @@ public class Following {
         this.followerUsertable = followerUsertable;
     }
 
-    class FollowingId implements Serializable {
+    static class FollowingId implements Serializable {
         private Integer followerId;
         private Integer followingId;
     }

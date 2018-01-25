@@ -81,4 +81,10 @@ public class UsertableController {
         return usertableService.getUserByFirstName(firstName);
     }
 
+    @JsonView(Views.ProfilePageView.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/user/profile/{id}")
+    public Usertable getUserProfilePage(@PathVariable Integer id) {
+        return usertableService.getUserById(id);
+    }
+
 }

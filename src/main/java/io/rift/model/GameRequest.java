@@ -1,6 +1,5 @@
 package io.rift.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -22,21 +21,19 @@ public class GameRequest {
     private Integer sessionId;
 
     @JsonView(Views.Public.class)
-    private boolean accepted;
-
+    private Boolean accepted;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_id", insertable = false, updatable = false)
     @JsonView(Views.InternalGameRequestRG.class)
     private RifterGame rifterGameGR;
 
-
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "riftee_id", insertable = false, updatable = false)
     @JsonView(Views.InternalGameRequestUsertable.class)
     private Usertable usertable;
 
+    public GameRequest() {}
 
     public Integer getRifteeId() {
         return rifteeId;
@@ -58,13 +55,11 @@ public class GameRequest {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
     }
 
-    public GameRequest() {}
-
-    public GameRequest(Integer rifteeId, Integer sessionId, boolean accepted) {
+    public GameRequest(Integer rifteeId, Integer sessionId, Boolean accepted) {
         this.rifteeId = rifteeId;
         this.sessionId = sessionId;
         this.accepted = accepted;
@@ -90,7 +85,10 @@ public class GameRequest {
     }
 
 
-    class GameRequestId implements Serializable {
+    static class GameRequestId implements Serializable {
+
+        public GameRequestId() {}
+
         private Integer rifteeId;
         private Integer sessionId;
     }
