@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
+import java.util.List;
+
 @RestController
 public class NotificationController {
 
@@ -24,7 +27,7 @@ public class NotificationController {
     }
 
     @JsonView(Views.InternalNotificationRG.class)
-    @RequestMapping(method = RequestMethod.GET, value = "notification/{id}/rifterGame")
+    @RequestMapping(method = RequestMethod.GET, value = "/notification/{id}/rifterGame")
     public Notification getNotificationAndRifterGameById(@PathVariable Integer id) {
         return notificationService.getNotificationById(id);
     }

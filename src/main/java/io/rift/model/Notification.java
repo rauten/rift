@@ -1,6 +1,8 @@
 package io.rift.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -180,7 +182,15 @@ public class Notification {
         this.rifterGame = rifterGame;
     }
 
+    /*
+    public enum NotificationType {
 
+        FR, // Follow Request - Directed
+        GR, // Game Request - Directed
+        GP, // Game Posted - Broadcast
+        SS  // Stream Starting - Broadcast
 
+    }
+    */
 
 }

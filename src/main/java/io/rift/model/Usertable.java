@@ -74,6 +74,16 @@ public class Usertable {
     @JsonView(Views.InternalUsertableCreator.class)
     private List<Notification> creatorActivityList;
 
+    /**
+     * A dummy connection so that I can get broadcastNotifications from usertableService without having to make this
+     * field transient. Transient fields do not show up in JSON.
+     * Probably not the best way to do this, but it's what I'm going with for now.
+     * The join column is by 'id' for both tables, so there will only be one entry returned, so it's a pretty lightweight solution
+     * even though it's a bad one.
+     */
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonView(Views.ProfilePageView.class)
+    private List<Notification> broadcastNotifications;
 
     @OneToMany(mappedBy = "usertable", cascade = CascadeType.ALL)
     @JsonView(Views.InternalUsertableGR.class)
@@ -134,7 +144,7 @@ public class Usertable {
     @JsonView(Views.ProfilePageView.class)
     private Integer numberFollowers;
 
-
+    //private List<Notification> broadcsatNotifications = usertableService.getBroadcastNotifications(id);
 
     public Usertable() {}
 
@@ -361,14 +371,12 @@ public class Usertable {
         this.bio = bio;
     }
 
+    public List<Notification> getBroadcaastNotification() {
+        return broadcastNotifications;
+    }
 
-    /*
+    public void setBroadcoastNotification(List<Notification> broadcastNotifications) {
+        this.broadcastNotifications   = broadcastNotifications;
+    }
 
-    SELECT COUNT(*)
-FROM (
-    SELECT *
-    FROM riftergame AS RG JOIN gamerequest AS GR
-    ON RG.id = GR.session_id
-    WHERE RG.expiration_time <= current_timestamp) AS foo
-     */
 }

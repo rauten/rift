@@ -2,16 +2,20 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.rift.model.GameRequest;
+import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
 import io.rift.service.UsertableService;
 import org.bouncycastle.cert.ocsp.Req;
+import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 public class UsertableController {
@@ -84,7 +88,12 @@ public class UsertableController {
     @JsonView(Views.ProfilePageView.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/profile/{id}")
     public Usertable getUserProfilePage(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+        Usertable usertable = usertableService.getUserById(id);
+        List<Notification> notifications = usertableService.getBroadcastNotifications(id);
+        usertable.setBroadcoastNotification(notifications);
+        return usertable;
     }
+
+
 
 }

@@ -53,7 +53,7 @@ public class Views {
 
     public interface InternalUsertableUserRatingSubmitter extends Public {}
 
-    public interface ProfilePageView extends InternalUsertableGR, InternalUsertableRG {}
+    public interface ProfilePageView extends InternalUsertableGR, InternalUsertableRG, InternalUsertableCreator, InternalUsertableUser, InternalUsertableFollowingFollowing {}
 
 
     /*******************************************************/
