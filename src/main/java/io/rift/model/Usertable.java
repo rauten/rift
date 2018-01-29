@@ -1,15 +1,28 @@
 package io.rift.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Loader;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.*;
+
+import javax.persistence.Transient;
+
+import java.lang.Integer;
 
 
 @Entity
 @Table(name = "usertable")
-public class Usertable {
+@NamedNativeQuery(name = "getInt", query = "SELECT id FROM notification WHERE id = 1")
+public class Usertable implements Serializable {
+
+    private static final long serialVerionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -144,6 +157,18 @@ public class Usertable {
     @JsonView(Views.ProfilePageView.class)
     private Integer numberFollowers;
 
+    /*
+    @OneToMany(mappedBy = "broadcastNotification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Loader(namedQuery = "getNotifications")
+    @JsonView(Views.Public.class)
+    private Set<Notification> theNotificationList;
+    */
+
+    @Transient
+    @JsonView(Views.ProfilePageView.class)
+    private List<Notification> broadcastList;
+
+
     //private List<Notification> broadcsatNotifications = usertableService.getBroadcastNotifications(id);
 
     public Usertable() {}
@@ -168,6 +193,8 @@ public class Usertable {
         this.profilePicturePath = profilePicturePath;
     }
     */
+
+
 
     public void addNotification(Notification notification) {
         notificationList.add(notification);
@@ -285,7 +312,7 @@ public class Usertable {
         this.profilePicturePath = profilePicturePath;
     }
 
-    public List getNotificationSet() { return notificationList; }
+    public List<Notification> getNotificationSet() { return notificationList; }
 
     public void setNotificationSet(List notificationSet) { this.notificationList = notificationSet; }
 
@@ -378,5 +405,28 @@ public class Usertable {
     public void setBroadcoastNotification(List<Notification> broadcastNotifications) {
         this.broadcastNotifications   = broadcastNotifications;
     }
+
+    public List<Notification> getBroadcastList() {
+        return broadcastList;
+    }
+
+    public void setBroadcastList(List<Notification> broadcastList) {
+        this.broadcastList = broadcastList;
+    }
+
+    /*
+    private void readObject(ObjectInputStream in ) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        broadcastList = new ArrayList<Notification>();
+    }
+    */
+
+    /*
+    private void writeObject(ObjectOutputStream objectOutputStream) throws IOException {
+        broadcastList = notificationList;
+        objectOutputStream.defaultWriteObject();
+        objectOutputStream.writeObject(broadcastList);
+    }
+    */
 
 }

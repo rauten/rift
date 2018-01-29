@@ -1,7 +1,6 @@
 package io.rift.service;
 
 
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import io.rift.config.SwaggerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +19,6 @@ public class ConnectionService {
 
     public Connection connection;
 
-    private final String sqlFile = "BOOT-INF/classes/sql.xml";
-    private HashMap<String, PreparedStatement> queryDict;
-
     @PostConstruct
     public void init() throws SQLException {
         try {
@@ -31,9 +27,6 @@ public class ConnectionService {
         } catch (SQLException e) {
             System.out.println("SQLException io.swagger.DAOs.AndrewDAO.java line 32:\n " + e.getMessage());
         }
-
-        Hibernate4Module hm = new Hibernate4Module();
-        hm.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
 
     }
 

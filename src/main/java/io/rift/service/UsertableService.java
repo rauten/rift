@@ -53,10 +53,11 @@ public class UsertableService {
      */
     public List<Notification> getBroadcastNotifications(Integer id) {
 
-        String query = "SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id\n" +
-                "        FROM usertable u JOIN following f ON u.id = f.follower_id\n" +
-                "        JOIN notification n ON f.following_id = n.creator_id\n" +
-                "        WHERE u.id = ? AND n.notification_type = 'New Game';";
+        String query = "SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id, us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating\n" +
+                "FROM usertable u JOIN following f ON u.id = f.follower_id\n" +
+                "JOIN notification n ON f.following_id = n.creator_id\n" +
+                "JOIN usertable us ON n.creator_id = us.id\n" +
+                "WHERE u.id = ? AND n.notification_type = 'New Game';";
 
         try {
             PreparedStatement preparedStatement = connectionService.connection.prepareStatement(query);
@@ -74,6 +75,17 @@ public class UsertableService {
                 notification.setGameId(resultSet.getInt(i + 4));
                 notification.setCreatedTime(resultSet.getTimestamp(i + 5));
                 notification.setCreatorId(resultSet.getInt(i + 6));
+                Usertable usertable = new Usertable();
+                usertable.setId(notification.getCreatorId());
+                usertable.setFirstName(resultSet.getString(8));
+                usertable.setLastName(resultSet.getString(9));
+                usertable.setPrivate(resultSet.getBoolean(10));
+                usertable.setSuspended(resultSet.getBoolean(11));
+                usertable.setProfilePicturePath(resultSet.getString(12));
+                usertable.setRiftTag(resultSet.getString(13));
+                usertable.setRifteeRating(resultSet.getDouble(14));
+                usertable.setRifterRating(resultSet.getDouble(15));
+                notification.setCreatorUsertable(usertable);
                 notifications.add(notification);
             }
             return notifications;

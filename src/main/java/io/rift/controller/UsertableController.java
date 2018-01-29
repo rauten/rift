@@ -72,7 +72,6 @@ public class UsertableController {
         return usertableService.getUserById(id);
     }
 
-
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}")
     public Usertable findUserByFirstName(@PathVariable String firstName) {
@@ -91,6 +90,7 @@ public class UsertableController {
         Usertable usertable = usertableService.getUserById(id);
         List<Notification> notifications = usertableService.getBroadcastNotifications(id);
         usertable.setBroadcoastNotification(notifications);
+        //usertable.setBroadcastList(notifications);
         return usertable;
     }
 

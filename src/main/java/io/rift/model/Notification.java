@@ -58,6 +58,12 @@ public class Notification {
     @JsonView(Views.InternalNotificationRG.class)
     private RifterGame rifterGame;
 
+    /*
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonView(Views.InternalNotificationUser.class)
+    private Usertable broadcastNotification;
+    */
 
     public Notification() {}
 
