@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+.navbar-fixed-top {
+  background-color: #293e49;
+  border: none;
+  color: white;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
