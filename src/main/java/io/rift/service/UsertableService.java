@@ -6,6 +6,7 @@ import io.rift.model.*;
 import io.rift.repository.UsertableRepository;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -26,6 +27,8 @@ public class UsertableService {
     @Autowired
     private ConnectionService connectionService;
 
+    /****************************** GET *******************************/
+    /******************************************************************/
     private final String getUserById = "getUserById";
     private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
     private final String getNumberFollowing = "getNumberFollowingById";
@@ -38,6 +41,13 @@ public class UsertableService {
     private final String getUserNotifications = "getUserNotifications";
     private final String getGameRequestsByUserAndAccepted = "getGameRequestsByUserAndAccepted";
     private final String getGameRequestsAndGameIinfoByUserId = "getGameRequestsAndGameIinfoByUserId";
+
+
+    /****************************** POST *******************************/
+    /*******************************************************************/
+    private final String createUser = "createUser";
+
+
 
     /*
     @Autowired
@@ -267,6 +277,12 @@ public class UsertableService {
         }
         return notifications;
 
+    }
+
+    public Boolean createUser(Usertable usertable) {
+        return usertableRepository.doInsert(createUser,
+                new Object[] {usertable.getFirstName(), usertable.getLastName(),
+                        usertable.getGender(), usertable.getRiftTag()});
     }
 
 

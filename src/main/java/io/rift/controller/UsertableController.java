@@ -3,6 +3,7 @@ package io.rift.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.GameRequest;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
@@ -11,6 +12,8 @@ import io.rift.service.UsertableService;
 import org.bouncycastle.cert.ocsp.Req;
 import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
@@ -31,8 +34,8 @@ public class UsertableController {
      */
 
     @JsonView(Views.InternalUsertableUser.class)
-    @RequestMapping(method=RequestMethod.GET, value="/user/notifications/{id}")
-    public Usertable getUserAndNotifications(@PathVariable Integer id) throws SQLException {
+    @RequestMapping(method=RequestMethod.GET, value="/user/direct_notifications/{id}")
+    public Usertable getUserAndDirectNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
@@ -106,6 +109,45 @@ public class UsertableController {
         usertable.setFollowings(usertableService.getFollowingsById(id));
         return usertable;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/broadcast_notifications")
+    public Usertable getUserAndBroadcastNotifications(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
+        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
+        return usertable;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/notifications")
+    public Usertable getUserAndNotifications(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
+        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
+        usertable.setNotificationList(usertableService.getUserNotifications(id));
+        return usertable;
+    }
+
+
+    /**
+     * Valid input:
+     * {
+     "firstName":"Steph",
+     "lastName":"Curry",
+     "gender":true,
+     "riftTag":"chefcurry"
+     }
+     *
+     * Can modify what input we want 
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/create_user")
+    Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
+        return usertableService.createUser(usertable);
+    }
+
 
     /*
     @JsonView(Views.Public.class)
