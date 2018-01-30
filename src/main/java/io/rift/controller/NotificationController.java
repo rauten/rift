@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class NotificationController {
 
     @Autowired
