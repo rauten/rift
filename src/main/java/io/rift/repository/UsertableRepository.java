@@ -18,9 +18,9 @@ public class UsertableRepository {
     @Autowired
     private ConnectionService connectionService;
 
-    HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
 
     public ResultSet doQuery(String queryName, Object[] args) throws SQLException {
+        HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
         PreparedStatement preparedStatement = queryDict.get(queryName);
         for (int i = 1; i <= args.length; i ++) {
             preparedStatement.setObject(i, args[i - 1]);
@@ -28,8 +28,19 @@ public class UsertableRepository {
         return preparedStatement.executeQuery();
     }
 
-    public void doInsert(String queryName, Object[] args) throws SQLException {
-        PreparedStatement preparedStatement = queryDict.get(queryName);
+    public boolean doInsert(String queryName, Object[] args) {
+        HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
+        try {
+            PreparedStatement preparedStatement = queryDict.get(queryName);
+            for (int i = 1; i <= args.length; i++) {
+                preparedStatement.setObject(i, args[i - 1]);
+            }
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
