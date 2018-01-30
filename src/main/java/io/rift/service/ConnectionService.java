@@ -51,7 +51,7 @@ public class ConnectionService {
         try {
             System.out.println("Preparing Statements");
             queryDict = new HashMap<String, PreparedStatement>();
-            NodeList nl = doc.getElementsByTagName("*");
+            NodeList nl = doc.getElementsByTagName("*");ç
             for (int i = 0; i < nl.getLength(); i++) {
                 Node n = nl.item(i);
                 System.out.println("Query: " + n.getNodeName());
