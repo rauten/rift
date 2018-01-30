@@ -11,8 +11,10 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    /*
     public Notification getNotificationById(Integer id) {
         return notificationRepository.getNotificationById(id);
     }
+    */
 
 }

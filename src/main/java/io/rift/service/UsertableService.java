@@ -2,11 +2,11 @@ package io.rift.service;
 
 
 import io.rift.config.SwaggerConfig;
-import io.rift.model.GameRequest;
-import io.rift.model.Notification;
-import io.rift.model.Usertable;
+import io.rift.model.*;
 import io.rift.repository.UsertableRepository;
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -24,8 +24,27 @@ public class UsertableService {
     private UsertableRepository usertableRepository;
 
 
-    @Autowired
-    private ConnectionService connectionService;
+    /****************************** GET *******************************/
+    /******************************************************************/
+    private final String getUserById = "getUserById";
+    private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
+    private final String getNumberFollowing = "getNumberFollowingById";
+    private final String getNumberFollowers = "getNumberFollowersById";
+    private final String getFollowersById = "getFollowersById";
+    private final String getBroadcastNotifications = "getBroadcastNotificationsById";
+    private final String getFollowingById = "getFollowingById";
+    private final String getRequestsByUser = "getRequestsByUser";
+    private final String getUserActivity = "getUserActivity";
+    private final String getUserNotifications = "getUserNotifications";
+    private final String getGameRequestsByUserAndAccepted = "getGameRequestsByUserAndAccepted";
+    private final String getGameRequestsAndGameIinfoByUserId = "getGameRequestsAndGameIinfoByUserId";
+
+
+    /****************************** POST *******************************/
+    /*******************************************************************/
+    private final String createUser = "createUser";
+
+
 
     /*
     @Autowired
@@ -35,11 +54,187 @@ public class UsertableService {
     private ConnectionService connectionService;
     */
 
-    public Usertable getUserById(Integer id) {
-        return usertableRepository.findById(id);
+    public Usertable getUserById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getUserById, args);
+        if (resultSet.next()) {
+            return populateUsertable(resultSet, 1);
+        }
+        return null;
     }
 
-    public Usertable getUserByFirstName(String name) { return usertableRepository.findByFirstName(name); }
+    public Usertable populateUsertable(ResultSet resultSet, int startPoint) throws SQLException {
+        Usertable usertable = new Usertable();
+        usertable.setId(resultSet.getInt(startPoint));
+        usertable.setFirstName(resultSet.getString(startPoint + 1));
+        usertable.setLastName(resultSet.getString(startPoint + 2));
+        usertable.setGender(resultSet.getBoolean(startPoint + 3));
+        usertable.setIsPrivate(resultSet.getBoolean(startPoint + 4));
+        usertable.setIsSuspended(resultSet.getBoolean(startPoint + 5));
+        usertable.setProfilePicturePath(resultSet.getString(startPoint + 6));
+        usertable.setRiftTag(resultSet.getString(startPoint + 7));
+        usertable.setRifteeRating(resultSet.getDouble(startPoint + 8));
+        usertable.setRifterRating(resultSet.getDouble(startPoint + 9));
+        usertable.setTwitchAccount(resultSet.getString(startPoint + 10));
+        usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
+        usertable.setBio(resultSet.getString(startPoint + 12));
+        return usertable;
+    }
+
+    public Integer getNumberGamesPlayedByUserId(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getNumberGamesPlayedByUserId, args);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return null;
+    }
+
+    public Integer getNumberFollowing(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getNumberFollowing, args);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return null;
+    }
+
+    public Integer getNumberFollowers(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getNumberFollowers, args);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return null;
+    }
+
+
+    public List<Following> getFollowingsById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getFollowersById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            followings.add(following);
+        }
+        return followings;
+    }
+
+    public List<Following> getFollowersById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getFollowingById, args);
+        List<Following> followers = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(resultSet.getInt(1));
+            following.setFollowingId(id);
+            following.setAccepted(resultSet.getBoolean(3));
+            followers.add(following);
+        }
+        return followers;
+    }
+
+    public List<GameRequest> getGameRequestsByUserId(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getRequestsByUser, args);
+        return populateGameRequests(resultSet);
+    }
+
+    public List<GameRequest> getGameRequestsByUserIdAndAccepted(Integer id, Boolean accepted) throws SQLException {
+        Object[] args = new Object[2];
+        args[0] = id;
+        args[1] = accepted;
+        ResultSet resultSet = usertableRepository.doQuery(getGameRequestsByUserAndAccepted, args);
+        return populateGameRequests(resultSet);
+    }
+
+    public List<GameRequest> getGameRequestsAndGameIinfoByUserId(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getGameRequestsAndGameIinfoByUserId, args);
+        return populateGameRequestsWithGameInfo(resultSet);
+    }
+
+    public List<Notification> getUserActivity(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getUserActivity, args);
+        return populateNotification(resultSet);
+    }
+
+    public List<Notification> getUserNotifications(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getUserNotifications, args);
+        return populateNotification(resultSet);
+    }
+
+    private List<Notification> populateNotification(ResultSet resultSet) throws SQLException {
+        List<Notification> notifications = new ArrayList<>();
+        while (resultSet.next()) {
+            Notification notification = new Notification();
+            notification.setId(resultSet.getInt(1));
+            notification.setUserId(resultSet.getInt(2));
+            notification.setNotificationType(resultSet.getString(3));
+            notification.setNotificationContent(resultSet.getString(4));
+            notification.setGameId(resultSet.getInt(5));
+            notification.setCreatedTime(resultSet.getTimestamp(6));
+            notification.setCreatorId(resultSet.getInt(7));
+            notifications.add(notification);
+        }
+        return notifications;
+    }
+
+    private List<GameRequest> populateGameRequests(ResultSet resultSet) throws SQLException {
+        List<GameRequest> gameRequests = new ArrayList<>();
+        while (resultSet.next()) {
+            GameRequest gameRequest = new GameRequest();
+            gameRequest.setRifteeId(resultSet.getInt(1));
+            gameRequest.setSessionId(resultSet.getInt(2));
+            gameRequest.setAccepted(resultSet.getBoolean(3));
+            gameRequests.add(gameRequest);
+        }
+        return gameRequests;
+    }
+
+    private List<GameRequest> populateGameRequestsWithGameInfo(ResultSet resultSet) throws SQLException {
+        List<GameRequest> gameRequests = new ArrayList<>();
+        while (resultSet.next()) {
+            GameRequest gameRequest = new GameRequest();
+            gameRequest.setRifteeId(resultSet.getInt(1));
+            gameRequest.setSessionId(resultSet.getInt(2));
+            gameRequest.setAccepted(resultSet.getBoolean(3));
+            RifterGame rifterGame = new RifterGame();
+            rifterGame.setId(resultSet.getInt(4));
+            rifterGame.setHostId(resultSet.getInt(5));
+            rifterGame.setNumSlots(resultSet.getInt(6));
+            rifterGame.setExpirationTime(resultSet.getTimestamp(7));
+            rifterGame.setGameCost(resultSet.getDouble(8));
+            rifterGame.setMethodOfContact(resultSet.getString(9));
+            rifterGame.setGameType(resultSet.getString(10));
+            rifterGame.setTitle(resultSet.getString(11));
+            rifterGame.setHits(resultSet.getInt(12));
+            rifterGame.setGameDuration((PGInterval)resultSet.getObject(13));
+            rifterGame.setGameTime(resultSet.getTimestamp(14));
+            gameRequest.setRifterGame(rifterGame);
+            gameRequests.add(gameRequest);
+        }
+        return gameRequests;
+    }
+
+
+
+    //public Usertable getUserByFirstName(String name) { return usertableRepository.findByFirstName(name); }
 
 
     /**
@@ -51,37 +246,43 @@ public class UsertableService {
      * @param id
      * @return
      */
-    public List<Notification> getBroadcastNotifications(Integer id) {
+    public List<Notification> getBroadcastNotifications(Integer id) throws SQLException {
 
-        String query = "SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id\n" +
-                "        FROM usertable u JOIN following f ON u.id = f.follower_id\n" +
-                "        JOIN notification n ON f.following_id = n.creator_id\n" +
-                "        WHERE u.id = ? AND n.notification_type = 'New Game';";
-
-        try {
-            PreparedStatement preparedStatement = connectionService.connection.prepareStatement(query);
-            preparedStatement.setObject(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println(resultSet);
-            int i = 1;
-            List<Notification> notifications = new ArrayList<>();
-            while (resultSet.next()) {
-                Notification notification = new Notification();
-                notification.setId(resultSet.getInt(i));
-                notification.setUserId(resultSet.getInt(i + 1));
-                notification.setNotificationType(resultSet.getString(i + 2));
-                notification.setNotificationContent(resultSet.getString(i + 3));
-                notification.setGameId(resultSet.getInt(i + 4));
-                notification.setCreatedTime(resultSet.getTimestamp(i + 5));
-                notification.setCreatorId(resultSet.getInt(i + 6));
-                notifications.add(notification);
-            }
-            return notifications;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getBroadcastNotifications, args);
+        int i = 1;
+        List<Notification> notifications = new ArrayList<>();
+        while (resultSet.next()) {
+            Notification notification = new Notification();
+            notification.setId(resultSet.getInt(1));
+            notification.setUserId(resultSet.getInt(2));
+            notification.setNotificationType(resultSet.getString(3));
+            notification.setNotificationContent(resultSet.getString(4));
+            notification.setGameId(resultSet.getInt(5));
+            notification.setCreatedTime(resultSet.getTimestamp(6));
+            notification.setCreatorId(resultSet.getInt(7));
+            Usertable usertable = new Usertable();
+            usertable.setId(notification.getCreatorId());
+            usertable.setFirstName(resultSet.getString(8));
+            usertable.setLastName(resultSet.getString(9));
+            usertable.setIsPrivate(resultSet.getBoolean(10));
+            usertable.setIsSuspended(resultSet.getBoolean(11));
+            usertable.setProfilePicturePath(resultSet.getString(12));
+            usertable.setRiftTag(resultSet.getString(13));
+            usertable.setRifteeRating(resultSet.getDouble(14));
+            usertable.setRifterRating(resultSet.getDouble(15));
+            notification.setCreatorUsertable(usertable);
+            notifications.add(notification);
         }
-        return null;
+        return notifications;
 
+    }
+
+    public Boolean createUser(Usertable usertable) {
+        return usertableRepository.doInsert(createUser,
+                new Object[] {usertable.getFirstName(), usertable.getLastName(),
+                        usertable.getGender(), usertable.getRiftTag()});
     }
 
 

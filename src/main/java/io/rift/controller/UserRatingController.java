@@ -21,6 +21,7 @@ public class UserRatingController {
     @Autowired
     private UserRatingService userRatingService;
 
+    /*
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/rating/{riftId}/{accountType}")
     public List<UserRating> getUserRatingByRiftIdAndAccountType(@PathVariable Integer riftId, @PathVariable Boolean accountType) {
@@ -58,5 +59,6 @@ public class UserRatingController {
     public List<UserRating> getUserRatingAndUserByRiftIdAndAccountType(@PathVariable Integer riftId, @PathVariable Boolean accountType) {
         return userRatingService.getUserRatingByRiftIdAndAccountType(riftId, accountType);
     }
+    */
 
 }

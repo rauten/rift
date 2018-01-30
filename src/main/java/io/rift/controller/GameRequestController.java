@@ -17,6 +17,7 @@ public class GameRequestController {
     @Autowired
     private GameRequestService gameRequestService;
 
+    /*
     @GetMapping
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/{rifteeId}-{sessionId}")
@@ -31,6 +32,7 @@ public class GameRequestController {
     public List<GameRequest> getGameRequestsByRifteeId(@PathVariable Integer rifteeId) {
         return gameRequestService.getGameRequestsByRifteeId(rifteeId);
     }
+    */
 
 
 

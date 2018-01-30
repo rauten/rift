@@ -12,9 +12,11 @@ public class FollowingService {
     @Autowired
     private FollowingRepository followingRepository;
 
+    /*
     public Following getFollowingByFollowerIdAndFollowingId(Integer followerId, Integer followingId) {
         return followingRepository.getFollowingByFollowerIdAndFollowingId(followerId, followingId);
     }
+    */
 
 
 }

@@ -1,71 +1,43 @@
 package io.rift.model;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Data;
 import org.postgresql.util.PGInterval;
 
-@Entity
-@Table(name = "riftergame")
+@Data
 public class RifterGame {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    @JsonView(Views.Public.class)
     private Integer id;
 
-    @Column(name = "host_id")
-    @JsonView(Views.Public.class)
     private Integer hostId;
 
-    @Column(name = "num_slots")
-    @JsonView(Views.Public.class)
     private Integer numSlots;
 
-    @Column(name = "expiration_time")
-    @JsonView(Views.Public.class)
     private Timestamp expirationTime;
 
-    @Column(name = "game_cost")
-    @JsonView(Views.Public.class)
     private Double gameCost;
 
-    @Column(name = "method_of_contact")
-    @JsonView(Views.Public.class)
     private String methodOfContact;
 
-    @Column(name = "game_type")
-    @JsonView(Views.Public.class)
     private String gameType;
 
-    /*
-    @Column(name = "game_duration")
-    @JsonView(Views.Public.class)
     private PGInterval gameDuration;
-    */
 
-    @JsonView(Views.Public.class)
     private String title;
 
-    @JsonView(Views.Public.class)
     private Integer hits;
 
-    @OneToMany(mappedBy = "rifterGameGR", cascade = CascadeType.ALL)
-    @JsonView(Views.InternalRifterGameGR.class)
+    private Timestamp gameTime;
+
     private List<GameRequest> gameRequests;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "host_id", insertable = false, updatable = false)
-    @JsonView(Views.InternalRifterGameUsertable.class)
     private Usertable usertable;
 
-
-    @OneToMany(mappedBy = "rifterGame", cascade = CascadeType.ALL)
-    @JsonView(Views.InternalRifterGameNotification.class)
     private List<Notification> notifications;
+
+    private List<Usertable> players;
 
     public RifterGame() {}
 
@@ -90,7 +62,7 @@ public class RifterGame {
 
     public void removeNotification(Notification notification) {
         notifications.remove(notification);
-        notification.setUsertable(null);
+        notification.setReceiverUsertable(null);
     }
 
 
@@ -205,4 +177,19 @@ public class RifterGame {
     }
 
 
+    public PGInterval getGameDuration() {
+        return gameDuration;
+    }
+
+    public void setGameDuration(PGInterval gameDuration) {
+        this.gameDuration = gameDuration;
+    }
+
+    public Timestamp getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(Timestamp gameTime) {
+        this.gameTime = gameTime;
+    }
 }

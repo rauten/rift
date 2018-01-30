@@ -14,6 +14,7 @@ public class UserRatingService {
     @Autowired
     private UserRatingRepository userRatingRepository;
 
+    /*
     public UserRating getUserRatingByRiftIdAndReviewerIdAndAccountType(Integer riftId, Integer reviewerId, Boolean accountType) {
         return userRatingRepository.getUserRatingByRiftIdAndReviewerIdAndAccountType(riftId, reviewerId, accountType);
     }
@@ -33,6 +34,7 @@ public class UserRatingService {
     public List<UserRating> getUserRatingByReviewerIdAndAccountType(Integer reviewerId, Boolean accountType) {
         return userRatingRepository.getUserRatingByReviewerIdAndAccountType(reviewerId, accountType);
     }
+    */
 
 
 }

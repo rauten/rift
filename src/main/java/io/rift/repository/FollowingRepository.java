@@ -7,12 +7,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FollowingRepository extends JpaRepository<Following, Integer> {
+public class FollowingRepository {
 
+    /*
     Following getFollowingByFollowerIdAndFollowingId(Integer follower, Integer following);
 
     List<Following> getFollowingByFollowerId(Integer followerId);
 
     List<Following> getFollowingByFollowingId(Integer followingId);
+    */
 
 }

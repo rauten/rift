@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GameRequestRepository extends CrudRepository<GameRequest, Integer> {
+public class GameRequestRepository {
 
+    /*
     @Modifying(clearAutomatically = true)
     @Query("SELECT um FROM GameRequest um WHERE rifteeId = :rifteeId AND sessionId = :sessionId")
     GameRequest getGameRequestByRifteeIdAndSessionId(@Param("rifteeId") int rifteeId, @Param("sessionId") int sessionId);
@@ -19,6 +20,7 @@ public interface GameRequestRepository extends CrudRepository<GameRequest, Integ
     List<GameRequest> getGameRequestsByRifteeId(Integer rifteeId);
 
     List<GameRequest> getGameRequestsBySessionId(Integer sessionId);
+    */
 
 
 }

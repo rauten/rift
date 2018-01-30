@@ -21,6 +21,7 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
+    /*
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{id}")
     public Notification getNotificationById(@PathVariable Integer id) {
@@ -32,5 +33,6 @@ public class NotificationController {
     public Notification getNotificationAndRifterGameById(@PathVariable Integer id) {
         return notificationService.getNotificationById(id);
     }
+    */
 
 }
