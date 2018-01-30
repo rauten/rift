@@ -23,15 +23,22 @@ public class UsertableController {
     @Autowired
     private UsertableService usertableService;
 
+
     /**
      * The result of a Usertable NATURAL JOIN Notification query
      * @param id The user id we want to get information for
      * @return A User object with notifications
      */
+
     @JsonView(Views.InternalUsertableUser.class)
     @RequestMapping(method=RequestMethod.GET, value="/user/notifications/{id}")
-    public Usertable getUserAndNotifications(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+    public Usertable getUserAndNotifications(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        usertable.setNotificationList(usertableService.getUserNotifications(id));
+        return usertable;
     }
 
     /**
@@ -39,10 +46,17 @@ public class UsertableController {
      * @param id The user id we want to get activity information for
      * @return A User object with activities
      */
+
     @JsonView(Views.InternalUsertableCreator.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/activity/{id}")
-    public Usertable getUserAndActivity(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+    public Usertable getUserAndActivity(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        List<Notification> userActivities = usertableService.getUserActivity(id);
+        usertable.setCreatorActivityList(userActivities);
+        return usertable;
     }
 
     /**
@@ -52,26 +66,48 @@ public class UsertableController {
      */
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
-    public Usertable getUser(@PathVariable Integer id) { return usertableService.getUserById(id); }
+    public Usertable getUser(@PathVariable Integer id) throws SQLException {
+        return usertableService.getUserById(id);
+    }
+
 
     @JsonView(Views.InternalUsertableFollowingFollowing.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followings")
-    public Usertable getUserAndFollowings(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+    public Usertable getUserAndFollowings(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        usertable.setFollowings(usertableService.getFollowingsById(id));
+        return usertable;
     }
+
 
     @JsonView(Views.InternalUsertableFollowingFollower.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followers")
-    public Usertable getUserAndFollowers(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+    public Usertable getUserAndFollowers(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        usertable.setFollowers(usertableService.getFollowersById(id));
+        return usertable;
     }
+
 
     @JsonView(Views.InternalUsertableFollowingFollowerAndFollowing.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers")
-    public Usertable getUserAndFollowersAndFollowings(@PathVariable Integer id) {
-        return usertableService.getUserById(id);
+    public Usertable getUserAndFollowersAndFollowings(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        usertable.setFollowers(usertableService.getFollowersById(id));
+        usertable.setFollowings(usertableService.getFollowingsById(id));
+        return usertable;
     }
 
+    /*
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}")
     public Usertable findUserByFirstName(@PathVariable String firstName) {
@@ -93,6 +129,11 @@ public class UsertableController {
         //usertable.setBroadcastList(notifications);
         return usertable;
     }
+
+    //following
+    //followers
+    //rifter games
+    */
 
 
 

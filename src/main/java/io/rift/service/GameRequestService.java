@@ -16,6 +16,7 @@ public class GameRequestService {
     @Autowired
     GameRequestRepository gameRequestRepository;
 
+    /*
     public GameRequest getGameRequestByRifteeAndSessionId(Integer rifteeId, Integer sessionId) {
         return gameRequestRepository.getGameRequestByRifteeIdAndSessionId(rifteeId, sessionId);
     }
@@ -27,6 +28,7 @@ public class GameRequestService {
     public List<GameRequest> getGameRequestsBySessionId(Integer sessionId) {
         return gameRequestRepository.getGameRequestsByRifteeId(sessionId);
     }
+    */
 
 
 

@@ -17,6 +17,7 @@ public class RifterGameController {
     @Autowired
     private RifterGameService rifterGameService;
 
+    /*
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rifterGame/{id}")
     public RifterGame getRifterGameById(@PathVariable Integer id) {
@@ -28,5 +29,6 @@ public class RifterGameController {
     public RifterGame getRifterGameAndNotificationsById(@PathVariable Integer id) {
         return rifterGameService.getRifterGameById(id);
     }
+    */
 
 }

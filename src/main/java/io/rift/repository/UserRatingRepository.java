@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRatingRepository extends JpaRepository<UserRating, Integer> {
+public class UserRatingRepository  {
 
+    /*
     UserRating getUserRatingByRiftIdAndReviewerIdAndAccountType(Integer riftId, Integer reviewerId, Boolean accountType);
 
     List<UserRating> getUserRatingByRiftIdAndAccountType(Integer riftId, Boolean accountType);
@@ -19,5 +20,6 @@ public interface UserRatingRepository extends JpaRepository<UserRating, Integer>
     List<UserRating> getUserRatingByReviewerId(Integer reviewerId);
 
     List<UserRating> getUserRatingByReviewerIdAndAccountType(Integer reviewerId, Boolean accountType);
+    */
 
 }

@@ -11,9 +11,10 @@ public class RifterGameService {
     @Autowired
     private RifterGameRepository rifterGameRepository;
 
+    /*
     public RifterGame getRifterGameById(Integer id) {
         return rifterGameRepository.getRifterGameById(id);
     }
-
+    */
 
 }
