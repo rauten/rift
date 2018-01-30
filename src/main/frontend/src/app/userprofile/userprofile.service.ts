@@ -18,7 +18,6 @@ export class UserprofileService {
     return this.http.get(this.apiUrl)
       .map(
         (response: Response) => {
-          // console.log(response.json())
           return response.json();
         }
       )
