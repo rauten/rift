@@ -37,6 +37,8 @@ public class RifterGame {
 
     private List<Notification> notifications;
 
+    private List<Usertable> players;
+
     public RifterGame() {}
 
     public RifterGame(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Double gameCost, String methodOfContact, String gameType, PGInterval gameDuration, String title, Integer hits) {

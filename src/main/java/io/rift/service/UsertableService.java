@@ -24,9 +24,6 @@ public class UsertableService {
     private UsertableRepository usertableRepository;
 
 
-    @Autowired
-    private ConnectionService connectionService;
-
     /****************************** GET *******************************/
     /******************************************************************/
     private final String getUserById = "getUserById";
@@ -61,25 +58,28 @@ public class UsertableService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserById, args);
-        Usertable usertable = new Usertable();
         if (resultSet.next()) {
-            usertable.setId(resultSet.getInt(1));
-            usertable.setFirstName(resultSet.getString(2));
-            usertable.setLastName(resultSet.getString(3));
-            usertable.setGender(resultSet.getBoolean(4));
-            usertable.setIsPrivate(resultSet.getBoolean(5));
-            usertable.setIsSuspended(resultSet.getBoolean(6));
-            usertable.setProfilePicturePath(resultSet.getString(7));
-            usertable.setRiftTag(resultSet.getString(8));
-            usertable.setRifteeRating(resultSet.getDouble(9));
-            usertable.setRifterRating(resultSet.getDouble(10));
-            usertable.setTwitchAccount(resultSet.getString(11));
-            usertable.setYoutubeAccount(resultSet.getString(12));
-            usertable.setBio(resultSet.getString(13));
-            return usertable;
-        } else {
-            return null;
+            return populateUsertable(resultSet, 1);
         }
+        return null;
+    }
+
+    public Usertable populateUsertable(ResultSet resultSet, int startPoint) throws SQLException {
+        Usertable usertable = new Usertable();
+        usertable.setId(resultSet.getInt(startPoint));
+        usertable.setFirstName(resultSet.getString(startPoint + 1));
+        usertable.setLastName(resultSet.getString(startPoint + 2));
+        usertable.setGender(resultSet.getBoolean(startPoint + 3));
+        usertable.setIsPrivate(resultSet.getBoolean(startPoint + 4));
+        usertable.setIsSuspended(resultSet.getBoolean(startPoint + 5));
+        usertable.setProfilePicturePath(resultSet.getString(startPoint + 6));
+        usertable.setRiftTag(resultSet.getString(startPoint + 7));
+        usertable.setRifteeRating(resultSet.getDouble(startPoint + 8));
+        usertable.setRifterRating(resultSet.getDouble(startPoint + 9));
+        usertable.setTwitchAccount(resultSet.getString(startPoint + 10));
+        usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
+        usertable.setBio(resultSet.getString(startPoint + 12));
+        return usertable;
     }
 
     public Integer getNumberGamesPlayedByUserId(Integer id) throws SQLException {

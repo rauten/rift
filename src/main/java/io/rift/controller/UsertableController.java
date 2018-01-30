@@ -135,15 +135,18 @@ public class UsertableController {
     /**
      * Valid input:
      * {
-     "firstName":"Steph",
-     "lastName":"Curry",
-     "gender":true,
-     "riftTag":"chefcurry"
+         "firstName":"Steph",
+         "lastName":"Curry",
+         "gender":true,
+         "riftTag":"chefcurry"
      }
      *
-     * Can modify what input we want 
+     * Can modify what input we want
+     * @param usertable - Usertable instance we wish to put in the database
+     * @return boolean - Success or not
+     * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/user/create_user")
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
     Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
