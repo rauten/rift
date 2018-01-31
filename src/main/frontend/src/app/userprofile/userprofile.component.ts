@@ -11,7 +11,6 @@ import {Activity} from "./models/activity";
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile = new Userprofile();
   activities: Activity[] = [];
-  notificationContent: string
 
   constructor(private userProfileService: UserprofileService) {
   }
@@ -33,8 +32,7 @@ export class UserprofileComponent implements OnInit {
         this.userprofile.riftTag = resBody.riftTag;
         this.userprofile.twitchAccount = resBody.twitchAccount;
         this.userprofile.youtubeAccount = resBody.youtubeAccount;
-
-        this.something = resBody.creatorActivityList[i].notificationContent;
+        this.userprofile.creatorActivityList = resBody.creatorActivityList;
 
 
         for (var i = 0; i < resBody.creatorActivityList.length; i++) {
