@@ -17,17 +17,35 @@ public class RifterSessionController {
     private RifterSessionService rifterSessionService;
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterGame/{id}")
+    /**
+     *
+     * @param id - The Rifter Session id
+     * @return - Rifter Session object with info
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}")
     public RifterSession getRifterGameById(@PathVariable Integer id) throws SQLException {
         return rifterSessionService.getRifterGameById(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterGame/{id}/host")
+    /**
+     *
+     * @param id - The Rifter Session id
+     * @return - Rifter Session object with info and host Usertable
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/host")
     public RifterSession getRifterGameAndHostByGameId(@PathVariable Integer id) throws SQLException {
         return rifterSessionService.getRifterGameAndHostByGameId(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterGame/{id}/players")
+    /**
+     *
+     * @param id - The Rifter Session id
+     * @return - Rifter Session object with info and all players Usertable
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/players")
     public RifterSession getRifterGameAndPlayersByGameId(@PathVariable Integer id) throws SQLException {
         RifterSession rifterSession = getRifterGameById(id);
         rifterSession.setPlayers(rifterSessionService.getGamePlayersByGameId(id));

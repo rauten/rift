@@ -33,7 +33,7 @@ public class RifterSessionService {
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getRifterGameById, args);
         if (resultSet.next()) {
-            return populateRifterGame(resultSet);
+            return populateRifterSession(resultSet, 1);
         }
         return null;
     }
@@ -43,7 +43,7 @@ public class RifterSessionService {
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getRifterGameAndHostByGameId, args);
         if (resultSet.next()) {
-            RifterSession rifterSession = populateRifterGame(resultSet);
+            RifterSession rifterSession = populateRifterSession(resultSet, 1);
             if (rifterSession.getId() != null) {
                 Usertable usertable = usertableService.populateUsertable(resultSet, 12);
                 rifterSession.setUsertable(usertable);
@@ -66,28 +66,28 @@ public class RifterSessionService {
         return players;
     }
 
-    public RifterSession populateRifterGame(ResultSet resultSet) throws SQLException {
+    public RifterSession populateRifterSession(ResultSet resultSet, int startPoint) throws SQLException {
         RifterSession rifterSession = new RifterSession();
-        rifterSession.setId(resultSet.getInt(1));
-        rifterSession.setHostId(resultSet.getInt(2));
-        rifterSession.setNumSlots(resultSet.getInt(3));
-        rifterSession.setExpirationTime(resultSet.getTimestamp(4));
-        rifterSession.setGameCost(resultSet.getDouble(5));
-        rifterSession.setMethodOfContact(resultSet.getString(6));
-        rifterSession.setGameType(resultSet.getString(7));
-        rifterSession.setTitle(resultSet.getString(8));
-        rifterSession.setHits(resultSet.getInt(9));
-        rifterSession.setGameDuration((PGInterval)resultSet.getObject(10));
-        rifterSession.setGameTime(resultSet.getTimestamp(11));
+        rifterSession.setId(resultSet.getInt(startPoint));
+        rifterSession.setHostId(resultSet.getInt(startPoint + 1));
+        rifterSession.setNumSlots(resultSet.getInt(startPoint + 2));
+        rifterSession.setExpirationTime(resultSet.getTimestamp(startPoint + 3));
+        rifterSession.setSessionCost(resultSet.getDouble(startPoint + 4));
+        rifterSession.setMethodOfContact(resultSet.getString(startPoint + 5));
+        rifterSession.setSessionType(resultSet.getString(startPoint + 6));
+        rifterSession.setTitle(resultSet.getString(startPoint + 7));
+        rifterSession.setHits(resultSet.getInt(startPoint + 8));
+        rifterSession.setSessionDuration((PGInterval)resultSet.getObject(startPoint + 9));
+        rifterSession.setSessionTime(resultSet.getTimestamp(startPoint + 10));
         return rifterSession;
     }
 
     public boolean createGame(RifterSession rifterSession) {
         return usertableRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(),
-                        rifterSession.getExpirationTime(), rifterSession.getGameCost(), rifterSession.getMethodOfContact(),
-                        rifterSession.getGameType(), rifterSession.getTitle(), rifterSession.getHits(),
-                        rifterSession.getGameDuration(), rifterSession.getGameTime()});
+                        rifterSession.getExpirationTime(), rifterSession.getSessionCost(), rifterSession.getMethodOfContact(),
+                        rifterSession.getSessionType(), rifterSession.getTitle(), rifterSession.getHits(),
+                        rifterSession.getSessionDuration(), rifterSession.getSessionTime()});
     }
 
 

@@ -21,6 +21,12 @@ public class UsertableService {
     @Autowired
     private RifterSessionService rifterSessionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private SessionRequestService sessionRequestService;
+
 
     /****************************** GET *******************************/
     /******************************************************************/
@@ -30,7 +36,7 @@ public class UsertableService {
     private final String getNumberFollowers = "getNumberFollowersById";
     private final String getFollowersById = "getFollowersById";
     private final String getBroadcastNotifications = "getBroadcastNotificationsById";
-    private final String getFollowingById = "getFollowingById";
+    private final String getFollowingsById = "getFollowingsById";
     private final String getRequestsByUser = "getRequestsByUser";
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
@@ -131,7 +137,7 @@ public class UsertableService {
     public List<Following> getFollowersById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowingById, args);
+        ResultSet resultSet = usertableRepository.doQuery(getFollowingsById, args);
         List<Following> followers = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -147,7 +153,7 @@ public class UsertableService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getRequestsByUser, args);
-        return populateGameRequests(resultSet);
+        return sessionRequestService.populateGameRequests(resultSet);
     }
 
     public List<SessionRequest> getGameRequestsAndGameInfoByUserIdAndFilter(Integer id, String filter, String value) throws SQLException {
@@ -157,7 +163,7 @@ public class UsertableService {
             boolean val = Boolean.valueOf(value);
             args[1] = val;
             ResultSet resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, args);
-            return populateGameRequestsWithGameInfo(resultSet);
+            return sessionRequestService.populateGameRequestsWithGameInfo(resultSet);
         }
         return null;
     }
@@ -166,21 +172,21 @@ public class UsertableService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserId, args);
-        return populateGameRequestsWithGameInfo(resultSet);
+        return sessionRequestService.populateGameRequestsWithGameInfo(resultSet);
     }
 
     public List<Notification> getUserActivity(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserActivity, args);
-        return populateNotification(resultSet);
+        return notificationService.populateNotifications(resultSet, 1);
     }
 
     public List<Notification> getUserNotifications(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserNotifications, args);
-        return populateNotification(resultSet);
+        return notificationService.populateNotifications(resultSet, 1);
     }
 
     public List<RifterSession> getUserAndRifterSession(Integer id) throws SQLException {
@@ -189,7 +195,7 @@ public class UsertableService {
         ResultSet resultSet = usertableRepository.doQuery(getUserAndRifterSessions, args);
         List<RifterSession> rifterSessions = new ArrayList<>();
         while (resultSet.next()) {
-            RifterSession rifterSession = rifterSessionService.populateRifterGame(resultSet);
+            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1);
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
@@ -203,58 +209,8 @@ public class UsertableService {
     }
     */
 
-    private List<Notification> populateNotification(ResultSet resultSet) throws SQLException {
-        List<Notification> notifications = new ArrayList<>();
-        while (resultSet.next()) {
-            Notification notification = new Notification();
-            notification.setId(resultSet.getInt(1));
-            notification.setUserId(resultSet.getInt(2));
-            notification.setNotificationType(resultSet.getString(3));
-            notification.setNotificationContent(resultSet.getString(4));
-            notification.setGameId(resultSet.getInt(5));
-            notification.setCreatedTime(resultSet.getTimestamp(6));
-            notification.setCreatorId(resultSet.getInt(7));
-            notifications.add(notification);
-        }
-        return notifications;
-    }
 
-    private List<SessionRequest> populateGameRequests(ResultSet resultSet) throws SQLException {
-        List<SessionRequest> rifteeSessions = new ArrayList<>();
-        while (resultSet.next()) {
-            SessionRequest sessionRequest = new SessionRequest();
-            sessionRequest.setRifteeId(resultSet.getInt(1));
-            sessionRequest.setSessionId(resultSet.getInt(2));
-            sessionRequest.setAccepted(resultSet.getBoolean(3));
-            rifteeSessions.add(sessionRequest);
-        }
-        return rifteeSessions;
-    }
 
-    private List<SessionRequest> populateGameRequestsWithGameInfo(ResultSet resultSet) throws SQLException {
-        List<SessionRequest> rifteeSessions = new ArrayList<>();
-        while (resultSet.next()) {
-            SessionRequest sessionRequest = new SessionRequest();
-            sessionRequest.setRifteeId(resultSet.getInt(1));
-            sessionRequest.setSessionId(resultSet.getInt(2));
-            sessionRequest.setAccepted(resultSet.getBoolean(3));
-            RifterSession rifterSession = new RifterSession();
-            rifterSession.setId(resultSet.getInt(4));
-            rifterSession.setHostId(resultSet.getInt(5));
-            rifterSession.setNumSlots(resultSet.getInt(6));
-            rifterSession.setExpirationTime(resultSet.getTimestamp(7));
-            rifterSession.setGameCost(resultSet.getDouble(8));
-            rifterSession.setMethodOfContact(resultSet.getString(9));
-            rifterSession.setGameType(resultSet.getString(10));
-            rifterSession.setTitle(resultSet.getString(11));
-            rifterSession.setHits(resultSet.getInt(12));
-            rifterSession.setGameDuration((PGInterval)resultSet.getObject(13));
-            rifterSession.setGameTime(resultSet.getTimestamp(14));
-            sessionRequest.setRifterSession(rifterSession);
-            rifteeSessions.add(sessionRequest);
-        }
-        return rifteeSessions;
-    }
 
 
 
