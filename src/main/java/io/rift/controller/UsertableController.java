@@ -202,6 +202,22 @@ public class UsertableController {
         return usertable;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/profilePage")
+    public Usertable getUserProfilePage(@PathVariable Integer id) throws SQLException{
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
+        usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
+        usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
+        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
+        usertable.setNotificationList(usertableService.getUserNotifications(id));
+        usertable.setCreatorActivityList(usertableService.getUserActivity(id));
+        usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+        return usertable;
+    }
+
 
     /**
      * Valid input:

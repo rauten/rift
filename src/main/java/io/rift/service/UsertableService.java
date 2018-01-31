@@ -293,7 +293,7 @@ public class UsertableService {
             notification.setUserId(resultSet.getInt(2));
             notification.setNotificationType(resultSet.getString(3));
             notification.setNotificationContent(resultSet.getString(4));
-            notification.setGameId(resultSet.getInt(5));
+            notification.setSessionId(resultSet.getInt(5));
             notification.setCreatedTime(resultSet.getTimestamp(6));
             notification.setCreatorId(resultSet.getInt(7));
             Usertable usertable = new Usertable();
@@ -312,6 +312,7 @@ public class UsertableService {
         return notifications;
 
     }
+    
 
     public Boolean createUser(Usertable usertable) {
         return usertableRepository.doInsert(createUser,
