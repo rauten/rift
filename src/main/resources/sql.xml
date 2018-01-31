@@ -37,7 +37,7 @@
     <getRequestsByUser>
         SELECT *
         FROM gamerequest
-        WHERE user_id = ?;
+        WHERE riftee_id = ?;
     </getRequestsByUser>
 
     <getUserActivity>
@@ -64,18 +64,25 @@
         WHERE riftee_id = ? AND accepted = ?;
     </getGameRequestsByUserAndAccepted>
 
-    <getGameRequestsAndGameIinfoByUserId>
+    <getGameRequestsAndGameInfoByUserId>
         SELECT *
         FROM gamerequest g JOIN riftergame r
         ON g.session_id = r.id
         WHERE g.riftee_id = ?;
-    </getGameRequestsAndGameIinfoByUserId>
+    </getGameRequestsAndGameInfoByUserId>
+
+    <getGameRequestsAndGameInfoByUserIdAndAccepted>
+        SELECT *
+        FROM gamerequest g JOIN riftergame r
+        ON g.session_id = r.id
+        WHERE g.riftee_id = ? AND accepted = ?
+    </getGameRequestsAndGameInfoByUserIdAndAccepted>
 
     <getBroadcastNotificationsById>
         SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
-        FROM usertable u JOIN following f ON u.id = f.follower_id
+        FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
-        WHERE u.id = 2 AND n.notification_type = 'New Game';
+        WHERE us.id = ? AND n.notification_type = 'New Game';
     </getBroadcastNotificationsById>
 
     <createUser>

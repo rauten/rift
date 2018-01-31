@@ -2,21 +2,13 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.rift.model.GameRequest;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
 import io.rift.service.UsertableService;
-import org.bouncycastle.cert.ocsp.Req;
-import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -34,8 +26,6 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object with notifications
      */
-
-    @JsonView(Views.InternalUsertableUser.class)
     @RequestMapping(method=RequestMethod.GET, value="/user/direct_notifications/{id}")
     public Usertable getUserAndDirectNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -51,8 +41,6 @@ public class UsertableController {
      * @param id The user id we want to get activity information for
      * @return A User object with activities
      */
-
-    //@JsonView(Views.InternalUsertableCreator.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/activity/{id}")
     public Usertable getUserAndActivity(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -69,14 +57,17 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object
      */
-    //@JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
     public Usertable getUser(@PathVariable Integer id) throws SQLException {
         return usertableService.getUserById(id);
     }
 
-
-    @JsonView(Views.InternalUsertableFollowingFollowing.class)
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's followings
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followings")
     public Usertable getUserAndFollowings(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -87,8 +78,12 @@ public class UsertableController {
         return usertable;
     }
 
-
-    @JsonView(Views.InternalUsertableFollowingFollower.class)
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's Followers objects
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followers")
     public Usertable getUserAndFollowers(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -99,8 +94,12 @@ public class UsertableController {
         return usertable;
     }
 
-
-    @JsonView(Views.InternalUsertableFollowingFollowerAndFollowing.class)
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's Following/Follower objects
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers")
     public Usertable getUserAndFollowersAndFollowings(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -112,6 +111,12 @@ public class UsertableController {
         return usertable;
     }
 
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's Broadcast Notification objects
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/broadcast_notifications")
     public Usertable getUserAndBroadcastNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -122,6 +127,12 @@ public class UsertableController {
         return usertable;
     }
 
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's Notification objects
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/notifications")
     public Usertable getUserAndNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -133,10 +144,59 @@ public class UsertableController {
         return usertable;
     }
 
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable object with info and user's Rifter Session objects
+     * @throws SQLException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifterGames(usertableService.getUserAndRifterSession(id));
+        usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable with SessionRequests
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions")
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsByUserId(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable with SessionRequests/Session info
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/sessionInfo")
+    public Usertable getUserAndRifteeSessionsAndGameInfo(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserId(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @param filter The filter param
+     *               Options: accepted
+     * @param value The filter value
+     *              Options for accepted: true/false
+     * @return - Usertable with SessionRequests/Session info
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/filterBy:{filter}={value}/sessionInfo")
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable String value) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserIdAndFilter(id, filter, value));
         return usertable;
     }
 
@@ -169,7 +229,7 @@ public class UsertableController {
     }
 
     @JsonView(Views.InternalUsertableRG.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterGame")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterSession")
     public Usertable findUserAndGamesByFirstName(@PathVariable String firstName) {
         return usertableService.getUserByFirstName(firstName);
     }

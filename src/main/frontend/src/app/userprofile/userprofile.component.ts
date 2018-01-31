@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {Userprofile} from "./models/userprofile"
+
 import {UserprofileService} from "./userprofile.service";
+import {UsersessionsService} from "../usersessions/usersessions.service";
+
 import {Activity} from "./models/activity";
+import {Session} from "../usersessions/models/session-card/session";
 
 @Component({
   selector: 'app-userprofile',
@@ -11,12 +15,15 @@ import {Activity} from "./models/activity";
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile = new Userprofile();
   activities: Activity[] = [];
+  sessions: Session[] = [];
 
-  constructor(private userProfileService: UserprofileService) {
+  constructor(private userProfileService: UserprofileService,
+  private userSessionsService: UsersessionsService) {
   }
 
   ngOnInit() {
-    this.getUserById()
+    this.getUserById();
+    this.getUserSessions();
   }
 
   getUserById() {
@@ -43,5 +50,40 @@ export class UserprofileComponent implements OnInit {
         console.log(err);
       }
     )
+  }
+
+  getUserSessions() {
+    this.userSessionsService.getUserSessions().subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        this.userprofile.rifterSessions = resBody.rifterSessions;
+        for (var i = 0; i < this.userprofile.rifterSessions.length; i++) {
+          //noinspection TypeScriptUnresolvedVariable
+          var currDateMS = this.userprofile.rifterSessions[i].sessionTime;
+          var date = new Date(currDateMS);
+          //noinspection TypeScriptUnresolvedVariable
+          var currSession = new Session(
+            resBody.firstName,
+            resBody.lastName,
+            resBody.riftTag,
+            resBody.rifterRating,
+            this.userprofile.rifterSessions[i].hostId,
+            this.userprofile.rifterSessions[i].sessionCost,
+            this.userprofile.rifterSessions[i].methodOfContact,
+            this.userprofile.rifterSessions[i].sessionDuration.value,
+            this.userprofile.rifterSessions[i].title,
+            this.userprofile.rifterSessions[i].hits,
+            date
+          );
+          this.sessions.push(currSession);
+        }
+        for(var i = 0; i < this.sessions.length; i++) {
+          console.log(this.sessions[i]);
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 }

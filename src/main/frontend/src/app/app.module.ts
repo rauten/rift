@@ -7,12 +7,15 @@ import { AppComponent } from './app.component';
 import { UserprofileComponent } from './userprofile/userprofile.component'
 
 import { UserprofileService } from './userprofile/userprofile.service';
+import { UsersessionsService} from './usersessions/usersessions.service';
+
 import { NavbarComponent } from './navbar/navbar.component';
 import { UsersessionsComponent } from './usersessions/usersessions.component';
 
 import { CalendarModule } from 'angular-calendar';
 import { TheriftComponent } from './therift/therift.component';
 import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.component';
+import { SessionCardComponent } from './usersessions/models/session-card/session-card.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.compo
     UsersessionsComponent,
     TheriftComponent,
     RiftsessionsComponent,
+    SessionCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +33,7 @@ import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.compo
     routes,
     CalendarModule.forRoot(),
   ],
-  providers: [UserprofileService],
+  providers: [UserprofileService, UsersessionsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

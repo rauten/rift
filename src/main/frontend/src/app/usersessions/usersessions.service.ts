@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Session } from "./models/session";
+import { Session } from "./models/session-card/session";
 import { Http, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
@@ -8,13 +8,13 @@ import "rxjs/Rx";
 
 @Injectable()
 export class UsersessionsService {
-  private apiUrl = "/api/user/activity/1";
+  private apiUrl = "/api/user/1/rifterSessions";
 
   constructor(private http: Http) {
   }
 
-  getUser(): Observable<Session> {
-    console.log("running getSession");
+  getUserSessions(): Observable<Session> {
+    console.log("running getUserSessions");
     return this.http.get(this.apiUrl)
       .map(
         (response: Response) => {

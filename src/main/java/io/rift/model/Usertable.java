@@ -1,12 +1,8 @@
 package io.rift.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import java.util.*;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class Usertable {
@@ -65,10 +61,10 @@ public class Usertable {
     private List<Notification> broadcastNotifications;
 
     //@JsonView(Views.InternalUsertableGR.class)
-    private List<GameRequest> gameRequests;
+    private List<SessionRequest> rifteeSessions;
 
     //@JsonView(Views.InternalUsertableRG.class)
-    private List<RifterGame> rifterGames;
+    private List<RifterSession> rifterSessions;
 
     //@JsonView(Views.InternalUsertableFollowingFollower.class)
     private List<Following> followers;

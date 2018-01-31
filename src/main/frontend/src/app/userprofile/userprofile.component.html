@@ -63,12 +63,17 @@
             <!-- end activities -->
             <!-- followers -->
             <div class="tab-pane fade" id="sessions">
-              <div class="media user-follower">
-                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
-                <div class="media-body">
-                  <a href="#">Antonius<br><span class="text-muted username">@mrantonius</span></a>
-                  <button type="button" class="btn btn-sm btn-toggle-following pull-right"><i class="fa fa-checkmark-round"></i> <span>Following</span></button>
-                </div>
+              <div class="media sessions-item" *ngFor="let session of sessions">
+                <app-session-card
+                  hostName="{{session.firstName}} {{session.lastName}}"
+                  hostRiftTag="{{session.riftTag}}"
+                  hostRifterRating="{{session.rifterRating}}"
+                  title="{{session.sessionTitle}}"
+                  day="{{session.sessionTime | date:'dd'}}"
+                  month="{{session.sessionTime | date:'MMM'}}"
+                  time="{{session.sessionTime | date:'shortTime'}}"
+                  title="{{session.sessionTitle}}"
+                ></app-session-card>
               </div>
             </div>
             <!-- end followers -->

@@ -6,6 +6,9 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./session-card.component.scss']
 })
 export class SessionCardComponent implements OnInit {
+  @Input() hostName: string;
+  @Input() hostRiftTag: string;
+  @Input() hostRifterRating: number;
   @Input() title: string;
   @Input() cost: number;
   @Input() contact: string;
