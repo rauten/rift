@@ -1,9 +1,9 @@
 export class Activity {
-  content: string;
-  creationTime: number;
+  notificationContent: string;
+  createdTime: number;
 
   constructor(content: string, creationTime: number) {
-    this.content = content;
-    this.creationTime = creationTime;
+    this.notificationContent = content;
+    this.createdTime = creationTime;
   }
 }
