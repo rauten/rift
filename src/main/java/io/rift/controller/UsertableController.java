@@ -52,7 +52,7 @@ public class UsertableController {
      * @return A User object with activities
      */
 
-    @JsonView(Views.InternalUsertableCreator.class)
+    //@JsonView(Views.InternalUsertableCreator.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/activity/{id}")
     public Usertable getUserAndActivity(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
@@ -69,7 +69,7 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object
      */
-    @JsonView(Views.Public.class)
+    //@JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
     public Usertable getUser(@PathVariable Integer id) throws SQLException {
         return usertableService.getUserById(id);

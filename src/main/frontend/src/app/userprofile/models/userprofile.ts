@@ -8,7 +8,8 @@ export class Userprofile {
   rifteeRating: number;
   twitchAccount: string;
   youtubeAccount: string;
-  creatorActivityList: string;
+  creatorActivityList: object[];
+  notificationContent: string;
 
   constructor() {
 
