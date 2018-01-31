@@ -34,7 +34,7 @@ export class UserprofileComponent implements OnInit {
         this.userprofile.youtubeAccount = resBody.youtubeAccount;
         this.userprofile.creatorActivityList = resBody.creatorActivityList;
 
-
+      
         for (var i = 0; i < resBody.creatorActivityList.length; i++) {
           //noinspection TypeScriptUnresolvedVariable
           this.activities.push(new Activity(resBody.creatorActivityList[i].notificationContent,
