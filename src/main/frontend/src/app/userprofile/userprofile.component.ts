@@ -14,8 +14,10 @@ import {Session} from "../usersessions/models/session-card/session";
 })
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile = new Userprofile();
-  activities: Activity[] = [];
+  followerUserprofiles: Userprofile[] = [];
+  followingUserprofiles: Userprofile[] = [];
   sessions: Session[] = [];
+  broadcastNotifications: Userprofile[] = [];
 
   constructor(private userProfileService: UserprofileService,
   private userSessionsService: UsersessionsService) {
@@ -24,6 +26,7 @@ export class UserprofileComponent implements OnInit {
   ngOnInit() {
     this.getUserById();
     this.getUserFollowersAndFollowing();
+    this.getBroadcastNotifications();
     this.getUserSessions();
   }
 
@@ -43,7 +46,7 @@ export class UserprofileComponent implements OnInit {
         this.userprofile.creatorActivityList = resBody.creatorActivityList;
         this.userprofile.bio = resBody.bio;
         for (var i = 0; i < this.userprofile.creatorActivityList.length; i++) {
-          this.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
+          this.userprofile.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
             this.userprofile.creatorActivityList[i].createdTime))
         }
       },
@@ -58,9 +61,42 @@ export class UserprofileComponent implements OnInit {
       resBody => {
         this.userprofile.followers = resBody.followers.length;
         this.userprofile.followings = resBody.followings.length;
+        for (var i = 0; i < this.userprofile.followers; i++) {
+          var currFollower = new Userprofile();
+          currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
+          currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
+          currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
+          this.followerUserprofiles.push(currFollower);
+        }
+        for (var i = 0; i < this.userprofile.followings; i++) {
+          var currFollowing = new Userprofile();
+          currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
+          currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
+          currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+          this.followingUserprofiles.push(currFollowing);
+        }
       },
       err => {
         console.log(err);
+      }
+    )
+  }
+
+  getBroadcastNotifications() {
+    this.userProfileService.getBroadcastNotifications().subscribe(
+      resBody => {
+        for (var i = 0; i < resBody.broadcastNotifications.length; i++) {
+          console.log(resBody.broadcastNotifications[i]);
+          var currUser = new Userprofile();
+          currUser.firstName = resBody.broadcastNotifications[i].creatorUsertable.firstName;
+          currUser.lastName = resBody.broadcastNotifications[i].creatorUsertable.lastName;
+          currUser.riftTag = resBody.broadcastNotifications[i].creatorUsertable.riftTag;
+          var currNotification = new Activity(resBody.broadcastNotifications[i].notificationContent,
+          resBody.broadcastNotifications[i].createdTime);
+          currUser.activities.push(currNotification);
+          this.broadcastNotifications.push(currUser);
+        }
+        console.log(this.broadcastNotifications);
       }
     )
   }
@@ -86,9 +122,6 @@ export class UserprofileComponent implements OnInit {
             date
           );
           this.sessions.push(currSession);
-        }
-        for(var i = 0; i < this.sessions.length; i++) {
-          console.log(this.sessions[i]);
         }
       },
       err => {

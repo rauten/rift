@@ -9,7 +9,8 @@ import "rxjs/Rx";
 @Injectable()
 export class UserprofileService {
   private userURL = "/api/user/activity/1";
-  private followerAndFollowingURL = "/api/user/1/followingsandfollowers";
+  private followerAndFollowingURL = "/api/user/1/followingsandfollowers/userInfo";
+  private broadcastNotificationsURL = "http://localhost:5000/api/user/2/broadcast_notifications";
 
   constructor(private http: Http) {
   }
@@ -24,6 +25,7 @@ export class UserprofileService {
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
+
   getUserFollowersAndFollowing(): Observable<Userprofile> {
     console.log("running getUserFollowersAndFollowing");
     return this.http.get(this.followerAndFollowingURL)
@@ -33,5 +35,17 @@ export class UserprofileService {
         }
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getBroadcastNotifications(): Observable<Userprofile> {
+    console.log("running getBroadcastNotifications");
+    return this.http.get(this.broadcastNotificationsURL)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+
   }
 }

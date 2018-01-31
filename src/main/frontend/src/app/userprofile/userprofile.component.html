@@ -31,19 +31,35 @@
       <div class="col-md-8">
         <div class="profile-info-right">
           <ul class="nav nav-pills nav-pills-custom-minimal custom-minimal-bottom">
-            <li class="active"><a href="#activity" data-toggle="tab">activity</a></li>
+            <li class="active"><a href="#feed" data-toggle="tab">feed</a></li>
+            <li><a href="#activity" data-toggle="tab">activity</a></li>
             <li><a href="#sessions" data-toggle="tab">sessions</a></li>
+            <li><a href="#followers" data-toggle="tab">followers</a></li>
+            <li><a href="#following" data-toggle="tab">following</a></li>
           </ul>
           <div class="tab-content">
-            <!-- activities -->
-            <div class="tab-pane fade in active" id="activity">
-              <div class="media activity-item" *ngFor="let activity of activities">
+            <!-- feed -->
+            <div class="tab-pane fade in active" id="feed">
+              <div class="media activity-item" *ngFor="let notification of broadcastNotifications">
                 <a href="#" class="pull-left">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
                 </a>
                 <div class="media-body">
-                  <p class="activity-title"><a href="#">{{userprofile.riftTag}}</a> {{activity.content}} </p>
-                  <small class="text-muted">Today {{activity.creationTime}}</small>
+                  <p class="activity-title"><a href="#">{{notification.riftTag}}</a> {{notification.activities[0].notificationContent}} </p>
+                  <small class="text-muted">{{notification.activities[0].createdTime | date:'fullDate'}} at {{notification.activities[0].createdTime | date:'shortTime'}}</small>
+                </div>
+              </div>
+            </div>
+            <!-- end feed -->
+            <!-- activities -->
+            <div class="tab-pane fade in active" id="activity">
+              <div class="media activity-item" *ngFor="let activity of userprofile.activities">
+                <a href="#" class="pull-left">
+                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
+                </a>
+                <div class="media-body">
+                  <p class="activity-title"><a href="#">{{userprofile.riftTag}}</a> {{activity.notificationContent}} </p>
+                  <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
                 </div>
                 <div class="btn-group pull-right activity-actions">
                   <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
@@ -58,10 +74,8 @@
                   </ul>
                 </div>
               </div>
-
             </div>
             <!-- end activities -->
-            <!-- followers -->
             <div class="tab-pane fade" id="sessions">
               <div class="media sessions-item" *ngFor="let session of sessions">
                 <app-session-card
@@ -76,8 +90,30 @@
                 ></app-session-card>
               </div>
             </div>
+            <!-- followers -->
+            <div class="tab-pane fade" id="followers">
+              <div class="media user-follower" *ngFor="let follower of followerUserprofiles">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
+                <div class="media-body">
+                  <a href="#">{{follower.firstName}} {{follower.lastName}}
+                    <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
+                  <button type="button" class="btn btn-sm btn-toggle-following pull-right"><i class="fa fa-checkmark-round"></i> <span>Following</span></button>
+                </div>
+              </div>
+            </div>
             <!-- end followers -->
-
+            <!-- following -->
+            <div class="tab-pane fade" id="following">
+              <div class="media user-following" *ngFor="let following of followingUserprofiles">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
+                <div class="media-body">
+                  <a href="#">{{following.firstName}} {{following.lastName}}
+                    <br><span class="text-muted username">@{{following.riftTag}}</span></a>
+                  <button type="button" class="btn btn-sm btn-danger pull-right"><i class="fa fa-close-round"></i> Unfollow</button>
+                </div>
+              </div>
+            </div>
+            <!-- end following -->
           </div>
         </div>
       </div>

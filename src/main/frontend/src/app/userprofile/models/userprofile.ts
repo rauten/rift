@@ -1,5 +1,6 @@
 import {Activity} from "./activity";
 import {Session} from "../../usersessions/models/session-card/session";
+
 export class Userprofile {
   id: number;
   firstName: string;
@@ -15,6 +16,11 @@ export class Userprofile {
   rifterSessions: Session[];
   followers: any;
   followings: any;
+  followerUsertable: any;
+  followingUsertable: any;
+  broadcastNotifications: any;
+  activities: Activity[] = [];
+  creatorUsertable: any;
 
   constructor() {
 
