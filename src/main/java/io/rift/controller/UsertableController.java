@@ -96,6 +96,17 @@ public class UsertableController {
         return usertable;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers/userInfo")
+    public Usertable getUserAndFollowingsAndFollowersAndInfo(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+        usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
+        usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
+        usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
+        return usertable;
+    }
+
     /**
      *
      * @param id - The user id

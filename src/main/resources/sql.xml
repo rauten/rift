@@ -28,6 +28,20 @@
         WHERE follower_id = ?;
     </getFollowingsById>
 
+    <getFollowersAndInfoById>
+        SELECT *
+        FROM following f JOIN usertable u
+        ON f.follower_id = u.id
+        WHERE f.following_id = ?;
+    </getFollowersAndInfoById>
+
+    <getFollowingsAndInfoById>
+        SELECT *
+        FROM following f JOIN usertable u
+        ON f.following_id = u.id
+        WHERE f.follower_id = ?;
+    </getFollowingsAndInfoById>
+
     <getNumberFollowersById>
         SELECT COUNT(*)
         FROM following

@@ -38,17 +38,23 @@ public class UsertableService {
     private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
     private final String getNumberFollowing = "getNumberFollowingById";
     private final String getNumberFollowers = "getNumberFollowersById";
-    private final String getFollowersById = "getFollowersById";
+
     private final String getBroadcastNotifications = "getBroadcastNotificationsById";
-    private final String getFollowingsById = "getFollowingsById";
-    private final String getRequestsByUser = "getRequestsByUser";
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
+
+    private final String getUserAndRifterSessions = "getUserAndRifterSessions";
+    private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
+
+    private final String getFollowersById = "getFollowersById";
+    private final String getFollowingsById = "getFollowingsById";
+    private final String getFollowersAndInfoById = "getFollowersAndInfoById";
+    private final String getFollowingsAndInfoById = "getFollowingsAndInfoById";
+
+    private final String getRequestsByUser = "getRequestsByUser";
     private final String getGameRequestsAndGameInfoByUserId = "getGameRequestsAndGameInfoByUserId";
     private final String getGameRequestsAndHostInfoByUserId = "getGameRequestsAndHostInfoByUserId";
     private final String getGameRequestsAndGameInfoAndHostInfoByUserId = "getGameRequestsAndGameInfoAndHostInfoByUserId";
-    private final String getUserAndRifterSessions = "getUserAndRifterSessions";
-    private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
 
     private final String getGameRequestsAndGameInfoByUserIdAndAccepted = "getGameRequestsAndGameInfoByUserIdAndAccepted";
     private final String getGameRequestsAndHostInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoByUserIdAndAccepted";
@@ -156,6 +162,38 @@ public class UsertableService {
             followers.add(following);
         }
         return followers;
+    }
+
+    public List<Following> getFollowingsAndInfoById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getFollowersAndInfoById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            following.setFollowingUsertable(populateUsertable(resultSet, 4));
+            followings.add(following);
+        }
+        return followings;
+    }
+
+    public List<Following> getFollowersAndInfoById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getFollowingsAndInfoById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            following.setFollowerUsertable(populateUsertable(resultSet, 4));
+            followings.add(following);
+        }
+        return followings;
     }
 
     public List<SessionRequest> getGameRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<String> value) throws SQLException {
