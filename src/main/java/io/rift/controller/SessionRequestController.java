@@ -1,28 +1,23 @@
 package io.rift.controller;
 
 
-import com.fasterxml.jackson.annotation.JsonView;
-import io.rift.model.GameRequest;
-import io.rift.model.Views;
-import io.rift.service.GameRequestService;
+import io.rift.service.SessionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
-public class GameRequestController {
+public class SessionRequestController {
 
     @Autowired
-    private GameRequestService gameRequestService;
+    private SessionRequestService sessionRequestService;
 
     /*
     @GetMapping
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/{rifteeId}-{sessionId}")
-    public GameRequest getGameRequestByRifteeAndSessionId(@PathVariable Integer rifteeId, @PathVariable Integer sessionId) {
+    public SessionRequest getGameRequestByRifteeAndSessionId(@PathVariable Integer rifteeId, @PathVariable Integer sessionId) {
         return gameRequestService.getGameRequestByRifteeAndSessionId(rifteeId, sessionId);
     }
 
@@ -30,7 +25,7 @@ public class GameRequestController {
     @GetMapping
     @JsonView(Views.Public.class)
     @RequestMapping(method = RequestMethod.GET, value = "/{rifteeId}")
-    public List<GameRequest> getGameRequestsByRifteeId(@PathVariable Integer rifteeId) {
+    public List<SessionRequest> getGameRequestsByRifteeId(@PathVariable Integer rifteeId) {
         return gameRequestService.getGameRequestsByRifteeId(rifteeId);
     }
     */

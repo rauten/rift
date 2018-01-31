@@ -27,7 +27,7 @@ public class NotificationController {
     }
 
     @JsonView(Views.InternalNotificationRG.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/notification/{id}/rifterGame")
+    @RequestMapping(method = RequestMethod.GET, value = "/notification/{id}/rifterSession")
     public Notification getNotificationAndRifterGameById(@PathVariable Integer id) {
         return notificationService.getNotificationById(id);
     }

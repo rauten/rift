@@ -1,25 +1,18 @@
 package io.rift.repository;
 
-import io.rift.model.GameRequest;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class GameRequestRepository {
 
     /*
     @Modifying(clearAutomatically = true)
-    @Query("SELECT um FROM GameRequest um WHERE rifteeId = :rifteeId AND sessionId = :sessionId")
-    GameRequest getGameRequestByRifteeIdAndSessionId(@Param("rifteeId") int rifteeId, @Param("sessionId") int sessionId);
+    @Query("SELECT um FROM SessionRequest um WHERE rifteeId = :rifteeId AND sessionId = :sessionId")
+    SessionRequest getGameRequestByRifteeIdAndSessionId(@Param("rifteeId") int rifteeId, @Param("sessionId") int sessionId);
 
-    List<GameRequest> getGameRequestsByRifteeId(Integer rifteeId);
+    List<SessionRequest> getGameRequestsByRifteeId(Integer rifteeId);
 
-    List<GameRequest> getGameRequestsBySessionId(Integer sessionId);
+    List<SessionRequest> getGameRequestsBySessionId(Integer sessionId);
     */
 
 

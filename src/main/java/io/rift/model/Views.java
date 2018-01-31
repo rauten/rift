@@ -14,7 +14,7 @@ public class Views {
 
 
     /*******************************************************/
-    /************** Views for RifterGame ******************/
+    /************** Views for RifterSession ******************/
     public interface InternalRifterGameGR extends Public {}
 
     public interface InternalRifterGameUsertable extends Public {}
@@ -23,7 +23,7 @@ public class Views {
 
 
     /*******************************************************/
-    /*************** Views for GameRequest *****************/
+    /*************** Views for SessionRequest *****************/
     public interface InternalGameRequestRG extends Public {}
 
     public interface InternalGameRequestUsertable extends Public {}

@@ -2,21 +2,13 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.rift.model.GameRequest;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
 import io.rift.service.UsertableService;
-import org.bouncycastle.cert.ocsp.Req;
-import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -136,7 +128,50 @@ public class UsertableController {
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifterGames(usertableService.getUserAndRifterSession(id));
+        usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable with SessionRequests
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions")
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsByUserId(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @return - Usertable with SessionRequests/Session info
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/gameInfo")
+    public Usertable getUserAndRifteeSessionsAndGameInfo(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserId(id));
+        return usertable;
+    }
+
+    /**
+     *
+     * @param id - The user id
+     * @param filter The filter param
+     *               Options: accepted
+     * @param value The filter value
+     *              Options for accepted: true/false
+     * @return - Usertable with SessionRequests/Session info
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/filterBy:{filter}={value}/gameInfo")
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable String value) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserIdAndFilter(id, filter, value));
         return usertable;
     }
 
@@ -169,7 +204,7 @@ public class UsertableController {
     }
 
     @JsonView(Views.InternalUsertableRG.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterGame")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterSession")
     public Usertable findUserAndGamesByFirstName(@PathVariable String firstName) {
         return usertableService.getUserByFirstName(firstName);
     }

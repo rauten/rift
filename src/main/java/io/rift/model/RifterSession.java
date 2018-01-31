@@ -7,7 +7,7 @@ import lombok.Data;
 import org.postgresql.util.PGInterval;
 
 @Data
-public class RifterGame {
+public class RifterSession {
 
     private Integer id;
 
@@ -17,21 +17,21 @@ public class RifterGame {
 
     private Timestamp expirationTime;
 
-    private Double gameCost;
+    private Double sessionCost;
 
     private String methodOfContact;
 
-    private String gameType;
+    private String sessionType;
 
-    private PGInterval gameDuration;
+    private PGInterval sessionDuration;
 
     private String title;
 
     private Integer hits;
 
-    private Timestamp gameTime;
+    private Timestamp sessionTime;
 
-    private List<GameRequest> gameRequests;
+    private List<SessionRequest> sessionRequests;
 
     private Usertable usertable;
 
@@ -39,17 +39,17 @@ public class RifterGame {
 
     private List<Usertable> players;
 
-    public RifterGame() {}
+    public RifterSession() {}
 
-    public RifterGame(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Double gameCost, String methodOfContact, String gameType, PGInterval gameDuration, String title, Integer hits) {
+    public RifterSession(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Double sessionCost, String methodOfContact, String sessionType, PGInterval sessionDuration, String title, Integer hits) {
         this.id = id;
         this.hostId = hostId;
         this.numSlots = numSlots;
         this.expirationTime = expirationTime;
-        this.gameCost = gameCost;
+        this.sessionCost = sessionCost;
         this.methodOfContact = methodOfContact;
-        this.gameType = gameType;
-        //this.gameDuration = gameDuration;
+        this.sessionType = sessionType;
+        //this.sessionDuration = sessionDuration;
         this.title = title;
         this.hits = hits;
     }
@@ -57,7 +57,7 @@ public class RifterGame {
 
     public void addNotification(Notification notification) {
         notifications.add(notification);
-        notification.setRifterGame(this);
+        notification.setRifterSession(this);
     }
 
     public void removeNotification(Notification notification) {
@@ -99,11 +99,11 @@ public class RifterGame {
     }
 
     public Double getGameCost() {
-        return gameCost;
+        return sessionCost;
     }
 
-    public void setGameCost(Double gameCost) {
-        this.gameCost = gameCost;
+    public void setGameCost(Double sessionCost) {
+        this.sessionCost = sessionCost;
     }
 
     public String getMethodOfContact() {
@@ -115,20 +115,20 @@ public class RifterGame {
     }
 
     public String getGameType() {
-        return gameType;
+        return sessionType;
     }
 
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
+    public void setGameType(String sessionType) {
+        this.sessionType = sessionType;
     }
 
     /*
     public PGInterval getGameDuration() {
-        return gameDuration;
+        return sessionDuration;
     }
 
-    public void setGameDuration(PGInterval gameDuration) {
-        this.gameDuration = gameDuration;
+    public void setGameDuration(PGInterval sessionDuration) {
+        this.sessionDuration = sessionDuration;
     }
     */
 
@@ -150,12 +150,12 @@ public class RifterGame {
     }
 
 
-    public List<GameRequest> getGameRequests() {
-        return gameRequests;
+    public List<SessionRequest> getSessionRequests() {
+        return sessionRequests;
     }
 
-    public void setGameRequests(List<GameRequest> gameRequests) {
-        this.gameRequests = gameRequests;
+    public void setSessionRequests(List<SessionRequest> sessionRequests) {
+        this.sessionRequests = sessionRequests;
     }
 
 
@@ -178,18 +178,18 @@ public class RifterGame {
 
 
     public PGInterval getGameDuration() {
-        return gameDuration;
+        return sessionDuration;
     }
 
-    public void setGameDuration(PGInterval gameDuration) {
-        this.gameDuration = gameDuration;
+    public void setGameDuration(PGInterval sessionDuration) {
+        this.sessionDuration = sessionDuration;
     }
 
     public Timestamp getGameTime() {
-        return gameTime;
+        return sessionTime;
     }
 
-    public void setGameTime(Timestamp gameTime) {
-        this.gameTime = gameTime;
+    public void setGameTime(Timestamp sessionTime) {
+        this.sessionTime = sessionTime;
     }
 }

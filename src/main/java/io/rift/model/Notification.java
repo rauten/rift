@@ -1,10 +1,7 @@
 package io.rift.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
-import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
@@ -28,7 +25,7 @@ public class Notification {
 
     private Usertable receiverUsertable;
 
-    private RifterGame rifterGame;
+    private RifterSession rifterSession;
 
     /*
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
