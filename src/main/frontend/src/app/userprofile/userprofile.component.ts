@@ -33,15 +33,11 @@ export class UserprofileComponent implements OnInit {
         this.userprofile.twitchAccount = resBody.twitchAccount;
         this.userprofile.youtubeAccount = resBody.youtubeAccount;
         this.userprofile.creatorActivityList = resBody.creatorActivityList;
-
-      
-        for (var i = 0; i < resBody.creatorActivityList.length; i++) {
+        for (var i = 0; i < this.userprofile.creatorActivityList.length; i++) {
           //noinspection TypeScriptUnresolvedVariable
-          this.activities.push(new Activity(resBody.creatorActivityList[i].notificationContent,
-            resBody.creatorActivityList[i].createdTime))
+          this.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
+            this.userprofile.creatorActivityList[i].createdTime))
         }
-
-
       },
       err => {
         console.log(err);

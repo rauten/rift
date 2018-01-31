@@ -1,3 +1,4 @@
+import {Activity} from "./activity";
 export class Userprofile {
   id: number;
   firstName: string;
@@ -8,7 +9,7 @@ export class Userprofile {
   rifteeRating: number;
   twitchAccount: string;
   youtubeAccount: string;
-  creatorActivityList: string
+  creatorActivityList: Activity[];
 
   constructor() {
 
