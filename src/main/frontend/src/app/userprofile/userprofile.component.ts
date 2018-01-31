@@ -55,13 +55,11 @@ export class UserprofileComponent implements OnInit {
   getUserSessions() {
     this.userSessionsService.getUserSessions().subscribe(
       resBody => {
-        //noinspection TypeScriptUnresolvedVariable
         this.userprofile.rifterSessions = resBody.rifterSessions;
         for (var i = 0; i < this.userprofile.rifterSessions.length; i++) {
-          //noinspection TypeScriptUnresolvedVariable
           var currDateMS = this.userprofile.rifterSessions[i].sessionTime;
           var date = new Date(currDateMS);
-          //noinspection TypeScriptUnresolvedVariable
+        //   //noinspection TypeScriptUnresolvedVariable
           var currSession = new Session(
             resBody.firstName,
             resBody.lastName,
@@ -70,7 +68,7 @@ export class UserprofileComponent implements OnInit {
             this.userprofile.rifterSessions[i].hostId,
             this.userprofile.rifterSessions[i].sessionCost,
             this.userprofile.rifterSessions[i].methodOfContact,
-            this.userprofile.rifterSessions[i].sessionDuration.value,
+            this.userprofile.rifterSessions[i].sessionDuration,
             this.userprofile.rifterSessions[i].title,
             this.userprofile.rifterSessions[i].hits,
             date

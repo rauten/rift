@@ -7,9 +7,10 @@ export class Session {
   sessionCost: number;
   methodOfContact: string;
   sessionDuration: string;
-  sessionTitle: string;
-  sessionHits: number;
+  title: string;
+  hits: number;
   sessionTime: any;
+  rifterSessions: any;
 
   constructor(firstName: string, lastName: string, riftTag: string, rifterRating: number,hostId: number,
               sessionCost: number, methodOfContact: string, sessionDuration: string, sessionTitle: string,
@@ -22,8 +23,8 @@ export class Session {
     this.sessionCost = sessionCost;
     this.methodOfContact = methodOfContact;
     this.sessionDuration = sessionDuration;
-    this.sessionTitle = sessionTitle;
-    this.sessionHits = sessionHits;
+    this.title = sessionTitle;
+    this.hits = sessionHits;
     this.sessionTime = sessionTime;
   }
 }
