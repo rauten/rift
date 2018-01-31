@@ -33,19 +33,25 @@ public class RifterGameService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getRifterGameById, args);
-        return populateRifterGame(resultSet);
+        if (resultSet.next()) {
+            return populateRifterGame(resultSet);
+        }
+        return null;
     }
 
     public RifterGame getRifterGameAndHostByGameId(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getRifterGameAndHostByGameId, args);
-        RifterGame rifterGame = populateRifterGame(resultSet);
-        if (rifterGame.getId() != null) {
-            Usertable usertable = usertableService.populateUsertable(resultSet, 12);
-            rifterGame.setUsertable(usertable);
+        if (resultSet.next()) {
+            RifterGame rifterGame = populateRifterGame(resultSet);
+            if (rifterGame.getId() != null) {
+                Usertable usertable = usertableService.populateUsertable(resultSet, 12);
+                rifterGame.setUsertable(usertable);
+            }
+            return rifterGame;
         }
-        return rifterGame;
+        return null;
     }
 
     public List<Usertable> getGamePlayersByGameId(Integer id) throws SQLException {
@@ -63,19 +69,17 @@ public class RifterGameService {
 
     public RifterGame populateRifterGame(ResultSet resultSet) throws SQLException {
         RifterGame rifterGame = new RifterGame();
-        if (resultSet.next()) {
-            rifterGame.setId(resultSet.getInt(1));
-            rifterGame.setHostId(resultSet.getInt(2));
-            rifterGame.setNumSlots(resultSet.getInt(3));
-            rifterGame.setExpirationTime(resultSet.getTimestamp(4));
-            rifterGame.setGameCost(resultSet.getDouble(5));
-            rifterGame.setMethodOfContact(resultSet.getString(6));
-            rifterGame.setGameType(resultSet.getString(7));
-            rifterGame.setTitle(resultSet.getString(8));
-            rifterGame.setHits(resultSet.getInt(9));
-            rifterGame.setGameDuration((PGInterval)resultSet.getObject(10));
-            rifterGame.setGameTime(resultSet.getTimestamp(11));
-        }
+        rifterGame.setId(resultSet.getInt(1));
+        rifterGame.setHostId(resultSet.getInt(2));
+        rifterGame.setNumSlots(resultSet.getInt(3));
+        rifterGame.setExpirationTime(resultSet.getTimestamp(4));
+        rifterGame.setGameCost(resultSet.getDouble(5));
+        rifterGame.setMethodOfContact(resultSet.getString(6));
+        rifterGame.setGameType(resultSet.getString(7));
+        rifterGame.setTitle(resultSet.getString(8));
+        rifterGame.setHits(resultSet.getInt(9));
+        rifterGame.setGameDuration((PGInterval)resultSet.getObject(10));
+        rifterGame.setGameTime(resultSet.getTimestamp(11));
         return rifterGame;
     }
 
