@@ -36,6 +36,7 @@ public class RifterGameController {
         return rifterGame;
     }
 
+
     /**
      * Example valid iput:
      *

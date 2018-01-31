@@ -52,6 +52,12 @@
         WHERE user_id = ?
     </getUserNotifications>
 
+    <getUserAndRifterSessions>
+        SELECT *
+        FROM riftergame
+        WHERE host_id = ?
+    </getUserAndRifterSessions>
+
     <getGameRequestsByUserAndAccepted>
         SELECT *
         FROM gamerequest

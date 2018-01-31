@@ -23,6 +23,9 @@ public class UsertableService {
     @Autowired
     private UsertableRepository usertableRepository;
 
+    @Autowired
+    private RifterGameService rifterGameService;
+
 
     /****************************** GET *******************************/
     /******************************************************************/
@@ -38,6 +41,7 @@ public class UsertableService {
     private final String getUserNotifications = "getUserNotifications";
     private final String getGameRequestsByUserAndAccepted = "getGameRequestsByUserAndAccepted";
     private final String getGameRequestsAndGameIinfoByUserId = "getGameRequestsAndGameIinfoByUserId";
+    private final String getUserAndRifterSessions = "getUserAndRifterSessions";
 
 
     /****************************** POST *******************************/
@@ -177,6 +181,18 @@ public class UsertableService {
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserNotifications, args);
         return populateNotification(resultSet);
+    }
+
+    public List<RifterGame> getUserAndRifterSession(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = usertableRepository.doQuery(getUserAndRifterSessions, args);
+        List<RifterGame> rifterGames = new ArrayList<>();
+        while (resultSet.next()) {
+            RifterGame rifterGame = rifterGameService.populateRifterGame(resultSet);
+            rifterGames.add(rifterGame);
+        }
+        return rifterGames;
     }
 
     private List<Notification> populateNotification(ResultSet resultSet) throws SQLException {

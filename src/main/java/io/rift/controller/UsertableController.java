@@ -133,6 +133,13 @@ public class UsertableController {
         return usertable;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifterSessions")
+    public Usertable getUserAndRifterSessions(@PathVariable Integer id) throws SQLException {
+        Usertable usertable = usertableService.getUserById(id);
+        usertable.setRifterGames(usertableService.getUserAndRifterSession(id));
+        return usertable;
+    }
+
 
     /**
      * Valid input:
