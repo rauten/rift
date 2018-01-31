@@ -4,6 +4,7 @@ export class Userprofile {
   id: number;
   firstName: string;
   lastName: string;
+  bio: string;
   riftTag: string;
   gender: boolean;
   rifterRating: number;
@@ -12,6 +13,8 @@ export class Userprofile {
   youtubeAccount: string;
   creatorActivityList: Activity[];
   rifterSessions: Session[];
+  followers: any;
+  followings: any;
 
   constructor() {
 

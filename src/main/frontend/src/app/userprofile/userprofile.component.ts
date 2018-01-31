@@ -23,6 +23,7 @@ export class UserprofileComponent implements OnInit {
 
   ngOnInit() {
     this.getUserById();
+    this.getUserFollowersAndFollowing();
     this.getUserSessions();
   }
 
@@ -40,11 +41,23 @@ export class UserprofileComponent implements OnInit {
         this.userprofile.twitchAccount = resBody.twitchAccount;
         this.userprofile.youtubeAccount = resBody.youtubeAccount;
         this.userprofile.creatorActivityList = resBody.creatorActivityList;
+        this.userprofile.bio = resBody.bio;
         for (var i = 0; i < this.userprofile.creatorActivityList.length; i++) {
-          //noinspection TypeScriptUnresolvedVariable
           this.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
             this.userprofile.creatorActivityList[i].createdTime))
         }
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+
+  getUserFollowersAndFollowing() {
+    this.userProfileService.getUserFollowersAndFollowing().subscribe(
+      resBody => {
+        this.userprofile.followers = resBody.followers.length;
+        this.userprofile.followings = resBody.followings.length;
       },
       err => {
         console.log(err);
@@ -59,7 +72,6 @@ export class UserprofileComponent implements OnInit {
         for (var i = 0; i < this.userprofile.rifterSessions.length; i++) {
           var currDateMS = this.userprofile.rifterSessions[i].sessionTime;
           var date = new Date(currDateMS);
-        //   //noinspection TypeScriptUnresolvedVariable
           var currSession = new Session(
             resBody.firstName,
             resBody.lastName,
