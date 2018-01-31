@@ -40,8 +40,6 @@ export class UserprofileComponent implements OnInit {
           this.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
             this.userprofile.creatorActivityList[i].createdTime))
         }
-
-
       },
       err => {
         console.log(err);

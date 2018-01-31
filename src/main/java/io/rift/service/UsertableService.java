@@ -1,6 +1,7 @@
 package io.rift.service;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.*;
 import io.rift.repository.UsertableRepository;
 import org.postgresql.util.PGInterval;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsertableService {
@@ -27,6 +29,8 @@ public class UsertableService {
     @Autowired
     private SessionRequestService sessionRequestService;
 
+    public final int POPULATESIZE = 13;
+
 
     /****************************** GET *******************************/
     /******************************************************************/
@@ -41,10 +45,15 @@ public class UsertableService {
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
     private final String getGameRequestsAndGameInfoByUserId = "getGameRequestsAndGameInfoByUserId";
+    private final String getGameRequestsAndHostInfoByUserId = "getGameRequestsAndHostInfoByUserId";
+    private final String getGameRequestsAndGameInfoAndHostInfoByUserId = "getGameRequestsAndGameInfoAndHostInfoByUserId";
     private final String getUserAndRifterSessions = "getUserAndRifterSessions";
     private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
-    private final String getGameRequestsAndGameInfoByUserIdAndAccepted = "getGameRequestsAndGameInfoByUserIdAndAccepted";
 
+    private final String getGameRequestsAndGameInfoByUserIdAndAccepted = "getGameRequestsAndGameInfoByUserIdAndAccepted";
+    private final String getGameRequestsAndHostInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoByUserIdAndAccepted";
+    private final String getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted";
+    private final String getGameRequestsByUserIdAndAccepted = "getGameRequestsByUserIdAndAccepted";
 
     /****************************** POST *******************************/
     /*******************************************************************/
@@ -149,31 +158,53 @@ public class UsertableService {
         return followers;
     }
 
-    public List<SessionRequest> getGameRequestsByUserId(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getRequestsByUser, args);
-        return sessionRequestService.populateGameRequests(resultSet);
-    }
-
-    public List<SessionRequest> getGameRequestsAndGameInfoByUserIdAndFilter(Integer id, String filter, String value) throws SQLException {
-        Object[] args = new Object[2];
-        args[0] = id;
-        if (filter.equals("accepted")) {
-            boolean val = Boolean.valueOf(value);
-            args[1] = val;
-            ResultSet resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, args);
-            return sessionRequestService.populateGameRequestsWithGameInfo(resultSet);
+    public List<SessionRequest> getGameRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<String> value) throws SQLException {
+        ResultSet resultSet;
+        boolean bool;
+        if (info.equals("sessionInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                bool = value.get().equals("true") ? true : false;
+                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, bool});
+            } else {
+                return null;
+            }
+            return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"sessionInfo"});
+        } else if (info.equals("hostInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                bool = value.get().equals("true") ? true : false;
+                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, bool});
+            } else {
+                return null;
+            }
+            return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo"});
+        } else if (info.equals("hostInfo&sessionInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                bool = value.get().equals("true") ? true : false;
+                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, bool});
+            } else {
+                return null;
+            }
+            return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo", "sessionInfo"});
+        } else {
+            if (!filter.isPresent()) {
+                resultSet = usertableRepository.doQuery(getRequestsByUser, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                bool = value.get().equals("true") ? true : false;
+                resultSet = usertableRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, bool});
+            } else {
+                return null;
+            }
+            return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {});
         }
-        return null;
     }
 
-    public List<SessionRequest> getGameRequestsAndGameInfoByUserId(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserId, args);
-        return sessionRequestService.populateGameRequestsWithGameInfo(resultSet);
-    }
+
 
     public List<Notification> getUserActivity(Integer id) throws SQLException {
         Object[] args = new Object[1];
@@ -200,21 +231,6 @@ public class UsertableService {
         }
         return rifterSessions;
     }
-
-    /*
-    public List<SessionRequest> getUserAndRifteeSessions(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getUserAndRifteeSessions, args);
-    }
-    */
-
-
-
-
-
-
-    //public Usertable getUserByFirstName(String name) { return usertableRepository.findByFirstName(name); }
 
 
     /**

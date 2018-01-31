@@ -3,6 +3,7 @@ package io.rift.service;
 
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
+import io.rift.model.Usertable;
 import io.rift.repository.GameRequestRepository;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class SessionRequestService {
 
     @Autowired
     private RifterSessionService rifterSessionService;
+
+    @Autowired UsertableService usertableService;
 
     public SessionRequest populateGameRequest(ResultSet resultSet, int startPoint) throws SQLException {
         SessionRequest sessionRequest = new SessionRequest();
@@ -42,15 +45,26 @@ public class SessionRequestService {
         return rifteeSessions;
     }
 
-    public List<SessionRequest> populateGameRequestsWithGameInfo(ResultSet resultSet) throws SQLException {
+    public List<SessionRequest> populateGameRequestsWithInfo(ResultSet resultSet, String[] info) throws SQLException {
         List<SessionRequest> rifteeSessions = new ArrayList<>();
         while (resultSet.next()) {
             SessionRequest sessionRequest = new SessionRequest();
             sessionRequest.setRifteeId(resultSet.getInt(1));
             sessionRequest.setSessionId(resultSet.getInt(2));
             sessionRequest.setAccepted(resultSet.getBoolean(3));
-            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 4);
-            sessionRequest.setRifterSession(rifterSession);
+            sessionRequest.setHostId(resultSet.getInt(4));
+            int startPoint = 5;
+            for (String str : info) {
+                if (str.equals("hostInfo")) {
+                    Usertable usertable = usertableService.populateUsertable(resultSet, startPoint);
+                    sessionRequest.setHostUsertable(usertable);
+                    startPoint += usertableService.POPULATESIZE;
+                } else if (str.equals("sessionInfo")) {
+                    RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, startPoint);
+                    sessionRequest.setRifterSession(rifterSession);
+                    startPoint += rifterSessionService.POPULATESIZE;
+                }
+            }
             rifteeSessions.add(sessionRequest);
         }
         return rifteeSessions;

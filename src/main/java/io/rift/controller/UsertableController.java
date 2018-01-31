@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -157,29 +159,14 @@ public class UsertableController {
         return usertable;
     }
 
-    /**
-     *
-     * @param id - The user id
-     * @return - Usertable with SessionRequests
-     * @throws SQLException
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions")
-    public Usertable getUserAndRifteeSessions(@PathVariable Integer id) throws SQLException {
+    @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/{info}", "/user/{id}/rifteeSessions"})
+    public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable Integer id, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifteeSessions(usertableService.getGameRequestsByUserId(id));
-        return usertable;
-    }
-
-    /**
-     *
-     * @param id - The user id
-     * @return - Usertable with SessionRequests/Session info
-     * @throws SQLException
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/sessionInfo")
-    public Usertable getUserAndRifteeSessionsAndGameInfo(@PathVariable Integer id) throws SQLException {
-        Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserId(id));
+        if (info.isPresent()) {
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, info.get(), Optional.empty(), Optional.empty()));
+        } else {
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "", Optional.empty(), Optional.empty()));
+        }
         return usertable;
     }
 
@@ -193,10 +180,14 @@ public class UsertableController {
      * @return - Usertable with SessionRequests/Session info
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifteeSessions/filterBy:{filter}={value}/sessionInfo")
-    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable String value) throws SQLException {
+    @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/filterBy:{filter}={value}/{info}", "/user/{id}/rifteeSessions/filterBy:{filter}={value}"})
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable String value, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifteeSessions(usertableService.getGameRequestsAndGameInfoByUserIdAndFilter(id, filter, value));
+        if (info.isPresent()) {
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, info.get(), Optional.of(filter), Optional.of(value)));
+        } else {
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "", Optional.of(filter), Optional.of(value)));
+        }
         return usertable;
     }
 
@@ -219,36 +210,6 @@ public class UsertableController {
     Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
-
-
-    /*
-    @JsonView(Views.Public.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}")
-    public Usertable findUserByFirstName(@PathVariable String firstName) {
-        return usertableService.getUserByFirstName(firstName);
-    }
-
-    @JsonView(Views.InternalUsertableRG.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/filterBy=firstName/{firstName}/rifterSession")
-    public Usertable findUserAndGamesByFirstName(@PathVariable String firstName) {
-        return usertableService.getUserByFirstName(firstName);
-    }
-
-    @JsonView(Views.ProfilePageView.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/profile/{id}")
-    public Usertable getUserProfilePage(@PathVariable Integer id) {
-        Usertable usertable = usertableService.getUserById(id);
-        List<Notification> notifications = usertableService.getBroadcastNotifications(id);
-        usertable.setBroadcoastNotification(notifications);
-        //usertable.setBroadcastList(notifications);
-        return usertable;
-    }
-
-    //following
-    //followers
-    //rifter games
-    */
-
 
 
 }

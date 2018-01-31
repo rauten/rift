@@ -11,9 +11,13 @@ public class SessionRequest {
 
     private Boolean accepted;
 
+    private Integer hostId;
+
     private RifterSession rifterSession;
 
-    private Usertable usertable;
+    private Usertable rifteeUsertable;
+
+    private Usertable hostUsertable;
 
     public SessionRequest() {}
 

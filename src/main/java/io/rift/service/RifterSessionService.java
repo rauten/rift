@@ -21,6 +21,8 @@ public class RifterSessionService {
     @Autowired
     private UsertableService usertableService;
 
+    public final int POPULATESIZE = 11;
+
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
     private final String getGamePlayersByGameId = "getGamePlayersByGameId";

@@ -34,12 +34,6 @@
         WHERE following_id = ?;
     </getNumberFollowersById>
 
-    <getRequestsByUser>
-        SELECT *
-        FROM gamerequest
-        WHERE riftee_id = ?;
-    </getRequestsByUser>
-
     <getUserActivity>
         SELECT *
         FROM notification
@@ -58,12 +52,6 @@
         WHERE host_id = ?
     </getUserAndRifterSessions>
 
-    <getGameRequestsByUserAndAccepted>
-        SELECT *
-        FROM gamerequest
-        WHERE riftee_id = ? AND accepted = ?;
-    </getGameRequestsByUserAndAccepted>
-
     <getGameRequestsAndGameInfoByUserId>
         SELECT *
         FROM gamerequest g JOIN riftergame r
@@ -71,12 +59,62 @@
         WHERE g.riftee_id = ?;
     </getGameRequestsAndGameInfoByUserId>
 
+    <getGameRequestsAndHostInfoByUserId>
+        SELECT *
+        FROM gamerequest g JOIN usertable u
+        ON g.host_id = u.id
+        WHERE g.riftee_id = ?;
+    </getGameRequestsAndHostInfoByUserId>
+
+    <getGameRequestsAndGameInfoAndHostInfoByUserId>
+        SELECT *
+        FROM gamerequest g JOIN usertable u
+        ON g.host_id = u.id
+        JOIN riftergame r
+        ON g.session_id = r.id
+        WHERE g.riftee_id = ?;
+    </getGameRequestsAndGameInfoAndHostInfoByUserId>
+
+    <getRequestsByUser>
+        SELECT *
+        FROM gamerequest
+        WHERE riftee_id = ?;
+    </getRequestsByUser>
+
+    <getGameRequestsByUserAndAccepted>
+        SELECT *
+        FROM gamerequest
+        WHERE riftee_id = ? AND accepted = ?;
+    </getGameRequestsByUserAndAccepted>
+
     <getGameRequestsAndGameInfoByUserIdAndAccepted>
         SELECT *
         FROM gamerequest g JOIN riftergame r
         ON g.session_id = r.id
         WHERE g.riftee_id = ? AND accepted = ?
     </getGameRequestsAndGameInfoByUserIdAndAccepted>
+
+    <getGameRequestsAndHostInfoByUserIdAndAccepted>
+        SELECT *
+        FROM gamerequest g JOIN usertable u
+        ON g.host_id = u.id
+        WHERE g.riftee_id = ? AND accepted = ?;
+    </getGameRequestsAndHostInfoByUserIdAndAccepted>
+
+    <getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted>
+        SELECT *
+        FROM gamerequest g JOIN usertable u
+        ON g.host_id = u.id
+        JOIN riftergame r
+        ON g.session_id = r.id
+        WHERE g.riftee_id = ? AND accepted = ?;
+    </getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted>
+
+    <getGameRequestsByUserIdAndAccepted>
+        SELECT *
+        FROM gamerequest
+        WHERE riftee_id = ? AND accepted = ?
+    </getGameRequestsByUserIdAndAccepted>
 
     <getBroadcastNotificationsById>
         SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
