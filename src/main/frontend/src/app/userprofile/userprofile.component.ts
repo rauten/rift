@@ -7,11 +7,13 @@ import {UsersessionsService} from "../usersessions/usersessions.service";
 import {Activity} from "./models/activity";
 import {Session} from "../usersessions/models/session-card/session";
 import {AuthService} from "../auth/auth.service";
+import {CapitalizePipe} from "../pipes/capitalize.pipe";
 
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.component.html',
   styleUrls: ['./userprofile.component.css'],
+  pipes: [CapitalizePipe]
 })
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile = new Userprofile();
