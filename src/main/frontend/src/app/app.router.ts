@@ -7,7 +7,7 @@ import { TheriftComponent } from './therift/therift.component';
 import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.component";
 
 export const router: Routes = [
-  { path: '', redirectTo: 'therift', pathMatch: 'full' },
+  { path: '', redirectTo: '/therift', pathMatch: 'full' },
   { path: 'user', component: UserprofileComponent },
   { path: 'sessions', component: UsersessionsComponent },
   { path: 'therift', component: TheriftComponent },

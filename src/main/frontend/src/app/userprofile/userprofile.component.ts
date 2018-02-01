@@ -6,6 +6,7 @@ import {UsersessionsService} from "../usersessions/usersessions.service";
 
 import {Activity} from "./models/activity";
 import {Session} from "../usersessions/models/session-card/session";
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-userprofile',
@@ -18,9 +19,12 @@ export class UserprofileComponent implements OnInit {
   followingUserprofiles: Userprofile[] = [];
   sessions: Session[] = [];
   broadcastNotifications: Userprofile[] = [];
+  profile: any;
 
   constructor(private userProfileService: UserprofileService,
-  private userSessionsService: UsersessionsService) {
+  private userSessionsService: UsersessionsService,
+  public auth: AuthService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
   ngOnInit() {
