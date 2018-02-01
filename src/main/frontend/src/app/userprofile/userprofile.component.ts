@@ -12,8 +12,7 @@ import {CapitalizePipe} from "../pipes/capitalize.pipe";
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.component.html',
-  styleUrls: ['./userprofile.component.css'],
-  pipes: [CapitalizePipe]
+  styleUrls: ['./userprofile.component.css']
 })
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile = new Userprofile();
