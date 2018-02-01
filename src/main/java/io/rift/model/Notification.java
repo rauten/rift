@@ -15,7 +15,7 @@ public class Notification {
 
     private String notificationContent;
 
-    private Integer gameId;
+    private Integer sessionId;
 
     private Timestamp createdTime;
 

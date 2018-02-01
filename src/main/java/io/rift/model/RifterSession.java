@@ -31,6 +31,10 @@ public class RifterSession {
 
     private Timestamp sessionTime;
 
+    private String game;
+
+    private String console;
+
     private List<SessionRequest> sessionRequests;
 
     private Usertable usertable;

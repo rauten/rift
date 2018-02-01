@@ -24,7 +24,7 @@ public class NotificationService {
             notification.setUserId(resultSet.getInt(startPoint + 1));
             notification.setNotificationType(resultSet.getString(startPoint + 2));
             notification.setNotificationContent(resultSet.getString(startPoint + 3));
-            notification.setGameId(resultSet.getInt(startPoint + 4));
+            notification.setSessionId(resultSet.getInt(startPoint + 4));
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notifications.add(notification);
