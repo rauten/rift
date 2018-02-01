@@ -104,7 +104,7 @@ body {
 }
 
 .btn-toggle-following {
-  background-color: #7bae16;
+  background-color: #293e49;
   color: #fff;
 }
 .btn-toggle-following:hover {
@@ -304,7 +304,7 @@ body {
 }
 .nav-pills-custom-minimal > li.active > a, .nav-pills-custom-minimal > li.active > a:hover, .nav-pills-custom-minimal > li.active > a:focus {
   background-color: transparent;
-  border-top-color: #94c632;
+  border-top-color: #293e49;
   color: #696565;
 }
 .nav-pills-custom-minimal > li + li {
@@ -320,5 +320,5 @@ body {
   border-bottom: 4px solid transparent;
 }
 .nav-pills-custom-minimal.custom-minimal-bottom > li.active > a, .nav-pills-custom-minimal.custom-minimal-bottom > li.active > a:hover, .nav-pills-custom-minimal.custom-minimal-bottom > li.active > a:focus {
-  border-bottom-color: #94c632;
+  border-bottom-color: #293e49;
 }
