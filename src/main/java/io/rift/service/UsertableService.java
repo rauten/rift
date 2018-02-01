@@ -4,6 +4,7 @@ package io.rift.service;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.*;
 import io.rift.repository.UsertableRepository;
+import org.aspectj.weaver.ast.Not;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -312,12 +313,11 @@ public class UsertableService {
         return notifications;
 
     }
-    
 
     public Boolean createUser(Usertable usertable) {
         return usertableRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getGender(), usertable.getRiftTag()});
+                        usertable.getRiftTag(), usertable.getAuth0Token()});
     }
 
 

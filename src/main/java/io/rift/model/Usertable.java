@@ -12,6 +12,8 @@ public class Usertable {
     //@JsonView(Views.Public.class)
     private Integer id;
 
+    private String auth0Token;
+
     //@JsonView(Views.Public.class)
     private String firstName;
 
