@@ -8,7 +8,10 @@
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
             <h3>{{userprofile.firstName}} {{userprofile.lastName}}</h3>
             <h3>{{profile.name}}</h3>
-            <h3>{{profile.sub}}</h3>
+            <h3>
+              {{profile['http://riftgaming:auth0:com/user_metadata'].firstName | capitalize}}
+              {{profile['http://riftgaming:auth0:com/user_metadata'].lastName | capitalize}}
+            </h3>
 
             <p class="text-muted text-capitalize">@{{userprofile.riftTag}}</p>
           </div>

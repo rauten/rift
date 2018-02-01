@@ -17,6 +17,7 @@ import { TheriftComponent } from './therift/therift.component';
 import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.component';
 import { SessionCardComponent } from './usersessions/models/session-card/session-card.component';
 import {AuthService} from "./auth/auth.service";
+import {CapitalizePipe} from "./pipes/capitalize.pipe";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {AuthService} from "./auth/auth.service";
     TheriftComponent,
     RiftsessionsComponent,
     SessionCardComponent,
+    CapitalizePipe
   ],
   imports: [
     BrowserModule,
