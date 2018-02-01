@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
 import { AppComponent } from './app.component';
@@ -12,10 +13,10 @@ import { UsersessionsService} from './usersessions/usersessions.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { UsersessionsComponent } from './usersessions/usersessions.component';
 
-import { CalendarModule } from 'angular-calendar';
 import { TheriftComponent } from './therift/therift.component';
 import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.component';
 import { SessionCardComponent } from './usersessions/models/session-card/session-card.component';
+import {AuthService} from "./auth/auth.service";
 
 @NgModule({
   declarations: [
@@ -31,9 +32,9 @@ import { SessionCardComponent } from './usersessions/models/session-card/session
     BrowserModule,
     HttpModule,
     routes,
-    CalendarModule.forRoot(),
+    FormsModule
   ],
-  providers: [UserprofileService, UsersessionsService],
+  providers: [UserprofileService, UsersessionsService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

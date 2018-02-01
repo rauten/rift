@@ -16,7 +16,13 @@
           <a routerLink="sessions">Sessions</a>
         </li>
         <li>
-          <a routerLink="user">Profile</a>
+          <a routerLink="user" *ngIf="auth.isAuthenticated()">Profile</a>
+        </li>
+        <li>
+          <a (click)="auth.login()" *ngIf="!auth.isAuthenticated()">Login</a>
+        </li>
+        <li>
+          <a (click)="auth.logout()" *ngIf="auth.isAuthenticated()">Logout</a>
         </li>
       </ul>
     </div>
