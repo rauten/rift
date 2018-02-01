@@ -317,7 +317,7 @@ public class UsertableService {
     public Boolean createUser(Usertable usertable) {
         return usertableRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getGender(), usertable.getRiftTag()});
+                        usertable.getRiftTag(), usertable.getAuth0Token()});
     }
 
 

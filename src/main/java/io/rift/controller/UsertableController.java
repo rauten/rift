@@ -239,7 +239,8 @@ public class UsertableController {
     Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
-    
+
+
 
 
 }

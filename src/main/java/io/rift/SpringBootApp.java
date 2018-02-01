@@ -12,7 +12,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableJpaRepositories(basePackages = "io.rift.repository")
 public class SpringBootApp {
 
-
     public static void main(String[] args) throws Exception {
         new SpringApplication(SpringBootApp.class).run(args);
 
