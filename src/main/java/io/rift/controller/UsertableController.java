@@ -23,6 +23,8 @@ public class UsertableController {
     private UsertableService usertableService;
 
 
+
+
     /**
      * The result of a Usertable NATURAL JOIN Notification query
      * @param id The user id we want to get information for
@@ -237,6 +239,7 @@ public class UsertableController {
     Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
+    
 
 
 }
