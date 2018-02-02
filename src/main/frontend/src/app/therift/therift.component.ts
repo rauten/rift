@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../auth/auth.service";
+import {UserprofileService} from "../userprofile/userprofile.service";
 
 @Component({
   selector: 'app-therift',

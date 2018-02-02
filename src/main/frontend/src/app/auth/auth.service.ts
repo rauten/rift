@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router, NavigationStart } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
+import {UserprofileService} from "../userprofile/userprofile.service";
 
 
 @Injectable()
 export class AuthService {
-
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
     autoclose: true,
     auth: {
@@ -14,7 +14,7 @@ export class AuthService {
       responseType: 'token id_token',
       audience: `https://${AUTH_CONFIG.domain}/userinfo`,
       params: {
-        scope: 'profile openid email user_metadata'
+        scope: 'profile openid email'
       }
     },
     additionalSignUpFields: [
@@ -28,12 +28,12 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router) {
-
+  constructor(public router: Router, private userProfileService: UserprofileService) {
   }
 
   public login(): void {
     this.lock.show();
+    this.checkUserSignedUp();
   }
 
   // Call this method in app.component.ts
@@ -55,7 +55,6 @@ export class AuthService {
   private setSession(authResult): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    console.log(authResult);
     this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
       if (error) {
         throw new Error(error);
@@ -64,9 +63,24 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
-      console.log(localStorage.getItem('profile'));
-    })
+    });
+  }
 
+  checkUserSignedUp() {
+    console.log('in checkusersignedup');
+    console.log(localStorage.getItem('profile'));
+    // console.log('The profile: ' + profile);
+    // var signedUp = false;
+    // var firstName = profile['http://riftgaming:auth0:com/user_metadata'].firstName;
+    // var lastName = profile['http://riftgaming:auth0:com/user_metadata'].lastName;
+    // var riftTag = profile.nickname;
+    // var auth0Id = profile.sub;
+    // if(profile.hasOwnProperty('http://riftgaming:auth0:com/app_metadata')) {
+    //   signedUp = profile['http://riftgaming:auth0:com/app_metadata'].signed_up;
+    // }
+    // if(!signedUp) {
+    //   this.userProfileService.createUser(firstName, lastName, riftTag, auth0Id);
+    // }
   }
 
   public logout(): void {
