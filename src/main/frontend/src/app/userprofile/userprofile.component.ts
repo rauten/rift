@@ -9,6 +9,7 @@ import {Session} from "../usersessions/models/session-card/session";
 import {AuthService} from "../auth/auth.service";
 import {CapitalizePipe} from "../pipes/capitalize.pipe";
 import {ActivatedRoute} from "@angular/router";
+import {SimplePageScroll} from "ng2-simple-page-scroll";
 
 @Component({
   selector: 'app-userprofile',
@@ -37,6 +38,7 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       console.log("rifttag: " + params['rifttag']);
     });
+
     this.getUserById();
     this.getUserFollowersAndFollowing();
     this.getBroadcastNotifications();

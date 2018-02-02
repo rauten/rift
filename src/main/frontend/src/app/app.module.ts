@@ -34,7 +34,7 @@ import {CapitalizePipe} from "./pipes/capitalize.pipe";
     BrowserModule,
     HttpModule,
     routes,
-    FormsModule
+    FormsModule,
   ],
   providers: [UserprofileService, UsersessionsService, AuthService],
   bootstrap: [AppComponent]
