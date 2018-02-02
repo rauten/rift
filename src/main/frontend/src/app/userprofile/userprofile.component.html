@@ -8,6 +8,8 @@
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
             <h3>{{userprofile.firstName}} {{userprofile.lastName}}</h3>
             <h3>{{profile.name}}</h3>
+            <h3>currUser rifttag = {{currUser}}</h3>
+
             <h3>
               {{profile['http://riftgaming:auth0:com/user_metadata'].firstName | capitalize}}
               {{profile['http://riftgaming:auth0:com/user_metadata'].lastName | capitalize}}
@@ -37,10 +39,10 @@
         <div class="profile-info-right">
           <ul class="nav nav-pills nav-pills-custom-minimal custom-minimal-bottom">
             <li class="active"><a href="#feed" data-toggle="tab">feed</a></li>
-            <li><a href="#activity" data-toggle="tab">activity</a></li>
-            <li><a href="#sessions" data-toggle="tab">sessions</a></li>
-            <li><a href="#followers" data-toggle="tab">followers</a></li>
-            <li><a href="#following" data-toggle="tab">following</a></li>
+            <li><a href="#activity" data-toggle="tab" target="_self">activity</a></li>
+            <li><a href="#sessions" data-toggle="tab" target="_self">sessions</a></li>
+            <li><a href="#followers" data-toggle="tab" target="_self">followers</a></li>
+            <li><a href="#following" data-toggle="tab" target="_self">following</a></li>
           </ul>
           <div class="tab-content">
             <!-- feed -->

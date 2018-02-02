@@ -8,7 +8,7 @@ import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.compone
 
 export const router: Routes = [
   { path: '', redirectTo: '/therift', pathMatch: 'full' },
-  { path: 'user', component: UserprofileComponent },
+  { path: 'user/:rifttag', component: UserprofileComponent },
   { path: 'sessions', component: UsersessionsComponent },
   { path: 'therift', component: TheriftComponent },
   { path: 'riftsessions', component: RiftsessionsComponent}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
-import { Router, NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
 import {UserprofileService} from "../userprofile/userprofile.service";
 

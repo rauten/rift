@@ -8,6 +8,7 @@ import {Activity} from "./models/activity";
 import {Session} from "../usersessions/models/session-card/session";
 import {AuthService} from "../auth/auth.service";
 import {CapitalizePipe} from "../pipes/capitalize.pipe";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-userprofile',
@@ -22,14 +23,20 @@ export class UserprofileComponent implements OnInit {
   sessions: Session[] = [];
   broadcastNotifications: Userprofile[] = [];
   profile: any;
+  sub: any;
+  currUser: any;
 
   constructor(private userProfileService: UserprofileService,
   private userSessionsService: UsersessionsService,
-  public auth: AuthService) {
+  public auth: AuthService, private route: ActivatedRoute) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
   ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.currUser = params['rifttag'];
+      console.log("rifttag: " + params['rifttag']);
+    });
     this.getUserById();
     this.getUserFollowersAndFollowing();
     this.getBroadcastNotifications();
