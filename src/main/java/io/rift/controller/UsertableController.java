@@ -236,6 +236,7 @@ public class UsertableController {
      * @return boolean - Success or not
      * @throws SQLException
      */
+    @JsonView(Views.CreateUser.class)
     @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
     public Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);

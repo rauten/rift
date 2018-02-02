@@ -180,7 +180,7 @@
 
     <createGame>
         INSERT INTO riftergame
-        (host_id, num_slots, expiration_time, game_cost, method_of_contact, game_type, title, hits, game_duration, game_time)
+        (host_id, num_slots, game_cost, title, game_duration, game_time, game, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
 

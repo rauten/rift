@@ -21,7 +21,7 @@ public class RifterSessionService {
     @Autowired
     private UsertableService usertableService;
 
-    public final int POPULATESIZE = 14;
+    public final int POPULATESIZE = 15;
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
@@ -84,15 +84,14 @@ public class RifterSessionService {
         rifterSession.setGame(resultSet.getString(startPoint + 11));
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
+        rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         return rifterSession;
     }
 
     public boolean createGame(RifterSession rifterSession) {
         return usertableRepository.doInsert(createGame,
-                new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(),
-                        rifterSession.getExpirationTime(), rifterSession.getSessionCost(), rifterSession.getMethodOfContact(),
-                        rifterSession.getSessionType(), rifterSession.getTitle(), rifterSession.getHits(),
-                        rifterSession.getSessionDuration(), rifterSession.getSessionTime()});
+                new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
+                        rifterSession.getSessionTime(), rifterSession.getGame(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
     }
 
 

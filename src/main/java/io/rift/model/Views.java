@@ -73,6 +73,8 @@ public class Views {
 
     public interface RifterSessionSlotsRemaining {}
 
+    public interface RifterSessionCreatedTime {}
+
     public interface RifterSessionSessionRequests {}
 
     public interface RifterSessionUsertable {}
@@ -203,5 +205,11 @@ public class Views {
             FollowingFollowingUsertable, FollowingFollowerUsertable, NotificationType, NotificationContent,
             NotificationRifterSession, NotificationCreatedTime, RifterSessionTitle, RifterSessionSessionTime,
             RifterSessionGame, RifterSessionConsole, RifterSessionSlotsRemaining {}
+
+    public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
+            RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame,
+            RifterSessionSlotsRemaining, RifterSessionCreatedTime {}
+
+    public interface CreateUser extends UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
 
 }

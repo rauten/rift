@@ -52,6 +52,9 @@ public class RifterSession {
     @JsonView(Views.RifterSessionSlotsRemaining.class)
     private Integer slotsRemaining;
 
+    @JsonView(Views.RifterSessionCreatedTime.class)
+    private Timestamp createdTime;
+
     @JsonView(Views.RifterSessionSessionRequests.class)
     private List<SessionRequest> sessionRequests;
 
