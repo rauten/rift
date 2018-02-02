@@ -4,6 +4,11 @@ import { HttpModule } from '@angular/http';
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
+import {MatTabsModule} from '@angular/material/tabs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+
+
 import { AppComponent } from './app.component';
 import { UserprofileComponent } from './userprofile/userprofile.component'
 
@@ -35,6 +40,9 @@ import {CapitalizePipe} from "./pipes/capitalize.pipe";
     HttpModule,
     routes,
     FormsModule,
+    MatTabsModule,
+    NoopAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [UserprofileService, UsersessionsService, AuthService],
   bootstrap: [AppComponent]
