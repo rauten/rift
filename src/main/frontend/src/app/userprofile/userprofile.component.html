@@ -1,3 +1,5 @@
+<base href="/">
+
 <div class="container" style="width: 80%">
   <div class="user-profile">
     <div class="row">
@@ -6,13 +8,13 @@
         <div class="profile-info-left">
           <div class="text-center">
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
-            <h3>{{userprofile.firstName}} {{userprofile.lastName}}</h3>
+            <h3>{{userprofile.firstName}} {{userprofile.lastName}} </h3>
             <h3>{{profile.name}}</h3>
             <h3>currUser rifttag = {{currUser}}</h3>
 
             <h3>
-              {{profile['http://riftgaming:auth0:com/user_metadata'].firstName}}
-              {{profile['http://riftgaming:auth0:com/user_metadata'].lastName}}
+              {{profile['http://riftgaming:auth0:com/user_metadata'].firstName  | capitalize}}
+              {{profile['http://riftgaming:auth0:com/user_metadata'].lastName  | capitalize}}
             </h3>
             <p class="text-muted text-capitalize">@{{userprofile.riftTag}}</p>
           </div>
@@ -52,7 +54,8 @@
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
                 </a>
                 <div class="media-body">
-                  <p class="activity-title"><a href="#">{{notification.riftTag}}</a> {{notification.activities[0].notificationContent}} </p>
+                  <p class="activity-title"><a [routerLink]="['../../user',notification.rifttag]">{{notification.riftTag}}</a>
+                    {{notification.activities[0].notificationContent}} </p>
                   <small class="text-muted">{{notification.activities[0].createdTime | date:'fullDate'}} at {{notification.activities[0].createdTime | date:'shortTime'}}</small>
                 </div>
               </div>

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
-import { Router, NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
-
 
 @Injectable()
 export class AuthService {
@@ -64,9 +63,7 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
-      console.log(localStorage.getItem('profile'));
-    })
-
+    });
   }
 
   public logout(): void {
