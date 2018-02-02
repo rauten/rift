@@ -317,7 +317,12 @@ public class UsertableService {
     public Boolean createUser(Usertable usertable) {
         return usertableRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getRiftTag(), usertable.getAuth0Id()});
+                        usertable.getRiftTag(), formatAuth0Id(usertable.getAuth0Id())});
+    }
+
+    private String formatAuth0Id(String auth0Id) {
+        String[] str = auth0Id.split("|");
+        return str[1];
     }
 
 
