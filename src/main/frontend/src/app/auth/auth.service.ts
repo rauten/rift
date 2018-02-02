@@ -3,6 +3,7 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
 import {Http} from "@angular/http";
+import {AppComponent} from "../app.component";
 
 @Injectable()
 export class AuthService {
@@ -40,20 +41,23 @@ export class AuthService {
 
   // Call this method in app.component.ts
   // if using path-based routing
-  public handleAuthentication(): void {
+  public handleAuthentication(callback): void {
     this.lock.on('authenticated', (authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult, function (http) {
+        this.setSession(authResult, function () {
           var profileJson = localStorage.getItem('profile');
           var profileJsonParse = JSON.parse(profileJson);
-          if (profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
+          if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
               "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
               "riftTag" : profileJsonParse.nickname,
               "auth0Id" : profileJsonParse.sub
             };
-            http.post("/user/createUser", data);
+            console.log("Going");
+            callback(data, true);
+          } else {
+            callback("", false);
           }
         });
         this.router.navigate(['/']);

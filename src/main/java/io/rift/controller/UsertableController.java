@@ -236,7 +236,7 @@ public class UsertableController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
-    Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
+    public Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
 
