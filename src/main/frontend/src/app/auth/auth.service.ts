@@ -87,7 +87,6 @@ export class AuthService {
       var profileJsonParse = JSON.parse(profileJson);
       console.log(profileJson);
       console.log(profileJsonParse['nickname']);
-      console.log(http);
       callback(http);
     })
   }
