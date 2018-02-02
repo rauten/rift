@@ -26,6 +26,7 @@ export class UserprofileComponent implements OnInit {
   private userSessionsService: UsersessionsService,
   public auth: AuthService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    console.log("Gonna call doStuff");
   }
 
   ngOnInit() {
