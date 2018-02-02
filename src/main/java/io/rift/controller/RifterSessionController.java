@@ -83,7 +83,7 @@ public class RifterSessionController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/createGame")
-    Boolean createGame(@RequestBody RifterSession rifterSession) throws SQLException {
+    public Boolean createGame(@RequestBody RifterSession rifterSession) throws SQLException {
         return rifterSessionService.createGame(rifterSession);
     }
 

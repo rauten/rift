@@ -51,7 +51,7 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
-        List<Notification> userActivities = usertableService.getUserActivity(id);
+        List<Notification> userActivities = usertableService.getUserActivity(id, "");
         usertable.setCreatorActivityList(userActivities);
         return usertable;
     }
@@ -138,7 +138,7 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
-        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
+        usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "User"));
         return usertable;
     }
 
@@ -154,7 +154,7 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
-        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
+        usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "User"));
         usertable.setNotificationList(usertableService.getUserNotifications(id));
         return usertable;
     }
@@ -204,15 +204,16 @@ public class UsertableController {
         return usertable;
     }
 
+    @JsonView(Views.ProfilePageView.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/profilePage")
     public Usertable getUserProfilePage(@PathVariable Integer id) throws SQLException{
         Usertable usertable = usertableService.getUserById(id);
         usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
         usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
         usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
-        usertable.setBroadcastNotifications(usertableService.getBroadcastNotifications(id));
         usertable.setNotificationList(usertableService.getUserNotifications(id));
-        usertable.setCreatorActivityList(usertableService.getUserActivity(id));
+        usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "Followers"));
+        usertable.setCreatorActivityList(usertableService.getUserActivity(id, "session"));
         usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));

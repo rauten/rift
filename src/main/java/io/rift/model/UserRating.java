@@ -7,26 +7,31 @@ import lombok.Data;
 @Data
 public class UserRating {
 
-    @JsonView(Views.Public.class)
+    @JsonView(Views.UserRatingId.class)
     private Integer id;
 
+    @JsonView(Views.UserRatingRiftId.class)
     private Integer riftId;
 
     /**
      * Whether this rating is for the user's rifter (0) or riftee (1) account
      */
+    @JsonView(Views.UserRatingAccountType.class)
     private Boolean accountType;
 
+    @JsonView(Views.UserRatingRating.class)
     private Double rating;
 
+    @JsonView(Views.UserRatingReview.class)
     private String review;
 
+    @JsonView(Views.UserRatingReviewerId.class)
     private Integer reviewerId;
 
-    @JsonView(Views.InternalUserRatingUsertableReceiver.class)
+    @JsonView(Views.UserRatingRiftUsertable.class)
     private Usertable riftUsertable;
 
-    @JsonView(Views.InternalUserRatingUsertableSubmitter.class)
+    @JsonView(Views.UserRatingReviewerUsertable.class)
     private Usertable reviewerUsertable;
 
     public UserRating() {}

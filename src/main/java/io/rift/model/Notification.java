@@ -1,5 +1,6 @@
 package io.rift.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -7,32 +8,35 @@ import java.sql.Timestamp;
 @Data
 public class Notification {
 
+    @JsonView(Views.NotificationId.class)
     private Integer id;
 
+    @JsonView(Views.NotificationUserId.class)
     private Integer userId;
 
+    @JsonView(Views.NotificationType.class)
     private String notificationType;
 
+    @JsonView(Views.NotificationContent.class)
     private String notificationContent;
 
+    @JsonView(Views.NotificationSessionId.class)
     private Integer sessionId;
 
+    @JsonView(Views.NotificationCreatedTime.class)
     private Timestamp createdTime;
 
+    @JsonView(Views.NotificationCreatorId.class)
     private Integer creatorId;
 
+    @JsonView(Views.NotificationCreatorUsertable.class)
     private Usertable creatorUsertable;
 
+    @JsonView(Views.NotificationReceiverUsertable.class)
     private Usertable receiverUsertable;
 
+    @JsonView(Views.NotificationRifterSession.class)
     private RifterSession rifterSession;
-
-    /*
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @JsonView(Views.InternalNotificationUser.class)
-    private Usertable broadcastNotification;
-    */
 
     public Notification() {}
 

@@ -56,7 +56,7 @@ public class SessionRequestService {
             int startPoint = 5;
             for (String str : info) {
                 if (str.equals("hostInfo")) {
-                    Usertable usertable = usertableService.populateUsertable(resultSet, startPoint);
+                    Usertable usertable = usertableService.populateUsertable(resultSet, startPoint, "");
                     sessionRequest.setHostUsertable(usertable);
                     startPoint += usertableService.POPULATESIZE;
                 } else if (str.equals("sessionInfo")) {

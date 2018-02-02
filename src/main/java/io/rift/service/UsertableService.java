@@ -30,7 +30,7 @@ public class UsertableService {
     @Autowired
     private SessionRequestService sessionRequestService;
 
-    public final int POPULATESIZE = 13;
+    public final int POPULATESIZE = 14;
 
 
     /****************************** GET *******************************/
@@ -41,8 +41,10 @@ public class UsertableService {
     private final String getNumberFollowers = "getNumberFollowersById";
 
     private final String getBroadcastNotifications = "getBroadcastNotificationsById";
+    private final String getBroadcastNotificationsForFollower = "getBroadcastNotificationsForFollower";
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
+    private final String getUserActiviyAndUserSession = "getUserActiviyAndUserSession";
 
     private final String getUserAndRifterSessions = "getUserAndRifterSessions";
     private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
@@ -81,12 +83,12 @@ public class UsertableService {
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserById, args);
         if (resultSet.next()) {
-            return populateUsertable(resultSet, 1);
+            return populateUsertable(resultSet, 1, "");
         }
         return null;
     }
 
-    public Usertable populateUsertable(ResultSet resultSet, int startPoint) throws SQLException {
+    public Usertable populateUsertable(ResultSet resultSet, int startPoint, String info) throws SQLException {
         Usertable usertable = new Usertable();
         usertable.setId(resultSet.getInt(startPoint));
         usertable.setFirstName(resultSet.getString(startPoint + 1));
@@ -101,6 +103,10 @@ public class UsertableService {
         usertable.setTwitchAccount(resultSet.getString(startPoint + 10));
         usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
         usertable.setBio(resultSet.getString(startPoint + 12));
+        usertable.setAuth0Id(resultSet.getString(startPoint + 13));
+        if (info.equals("activity")) {
+            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 13, ""));
+        }
         return usertable;
     }
 
@@ -175,7 +181,7 @@ public class UsertableService {
             following.setFollowerId(id);
             following.setFollowingId(resultSet.getInt(2));
             following.setAccepted(resultSet.getBoolean(3));
-            following.setFollowingUsertable(populateUsertable(resultSet, 4));
+            following.setFollowingUsertable(populateUsertable(resultSet, 4, ""));
             followings.add(following);
         }
         return followings;
@@ -191,7 +197,7 @@ public class UsertableService {
             following.setFollowerId(id);
             following.setFollowingId(resultSet.getInt(2));
             following.setAccepted(resultSet.getBoolean(3));
-            following.setFollowerUsertable(populateUsertable(resultSet, 4));
+            following.setFollowerUsertable(populateUsertable(resultSet, 4, ""));
             followings.add(following);
         }
         return followings;
@@ -245,18 +251,24 @@ public class UsertableService {
 
 
 
-    public List<Notification> getUserActivity(Integer id) throws SQLException {
+    public List<Notification> getUserActivity(Integer id, String info) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getUserActivity, args);
-        return notificationService.populateNotifications(resultSet, 1);
+        ResultSet resultSet;
+        if (info.equals("session")) {
+            resultSet = usertableRepository.doQuery(getUserActiviyAndUserSession, args);
+        } else {
+            resultSet = usertableRepository.doQuery(getUserActivity, args);
+        }
+        return notificationService.populateNotifications(resultSet, 1, info);
     }
 
     public List<Notification> getUserNotifications(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getUserNotifications, args);
-        return notificationService.populateNotifications(resultSet, 1);
+        ResultSet resultSet;
+        resultSet = usertableRepository.doQuery(getUserNotifications, args);
+        return notificationService.populateNotifications(resultSet, 1, "");
     }
 
     public List<RifterSession> getUserAndRifterSession(Integer id) throws SQLException {
@@ -281,11 +293,16 @@ public class UsertableService {
      * @param id
      * @return
      */
-    public List<Notification> getBroadcastNotifications(Integer id) throws SQLException {
+    public List<Notification> getBroadcastNotifications(Integer id, String type) throws SQLException {
 
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getBroadcastNotifications, args);
+        ResultSet resultSet;
+        if (type.equals("Followers")) {
+            resultSet = usertableRepository.doQuery(getBroadcastNotificationsForFollower, args);
+        } else {
+            resultSet = usertableRepository.doQuery(getBroadcastNotifications, args);
+        }
         int i = 1;
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {
@@ -307,6 +324,8 @@ public class UsertableService {
             usertable.setRiftTag(resultSet.getString(13));
             usertable.setRifteeRating(resultSet.getDouble(14));
             usertable.setRifterRating(resultSet.getDouble(15));
+            usertable.setGender(resultSet.getBoolean(16));
+            usertable.setAuth0Id(resultSet.getString(17));
             notification.setCreatorUsertable(usertable);
             notifications.add(notification);
         }

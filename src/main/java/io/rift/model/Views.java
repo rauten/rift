@@ -4,79 +4,204 @@ public class Views {
 
     public interface Public {}
 
-    /*******************************************************/
-    /*************** Views for Notification ****************/
-    public interface InternalNotificationUser extends Public {}
+    /****************** Following Attributes **********************/
+    /**************************************************************/
 
-    public interface InternalNotificationCreator extends Public {}
-    
-    public interface InternalNotificationRG extends Public {}
+    public interface FollowingFollowerId {}
 
+    public interface FollowingFollowingId {}
 
-    /*******************************************************/
-    /************** Views for RifterSession ******************/
-    public interface InternalRifterGameGR extends Public {}
+    public interface FollowingAccepted{}
 
-    public interface InternalRifterGameUsertable extends Public {}
-    
-    public interface InternalRifterGameNotification extends Public {}
+    public interface FollowingFollowerUsertable {}
+
+    public interface FollowingFollowingUsertable {}
 
 
-    /*******************************************************/
-    /*************** Views for SessionRequest *****************/
-    public interface InternalGameRequestRG extends Public {}
+    /****************** Notification Attributes **********************/
+    /*****************************************************************/
 
-    public interface InternalGameRequestUsertable extends Public {}
+    public interface NotificationId {}
 
+    public interface NotificationUserId {}
 
-    /*******************************************************/
-    /*************** Views for Usertable *******************/
-    public interface InternalUsertableUser extends Public {}
+    public interface NotificationType {}
 
-    public interface InternalUsertableCreator extends Public {}
+    public interface NotificationContent {}
 
-    public interface InternalUsertableGR extends Public {}
+    public interface NotificationSessionId {}
 
-    public interface InternalUsertableRG extends Public {}
+    public interface NotificationCreatedTime {}
 
-    public interface InternalUsertableFollowingFollower extends Public {}
+    public interface NotificationCreatorId {}
 
-    public interface InternalUsertableFollowingFollowing extends Public {}
+    public interface NotificationCreatorUsertable {}
 
-    public interface InternalUsertableFollowingFollowerAndFollowing extends Public {}
+    public interface NotificationReceiverUsertable {}
 
-    public interface InternalUsertableUserComplaintReceiver extends Public {}
-
-    public interface InternalUsertableUserComplaintSubmitter extends Public {}
-
-    public interface InternalUsertableUserRatingReceiver extends Public {}
-
-    public interface InternalUsertableUserRatingSubmitter extends Public {}
-
-    public interface ProfilePageView extends InternalUsertableGR, InternalUsertableRG, InternalUsertableCreator, InternalUsertableUser, InternalUsertableFollowingFollowing, InternalUsertableFollowingFollower {}
+    public interface NotificationRifterSession {}
 
 
-    /*******************************************************/
-    /*************** Views for Following *****************/
-    public interface InternalFollowingUsertableFollower extends Public {}
+    /****************** RifterSession Attributes **********************/
+    /******************************************************************/
 
-    public interface InternalFollowingUsertableFollowing extends Public {}
+    public interface RifterSessionId {}
+
+    public interface RifterSessionHostId {}
+
+    public interface RifterSessionNumSlots {}
+
+    public interface RifterSessionExpirationTime{}
+
+    public interface RifterSessionCost {}
+
+    public interface RifterSessionMethodOfContact {}
+
+    public interface RifterSessionSessionType {}
+
+    public interface RifterSessionSessionDuration {}
+
+    public interface RifterSessionTitle {}
+
+    public interface RifterSessionHits{}
+
+    public interface RifterSessionSessionTime {}
+
+    public interface RifterSessionGame{}
+
+    public interface RifterSessionConsole {}
+
+    public interface RifterSessionSlotsRemaining {}
+
+    public interface RifterSessionSessionRequests {}
+
+    public interface RifterSessionUsertable {}
+
+    public interface RifterSessionNotifications {}
+
+    public interface RifterSessionPlayers {}
 
 
-    /*******************************************************/
-    /*************** Views for UserComplaint ***************/
-    public interface InternalUserComplaintUsertableReceiver extends Public {}
+    /****************** SessionRequest Attributes **********************/
+    /*******************************************************************/
 
-    public interface InternalUserComplaintUsertableSubmitter extends Public {}
+    public interface SessionRequestRifteeId {}
+
+    public interface SessionRequestSessionId {}
+
+    public interface SessionRequestAccepted {}
+
+    public interface SessionRequestHostId {}
+
+    public interface SessionRequestRifterSession {}
+
+    public interface SessionRequestRifteeUsertable {}
+
+    public interface SessionRequestHostUsertable {}
 
 
-    /*******************************************************/
-    /*************** Views for UserRating ******************/
-    public interface InternalUserRatingUsertableReceiver extends Public {}
+    /****************** UserComplaint Attributes ***********************/
+    /*******************************************************************/
 
-    public interface InternalUserRatingUsertableSubmitter extends Public {}
+    public interface UserComplaintRiftId {}
+
+    public interface UserComplaintSubmitterId {}
+
+    public interface UserComplaintComplaint {}
+
+    public interface UserComplaintReceiverUsertable {}
+
+    public interface UserComplaintSubmitterUsertable {}
 
 
+    /****************** UserRating Attributes ***********************/
+    /****************************************************************/
 
+    public interface UserRatingId {}
+
+    public interface UserRatingRiftId {}
+
+    public interface UserRatingAccountType {}
+
+    public interface UserRatingRating {}
+
+    public interface UserRatingReview {}
+
+    public interface UserRatingReviewerId {}
+
+    public interface UserRatingRiftUsertable {}
+
+    public interface UserRatingReviewerUsertable {}
+
+
+    /****************** Usertable Attributes ***********************/
+    /****************************************************************/
+
+    public interface UsertableId {}
+
+    public interface UsertableAuth0Id {}
+
+    public interface UsertableFirstName {}
+
+    public interface UsertableLastName {}
+
+    public interface UsertableRiftTag {}
+
+    public interface UsertableGender {}
+
+    public interface UsertableTwitchAccount {}
+
+    public interface UsertableYoutubeAccount {}
+
+    public interface UsertableRifterRating {}
+
+    public interface UsertableRifteeRating {}
+
+    public interface UsertableIsPrivate {}
+
+    public interface UsertableIsSuspended {}
+
+    public interface UsertableProfilePicturePath {}
+
+    public interface UsertableBio {}
+
+    public interface UsertableNotificationList {}
+
+    public interface UsertableCreatorActivityList {}
+
+    public interface UsertableBroadcastNotificationList {}
+
+    public interface UsertableRifteeSessions {}
+
+    public interface UsertableRifterSessions {}
+
+    public interface UsertableFollowers {}
+
+    public interface UsertableFollowings {}
+
+    public interface UsertableReceiverComplaints {}
+
+    public interface UsertableSubmitterComplaints {}
+
+    public interface UsertableRiftReviews {}
+
+    public interface UsertableReviewerReviews {}
+
+    public interface UsertableGamesPlayed {}
+
+    public interface UsertableNumberFollowing {}
+
+    public interface UsertableNumberFollowers {}
+
+
+    /****************** GetProfilePage View ***********************/
+    /**************************************************************/
+
+    public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableFirstName, UsertableLastName,
+            UsertableRiftTag, UsertableGender, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
+            UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableBroadcastNotificationList,
+            FollowingFollowingUsertable, FollowingFollowerUsertable, NotificationType, NotificationContent,
+            NotificationRifterSession, NotificationCreatedTime, RifterSessionTitle, RifterSessionSessionTime,
+            RifterSessionGame, RifterSessionConsole, RifterSessionSlotsRemaining {}
 
 }
