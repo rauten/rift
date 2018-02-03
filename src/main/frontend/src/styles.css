@@ -1,14 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-
 .navbar-fixed-top {
   background-color: #293e49;
   border: none;
   color: white;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 0px) {
   .container {
     width: 100%;
     padding-right: 0;

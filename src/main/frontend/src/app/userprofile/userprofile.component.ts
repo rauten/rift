@@ -35,7 +35,6 @@ export class UserprofileComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
-      console.log("rifttag: " + params['rifttag']);
     });
 
     this.getUserById();
@@ -100,7 +99,6 @@ export class UserprofileComponent implements OnInit {
     this.userProfileService.getBroadcastNotifications().subscribe(
       resBody => {
         for (var i = 0; i < resBody.broadcastNotifications.length; i++) {
-          console.log(resBody.broadcastNotifications[i]);
           var currUser = new Userprofile();
           currUser.firstName = resBody.broadcastNotifications[i].creatorUsertable.firstName;
           currUser.lastName = resBody.broadcastNotifications[i].creatorUsertable.lastName;
@@ -110,7 +108,6 @@ export class UserprofileComponent implements OnInit {
           currUser.activities.push(currNotification);
           this.broadcastNotifications.push(currUser);
         }
-        console.log(this.broadcastNotifications);
       }
     )
   }

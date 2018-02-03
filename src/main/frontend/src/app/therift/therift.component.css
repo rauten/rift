@@ -144,4 +144,15 @@ header.masthead .intro-text .intro-heading {
   }
 }
 
+.container /deep/ {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (min-width: 1999px) {
+  .container /deep/ {
+    width: 100% !important;
+  }
+}
+
 

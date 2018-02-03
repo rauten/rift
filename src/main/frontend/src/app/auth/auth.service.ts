@@ -2,9 +2,13 @@ import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
+import {Http} from "@angular/http";
+import {AppComponent} from "../app.component";
 
 @Injectable()
 export class AuthService {
+
+  private createUser = "/user/createUser";
 
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
     autoclose: true,
@@ -27,7 +31,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private http: Http) {
 
   }
 
@@ -37,10 +41,24 @@ export class AuthService {
 
   // Call this method in app.component.ts
   // if using path-based routing
-  public handleAuthentication(): void {
+  public handleAuthentication(callback): void {
     this.lock.on('authenticated', (authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
+        this.setSession(authResult, function () {
+          var profileJson = localStorage.getItem('profile');
+          var profileJsonParse = JSON.parse(profileJson);
+          if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
+            let data = {
+              "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
+              "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
+              "riftTag" : profileJsonParse.nickname,
+              "auth0Id" : profileJsonParse.sub
+            };
+            callback(data, true);
+          } else {
+            callback("", false);
+          }
+        });
         this.router.navigate(['/']);
       }
     });
@@ -51,11 +69,10 @@ export class AuthService {
     });
   }
 
-  private setSession(authResult): void {
+  private setSession(authResult, callback): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    console.log(authResult);
-    this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
+     this.lock.getUserInfo(authResult.accessToken, function(error, profile, http : Http) {
       if (error) {
         throw new Error(error);
       }
@@ -63,7 +80,8 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
-    });
+      callback(http);
+    })
   }
 
   public logout(): void {
@@ -79,6 +97,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
+
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
   }
