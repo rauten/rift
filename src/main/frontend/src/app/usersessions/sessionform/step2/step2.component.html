@@ -1,0 +1,30 @@
+<form #step2Form="ngForm" class="editForm" novalidate>
+  <div class="tab-pane fade in active">
+    <h4 class="head text-center">{{title}}</h4>
+    <br/>
+    <div class='row'>
+      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+        <div class="row">
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessionslots">Give your session a title</label>
+              <input class="form-control input-md" #sessionslots="ngModel" required id="sessionslots" name="sessionslots" type="text" placeholder="Number of slots for your session" [(ngModel)]="step2.sessionSlots">
+              <div class="alert alert-danger" [hidden]="sessionslots.valid">Session title is required</div>
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessioncost">What game will you be playing?</label>
+              <input class="form-control input-md" #sessioncost="ngModel" required id="sessioncost" name="sessioncost" type="text" placeholder="Cost per slot" [(ngModel)]="step2.sessionCostPerSlot">
+              <div class="alert alert-danger" [hidden]="sessioncost.valid">Last Name is required</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group text-center">
+          <button mat-button matStepperPrevious class="btn-primary" type="button" (click)="save(step2Form)">Back</button>
+          <button mat-button matStepperNext type="button" [disabled]="!step2Form.valid" (click)="save(step2Form)">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

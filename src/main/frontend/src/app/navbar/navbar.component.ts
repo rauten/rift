@@ -8,9 +8,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  currUser: any;
   constructor(public auth: AuthService) {
-    this.currUser = JSON.parse(localStorage.getItem('profile'));
+  }
+
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem('profile'));
   }
 
   ngOnInit() {

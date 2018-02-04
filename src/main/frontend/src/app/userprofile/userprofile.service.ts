@@ -3,7 +3,8 @@ import { Userprofile } from "./models/userprofile";
 import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
-import {Router, ActivatedRoute, Params} from "@angular/router";
+
+
 
 @Injectable()
 export class UserprofileService {

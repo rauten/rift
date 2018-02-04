@@ -6,6 +6,8 @@ import Auth0Lock from 'auth0-lock';
 @Injectable()
 export class AuthService {
 
+  private createUser = "/user/createUser";
+
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
     autoclose: true,
     auth: {
@@ -50,7 +52,6 @@ export class AuthService {
               "riftTag" : profileJsonParse.nickname,
               "auth0Id" : profileJsonParse.sub
             };
-            console.log("Going");
             callback(data, true);
           } else {
             callback("", false);
@@ -69,8 +70,7 @@ export class AuthService {
   private setSession(authResult, callback): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    console.log(authResult);
-    this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
+     this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
       if (error) {
         throw new Error(error);
       }
@@ -100,6 +100,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
+
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
   }

@@ -42,6 +42,8 @@ body {
 .profile-info-left ul.list-social > li {
   line-height: 2.3;
 }
+
+/*noinspection CssInvalidPropertyValue*/
 .profile-info-left ul.list-social > li i {
   display: inline-block;
   vertical-align: middle;
@@ -208,10 +210,11 @@ body {
   margin-bottom: 15px;
 }
 
-/deep/.mat-tab-label, /deep/.mat-tab-label-active{
+.profile-info-right /deep/.mat-tab-label, .profile-info-right /deep/.mat-tab-label-active{
   min-width: 0!important;
   padding: 10px!important;
   margin-left: 10px!important;
   margin-right: 10px!important;
   background-color: transparent!important;
 }
+
