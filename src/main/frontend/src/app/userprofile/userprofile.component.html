@@ -1,3 +1,5 @@
+<base href="/">
+
 <div class="container" style="width: 80%">
   <div class="user-profile">
     <div class="row">
@@ -6,13 +8,14 @@
         <div class="profile-info-left">
           <div class="text-center">
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
-            <h3>{{userprofile.firstName}} {{userprofile.lastName}}</h3>
+            <h3>{{userprofile.firstName}} {{userprofile.lastName}} </h3>
             <h3>{{profile.name}}</h3>
-            <h3>
-              {{profile['http://riftgaming:auth0:com/user_metadata'].firstName}}
-              {{profile['http://riftgaming:auth0:com/user_metadata'].lastName}}
-            </h3>
+            <h3>currUser rifttag = {{currUser}}</h3>
 
+            <h3>
+              {{profile['http://riftgaming:auth0:com/user_metadata'].firstName  | capitalize}}
+              {{profile['http://riftgaming:auth0:com/user_metadata'].lastName  | capitalize}}
+            </h3>
             <p class="text-muted text-capitalize">@{{userprofile.riftTag}}</p>
           </div>
           <div class="section">
@@ -36,29 +39,20 @@
       </div>
       <div class="col-md-8">
         <div class="profile-info-right">
-          <ul class="nav nav-pills nav-pills-custom-minimal custom-minimal-bottom">
-            <li class="active"><a href="#feed" data-toggle="tab">feed</a></li>
-            <li><a href="#activity" data-toggle="tab">activity</a></li>
-            <li><a href="#sessions" data-toggle="tab">sessions</a></li>
-            <li><a href="#followers" data-toggle="tab">followers</a></li>
-            <li><a href="#following" data-toggle="tab">following</a></li>
-          </ul>
-          <div class="tab-content">
-            <!-- feed -->
-            <div class="tab-pane fade in active" id="feed">
+          <mat-tab-group>
+            <mat-tab label="feed">
               <div class="media activity-item" *ngFor="let notification of broadcastNotifications">
                 <a href="#" class="pull-left">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
                 </a>
                 <div class="media-body">
-                  <p class="activity-title"><a href="#">{{notification.riftTag}}</a> {{notification.activities[0].notificationContent}} </p>
+                  <p class="activity-title"><a [routerLink]="['../../user',notification.rifttag]">{{notification.riftTag}}</a>
+                    {{notification.activities[0].notificationContent}} </p>
                   <small class="text-muted">{{notification.activities[0].createdTime | date:'fullDate'}} at {{notification.activities[0].createdTime | date:'shortTime'}}</small>
                 </div>
               </div>
-            </div>
-            <!-- end feed -->
-            <!-- activities -->
-            <div class="tab-pane fade in active" id="activity">
+            </mat-tab>
+            <mat-tab label="activity">
               <div class="media activity-item" *ngFor="let activity of userprofile.activities">
                 <a href="#" class="pull-left">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
@@ -80,10 +74,9 @@
                   </ul>
                 </div>
               </div>
-            </div>
-            <!-- end activities -->
-            <div class="tab-pane fade" id="sessions">
-              <div class="media sessions-item" *ngFor="let session of sessions">
+            </mat-tab>
+            <mat-tab label="sessions">
+              <div class="media activity-item" *ngFor="let session of sessions">
                 <app-session-card
                   hostName="{{session.firstName}} {{session.lastName}}"
                   hostRiftTag="{{session.riftTag}}"
@@ -95,9 +88,8 @@
                   title="{{session.sessionTitle}}"
                 ></app-session-card>
               </div>
-            </div>
-            <!-- followers -->
-            <div class="tab-pane fade" id="followers">
+            </mat-tab>
+            <mat-tab label="followers">
               <div class="media user-follower" *ngFor="let follower of followerUserprofiles">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
                 <div class="media-body">
@@ -106,10 +98,8 @@
                   <button type="button" class="btn btn-sm btn-toggle-following pull-right"><i class="fa fa-checkmark-round"></i> <span>Following</span></button>
                 </div>
               </div>
-            </div>
-            <!-- end followers -->
-            <!-- following -->
-            <div class="tab-pane fade" id="following">
+            </mat-tab>
+            <mat-tab label="following">
               <div class="media user-following" *ngFor="let following of followingUserprofiles">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
                 <div class="media-body">
@@ -118,9 +108,8 @@
                   <button type="button" class="btn btn-sm btn-danger pull-right"><i class="fa fa-close-round"></i> Unfollow</button>
                 </div>
               </div>
-            </div>
-            <!-- end following -->
-          </div>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </div>
     </div>

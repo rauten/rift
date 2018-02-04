@@ -2,13 +2,9 @@ import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
-import {Http} from "@angular/http";
-import {AppComponent} from "../app.component";
 
 @Injectable()
 export class AuthService {
-
-  private createUser = "/user/createUser";
 
   lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
     autoclose: true,
@@ -31,7 +27,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router, private http: Http) {
+  constructor(public router: Router) {
 
   }
 
@@ -70,15 +66,11 @@ export class AuthService {
     });
   }
 
-  public createUserFunc(data) {
-    this.http.post(this.createUser, data);
-  }
-
   private setSession(authResult, callback): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     console.log(authResult);
-     this.lock.getUserInfo(authResult.accessToken, function(error, profile, http : Http) {
+    this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
       if (error) {
         throw new Error(error);
       }
@@ -91,7 +83,7 @@ export class AuthService {
       var profileJsonParse = JSON.parse(profileJson);
       console.log(profileJson);
       console.log(profileJsonParse['nickname']);
-      callback(http);
+      callback();
     })
   }
 
@@ -108,7 +100,6 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
   }
