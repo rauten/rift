@@ -3,12 +3,12 @@ export class FormData {
   sessionCreatorRiftTag: string = "";
   sessionCreationTime: any;
 
-  sessionTitle: string = "";
-  sessionGame: string = "";
-  sessionPlatform: string = "";
+  title: string = "";
+  game: string = "";
+  console: string = "";
 
-  sessionSlots: string = "";
-  sessionCostPerSlot: string = "";
+  numSlots: string = "";
+  sessionCost: string = "";
 
   sessionDate: string = "";
   sessionTimes: string = "";
@@ -17,11 +17,11 @@ export class FormData {
     this.sessionCreatorId = "";
     this.sessionCreatorRiftTag = "";
     this.sessionCreationTime = "";
-    this.sessionTitle = "";
-    this.sessionGame = "";
-    this.sessionPlatform = "";
-    this.sessionSlots = "";
-    this.sessionCostPerSlot = "";
+    this.title = "";
+    this.game = "";
+    this.console = "";
+    this.numSlots = "";
+    this.sessionCost = "";
     this.sessionDate = "";
     this.sessionTimes = "";
   }
@@ -29,14 +29,14 @@ export class FormData {
 }
 
 export class Step1 {
-  sessionTitle: string = "";
-  sessionGame: string = "";
-  sessionPlatform: string = "";
+  title: string = "";
+  game: string = "";
+  console: string = "";
 }
 
 export class Step2 {
-  sessionSlots: string;
-  sessionCostPerSlot: string;
+  numSlots: string;
+  sessionCost: string;
 }
 
 export class Step3 {

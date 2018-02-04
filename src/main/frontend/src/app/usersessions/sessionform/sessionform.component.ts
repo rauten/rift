@@ -11,9 +11,9 @@ export class SessionformComponent implements OnInit {
   step1Title = 'Step 1';
   step2Title = 'Step 2';
   step3Title = 'Step 3';
-  step1 = Step1;
-  step2 = Step2;
-  step3 = Step3;
+  step1:Step1;
+  step2:Step2;
+  step3:Step3;
   @Input() formData;
 
   constructor(private formDataService: FormDataService) { }

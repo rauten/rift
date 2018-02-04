@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { FormData } from '../data/formData.model';
 import { FormDataService } from '../data/formData.service';
+import { UsersessionsService} from "../../usersessions.service";
 
 @Component({
   selector: 'app-result',
@@ -13,7 +14,7 @@ export class ResultComponent implements OnInit {
   @Input() formData: FormData;
   isFormValid: boolean = false;
 
-  constructor(private formDataService: FormDataService) { }
+  constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService) { }
 
   ngOnInit() {
     this.formData = this.formDataService.getFormData();
@@ -23,6 +24,8 @@ export class ResultComponent implements OnInit {
 
   submit() {
     alert('Excellent Job!');
+    console.log(this.formData);
+    this.userSessionService.createUserSession(this.formData);
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
   }

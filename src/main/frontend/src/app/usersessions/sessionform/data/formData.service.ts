@@ -17,25 +17,25 @@ export class FormDataService {
 
   getStep1Info(): Step1 {
     var step1: Step1 = {
-      sessionTitle: this.formData.sessionTitle,
-      sessionGame: this.formData.sessionGame,
-      sessionPlatform: this.formData.sessionPlatform
+      title: this.formData.title,
+      game: this.formData.game,
+      console: this.formData.console
     };
     return step1;
   }
 
   setStep1Info(data: Step1) {
     this.isStep1Valid = true;
-    this.formData.sessionTitle = data.sessionTitle;
-    this.formData.sessionGame = data.sessionGame;
-    this.formData.sessionPlatform = data.sessionPlatform;
+    this.formData.title = data.title;
+    this.formData.game = data.game;
+    this.formData.console = data.console;
     this.workflowService.validateStep(STEPS.step1);
   }
 
   getStep2Info(): Step2 {
     var step2: Step2 = {
-      sessionSlots: this.formData.sessionSlots,
-      sessionCostPerSlot: this.formData.sessionCostPerSlot
+      numSlots: this.formData.numSlots,
+      sessionCost: this.formData.sessionCost
     };
     return step2;
   }
@@ -43,8 +43,8 @@ export class FormDataService {
   setStep2Info(data: Step2) {
     // Update the work type only when the Work Form had been validated successfully
     this.isStep2Valid = true;
-    this.formData.sessionSlots = data.sessionSlots;
-    this.formData.sessionCostPerSlot = data.sessionCostPerSlot;
+    this.formData.numSlots = data.numSlots;
+    this.formData.sessionCost = data.sessionCost;
     this.workflowService.validateStep(STEPS.step2);
   }
 

@@ -8,14 +8,14 @@
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessionslots">Give your session a title</label>
-              <input class="form-control input-md" #sessionslots="ngModel" required id="sessionslots" name="sessionslots" type="text" placeholder="Number of slots for your session" [(ngModel)]="step2.sessionSlots">
+              <input class="form-control input-md" #sessionslots="ngModel" required id="sessionslots" name="sessionslots" type="text" placeholder="Number of slots for your session" [(ngModel)]="step2.numSlots">
               <div class="alert alert-danger" [hidden]="sessionslots.valid">Session title is required</div>
             </div>
           </div>
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessioncost">What game will you be playing?</label>
-              <input class="form-control input-md" #sessioncost="ngModel" required id="sessioncost" name="sessioncost" type="text" placeholder="Cost per slot" [(ngModel)]="step2.sessionCostPerSlot">
+              <input class="form-control input-md" #sessioncost="ngModel" required id="sessioncost" name="sessioncost" type="text" placeholder="Cost per slot" [(ngModel)]="step2.sessionCost">
               <div class="alert alert-danger" [hidden]="sessioncost.valid">Last Name is required</div>
             </div>
           </div>

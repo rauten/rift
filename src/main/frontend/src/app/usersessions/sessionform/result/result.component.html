@@ -8,51 +8,51 @@
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessiontitle">Session Title: </label>
+            <label class="control-label" for="title">Session Title: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
-          {{formData.sessionTitle}}
+          {{formData.title}}
         </div>
       </div>
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessionGame">Game: </label>
+            <label class="control-label" for="game">Game: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
-          {{formData.sessionGame}}
+          {{formData.game}}
         </div>
       </div>
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessionplatform">Platform: </label>
+            <label class="control-label" for="console">Platform: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
-          {{formData.sessionPlatform}}
+          {{formData.console}}
         </div>
       </div>
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessionslots">Platform: </label>
+            <label class="control-label" for="numSlots">Platform: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
-          {{formData.sessionSlots}}
+          {{formData.numSlots}}
         </div>
       </div>
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessioncost">Platform: </label>
+            <label class="control-label" for="sessionCost">Platform: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
-          {{formData.sessionCostPerSlot}}
+          {{formData.sessionCost}}
         </div>
       </div>
       <div class="row">
@@ -79,6 +79,6 @@
     </div>
   </div>
   <div class="text-center">
-    <button class="btn btn-success btn-outline-rounded" [disabled]="!isFormValid" (click)="submit()"> Submit <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
+    <button class="btn btn-success btn-outline-rounded" (click)="submit()"> Submit <span style="margin-left:10px;" class="glyphicon glyphicon-arrow-right"></span></button>
   </div>
 </div>
