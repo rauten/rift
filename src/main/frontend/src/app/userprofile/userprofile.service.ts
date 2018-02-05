@@ -45,4 +45,15 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  unfollowUser(riftTag: string, id: number) {
+    console.log("running unfollowUser");
+    return this.http.get("/api/user/" + riftTag + "/unfollow=" + id)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
 }
