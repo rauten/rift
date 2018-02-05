@@ -205,9 +205,10 @@ public class UsertableController {
     }
 
     @JsonView(Views.ProfilePageView.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/profilePage")
-    public Usertable getUserProfilePage(@PathVariable Integer id) throws SQLException{
-        Usertable usertable = usertableService.getUserById(id);
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
+    public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
+        Usertable usertable = usertableService.getUserByRiftTag(riftTag);
+        int id = usertable.getId();
         usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
         usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
         usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));

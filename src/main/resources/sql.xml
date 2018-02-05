@@ -4,6 +4,10 @@
         SELECT * FROM usertable WHERE id = ?;
     </getUserById>
 
+    <getUserByRiftTag>
+        SELECT * FROM usertable WHERE rift_tag = ?;
+    </getUserByRiftTag>
+
     <getNumberFollowingById>
         SELECT COUNT(*)
         FROM following

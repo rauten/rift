@@ -36,6 +36,8 @@ public class UsertableService {
     /****************************** GET *******************************/
     /******************************************************************/
     private final String getUserById = "getUserById";
+    private final String getUserByRiftTag = "getUserByRiftTag";
+
     private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
     private final String getNumberFollowing = "getNumberFollowingById";
     private final String getNumberFollowers = "getNumberFollowersById";
@@ -82,6 +84,16 @@ public class UsertableService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = usertableRepository.doQuery(getUserById, args);
+        if (resultSet.next()) {
+            return populateUsertable(resultSet, 1, "");
+        }
+        return null;
+    }
+
+    public Usertable getUserByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = usertableRepository.doQuery(getUserByRiftTag, args);
         if (resultSet.next()) {
             return populateUsertable(resultSet, 1, "");
         }
