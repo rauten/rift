@@ -105,7 +105,10 @@
                 <div class="media-body">
                   <a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
-                  <button type="button" class="btn btn-sm btn-toggle-following pull-right"><i class="fa fa-checkmark-round"></i> <span>Following</span></button>
+                  <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [currentUser]="follower"
+                                     [loggedInUser]="loggedInUser">
+
+                  </app-follow-button>
                 </div>
               </div>
             </mat-tab>
@@ -115,7 +118,10 @@
                 <div class="media-body">
                   <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
                     <br><span class="text-muted username">@{{following.riftTag}}</span></a>
-                  <button type="button" class="btn btn-sm btn-danger pull-right"><i class="fa fa-close-round"></i> Unfollow</button>
+                  <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [currentUser]="following"
+                                     [loggedInUser]="loggedInUser">
+
+                  </app-follow-button>
                 </div>
               </div>
             </mat-tab>
