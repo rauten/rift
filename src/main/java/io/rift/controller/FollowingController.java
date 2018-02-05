@@ -22,9 +22,18 @@ public class FollowingController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/follow={id}")
     public boolean followUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException {
-        int followerId = followingService.isFollowing(riftTag, id);
-        if (followerId != -1) {
-            return followingService.follow(followerId, id);
+        Object[] res = followingService.isFollowing(riftTag, id);
+        if (!(boolean)res[0]) {
+            return followingService.follow((int)res[1], id);
+        }
+        return false;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/unfollow={id}")
+    public boolean unfollowUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException {
+        Object[] res = followingService.isFollowing(riftTag, id);
+        if ((boolean)res[0]) {
+            return followingService.unfollow((int)res[1], id);
         }
         return false;
     }

@@ -43,6 +43,21 @@ public class UsertableRepository {
         }
     }
 
+    public boolean doDelete(String queryName, Object[] args) {
+        HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
+        try {
+            PreparedStatement preparedStatement = queryDict.get(queryName);
+            for (int i = 1; i <= args.length; i++) {
+                preparedStatement.setObject(i, args[i - 1]);
+            }
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 

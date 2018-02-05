@@ -210,4 +210,10 @@
         VALUES(?, ?, ?);
     </follow>
 
+    <!-- Named as such because this query can either be used to unfollow or to deny a follow request. The action is the same -->
+    <removeFollowing>
+        DELETE FROM following
+        WHERE follower_id = ? AND following_id = ?;
+    </removeFollowing>
+
 </Queries>
