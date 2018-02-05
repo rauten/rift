@@ -5,10 +5,7 @@ import io.rift.model.Usertable;
 import io.rift.service.FollowingService;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -23,7 +20,7 @@ public class FollowingController {
     @Autowired
     private UsertableService usertableService;
 
-    @RequestMapping("/user/{riftTag}/follow={id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/follow={id}")
     public boolean followUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException {
         int followerId = followingService.isFollowing(riftTag, id);
         if (followerId != -1) {
