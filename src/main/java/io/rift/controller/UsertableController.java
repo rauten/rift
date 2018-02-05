@@ -165,10 +165,10 @@ public class UsertableController {
      * @return - Usertable object with info and user's Rifter Session objects
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/rifterSessions")
-    public Usertable getUserAndRifterSessions(@PathVariable Integer id) throws SQLException {
-        Usertable usertable = usertableService.getUserById(id);
-        usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifterSessions")
+    public Usertable getUserAndRifterSessions(@PathVariable String riftTag) throws SQLException {
+        Usertable usertable = usertableService.getUserByRiftTag(riftTag);
+        usertable.setRifterSessions(usertableService.getUserAndRifterSession(usertable.getId()));
         return usertable;
     }
 

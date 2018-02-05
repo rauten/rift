@@ -1,5 +1,8 @@
 <Queries>
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - USERTABLE SQL COMMANDS - - - - - - - - - - - - - -->
+
     <getUserById>
         SELECT * FROM usertable WHERE id = ?;
     </getUserById>
@@ -162,6 +165,9 @@
         VALUES(?, ?, ?, false, false, ?);
     </createUser>
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - RIFTER GAME SQL COMMANDS - - - - - - - - - - - - - -->
+
     <getRifterGameById>
         SELECT *
         FROM riftergame
@@ -187,5 +193,27 @@
         (host_id, num_slots, game_cost, title, game_duration, game_time, game, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - FOLLOWING SQL COMMANDS - - - - - - - - - - - - - -->
+
+    <isFollowing>
+        SELECT *
+        FROM usertable u JOIN following f
+        ON u.id = f.follower_id
+        WHERE u.rift_tag = ? AND f.following_id = ?;
+    </isFollowing>
+
+    <follow>
+        INSERT INTO following
+        (follower_id, following_id, accepted)
+        VALUES(?, ?, ?);
+    </follow>
+
+    <!-- Named as such because this query can either be used to unfollow or to deny a follow request. The action is the same -->
+    <removeFollowing>
+        DELETE FROM following
+        WHERE follower_id = ? AND following_id = ?;
+    </removeFollowing>
 
 </Queries>
