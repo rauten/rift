@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Userprofile} from "./models/userprofile"
 
 import {UserprofileService} from "./userprofile.service";
@@ -7,24 +7,20 @@ import {UsersessionsService} from "../usersessions/usersessions.service";
 import {Activity} from "./models/activity";
 import {Session} from "../usersessions/models/session-card/session";
 import {AuthService} from "../auth/auth.service";
-import {CapitalizePipe} from "../pipes/capitalize.pipe";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-userprofile',
   templateUrl: './userprofile.component.html',
   styleUrls: ['./userprofile.component.css'],
-  pipes: [CapitalizePipe]
 })
 export class UserprofileComponent implements OnInit {
-  userprofile: Userprofile = new Userprofile();
-  followerUserprofiles: Userprofile[] = [];
-  followingUserprofiles: Userprofile[] = [];
-  sessions: Session[] = [];
-  broadcastNotifications: Userprofile[] = [];
+  currentUser: Userprofile = new Userprofile();
+  loggedInUser: Userprofile = new Userprofile();
   profile: any;
   sub: any;
   currUser: any;
+  following = false;
 
   constructor(private userProfileService: UserprofileService,
   private userSessionsService: UsersessionsService,
@@ -35,58 +31,97 @@ export class UserprofileComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
+      this.getUserProfileInformation(params['rifttag']);
+      this.getUserFollowersAndFollowing(params['rifttag']);
+      this.getBroadcastNotifications(params['rifttag']);
+      this.getUserSessions(params['rifttag']);
+      this.getCurrentLoggedInUser();
     });
-
-    this.getUserById();
-    this.getUserFollowersAndFollowing();
-    this.getBroadcastNotifications();
-    this.getUserSessions();
   }
 
-  getUserById() {
-    this.userProfileService.getUser().subscribe(
-      resBody => {
-        this.userprofile.firstName = resBody.firstName;
-        this.userprofile.firstName = resBody.firstName;
-        this.userprofile.lastName = resBody.lastName;
-        this.userprofile.rifterRating = resBody.rifterRating;
-        this.userprofile.rifteeRating = resBody.rifteeRating;
-        this.userprofile.id = resBody.id;
-        this.userprofile.gender = resBody.gender;
-        this.userprofile.riftTag = resBody.riftTag;
-        this.userprofile.twitchAccount = resBody.twitchAccount;
-        this.userprofile.youtubeAccount = resBody.youtubeAccount;
-        this.userprofile.creatorActivityList = resBody.creatorActivityList;
-        this.userprofile.bio = resBody.bio;
-        for (var i = 0; i < this.userprofile.creatorActivityList.length; i++) {
-          this.userprofile.activities.push(new Activity(this.userprofile.creatorActivityList[i].notificationContent,
-            this.userprofile.creatorActivityList[i].createdTime))
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    )
-  }
 
-  getUserFollowersAndFollowing() {
-    this.userProfileService.getUserFollowersAndFollowing().subscribe(
+  getCurrentLoggedInUser() {
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
-        this.userprofile.followers = resBody.followers.length;
-        this.userprofile.followings = resBody.followings.length;
-        for (var i = 0; i < this.userprofile.followers; i++) {
-          var currFollower = new Userprofile();
-          currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
-          currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
-          currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
-          this.followerUserprofiles.push(currFollower);
-        }
-        for (var i = 0; i < this.userprofile.followings; i++) {
+        this.loggedInUser.firstName = resBody.firstName;
+        this.loggedInUser.lastName = resBody.lastName;
+        this.loggedInUser.riftTag = resBody.riftTag;
+        this.loggedInUser.gender = resBody.gender;
+        this.loggedInUser.bio = resBody.bio;
+        this.loggedInUser.id = resBody.id;
+        for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
-          this.followingUserprofiles.push(currFollowing);
+          this.loggedInUser.followings.push(currFollowing);
+        }
+      }
+    )
+  }
+
+  getUserProfileInformation(riftTag: string) {
+    this.userProfileService.getUser(riftTag).subscribe(
+        resBody => {
+          this.currentUser.firstName = resBody.firstName;
+          this.currentUser.lastName = resBody.lastName;
+          this.currentUser.riftTag = resBody.riftTag;
+          this.currentUser.gender = resBody.gender;
+          this.currentUser.bio = resBody.bio;
+          this.currentUser.id = resBody.id;
+          this.currentUser.creatorActivityList = resBody.creatorActivityList;
+          for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+            var currActivity = new Activity();
+            currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
+            currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
+            currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
+            // currActivity.rifterSession= this.currentUser.creatorActivityList[i].rifterSession;
+            this.currentUser.activities.push(currActivity);
+          }
+      }
+    )
+  }
+
+  isFollowing(riftTag: string) {
+    for (var i = 0; i < this.loggedInUser.followings.length; i++) {
+      var currFollowing = this.loggedInUser.followings[i].riftTag;
+      if (currFollowing == riftTag) {
+        this.following = true;
+        return true;
+      }
+    }
+    this.following = false;
+
+  }
+
+  // getUserSocialMedia(riftTag: string) {
+  //   this.userProfileService.getUser(riftTag).subscribe(
+  //     resBody => {
+  //       this.currentUser.twitchAccount =
+  //     }
+  //   )
+  // }
+
+  getUserFollowersAndFollowing(riftTag: string) {
+    this.currentUser.followings = [];
+    this.currentUser.followers = [];
+    this.userProfileService.getUser(riftTag).subscribe(
+      resBody => {
+        for (var i = 0; i < resBody.followers.length; i++) {
+          var currFollower = new Userprofile();
+          currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
+          currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
+          currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
+          currFollower.id = resBody.followers[i].followerUsertable.id;
+          this.currentUser.followers.push(currFollower);
+        }
+        for (var i = 0; i < resBody.followings.length; i++) {
+          var currFollowing = new Userprofile();
+          currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
+          currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
+          currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+          currFollowing.id = resBody.followings[i].followingUsertable.id;
+          this.currentUser.followings.push(currFollowing);
         }
       },
       err => {
@@ -95,44 +130,43 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getBroadcastNotifications() {
-    this.userProfileService.getBroadcastNotifications().subscribe(
+  getBroadcastNotifications(riftTag: string) {
+    this.currentUser.feed = [];
+    this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        for (var i = 0; i < resBody.broadcastNotifications.length; i++) {
-          var currUser = new Userprofile();
-          currUser.firstName = resBody.broadcastNotifications[i].creatorUsertable.firstName;
-          currUser.lastName = resBody.broadcastNotifications[i].creatorUsertable.lastName;
-          currUser.riftTag = resBody.broadcastNotifications[i].creatorUsertable.riftTag;
-          var currNotification = new Activity(resBody.broadcastNotifications[i].notificationContent,
-          resBody.broadcastNotifications[i].createdTime);
-          currUser.activities.push(currNotification);
-          this.broadcastNotifications.push(currUser);
+        for (var i = 0; i < resBody.broadcastNotificationList.length; i++) {
+          var currNotification = new Activity();
+          currNotification.notificationType = resBody.broadcastNotificationList[i].notificationType;
+          currNotification.notificationContent = resBody.broadcastNotificationList[i].notificationContent;
+          currNotification.createdTime = resBody.broadcastNotificationList[i].createdTime;
+          currNotification.rifterSession = resBody.broadcastNotificationList[i].rifterSession;
+          this.currentUser.feed.push(currNotification);
         }
       }
-    )
+    );
   }
 
-  getUserSessions() {
-    this.userSessionsService.getUserSessions().subscribe(
+  getUserSessions(riftTag: string) {
+    this.currentUser.rifterSessions = [];
+    this.userSessionsService.getUserRifterSessions(riftTag).subscribe(
       resBody => {
-        this.userprofile.rifterSessions = resBody.rifterSessions;
-        for (var i = 0; i < this.userprofile.rifterSessions.length; i++) {
-          var currDateMS = this.userprofile.rifterSessions[i].sessionTime;
+        for (var i = 0; i < resBody.rifterSessions.length; i++) {
+          var currDateMS = resBody.rifterSessions[i].sessionTime;
           var date = new Date(currDateMS);
           var currSession = new Session(
             resBody.firstName,
             resBody.lastName,
             resBody.riftTag,
             resBody.rifterRating,
-            this.userprofile.rifterSessions[i].hostId,
-            this.userprofile.rifterSessions[i].sessionCost,
-            this.userprofile.rifterSessions[i].methodOfContact,
-            this.userprofile.rifterSessions[i].sessionDuration,
-            this.userprofile.rifterSessions[i].title,
-            this.userprofile.rifterSessions[i].hits,
+            resBody.rifterSessions[i].hostId,
+            resBody.rifterSessions[i].sessionCost,
+            resBody.rifterSessions[i].methodOfContact,
+            resBody.rifterSessions[i].sessionDuration,
+            resBody.rifterSessions[i].title,
+            resBody.rifterSessions[i].hits,
             date
           );
-          this.sessions.push(currSession);
+          this.currentUser.rifterSessions.push(currSession);
         }
       },
       err => {

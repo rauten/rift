@@ -14,11 +14,13 @@ export class Userprofile {
   youtubeAccount: string;
   creatorActivityList: Activity[];
   rifterSessions: Session[];
-  followers: any;
-  followings: any;
+  feed: Activity[];
+  followers: Userprofile[] = [];
+  followings: Userprofile[] = [];
+
   followerUsertable: any;
   followingUsertable: any;
-  broadcastNotifications: any;
+  broadcastNotificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
 

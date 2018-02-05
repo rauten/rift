@@ -36,6 +36,7 @@ import { ResultComponent } from './usersessions/sessionform/result/result.compon
 import {FormDataService} from "./usersessions/sessionform/data/formData.service";
 import {WorkflowService} from "./usersessions/sessionform/workflow/workflow.service";
 import {FormWizardModule} from "angular2-wizard/dist";
+import { FollowButtonComponent } from './components/follow-button/follow-button.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import {FormWizardModule} from "angular2-wizard/dist";
     Step1Component,
     Step2Component,
     Step3Component,
-    ResultComponent
+    ResultComponent,
+    FollowButtonComponent
   ],
   imports: [
     BrowserModule,

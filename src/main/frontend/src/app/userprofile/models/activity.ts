@@ -1,9 +1,11 @@
+import {Session} from "../../usersessions/models/session-card/session";
 export class Activity {
   notificationContent: string;
+  notificationType: string;
   createdTime: number;
+  rifterSession: Session;
 
-  constructor(content: string, creationTime: number) {
-    this.notificationContent = content;
-    this.createdTime = creationTime;
+  constructor() {
+
   }
 }

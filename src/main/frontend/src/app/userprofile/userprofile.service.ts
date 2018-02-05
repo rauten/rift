@@ -8,45 +8,20 @@ import "rxjs/Rx";
 
 @Injectable()
 export class UserprofileService {
-  private userURL = "/api/user/activity/1";
   private createUserURL = "/api/user/createUser";
-  private followerAndFollowingURL = "/api/user/1/followingsandfollowers/userInfo";
-  private broadcastNotificationsURL = "http://localhost:5000/api/user/2/broadcast_notifications";
 
   constructor(private http: Http) {
   }
 
-  getUser(): Observable<Userprofile> {
-    console.log("running getUser");
-    return this.http.get(this.userURL)
+  getUser(riftTag: string): Observable<Userprofile> {
+    console.log("running new getUser");
+    return this.http.get("/api/user/" + riftTag + "/profilePage")
       .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-  getUserFollowersAndFollowing(): Observable<Userprofile> {
-    console.log("running getUserFollowersAndFollowing");
-    return this.http.get(this.followerAndFollowingURL)
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-  getBroadcastNotifications(): Observable<Userprofile> {
-    console.log("running getBroadcastNotifications");
-    return this.http.get(this.broadcastNotificationsURL)
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+          (response: Response) => {
+            return response.json();
+          }
+        )
+        .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   createUser(data): void {
@@ -59,5 +34,26 @@ export class UserprofileService {
       .subscribe();
   }
 
+  followUser(riftTag: string, id: number) {
+    console.log("running followUser");
+    return this.http.get("/api/user/" + riftTag + "/follow=" + id)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  unfollowUser(riftTag: string, id: number) {
+    console.log("running unfollowUser");
+    return this.http.get("/api/user/" + riftTag + "/unfollow=" + id)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
 
 }
