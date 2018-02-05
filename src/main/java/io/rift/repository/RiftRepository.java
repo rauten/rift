@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
-public class UsertableRepository {
+public class RiftRepository {
 
     @Autowired
     private ConnectionService connectionService;
@@ -60,7 +60,6 @@ public class UsertableRepository {
     }
 
     public boolean doUpdate(StringBuilder queryName, List<Object> args) {
-        //HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
         try {
             PreparedStatement preparedStatement = connectionService.connection.prepareStatement(queryName.toString());
             for (int i = 1; i <= args.size(); i++) {

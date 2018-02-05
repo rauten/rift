@@ -4,8 +4,6 @@ package io.rift.service;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
-import io.rift.repository.GameRequestRepository;
-import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +15,6 @@ import java.util.List;
 @Service
 public class SessionRequestService {
 
-    @Autowired
-    GameRequestRepository gameRequestRepository;
 
     @Autowired
     private RifterSessionService rifterSessionService;
@@ -69,24 +65,6 @@ public class SessionRequestService {
         }
         return rifteeSessions;
     }
-
-
-    /*
-    public SessionRequest getGameRequestByRifteeAndSessionId(Integer rifteeId, Integer sessionId) {
-        return gameRequestRepository.getGameRequestByRifteeIdAndSessionId(rifteeId, sessionId);
-    }
-
-    public List<SessionRequest> getGameRequestsByRifteeId(Integer rifteeId) {
-        return gameRequestRepository.getGameRequestsByRifteeId(rifteeId);
-    }
-
-    public List<SessionRequest> getGameRequestsBySessionId(Integer sessionId) {
-        return gameRequestRepository.getGameRequestsByRifteeId(sessionId);
-    }
-    */
-
-
-
 
 
 }
