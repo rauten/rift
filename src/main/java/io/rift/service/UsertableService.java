@@ -186,7 +186,7 @@ public class UsertableService {
     public List<Following> getFollowingsAndInfoById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowersAndInfoById, args);
+        ResultSet resultSet = usertableRepository.doQuery(getFollowingsAndInfoById, args);
         List<Following> followings = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -202,7 +202,7 @@ public class UsertableService {
     public List<Following> getFollowersAndInfoById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowingsAndInfoById, args);
+        ResultSet resultSet = usertableRepository.doQuery(getFollowersAndInfoById, args);
         List<Following> followings = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
