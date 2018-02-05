@@ -112,6 +112,7 @@ export class UserprofileComponent implements OnInit {
           currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
           currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
           currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
+          currFollower.id = resBody.followers[i].followerUsertable.id;
           this.followerUserprofiles.push(currFollower);
         }
         for (var i = 0; i < this.currentUser.followings; i++) {
@@ -119,6 +120,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+          currFollowing.id = resBody.followings[i].followingUsertable.id;
           this.followingUserprofiles.push(currFollowing);
         }
       },

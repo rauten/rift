@@ -19,6 +19,7 @@ export class UsersessionsService {
     return this.http.get("/api/user/" + riftTag + "/rifterSessions")
       .map(
         (response: Response) => {
+          console.log(response.json());
           return response.json();
         }
       )

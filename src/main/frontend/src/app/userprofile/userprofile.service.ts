@@ -34,5 +34,9 @@ export class UserprofileService {
       .subscribe();
   }
 
+  followUser(id: number) {
+    console.log("running followUser");
+
+  }
 
 }
