@@ -34,9 +34,15 @@ export class UserprofileService {
       .subscribe();
   }
 
-  followUser(id: number) {
+  followUser(riftTag: string, id: number) {
     console.log("running followUser");
-
+    return this.http.get("/api/user/" + riftTag + "/follow=" + id)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
 }

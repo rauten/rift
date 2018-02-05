@@ -94,6 +94,13 @@ export class UserprofileComponent implements OnInit {
     return false;
   }
 
+  followUser(id: number) {
+    this.userProfileService.followUser(this.loggedInUser.riftTag, id).subscribe(
+      resBody => {}
+    )
+  }
+
+
   // getUserSocialMedia(riftTag: string) {
   //   this.userProfileService.getUser(riftTag).subscribe(
   //     resBody => {
