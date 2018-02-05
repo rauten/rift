@@ -18,7 +18,7 @@ export class Userprofile {
   followings: any;
   followerUsertable: any;
   followingUsertable: any;
-  broadcastNotifications: any;
+  broadcastNotificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
 

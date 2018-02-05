@@ -3,20 +3,20 @@ import { Session } from "./models/session-card/session";
 import { Http, RequestOptions, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
+import {Userprofile} from "../userprofile/models/userprofile";
 
 
 
 @Injectable()
 export class UsersessionsService {
-  private apiUrl = "/api/user/1/rifterSessions";
   private createUserSessionURL = "/api/rifterSession/createGame";
 
   constructor(private http: Http) {
   }
 
-  getUserSessions(): Observable<Session> {
-    console.log("running getUserSessions");
-    return this.http.get(this.apiUrl)
+  getUserRifterSessions(riftTag: string): Observable<Userprofile> {
+    console.log("running getUserRifterSessions");
+    return this.http.get("/api/user/" + riftTag + "/rifterSessions")
       .map(
         (response: Response) => {
           return response.json();
@@ -26,7 +26,7 @@ export class UsersessionsService {
   }
 
   createUserSession(data) : void {
-    console.log("running createUserSession")
+    console.log("running createUserSession");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserSessionURL, data, options)
