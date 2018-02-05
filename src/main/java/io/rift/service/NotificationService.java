@@ -16,7 +16,10 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    public List<Notification> populateNotifications(ResultSet resultSet, int startPoint) throws SQLException {
+    @Autowired
+    private RifterSessionService rifterSessionService;
+
+    public List<Notification> populateNotifications(ResultSet resultSet, int startPoint, String info) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {
             Notification notification = new Notification();
@@ -28,6 +31,9 @@ public class NotificationService {
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notifications.add(notification);
+            if (info.equals("session")) {
+                notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, 8));
+            }
         }
         return notifications;
     }

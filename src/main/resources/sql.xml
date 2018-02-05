@@ -60,6 +60,13 @@
         WHERE user_id = ?
     </getUserNotifications>
 
+    <getUserActiviyAndUserSession>
+        SELECT *
+        FROM notification n JOIN riftergame r
+        ON n.session_id = r.id
+        WHERE n.user_id = ?
+    </getUserActiviyAndUserSession>
+
     <getUserAndRifterSessions>
         SELECT *
         FROM riftergame
@@ -131,11 +138,19 @@
     </getGameRequestsByUserIdAndAccepted>
 
     <getBroadcastNotificationsById>
-        SELECT n.id, user_id, notification_type, notification_content, game_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
+        SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
         WHERE us.id = ? AND n.notification_type = 'New Game';
     </getBroadcastNotificationsById>
+
+    <getBroadcastNotificationsForFollower>
+        SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, u.auth0_Token
+        FROM usertable us JOIN following f ON us.id = f.follower_id
+        JOIN notification n ON f.following_id = n.creator_id
+        JOIN usertable u ON f.following_id = u.id
+        WHERE us.id = ? AND n.notification_type = 'New Game';
+    </getBroadcastNotificationsForFollower>
 
     <createUser>
         INSERT INTO usertable
@@ -165,7 +180,7 @@
 
     <createGame>
         INSERT INTO riftergame
-        (host_id, num_slots, expiration_time, game_cost, method_of_contact, game_type, title, hits, game_duration, game_time)
+        (host_id, num_slots, game_cost, title, game_duration, game_time, game, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
 

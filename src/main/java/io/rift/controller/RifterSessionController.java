@@ -1,7 +1,9 @@
 package io.rift.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.RifterSession;
+import io.rift.model.Views;
 import io.rift.service.RifterSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -82,8 +84,9 @@ public class RifterSessionController {
      * @return
      * @throws SQLException
      */
+    @JsonView(Views.CreateGame.class)
     @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/createGame")
-    Boolean createGame(@RequestBody RifterSession rifterSession) throws SQLException {
+    public Boolean createGame(@RequestBody RifterSession rifterSession) throws SQLException {
         return rifterSessionService.createGame(rifterSession);
     }
 

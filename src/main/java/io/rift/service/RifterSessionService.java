@@ -21,7 +21,7 @@ public class RifterSessionService {
     @Autowired
     private UsertableService usertableService;
 
-    public final int POPULATESIZE = 11;
+    public final int POPULATESIZE = 15;
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
@@ -47,7 +47,7 @@ public class RifterSessionService {
         if (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1);
             if (rifterSession.getId() != null) {
-                Usertable usertable = usertableService.populateUsertable(resultSet, 12);
+                Usertable usertable = usertableService.populateUsertable(resultSet, 12, "");
                 rifterSession.setUsertable(usertable);
             }
             return rifterSession;
@@ -62,7 +62,7 @@ public class RifterSessionService {
         ResultSet resultSet = usertableRepository.doQuery(getGamePlayersByGameId, args);
         List<Usertable> players = new ArrayList<>();
         while (resultSet.next()) {
-            Usertable usertable = usertableService.populateUsertable(resultSet, 1);
+            Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
             players.add(usertable);
         }
         return players;
@@ -81,15 +81,17 @@ public class RifterSessionService {
         rifterSession.setHits(resultSet.getInt(startPoint + 8));
         rifterSession.setSessionDuration((PGInterval)resultSet.getObject(startPoint + 9));
         rifterSession.setSessionTime(resultSet.getTimestamp(startPoint + 10));
+        rifterSession.setGame(resultSet.getString(startPoint + 11));
+        rifterSession.setConsole(resultSet.getString(startPoint + 12));
+        rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
+        rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         return rifterSession;
     }
 
     public boolean createGame(RifterSession rifterSession) {
         return usertableRepository.doInsert(createGame,
-                new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(),
-                        rifterSession.getExpirationTime(), rifterSession.getSessionCost(), rifterSession.getMethodOfContact(),
-                        rifterSession.getSessionType(), rifterSession.getTitle(), rifterSession.getHits(),
-                        rifterSession.getSessionDuration(), rifterSession.getSessionTime()});
+                new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
+                        rifterSession.getSessionTime(), rifterSession.getGame(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
     }
 
 

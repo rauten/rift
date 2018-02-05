@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
-import {Http} from "@angular/http";
-import {AppComponent} from "../app.component";
 
 @Injectable()
 export class AuthService {
@@ -31,7 +29,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router, private http: Http) {
+  constructor(public router: Router) {
 
   }
 
@@ -72,7 +70,7 @@ export class AuthService {
   private setSession(authResult, callback): void {
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-     this.lock.getUserInfo(authResult.accessToken, function(error, profile, http : Http) {
+     this.lock.getUserInfo(authResult.accessToken, function(error, profile) {
       if (error) {
         throw new Error(error);
       }
@@ -80,7 +78,12 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
-      callback(http);
+      console.log(localStorage.getItem('profile'));
+      var profileJson = localStorage.getItem('profile');
+      var profileJsonParse = JSON.parse(profileJson);
+      console.log(profileJson);
+      console.log(profileJsonParse['nickname']);
+      callback();
     })
   }
 
