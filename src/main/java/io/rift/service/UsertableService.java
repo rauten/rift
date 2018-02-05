@@ -1,14 +1,27 @@
 package io.rift.service;
 
 
+import com.google.common.base.CaseFormat;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.*;
 import io.rift.repository.UsertableRepository;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.generic.POP;
 import org.aspectj.weaver.ast.Not;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import org.apache.bcel.classfile.Field;
+
+import javax.validation.constraints.Null;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,6 +42,9 @@ public class UsertableService {
 
     @Autowired
     private SessionRequestService sessionRequestService;
+
+    @Autowired
+    private ConnectionService connectionService;
 
     public final int POPULATESIZE = 14;
 
@@ -69,6 +85,19 @@ public class UsertableService {
     /****************************** POST *******************************/
     /*******************************************************************/
     private final String createUser = "createUser";
+
+
+
+    private final String updateUserStart = "UPDATE usertable SET (";
+    private final String updateUserEnd = " WHERE id = ?";
+    private final String usertableClassPath = "/io/rift/model/Usertable.class";
+    private final String usertableClass = "Usertable.class";
+
+    private final String booleanStr = "Boolean";
+    private final String stringStr = "String";
+    private final String intStr = "Integer";
+    private final String doubleStr = "Double";
+
 
 
 
@@ -115,7 +144,7 @@ public class UsertableService {
         usertable.setTwitchAccount(resultSet.getString(startPoint + 10));
         usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
         usertable.setBio(resultSet.getString(startPoint + 12));
-        usertable.setAuth0Id(resultSet.getString(startPoint + 13));
+        usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 13, ""));
         }
@@ -337,7 +366,7 @@ public class UsertableService {
             usertable.setRifteeRating(resultSet.getDouble(14));
             usertable.setRifterRating(resultSet.getDouble(15));
             usertable.setGender(resultSet.getBoolean(16));
-            usertable.setAuth0Id(resultSet.getString(17));
+            usertable.setAuth0Token(resultSet.getString(17));
             notification.setCreatorUsertable(usertable);
             notifications.add(notification);
         }
@@ -348,13 +377,54 @@ public class UsertableService {
     public Boolean createUser(Usertable usertable) {
         return usertableRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getRiftTag(), formatAuth0Id(usertable.getAuth0Id())});
+                        usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token())});
     }
 
-    private String formatAuth0Id(String auth0Id) {
-        String[] str = auth0Id.split("|");
+    private String formatAuth0Token(String auth0Token) {
+        String[] str = auth0Token.split("|");
         return str[1];
     }
 
-
+    public Boolean updateUser(Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        int id = usertable.getId();
+        String str = updateUserStart;
+        StringBuilder query = new StringBuilder(str);
+        StringBuilder values = new StringBuilder("(");
+        ClassParser parser = new ClassParser(UsertableService.class.getResourceAsStream(usertableClassPath), usertableClass);
+        JavaClass javaClass = parser.parse();
+        Field[] fields = javaClass.getFields();
+        List<Object> args = new ArrayList<>();
+        for (int i = 1; i < POPULATESIZE; i++) {
+            String[] properties = fields[i].toString().split(" ");
+            String attribute = properties[2];
+            PropertyDescriptor pd = new PropertyDescriptor(attribute, Usertable.class);
+            Method getter = pd.getReadMethod();
+            Object f = getter.invoke(usertable);
+            if (f != null) {
+                if (properties[1].equals(intStr)) {
+                    f = (Integer) f;
+                } else if (properties[1].equals(stringStr)) {
+                    f = (String) f;
+                } else if (properties[1].equals(doubleStr)) {
+                    f = (Double) f;
+                } else if (properties[2].equals(booleanStr)) {
+                    f = (boolean) f;
+                }
+                attribute = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, attribute);
+                query.append(attribute);
+                query.append(", ");
+                values.append("?");
+                values.append(", ");
+                args.add(f);
+            }
+        }
+        query.delete(query.length() - 2, query.length() - 1);
+        values.delete(values.length() - 2, query.length() - 1);
+        query.append(") = ");
+        values.append(")");
+        query.append(values);
+        query.append(updateUserEnd);
+        args.add(id);
+        return usertableRepository.doUpdate(query, args);
+    }
 }

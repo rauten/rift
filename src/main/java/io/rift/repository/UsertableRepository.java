@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 @Repository
 public class UsertableRepository {
@@ -49,6 +50,21 @@ public class UsertableRepository {
             PreparedStatement preparedStatement = queryDict.get(queryName);
             for (int i = 1; i <= args.length; i++) {
                 preparedStatement.setObject(i, args[i - 1]);
+            }
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean doUpdate(StringBuilder queryName, List<Object> args) {
+        //HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
+        try {
+            PreparedStatement preparedStatement = connectionService.connection.prepareStatement(queryName.toString());
+            for (int i = 1; i <= args.size(); i++) {
+                preparedStatement.setObject(i, args.get(i  - 1));
             }
             preparedStatement.execute();
             return true;

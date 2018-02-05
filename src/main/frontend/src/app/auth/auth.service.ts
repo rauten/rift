@@ -50,7 +50,7 @@ export class AuthService {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
               "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
               "riftTag" : profileJsonParse.nickname,
-              "auth0Id" : profileJsonParse.sub
+              "auth0Token" : profileJsonParse.sub
             };
             callback(data, true);
           } else {

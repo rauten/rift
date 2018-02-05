@@ -9,6 +9,9 @@ import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.IntrospectionException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -241,6 +244,11 @@ public class UsertableController {
     @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
     public Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/updateUser")
+    public Boolean updateUpdate(@RequestBody Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        return usertableService.updateUser(usertable);
     }
 
 

@@ -12,7 +12,7 @@ public class Usertable {
     private Integer id;
 
     @JsonView(Views.UsertableAuth0Id.class)
-    private String auth0Id;
+    private String auth0Token;
 
     @JsonView(Views.UsertableFirstName.class)
     private String firstName;
