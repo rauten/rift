@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Userprofile} from "../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
+import {UserprofileService} from "../userprofile.service";
 
 @Component({
   selector: 'app-update-info',
@@ -9,20 +10,34 @@ import {UpdateInfoService} from "./data/update-info.service";
 })
 export class UpdateInfoComponent implements OnInit {
   title = "Update your Profile Information";
-  currentUser: Userprofile;
+  currentUser: Userprofile = new Userprofile();
+  loggedInUser: Userprofile = new Userprofile();
+  profile: any;
   @Input() updateInfoData;
 
-  constructor(private updateInfoService: UpdateInfoService) {
+  constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
   ngOnInit() {
+    this.getCurrentLoggedInUser();
     this.currentUser = this.updateInfoService.getUserData();
     this.updateInfoData = this.updateInfoService.getFormData();
     console.log("Current user info loaded to Update Profile");
   }
 
+  getCurrentLoggedInUser() {
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
+      resBody => {
+        this.loggedInUser.firstName = resBody.firstName;
+        this.loggedInUser.lastName = resBody.lastName;
+        this.loggedInUser.riftTag = resBody.riftTag;
+        this.loggedInUser.id = resBody.id;
+      }
+    )
+  }
 
   save() {
-    this.updateInfoService.setUserData(this.currentUser);
+    this.updateInfoService.setUserData(this.currentUser, this.loggedInUser.id);
   }
 }

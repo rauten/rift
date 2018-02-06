@@ -19,11 +19,12 @@ export class UpdateInfoService {
     return user;
   }
 
-  setUserData(data: Userprofile) {
+  setUserData(data: Userprofile, id: number) {
     this.isValid = true;
     this.updateInfoData.riftTag = data.riftTag;
     this.updateInfoData.lastName = data.lastName;
     this.updateInfoData.firstName = data.firstName;
+    this.updateInfoData.id = id;
   }
 
   getFormData(): UpdateInfoData {

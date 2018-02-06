@@ -26,8 +26,13 @@
     </div>
   </div>
   <div>
-    <button mat-button [disabled]="!updateInfo.valid" (click)="save()" class="btn-primary" type="button">Update</button>
+    <button [disabled]="!updateInfo.valid" (click)="save()" class="btn-primary" type="button">Update</button>
+    <button routerLink="../" class="btn-primary" type="button">Cancel</button>
+
   </div>
 </form>
 
 <pre>{{ updateInfoData | json }}</pre>
+<pre>{{currentUser.riftTag}}</pre>
+<pre>{{currentUser.firstName}}</pre>
+<pre>{{currentUser.lastName}}</pre>
