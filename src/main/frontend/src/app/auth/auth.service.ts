@@ -13,8 +13,8 @@ export class AuthService {
     auth: {
       redirectUrl: AUTH_CONFIG.callbackURL,
       responseType: 'token id_token',
-      // audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-      audience: AUTH_CONFIG.apiUrl,
+      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      // audience: AUTH_CONFIG.apiUrl,
       params: {
         scope: 'profile openid email user_metadata'
       }

@@ -48,9 +48,11 @@ export class UpdateInfoService {
     let headers = new Headers({'Accept' : 'application/json', 'Content-Type': 'application/json',
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'});
+    headers.set("Authorization", `Bearer ${localStorage.getItem('access_token')}`);
+    headers.set("Access-Control-Expose-Headers", ["Authorization", "Access-Control-Allow-Origin", "Access-Control-AllowMethods"]);
     let options = new RequestOptions({ headers: headers });
     console.log(options);
-    this.authHttp.post(this.updateAuth0UserURL + auth0Id, auth0data, {headers: headers})
+    this.http.put(this.updateAuth0UserURL + auth0Id, auth0data, options)
       .map(res => res.json())
       .subscribe();
   }

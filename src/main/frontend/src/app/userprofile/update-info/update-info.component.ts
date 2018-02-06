@@ -24,9 +24,9 @@ export class UpdateInfoComponent implements OnInit {
     this.currentUser = this.updateInfoService.getUserData();
     this.updateInfoData = this.updateInfoService.getFormData();
     console.log("Current user info loaded to Update Profile");
-    console.log(this.profile.sub);
-    console.log(localStorage.getItem('id_token'));
-    console.log(localStorage.getItem('access_token'));
+    console.log(this.profile);
+    // console.log(localStorage.getItem('id_token'));
+    // console.log(localStorage.getItem('access_token'));
 
   }
 
@@ -56,7 +56,6 @@ export class UpdateInfoComponent implements OnInit {
       },
       'username' : this.updateInfoData.riftTag
     };
-    console.log(data);
     // this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
   }
