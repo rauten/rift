@@ -39,7 +39,7 @@ public class SearchService {
      * @return - A list of possible results
      * @throws SQLException
      */
-    public List<Object> search(String searchParam) throws SQLException {
+    public List<List<Object>> search(String searchParam) throws SQLException {
         // Set up query arg lists
         Object[] userSearchArgs = new Object[8];
         for (int i = 0; i < userSearchArgs.length; i++) {
@@ -50,22 +50,23 @@ public class SearchService {
         rifterGameArgs[1] = searchParam;
 
         // Init searchResult list
-        List<Object> searchResults = new ArrayList<>();
+        List<List<Object>> searchResults = new ArrayList<>();
+        List<Object> userSearchResults = new ArrayList<>();
+        List<Object> rifterSessionSearchResults = new ArrayList<>();
 
         // Add Usertable results
         ResultSet resultSet = riftRepository.doQuery(searchUsertable, userSearchArgs);
         while (resultSet.next()) {
-            searchResults.add(usertableService.populateUsertable(resultSet, 1, "levenshtein"));
+            userSearchResults.add(usertableService.populateUsertable(resultSet, 1, "levenshtein"));
         }
-
-        // Include a null entry so we can determine where users stop and sessions start
-        searchResults.add(null);
+        searchResults.add(userSearchResults);
 
         // Add RifterSession results
         resultSet = riftRepository.doQuery(searchRifterSession, rifterGameArgs);
         while (resultSet.next()) {
-            searchResults.add(rifterSessionService.populateRifterSession(resultSet, 1, ""));
+            rifterSessionSearchResults.add(rifterSessionService.populateRifterSession(resultSet, 1, ""));
         }
+        searchResults.add(rifterSessionSearchResults);
 
         // Return search results
         return searchResults;

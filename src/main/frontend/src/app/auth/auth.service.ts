@@ -13,7 +13,8 @@ export class AuthService {
     auth: {
       redirectUrl: AUTH_CONFIG.callbackURL,
       responseType: 'token id_token',
-      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      // audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      audience: AUTH_CONFIG.apiUrl,
       params: {
         scope: 'profile openid email user_metadata'
       }
@@ -78,11 +79,6 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
-      console.log(localStorage.getItem('profile'));
-      var profileJson = localStorage.getItem('profile');
-      var profileJsonParse = JSON.parse(profileJson);
-      console.log(profileJson);
-      console.log(profileJsonParse['nickname']);
       callback();
     })
   }

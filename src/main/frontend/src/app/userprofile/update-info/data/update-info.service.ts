@@ -5,36 +5,18 @@ import {Http, RequestOptions, Headers} from "@angular/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
 
-declare var require:any;
 
 @Injectable()
 export class UpdateInfoService {
   updateUserURL = "/api/user/updateUser";
   updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
+  updateAuth0UserURL2 = "/api/v2/users/";
+  userData : string;
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
 
 
   constructor(private http: Http, private authHttp: AuthHttp) {
-    /*
-    var request = require("request");
-
-    var options = { method: 'POST',
-      url: 'https://riftgaming.auth0.com/oauth/token',
-      headers: { 'content-type': 'application/json' },
-      body:
-        { grant_type: 'client_credentials',
-          client_id: 'YOUR_CLIENT_ID',
-          client_secret: 'YOUR_CLIENT_SECRET',
-          audience: 'https://api.example.com/api/v2/users' },
-      json: true };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-
-      console.log(body);
-    });
-    */
   }
 
   getUserData(): Userprofile {
@@ -67,14 +49,13 @@ export class UpdateInfoService {
   }
 
   updateAuth0User(auth0data, auth0Id) {
-    let headers = new Headers({'Accept' : 'application/json', 'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin' : '*',
-      'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'});
-    let options = new RequestOptions({ headers: headers });
-    console.log(options);
-    this.authHttp.post(this.updateAuth0UserURL + auth0Id, auth0data, {headers: headers})
+    let myHeader = new Headers();
+    myHeader.append('Content-Type', 'application/json');
+    this.authHttp.patch(this.updateAuth0UserURL + auth0Id, auth0data, {headers : myHeader})
       .map(res => res.json())
-      .subscribe();
+      .subscribe(data => this.userData = data,
+        err => console.log(err),
+        () => console.log('Request Complete'));
   }
 
 

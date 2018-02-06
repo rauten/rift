@@ -8,9 +8,6 @@ import {Step2, Step1, Step3} from "./data/formData.model";
   styleUrls: ['./sessionform.component.scss']
 })
 export class SessionformComponent implements OnInit {
-  step1Title = 'Step 1';
-  step2Title = 'Step 2';
-  step3Title = 'Step 3';
   step1:Step1;
   step2:Step2;
   step3:Step3;

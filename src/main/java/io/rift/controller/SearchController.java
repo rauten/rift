@@ -19,7 +19,7 @@ public class SearchController {
 
     @JsonView(Views.Search.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/search/searchParam={param}")
-    public List<Object> search(@PathVariable String param) throws SQLException {
+    public List<List<Object>> search(@PathVariable String param) throws SQLException {
         return searchService.search(param);
     }
 }
