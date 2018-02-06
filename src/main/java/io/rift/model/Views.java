@@ -221,7 +221,7 @@ public class Views {
     public interface CreateUser extends UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
 
     public interface Search extends UsertableRiftTagLevenshtein, UsertableFirstNameLevenshtein, UsertableFullNameLevenshtein,
-            UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, RifterSessionId,
-            RifterSessionHostId {}
+            UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, CreateGame,
+            RifterSessionGameLevenshtein {}
 
 }

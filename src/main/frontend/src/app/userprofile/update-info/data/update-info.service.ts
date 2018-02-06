@@ -5,12 +5,16 @@ import {Http, RequestOptions, Headers} from "@angular/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
 
+
 @Injectable()
 export class UpdateInfoService {
   updateUserURL = "/api/user/updateUser";
   updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
+  updateAuth0UserURL2 = "/api/v2/users/";
+  userData : string;
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
+
 
   constructor(private http: Http, private authHttp: AuthHttp) {
   }
@@ -54,6 +58,10 @@ export class UpdateInfoService {
     console.log(options);
     this.http.put(this.updateAuth0UserURL + auth0Id, auth0data, options)
       .map(res => res.json())
-      .subscribe();
+      .subscribe(data => this.userData = data,
+        err => console.log(err),
+        () => console.log('Request Complete'));
   }
+
+
 }

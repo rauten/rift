@@ -6,7 +6,7 @@ import { UsersessionsComponent } from './usersessions/usersessions.component';
 import { TheriftComponent } from './therift/therift.component';
 import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.component";
 import {SessionformComponent} from "./usersessions/sessionform/sessionform.component";
-import {UpdateInfoComponent} from "./userprofile/update-info/update-info.component";
+import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
 
 export const router: Routes = [
   { path: '', redirectTo: 'therift', pathMatch: 'full' },

@@ -46,9 +46,7 @@ import {SearchBarService} from "./components/search-bar/search-bar.service";
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
     tokenGetter: (() => localStorage.getItem('access_token')),
-    globalHeaders: [{'Accept' : 'application/json', 'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin' : '*',
-      'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'}],
+    globalHeaders: [{'Content-Type':'application/json'}],
   }), http, options);
 }
 
