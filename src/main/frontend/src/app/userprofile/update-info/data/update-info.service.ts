@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import {UpdateInfoData} from "./update-info-model";
 import {Userprofile} from "../../models/userprofile";
+import {Http, RequestOptions} from "@angular/http";
+import {Observable} from "rxjs";
+import {AuthHttp} from "angular2-jwt";
 
 @Injectable()
 export class UpdateInfoService {
-
+  updateUserURL = "/api/user/updateUser";
+  updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
 
-  constructor() {
+  constructor(private http: Http, private authHttp: AuthHttp) {
   }
 
   getUserData(): Userprofile {
@@ -28,5 +32,25 @@ export class UpdateInfoService {
 
   getFormData(): UpdateInfoData {
     return this.updateInfoData;
+  }
+
+  updateUser(data): void {
+    console.log("running updateUser");
+    let headers = new Headers({'Accept' : 'application/json', 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.updateUserURL, data, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
+  updateAuth0User(auth0data, auth0Id) {
+    let headers = new Headers({'Accept' : 'application/json', 'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'});
+    let options = new RequestOptions({ headers: headers });
+    this.authHttp.patch(this.updateAuth0UserURL + auth0Id, auth0data, options)
+      .map(res => res.json())
+      .subscribe();
   }
 }

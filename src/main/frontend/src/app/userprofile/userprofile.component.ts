@@ -27,6 +27,7 @@ export class UserprofileComponent implements OnInit {
   private userSessionsService: UsersessionsService,
   public auth: AuthService, private route: ActivatedRoute) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    console.log(this.profile);
   }
 
   ngOnInit() {
@@ -37,7 +38,6 @@ export class UserprofileComponent implements OnInit {
       this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
       this.getUserSessions(params['rifttag']);
       this.getCurrentLoggedInUser();
-      console.log(this.isDataAvailable);
     });
   }
 
@@ -58,7 +58,6 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
-        console.log("5");
       }
     )
   }
@@ -81,7 +80,6 @@ export class UserprofileComponent implements OnInit {
             // currActivity.rifterSession= this.currentUser.creatorActivityList[i].rifterSession;
             this.currentUser.activities.push(currActivity);
           }
-          console.log("1");
       }
     )
   }
@@ -127,7 +125,6 @@ export class UserprofileComponent implements OnInit {
           currFollowing.id = resBody.followings[i].followingUsertable.id;
           this.currentUser.followings.push(currFollowing);
         }
-        console.log("2");
       },
       err => {
         console.log(err);
@@ -147,7 +144,6 @@ export class UserprofileComponent implements OnInit {
           currNotification.rifterSession = resBody.broadcastNotificationList[i].rifterSession;
           this.currentUser.feed.push(currNotification);
         }
-        console.log("3");
       }
     );
     return true;
@@ -175,7 +171,6 @@ export class UserprofileComponent implements OnInit {
           );
           this.currentUser.rifterSessions.push(currSession);
         }
-        console.log("4");
       },
       err => {
         console.log(err);
