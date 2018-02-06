@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {UpdateInfoData} from "./update-info-model";
 import {Userprofile} from "../../models/userprofile";
-import {Http, RequestOptions} from "@angular/http";
+import {Http, RequestOptions, Headers} from "@angular/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
 
@@ -49,7 +49,8 @@ export class UpdateInfoService {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'});
     let options = new RequestOptions({ headers: headers });
-    this.authHttp.patch(this.updateAuth0UserURL + auth0Id, auth0data, options)
+    console.log(options);
+    this.authHttp.post(this.updateAuth0UserURL + auth0Id, auth0data, {headers: headers})
       .map(res => res.json())
       .subscribe();
   }
