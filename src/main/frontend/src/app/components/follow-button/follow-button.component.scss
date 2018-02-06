@@ -1,0 +1,24 @@
+.btn-toggle-following {
+  background-color: #293e49;
+  color: #fff;
+}
+.btn-toggle-following:hover {
+  background-color: #ef2020;
+  color: #fff;
+}
+.btn-toggle-following:hover span {
+  display: none;
+}
+.btn-toggle-following:hover:after {
+  content: 'Unfollow';
+  display: inline;
+}
+.btn-toggle-following:hover i:before {
+  content: '\f129';
+}
+.btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 92px;
+}

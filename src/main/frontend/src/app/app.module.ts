@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import {HttpModule, Http, RequestOptions} from '@angular/http';
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
@@ -37,6 +37,18 @@ import {FormDataService} from "./usersessions/sessionform/data/formData.service"
 import {WorkflowService} from "./usersessions/sessionform/workflow/workflow.service";
 import {FormWizardModule} from "angular2-wizard/dist";
 import { FollowButtonComponent } from './components/follow-button/follow-button.component';
+import { UpdateInfoComponent } from './userprofile/update-info/update-info.component';
+import {UpdateInfoService} from "./userprofile/update-info/data/update-info.service";
+import {AuthHttp, AuthConfig} from "angular2-jwt";
+
+export function authHttpServiceFactory(http: Http, options: RequestOptions) {
+  return new AuthHttp(new AuthConfig({
+    tokenGetter: (() => localStorage.getItem('access_token')),
+    globalHeaders: [{'Accept' : 'application/json', 'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'}],
+  }), http, options);
+}
 
 @NgModule({
   declarations: [
@@ -54,7 +66,8 @@ import { FollowButtonComponent } from './components/follow-button/follow-button.
     Step2Component,
     Step3Component,
     ResultComponent,
-    FollowButtonComponent
+    FollowButtonComponent,
+    UpdateInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -70,9 +83,10 @@ import { FollowButtonComponent } from './components/follow-button/follow-button.
     MatInputModule,
     FormWizardModule
   ],
-  providers: [UserprofileService, UsersessionsService, AuthService,
+  providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
+    {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}
   ],
   bootstrap: [AppComponent]
 })

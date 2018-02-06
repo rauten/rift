@@ -9,7 +9,7 @@ import { FormDataService } from '../data/formData.service';
 })
 export class Step1Component implements OnInit {
   title = 'Step 1';
-  step1:Step1;
+  step1: Step1;
 
   constructor(private formDataService: FormDataService) { }
 
