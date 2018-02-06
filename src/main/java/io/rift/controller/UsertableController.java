@@ -245,6 +245,13 @@ public class UsertableController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/user/updateUser")
     public Boolean updateUpdate(@RequestBody Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        String riftTag = usertable.getRiftTag();
+        if (!riftTag.equals("")) {
+            Usertable user = usertableService.getUserByRiftTag(riftTag);
+            if (user != null) {
+                return false;
+            }
+        }
         return usertableService.updateUser(usertable);
     }
 
