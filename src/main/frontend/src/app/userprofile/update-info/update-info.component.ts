@@ -24,6 +24,10 @@ export class UpdateInfoComponent implements OnInit {
     this.currentUser = this.updateInfoService.getUserData();
     this.updateInfoData = this.updateInfoService.getFormData();
     console.log("Current user info loaded to Update Profile");
+    console.log(this.profile.sub);
+    console.log(localStorage.getItem('id_token'));
+    console.log(localStorage.getItem('access_token'));
+
   }
 
   getCurrentLoggedInUser() {
@@ -38,6 +42,22 @@ export class UpdateInfoComponent implements OnInit {
   }
 
   save() {
-    this.updateInfoService.setUserData(this.currentUser, this.loggedInUser.id);
+    this.updateInfoService.setUserData(this.currentUser);
+    let data = {
+      "firstName" : this.updateInfoData.firstName,
+      "lastName" : this.updateInfoData.lastName,
+      "riftTag" : this.updateInfoData.riftTag,
+      "id" : this.loggedInUser.id
+    };
+    let auth0data = {
+      'user_metadata': {
+        'firstName': this.updateInfoData.firstName,
+        'lastName': this.updateInfoData.riftTag
+      },
+      'username' : this.updateInfoData.riftTag
+    };
+    console.log(data);
+    // this.updateInfoService.updateUser(data);
+    this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
   }
 }
