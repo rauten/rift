@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {UpdateInfoData} from "./update-info-model";
 import {Userprofile} from "../../models/userprofile";
-import {Http, RequestOptions} from "@angular/http";
+import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
+
+declare var require:any;
 
 @Injectable()
 export class UpdateInfoService {
@@ -12,7 +14,27 @@ export class UpdateInfoService {
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
 
+
   constructor(private http: Http, private authHttp: AuthHttp) {
+    /*
+    var request = require("request");
+
+    var options = { method: 'POST',
+      url: 'https://riftgaming.auth0.com/oauth/token',
+      headers: { 'content-type': 'application/json' },
+      body:
+        { grant_type: 'client_credentials',
+          client_id: 'YOUR_CLIENT_ID',
+          client_secret: 'YOUR_CLIENT_SECRET',
+          audience: 'https://api.example.com/api/v2/users' },
+      json: true };
+
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+
+      console.log(body);
+    });
+    */
   }
 
   getUserData(): Userprofile {
@@ -53,4 +75,6 @@ export class UpdateInfoService {
       .map(res => res.json())
       .subscribe();
   }
+
+
 }
