@@ -106,25 +106,10 @@ body {
   min-width: 92px;
 }
 
-.btn-toggle-following {
-  background-color: #293e49;
-  color: #fff;
+.userbtn {
+  position: relative!important;
+  min-width: 92px!important;
 }
-.btn-toggle-following:hover {
-  background-color: #ef2020;
-  color: #fff;
-}
-.btn-toggle-following:hover span {
-  display: none;
-}
-.btn-toggle-following:hover:after {
-  content: 'Unfollow';
-  display: inline;
-}
-.btn-toggle-following:hover i:before {
-  content: '\f129';
-}
-
 
 /* list icons */
 .list-icons-demo li {
@@ -216,5 +201,10 @@ body {
   margin-left: 10px!important;
   margin-right: 10px!important;
   background-color: transparent!important;
+}
+
+.userbtn /deep/ button {
+  position: relative!important;
+  min-width: 92px!important;
 }
 
