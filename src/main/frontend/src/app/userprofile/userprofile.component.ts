@@ -21,6 +21,7 @@ export class UserprofileComponent implements OnInit {
   sub: any;
   currUser: any;
   following = false;
+  isDataAvailable:boolean = false;
 
   constructor(private userProfileService: UserprofileService,
   private userSessionsService: UsersessionsService,
@@ -33,14 +34,15 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       this.getUserProfileInformation(params['rifttag']);
       this.getUserFollowersAndFollowing(params['rifttag']);
-      this.getBroadcastNotifications(params['rifttag']);
+      this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
       this.getUserSessions(params['rifttag']);
       this.getCurrentLoggedInUser();
+      console.log(this.isDataAvailable);
     });
   }
 
 
-  getCurrentLoggedInUser() {
+  getCurrentLoggedInUser():any {
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
         this.loggedInUser.firstName = resBody.firstName;
@@ -56,6 +58,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
+        console.log("5");
       }
     )
   }
@@ -78,6 +81,7 @@ export class UserprofileComponent implements OnInit {
             // currActivity.rifterSession= this.currentUser.creatorActivityList[i].rifterSession;
             this.currentUser.activities.push(currActivity);
           }
+          console.log("1");
       }
     )
   }
@@ -123,6 +127,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.id = resBody.followings[i].followingUsertable.id;
           this.currentUser.followings.push(currFollowing);
         }
+        console.log("2");
       },
       err => {
         console.log(err);
@@ -130,7 +135,7 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getBroadcastNotifications(riftTag: string) {
+  getBroadcastNotifications(riftTag: string):any {
     this.currentUser.feed = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
@@ -142,8 +147,10 @@ export class UserprofileComponent implements OnInit {
           currNotification.rifterSession = resBody.broadcastNotificationList[i].rifterSession;
           this.currentUser.feed.push(currNotification);
         }
+        console.log("3");
       }
     );
+    return true;
   }
 
   getUserSessions(riftTag: string) {
@@ -168,10 +175,13 @@ export class UserprofileComponent implements OnInit {
           );
           this.currentUser.rifterSessions.push(currSession);
         }
+        console.log("4");
       },
       err => {
         console.log(err);
       }
     );
   }
+
+
 }
