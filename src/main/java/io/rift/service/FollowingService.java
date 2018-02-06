@@ -1,10 +1,8 @@
 package io.rift.service;
 
 
-import io.rift.model.Following;
 import io.rift.model.Usertable;
-import io.rift.repository.FollowingRepository;
-import io.rift.repository.UsertableRepository;
+import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +13,7 @@ import java.sql.SQLException;
 public class FollowingService {
 
     @Autowired
-    private UsertableRepository usertableRepository;
+    private RiftRepository riftRepository;
 
     @Autowired
     private UsertableService usertableService;
@@ -38,7 +36,7 @@ public class FollowingService {
         args[0] = followerRiftTag;
         args[1] = followingId;
         Object[] res = new Object[2];
-        ResultSet resultSet = usertableRepository.doQuery(isFollowing, args);
+        ResultSet resultSet = riftRepository.doQuery(isFollowing, args);
         if (resultSet.next()) {
             res[0] = true;
             res[1] = resultSet.getInt(1);
@@ -55,14 +53,14 @@ public class FollowingService {
         args[0] = followerId;
         args[1] = followingId;
         args[2] = true;
-        return usertableRepository.doInsert(follow, args);
+        return riftRepository.doInsert(follow, args);
     }
 
     public boolean unfollow(int followerId, int followingId) throws SQLException {
         Object[] args = new Object[2];
         args[0] = followerId;
         args[1] = followingId;
-        return usertableRepository.doDelete(removeFollowing, args);
+        return riftRepository.doDelete(removeFollowing, args);
     }
 
     /*

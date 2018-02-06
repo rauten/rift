@@ -32,7 +32,7 @@ public class NotificationService {
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notifications.add(notification);
             if (info.equals("session")) {
-                notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, 8));
+                notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, 8, ""));
             }
         }
         return notifications;

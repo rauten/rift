@@ -2,7 +2,7 @@ package io.rift.service;
 
 import io.rift.model.RifterSession;
 import io.rift.model.Usertable;
-import io.rift.repository.UsertableRepository;
+import io.rift.repository.RiftRepository;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 public class RifterSessionService {
 
     @Autowired
-    private UsertableRepository usertableRepository;
+    private RiftRepository riftRepository;
 
     @Autowired
     private UsertableService usertableService;
@@ -33,9 +33,9 @@ public class RifterSessionService {
 
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getRifterGameById, args);
+        ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
         if (resultSet.next()) {
-            return populateRifterSession(resultSet, 1);
+            return populateRifterSession(resultSet, 1, "");
         }
         return null;
     }
@@ -43,9 +43,9 @@ public class RifterSessionService {
     public RifterSession getRifterGameAndHostByGameId(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getRifterGameAndHostByGameId, args);
+        ResultSet resultSet = riftRepository.doQuery(getRifterGameAndHostByGameId, args);
         if (resultSet.next()) {
-            RifterSession rifterSession = populateRifterSession(resultSet, 1);
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             if (rifterSession.getId() != null) {
                 Usertable usertable = usertableService.populateUsertable(resultSet, 12, "");
                 rifterSession.setUsertable(usertable);
@@ -59,7 +59,7 @@ public class RifterSessionService {
 
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getGamePlayersByGameId, args);
+        ResultSet resultSet = riftRepository.doQuery(getGamePlayersByGameId, args);
         List<Usertable> players = new ArrayList<>();
         while (resultSet.next()) {
             Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
@@ -68,7 +68,7 @@ public class RifterSessionService {
         return players;
     }
 
-    public RifterSession populateRifterSession(ResultSet resultSet, int startPoint) throws SQLException {
+    public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
         RifterSession rifterSession = new RifterSession();
         rifterSession.setId(resultSet.getInt(startPoint));
         rifterSession.setHostId(resultSet.getInt(startPoint + 1));
@@ -85,11 +85,14 @@ public class RifterSessionService {
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
+        if (info.equals("levenshtein")) {
+            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
+        }
         return rifterSession;
     }
 
     public boolean createGame(RifterSession rifterSession) {
-        return usertableRepository.doInsert(createGame,
+        return riftRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
                         rifterSession.getSessionTime(), rifterSession.getGame(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
     }

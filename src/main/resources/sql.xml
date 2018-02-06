@@ -216,4 +216,23 @@
         WHERE follower_id = ? AND following_id = ?;
     </removeFollowing>
 
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - SEARCH SQL COMMANDS - - - - - - - - - - - - - -->
+
+    <searchUsertable>
+        SELECT u.*, levenshtein(rift_tag, ?, 2, 3, 3), levenshtein(first_name, ?, 2, 3, 3), CAST(((levenshtein(lower(first_name || ' ' || last_name), lower(?), 2, 3, 3) + levenshtein(first_name || ' ' || last_name, ?, 2,3,3)) / 2.0) as float)
+        FROM usertable u
+        ORDER BY LEAST(levenshtein(rift_tag, ?, 2, 3, 3), levenshtein(first_name, ?, 2, 3, 3), CAST(((levenshtein(lower(first_name || ' ' || last_name), lower(?), 2, 3, 3) + levenshtein(first_name || ' ' || last_name, ?, 2,3,3)) / 2.0) as float))
+        LIMIT 25;
+    </searchUsertable>
+
+    <searchRifterSession>
+        SELECT r.*, levenshtein(game, ?, 2, 3, 3)
+        FROM riftergame r
+        ORDER BY LEAST(levenshtein(game, ?, 2, 3, 3))
+        LIMIT 25;
+    </searchRifterSession>
+
+
 </Queries>

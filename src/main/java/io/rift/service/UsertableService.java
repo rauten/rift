@@ -2,14 +2,10 @@ package io.rift.service;
 
 
 import com.google.common.base.CaseFormat;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.*;
-import io.rift.repository.UsertableRepository;
+import io.rift.repository.RiftRepository;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.generic.POP;
-import org.aspectj.weaver.ast.Not;
-import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +14,8 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import org.apache.bcel.classfile.Field;
 
-import javax.validation.constraints.Null;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,7 +26,7 @@ import java.util.Optional;
 public class UsertableService {
 
     @Autowired
-    private UsertableRepository usertableRepository;
+    private RiftRepository riftRepository;
 
     @Autowired
     private RifterSessionService rifterSessionService;
@@ -112,7 +106,7 @@ public class UsertableService {
     public Usertable getUserById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getUserById, args);
+        ResultSet resultSet = riftRepository.doQuery(getUserById, args);
         if (resultSet.next()) {
             return populateUsertable(resultSet, 1, "");
         }
@@ -122,7 +116,7 @@ public class UsertableService {
     public Usertable getUserByRiftTag(String riftTag) throws SQLException {
         Object[] args = new Object[1];
         args[0] = riftTag;
-        ResultSet resultSet = usertableRepository.doQuery(getUserByRiftTag, args);
+        ResultSet resultSet = riftRepository.doQuery(getUserByRiftTag, args);
         if (resultSet.next()) {
             return populateUsertable(resultSet, 1, "");
         }
@@ -147,6 +141,10 @@ public class UsertableService {
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 13, ""));
+        } else if (info.equals("levenshtein")) {
+            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + 14));
+            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + 15));
+            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + 16));
         }
         return usertable;
     }
@@ -154,7 +152,7 @@ public class UsertableService {
     public Integer getNumberGamesPlayedByUserId(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getNumberGamesPlayedByUserId, args);
+        ResultSet resultSet = riftRepository.doQuery(getNumberGamesPlayedByUserId, args);
         if (resultSet.next()) {
             return resultSet.getInt(1);
         }
@@ -164,7 +162,7 @@ public class UsertableService {
     public Integer getNumberFollowing(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getNumberFollowing, args);
+        ResultSet resultSet = riftRepository.doQuery(getNumberFollowing, args);
         if (resultSet.next()) {
             return resultSet.getInt(1);
         }
@@ -174,7 +172,7 @@ public class UsertableService {
     public Integer getNumberFollowers(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getNumberFollowers, args);
+        ResultSet resultSet = riftRepository.doQuery(getNumberFollowers, args);
         if (resultSet.next()) {
             return resultSet.getInt(1);
         }
@@ -185,7 +183,7 @@ public class UsertableService {
     public List<Following> getFollowingsById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowersById, args);
+        ResultSet resultSet = riftRepository.doQuery(getFollowersById, args);
         List<Following> followings = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -200,7 +198,7 @@ public class UsertableService {
     public List<Following> getFollowersById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowingsById, args);
+        ResultSet resultSet = riftRepository.doQuery(getFollowingsById, args);
         List<Following> followers = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -215,7 +213,7 @@ public class UsertableService {
     public List<Following> getFollowingsAndInfoById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowingsAndInfoById, args);
+        ResultSet resultSet = riftRepository.doQuery(getFollowingsAndInfoById, args);
         List<Following> followings = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -231,7 +229,7 @@ public class UsertableService {
     public List<Following> getFollowersAndInfoById(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getFollowersAndInfoById, args);
+        ResultSet resultSet = riftRepository.doQuery(getFollowersAndInfoById, args);
         List<Following> followings = new ArrayList<>();
         while (resultSet.next()) {
             Following following = new Following();
@@ -249,40 +247,40 @@ public class UsertableService {
         boolean bool;
         if (info.equals("sessionInfo")) {
             if (!filter.isPresent()) {
-                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
                 bool = value.get().equals("true") ? true : false;
-                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, bool});
             } else {
                 return null;
             }
             return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"sessionInfo"});
         } else if (info.equals("hostInfo")) {
             if (!filter.isPresent()) {
-                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
                 bool = value.get().equals("true") ? true : false;
-                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, bool});
             } else {
                 return null;
             }
             return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo"});
         } else if (info.equals("hostInfo&sessionInfo")) {
             if (!filter.isPresent()) {
-                resultSet = usertableRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
                 bool = value.get().equals("true") ? true : false;
-                resultSet = usertableRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, bool});
             } else {
                 return null;
             }
             return sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo", "sessionInfo"});
         } else {
             if (!filter.isPresent()) {
-                resultSet = usertableRepository.doQuery(getRequestsByUser, new Object[] {id});
+                resultSet = riftRepository.doQuery(getRequestsByUser, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
                 bool = value.get().equals("true") ? true : false;
-                resultSet = usertableRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, bool});
             } else {
                 return null;
             }
@@ -297,9 +295,9 @@ public class UsertableService {
         args[0] = id;
         ResultSet resultSet;
         if (info.equals("session")) {
-            resultSet = usertableRepository.doQuery(getUserActiviyAndUserSession, args);
+            resultSet = riftRepository.doQuery(getUserActiviyAndUserSession, args);
         } else {
-            resultSet = usertableRepository.doQuery(getUserActivity, args);
+            resultSet = riftRepository.doQuery(getUserActivity, args);
         }
         return notificationService.populateNotifications(resultSet, 1, info);
     }
@@ -308,17 +306,17 @@ public class UsertableService {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet;
-        resultSet = usertableRepository.doQuery(getUserNotifications, args);
+        resultSet = riftRepository.doQuery(getUserNotifications, args);
         return notificationService.populateNotifications(resultSet, 1, "");
     }
 
     public List<RifterSession> getUserAndRifterSession(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = usertableRepository.doQuery(getUserAndRifterSessions, args);
+        ResultSet resultSet = riftRepository.doQuery(getUserAndRifterSessions, args);
         List<RifterSession> rifterSessions = new ArrayList<>();
         while (resultSet.next()) {
-            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1);
+            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "");
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
@@ -340,9 +338,9 @@ public class UsertableService {
         args[0] = id;
         ResultSet resultSet;
         if (type.equals("Followers")) {
-            resultSet = usertableRepository.doQuery(getBroadcastNotificationsForFollower, args);
+            resultSet = riftRepository.doQuery(getBroadcastNotificationsForFollower, args);
         } else {
-            resultSet = usertableRepository.doQuery(getBroadcastNotifications, args);
+            resultSet = riftRepository.doQuery(getBroadcastNotifications, args);
         }
         int i = 1;
         List<Notification> notifications = new ArrayList<>();
@@ -375,7 +373,7 @@ public class UsertableService {
     }
 
     public Boolean createUser(Usertable usertable) {
-        return usertableRepository.doInsert(createUser,
+        return riftRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
                         usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token())});
     }
@@ -400,7 +398,7 @@ public class UsertableService {
             PropertyDescriptor pd = new PropertyDescriptor(attribute, Usertable.class);
             Method getter = pd.getReadMethod();
             Object f = getter.invoke(usertable);
-            if (f != null) {
+            if (f != null && !((String) f).equals("")) {
                 if (properties[1].equals(intStr)) {
                     f = (Integer) f;
                 } else if (properties[1].equals(stringStr)) {
@@ -425,6 +423,8 @@ public class UsertableService {
         query.append(values);
         query.append(updateUserEnd);
         args.add(id);
-        return usertableRepository.doUpdate(query, args);
+        return riftRepository.doUpdate(query, args);
     }
+
+
 }

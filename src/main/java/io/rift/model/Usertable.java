@@ -92,6 +92,15 @@ public class Usertable {
     
     @JsonView(Views.UsertableNumberFollowers.class)
     private Integer numberFollowers;
+
+    @JsonView(Views.UsertableRiftTagLevenshtein.class)
+    private Integer riftTagLevenshtein;
+
+    @JsonView(Views.UsertableFirstNameLevenshtein.class)
+    private Integer firstNameLevenshtein;
+
+    @JsonView(Views.UsertableFullNameLevenshtein.class)
+    private Double fullNameLevenshtein;
     
     public Usertable() {}
 

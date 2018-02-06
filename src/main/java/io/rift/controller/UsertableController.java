@@ -25,9 +25,6 @@ public class UsertableController {
     @Autowired
     private UsertableService usertableService;
 
-
-
-
     /**
      * The result of a Usertable NATURAL JOIN Notification query
      * @param id The user id we want to get information for
@@ -250,8 +247,5 @@ public class UsertableController {
     public Boolean updateUpdate(@RequestBody Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
         return usertableService.updateUser(usertable);
     }
-
-
-
 
 }
