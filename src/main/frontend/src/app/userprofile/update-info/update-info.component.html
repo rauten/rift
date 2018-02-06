@@ -7,28 +7,27 @@
         <div class="row">
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
-              <label class="control-label" for="sessiontitle">Give your session a title</label>
-              <input class="form-control input-md" #sessiontitle="ngModel" required id="sessiontitle" name="sessiontitle" type="text" placeholder="Session Title" [(ngModel)]="step1.title">
-              <div class="alert alert-danger" [hidden]="sessiontitle.valid">Session title is required</div>
+              <label class="control-label" for="riftTag">Update your Rift Tag</label>
+              <input class="form-control input-md" #riftTag="ngModel" id="riftTag" name="riftTag" type="text" placeholder="Change your Rift Tag" [(ngModel)]="currentUser.riftTag">
             </div>
           </div>
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
-              <label class="control-label" for="sessiongame">What game will you be playing?</label>
-              <input class="form-control input-md" #sessiongame="ngModel" required id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="step1.game">
-              <div class="alert alert-danger" [hidden]="sessiongame.valid">Last Name is required</div>
+              <label class="control-label" for="firstName">Update your First Name</label>
+              <input class="form-control input-md" #firstName="ngModel" id="firstName" name="firstName" type="text" placeholder="Change your first name" [(ngModel)]="currentUser.firstName">
             </div>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label" for="sessionplatform">What platform will you be playing on?</label>
-          <input class="form-control input-md" #sessionplatform="ngModel" required id="sessionplatform" name="sessinplatform" type="text" placeholder="Session Platform" [(ngModel)]="step1.console">
-          <div class="alert alert-danger" [hidden]="sessionplatform.valid">Email is required and must be valid</div>
+          <label class="control-label" for="lastName">Update your Last name</label>
+          <input class="form-control input-md" #lastName="ngModel" id="lastName" name="lastName" type="text" placeholder="Change your last name" [(ngModel)]="currentUser.lastName">
         </div>
       </div>
     </div>
   </div>
   <div>
-    <button mat-button matStepperNext [disabled]="!step1Form.valid" (click)="save(step1Form)" class="btn-primary" type="button">Next</button>
+    <button mat-button [disabled]="!updateInfo.valid" (click)="save()" class="btn-primary" type="button">Update</button>
   </div>
 </form>
+
+<pre>{{ updateInfoData | json }}</pre>
