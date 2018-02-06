@@ -141,6 +141,10 @@ public class UsertableService {
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 13, ""));
+        } else if (info.equals("levenshtein")) {
+            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + 14));
+            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + 15));
+            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + 16));
         }
         return usertable;
     }
@@ -312,7 +316,7 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getUserAndRifterSessions, args);
         List<RifterSession> rifterSessions = new ArrayList<>();
         while (resultSet.next()) {
-            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1);
+            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "");
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
@@ -394,7 +398,7 @@ public class UsertableService {
             PropertyDescriptor pd = new PropertyDescriptor(attribute, Usertable.class);
             Method getter = pd.getReadMethod();
             Object f = getter.invoke(usertable);
-            if (f != null) {
+            if (f != null && !((String) f).equals("")) {
                 if (properties[1].equals(intStr)) {
                     f = (Integer) f;
                 } else if (properties[1].equals(stringStr)) {
@@ -421,4 +425,6 @@ public class UsertableService {
         args.add(id);
         return riftRepository.doUpdate(query, args);
     }
+
+
 }

@@ -83,6 +83,8 @@ public class Views {
 
     public interface RifterSessionPlayers {}
 
+    public interface RifterSessionGameLevenshtein {}
+
 
     /****************** SessionRequest Attributes **********************/
     /*******************************************************************/
@@ -195,6 +197,12 @@ public class Views {
 
     public interface UsertableNumberFollowers {}
 
+    public interface UsertableRiftTagLevenshtein {}
+
+    public interface UsertableFirstNameLevenshtein {}
+
+    public interface UsertableFullNameLevenshtein {}
+
 
     /****************** GetProfilePage View ***********************/
     /**************************************************************/
@@ -211,5 +219,9 @@ public class Views {
             RifterSessionSlotsRemaining, RifterSessionCreatedTime {}
 
     public interface CreateUser extends UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
+
+    public interface Search extends UsertableRiftTagLevenshtein, UsertableFirstNameLevenshtein, UsertableFullNameLevenshtein,
+            UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, RifterSessionId,
+            RifterSessionHostId {}
 
 }

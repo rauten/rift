@@ -56,7 +56,7 @@ public class SessionRequestService {
                     sessionRequest.setHostUsertable(usertable);
                     startPoint += usertableService.POPULATESIZE;
                 } else if (str.equals("sessionInfo")) {
-                    RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, startPoint);
+                    RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, startPoint, "");
                     sessionRequest.setRifterSession(rifterSession);
                     startPoint += rifterSessionService.POPULATESIZE;
                 }

@@ -35,7 +35,7 @@ public class RifterSessionService {
         args[0] = id;
         ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
         if (resultSet.next()) {
-            return populateRifterSession(resultSet, 1);
+            return populateRifterSession(resultSet, 1, "");
         }
         return null;
     }
@@ -45,7 +45,7 @@ public class RifterSessionService {
         args[0] = id;
         ResultSet resultSet = riftRepository.doQuery(getRifterGameAndHostByGameId, args);
         if (resultSet.next()) {
-            RifterSession rifterSession = populateRifterSession(resultSet, 1);
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             if (rifterSession.getId() != null) {
                 Usertable usertable = usertableService.populateUsertable(resultSet, 12, "");
                 rifterSession.setUsertable(usertable);
@@ -68,7 +68,7 @@ public class RifterSessionService {
         return players;
     }
 
-    public RifterSession populateRifterSession(ResultSet resultSet, int startPoint) throws SQLException {
+    public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
         RifterSession rifterSession = new RifterSession();
         rifterSession.setId(resultSet.getInt(startPoint));
         rifterSession.setHostId(resultSet.getInt(startPoint + 1));
@@ -85,6 +85,9 @@ public class RifterSessionService {
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
+        if (info.equals("levenshtein")) {
+            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
+        }
         return rifterSession;
     }
 
