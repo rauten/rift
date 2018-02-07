@@ -43,7 +43,6 @@
         <div class="profile-info-right">
           <mat-tab-group>
             <mat-tab label="feed" *ngIf="profile.nickname == currentUser.riftTag">
-              <!--{{profile["http://riftgaming:auth0:com/user_metadata"].riftTag}}-->
               <div class="media activity-item" *ngFor="let notification of currentUser.feed">
                 <a href="#" class="pull-left">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
