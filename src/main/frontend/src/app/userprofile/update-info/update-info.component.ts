@@ -56,7 +56,7 @@ export class UpdateInfoComponent implements OnInit {
       },
       'username' : this.updateInfoData.riftTag
     };
-    console.log(data);
+    console.log("Data: " + auth0data);
     // this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
   }

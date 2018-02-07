@@ -64,7 +64,7 @@ public class SearchService {
         // Add RifterSession results
         resultSet = riftRepository.doQuery(searchRifterSession, rifterGameArgs);
         while (resultSet.next()) {
-            rifterSessionSearchResults.add(rifterSessionService.populateRifterSession(resultSet, 1, ""));
+            rifterSessionSearchResults.add(rifterSessionService.populateRifterSession(resultSet, 1, "levenshteinSearch"));
         }
         searchResults.add(rifterSessionSearchResults);
 

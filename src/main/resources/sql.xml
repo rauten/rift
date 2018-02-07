@@ -228,8 +228,9 @@
     </searchUsertable>
 
     <searchRifterSession>
-        SELECT r.*, levenshtein(game, ?, 2, 3, 3)
-        FROM riftergame r
+        SELECT r.*, levenshtein(game, ?, 2, 3, 3), u.*
+        FROM riftergame r JOIN usertable u
+        ON r.host_id = u.id
         ORDER BY LEAST(levenshtein(game, ?, 2, 3, 3))
         LIMIT 25;
     </searchRifterSession>

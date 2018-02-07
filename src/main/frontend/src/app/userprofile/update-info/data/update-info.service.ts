@@ -10,7 +10,6 @@ import {AuthHttp} from "angular2-jwt";
 export class UpdateInfoService {
   updateUserURL = "/api/user/updateUser";
   updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
-  updateAuth0UserURL2 = "/api/v2/users/";
   userData : string;
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
@@ -49,13 +48,25 @@ export class UpdateInfoService {
   }
 
   updateAuth0User(auth0data, auth0Id) {
-    let myHeader = new Headers();
-    myHeader.append('Content-Type', 'application/json');
+
+    var header = new Headers();
+    header.append('Content-Type', 'application/json');
+
+    var token = localStorage.getItem("access_token");
+    header.append("Authorization", "Bearer " + token);
+
+    this.http.patch(this.updateAuth0UserURL + auth0Id,  auth0data, {headers: header})
+      .map(res => res.json())
+      .subscribe(data => this.userData = data,
+        err => console.log(err),
+        () => console.log('Request Complete'));
+    /*
     this.authHttp.patch(this.updateAuth0UserURL + auth0Id, auth0data, {headers : myHeader})
       .map(res => res.json())
       .subscribe(data => this.userData = data,
         err => console.log(err),
         () => console.log('Request Complete'));
+        */
   }
 
 
