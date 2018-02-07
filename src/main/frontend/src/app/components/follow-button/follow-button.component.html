@@ -1,10 +1,10 @@
 <h3 *ngIf="following">
-  <button type="button" class="btn btn-sm btn-toggle-following" (click)="unfollowUser(currentUser.id)">
+  <button type="button" class="btn btn-sm btn-toggle-following" (click)="unfollowUser()">
     <span>Following</span>
   </button>
 </h3>
 <h3 *ngIf="!following">
-  <button type="button" class="btn btn-sm btn-primary" (click)="followUser(currentUser.id)">
+  <button type="button" class="btn btn-sm btn-primary" (click)="followUser()">
     <i class="fa fa-checkmark-round"></i> <span>Follow</span>
   </button>
 </h3>

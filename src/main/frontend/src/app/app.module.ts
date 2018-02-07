@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpModule, Http, RequestOptions} from '@angular/http';
+import {HttpClient, HttpHeaders, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
@@ -23,7 +24,7 @@ import { UsersessionsComponent } from './usersessions/usersessions.component';
 
 import { TheriftComponent } from './therift/therift.component';
 import { RiftsessionsComponent } from './therift/riftsessions/riftsessions.component';
-import { SessionCardComponent } from './usersessions/models/session-card/session-card.component';
+import { SessionCardComponent } from './components/session-card/session-card.component';
 import {AuthService} from "./auth/auth.service";
 import {CapitalizePipe} from "./pipes/capitalize.pipe";
 
@@ -40,6 +41,9 @@ import { FollowButtonComponent } from './components/follow-button/follow-button.
 import { UpdateInfoComponent } from './userprofile/update-info/update-info.component';
 import {UpdateInfoService} from "./userprofile/update-info/data/update-info.service";
 import {AuthHttp, AuthConfig} from "angular2-jwt";
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import {SearchBarService} from "./components/search-bar/search-bar.service";
+import { UserCardComponent } from './components/user-card/user-card.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -65,7 +69,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     Step3Component,
     ResultComponent,
     FollowButtonComponent,
-    UpdateInfoComponent
+    UpdateInfoComponent,
+    SearchBarComponent,
+    UserCardComponent
   ],
   imports: [
     BrowserModule,
@@ -79,9 +85,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FormWizardModule
+    FormWizardModule,
+    HttpClientModule
   ],
-  providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService,
+  providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}

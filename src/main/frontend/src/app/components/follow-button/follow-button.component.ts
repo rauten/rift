@@ -9,7 +9,7 @@ import {UserprofileService} from "../../userprofile/userprofile.service";
 })
 export class FollowButtonComponent implements OnInit {
   @Input() following: boolean;
-  @Input() currentUser: Userprofile;
+  @Input() id: number;
   @Input() loggedInUser: Userprofile;
 
   constructor(private userProfileService: UserprofileService) {
@@ -20,7 +20,7 @@ export class FollowButtonComponent implements OnInit {
 
 
   followUser() {
-    this.userProfileService.followUser(this.loggedInUser.riftTag, this.currentUser.id).subscribe(
+    this.userProfileService.followUser(this.loggedInUser.riftTag, this.id).subscribe(
       resBody => {
         this.following = true;
       }
@@ -28,7 +28,7 @@ export class FollowButtonComponent implements OnInit {
   }
 
   unfollowUser() {
-    this.userProfileService.unfollowUser(this.loggedInUser.riftTag, this.currentUser.id).subscribe(
+    this.userProfileService.unfollowUser(this.loggedInUser.riftTag, this.id).subscribe(
       resBody => {
         this.following = false;
       }

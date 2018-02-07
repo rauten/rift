@@ -5,18 +5,19 @@
         <span class="sr-only">Toggle navigation</span>
         Menu <i class="fa fa-bars"></i>
       </button>
-      <a class="navbar-brand" routerLink="therift">Rift</a>
+      <a class="navbar-brand" routerLink="home">Rift</a>
+      <app-search-bar></app-search-bar>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a routerLink="therift">The Rift</a>
+          <a routerLink="home">The Rift</a>
         </li>
         <li>
           <a routerLink="sessions">Sessions</a>
         </li>
         <li>
-          <a [routerLink]="['user', getCurrentUser().nickname]" *ngIf="auth.isAuthenticated()">Profile</a>
+          <a [routerLink]="['user', getCurrentUser()['http://riftgaming:auth0:com/user_metadata'].riftTag]" *ngIf="auth.isAuthenticated()">Profile</a>
         </li>
         <li>
           <a (click)="auth.login()" *ngIf="!auth.isAuthenticated()">Login</a>

@@ -24,14 +24,14 @@ export class UpdateInfoComponent implements OnInit {
     this.currentUser = this.updateInfoService.getUserData();
     this.updateInfoData = this.updateInfoService.getFormData();
     console.log("Current user info loaded to Update Profile");
-    console.log(this.profile.sub);
-    console.log(localStorage.getItem('id_token'));
-    console.log(localStorage.getItem('access_token'));
+    console.log(this.profile);
+    console.log("id_token: " + localStorage.getItem('id_token'));
+    console.log("access_token: " + localStorage.getItem('access_token'));
 
   }
 
   getCurrentLoggedInUser() {
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
+    this.userProfileService.getUser(this.profile['http://riftgaming:auth0:com/user_metadata'].riftTag).subscribe(
       resBody => {
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
@@ -49,6 +49,8 @@ export class UpdateInfoComponent implements OnInit {
       "riftTag" : this.updateInfoData.riftTag,
       "id" : this.loggedInUser.id
     };
+
+    /*
     let auth0data = {
       'user_metadata': {
         'firstName': this.updateInfoData.firstName,
@@ -56,6 +58,9 @@ export class UpdateInfoComponent implements OnInit {
       },
       'username' : this.updateInfoData.riftTag
     };
+    */
+    let auth0data = {'firstName': this.updateInfoData.firstName, 'lastName':this.updateInfoData.lastName, 'riftTag': this.updateInfoData.riftTag};
+    console.log("Herro");
     console.log("Data: " + auth0data);
     // this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);

@@ -13,8 +13,8 @@ export class AuthService {
     auth: {
       redirectUrl: AUTH_CONFIG.callbackURL,
       responseType: 'token id_token',
-      // audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-      audience: AUTH_CONFIG.apiUrl,
+      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      // audience: AUTH_CONFIG.apiUrl,
       params: {
         scope: 'profile openid email user_metadata'
       }
@@ -27,6 +27,10 @@ export class AuthService {
       {
         name: "lastName",
         placeholder: "Enter your last name"
+      },
+      {
+        name: "riftTag",
+        placeholder: "Enter your Rift Username"
       }]
   });
 
@@ -51,7 +55,7 @@ export class AuthService {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
               "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
-              "riftTag" : profileJsonParse.nickname,
+              "riftTag" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].riftTag,
               "auth0Token" : profileJsonParse.sub
             };
             callback(data, true);

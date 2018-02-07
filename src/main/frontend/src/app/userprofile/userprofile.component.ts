@@ -5,7 +5,7 @@ import {UserprofileService} from "./userprofile.service";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 
 import {Activity} from "./models/activity";
-import {Session} from "../usersessions/models/session-card/session";
+import {Session} from "../components/session-card/session";
 import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 
@@ -43,7 +43,7 @@ export class UserprofileComponent implements OnInit {
 
 
   getCurrentLoggedInUser():any {
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
+    this.userProfileService.getUser(this.profile["http://riftgaming:auth0:com/user_metadata"].riftTag).subscribe(
       resBody => {
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
@@ -93,7 +93,6 @@ export class UserprofileComponent implements OnInit {
       }
     }
     this.following = false;
-
   }
 
   // getUserSocialMedia(riftTag: string) {

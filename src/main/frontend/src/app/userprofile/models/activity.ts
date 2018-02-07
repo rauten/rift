@@ -1,4 +1,4 @@
-import {Session} from "../../usersessions/models/session-card/session";
+import {Session} from "../../components/session-card/session";
 export class Activity {
   notificationContent: string;
   notificationType: string;

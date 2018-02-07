@@ -5,20 +5,21 @@ import {Http, RequestOptions, Headers} from "@angular/http";
 import {HttpHeaders, HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
-import {error} from "util";
 
 
 @Injectable()
 export class UpdateInfoService {
   updateUserURL = "/api/user/updateUser";
-  updateUserAuth0 = '/api/user/updateAuth0';
+  updateUserAuth0 = "/api/user/updateAuth";
+  updateUserAuth = "/api/user/updateAuth0";
+  updateUserAuthTwo = "/api/user/updateAuthTwo";
   updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
   userData : string;
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
 
 
-  constructor(private http: HttpClient, private authHttp: AuthHttp) {
+  constructor(private http: Http, private authHttp: AuthHttp) {
   }
 
   getUserData(): Userprofile {
@@ -42,45 +43,36 @@ export class UpdateInfoService {
 
   updateUser(data): void {
     console.log("running updateUser");
-    let headers = new HttpHeaders({'Accept' : 'application/json', 'Content-Type': 'application/json' });
-    //let options = new RequestOptions({ headers: headers });
-    this.http.put(this.updateUserURL, data, {headers: headers})
+    let headers = new Headers({'Accept' : 'application/json', 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.updateUserURL, data, options)
+      .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();
   }
 
-  updateAuth0User(auth0data) {
+  updateAuth0User(auth0data, auth0Id) {
 
-    let header = new HttpHeaders();
-    const token = localStorage.getItem("access_token");
+    //auth0data = JSON.parse(auth0data);
+    //console.log(auth0data);
+    let header = new Headers();
+    const token = localStorage.getItem("id_token");
     if (token) {
       const auth = 'Bearer ' + token;
-      header = new HttpHeaders(({"Authorization": auth}));
+      header = new Headers(({"Authorization": auth}));
     }
-    header.append("Metadata", auth0data);
+    header.append("FirstName", auth0data["firstName"]);
+    header.append("LastName", auth0data["lastName"]);
+    header.append("RiftTag", auth0data["riftTag"]);
+    header.append("Auth0Id", auth0Id);
+    console.log("Hello");
+    console.log(auth0data);
     this.http.get(this.updateUserAuth0, {headers: header})
       .subscribe(
         data => console.log(data),
         error => console.log(error)
-      )
-    //header.append('Content-Type', 'application/json');
+      );
 
-    /*
-    var token = localStorage.getItem("access_token");
-    header.append("Authorization", "Bearer " + token);
-
-    this.http.patch(this.updateAuth0UserURL + auth0Id,  auth0data, {headers: header})
-      .map(res => res.json())
-      .subscribe(data => this.userData = data,
-        err => console.log(err),
-        () => console.log('Request Complete'));
-    /*
-    this.authHttp.patch(this.updateAuth0UserURL + auth0Id, auth0data, {headers : myHeader})
-      .map(res => res.json())
-      .subscribe(data => this.userData = data,
-        err => console.log(err),
-        () => console.log('Request Complete'));
-        */
   }
 
 
