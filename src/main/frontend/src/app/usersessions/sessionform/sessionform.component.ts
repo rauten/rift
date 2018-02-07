@@ -29,6 +29,7 @@ export class SessionformComponent implements OnInit {
     this.formDataService.setStep1Info(this.step1);
     this.formDataService.setStep2Info(this.step2);
     this.formDataService.setStep3Info(this.step3);
+    console.log(this.step3.sessionDate)
 
   }
 

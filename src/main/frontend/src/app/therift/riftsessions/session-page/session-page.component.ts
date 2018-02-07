@@ -34,7 +34,7 @@ export class SessionPageComponent implements OnInit {
         this.session.methodOfContact = this.response.methodOfContact;
         this.session.title = this.response.title;
         this.session.hits = this.response.hits;
-        // this.session.sessionTime = this.response.sessionTime;
+        this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
       }
     )

@@ -18,7 +18,7 @@ export class RiftsessionsComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.searchQuery = params['searchQuery'];
-      console.log(this.searchQuery);
+      // console.log(this.searchQuery);
       this.getUserSearchResults(this.searchQuery);
     })
   }
@@ -26,8 +26,8 @@ export class RiftsessionsComponent implements OnInit {
   getUserSearchResults(searchQuery: string) {
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        console.log(resBody[0]);
-        console.log(resBody[1]);
+        // console.log(resBody[0]);
+        // console.log(resBody[1]);
         this.users = resBody[0];
         this.sessions = resBody[1];
       }

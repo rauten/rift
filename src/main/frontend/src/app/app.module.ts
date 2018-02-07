@@ -5,7 +5,10 @@ import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
 import {MatTabsModule} from '@angular/material/tabs';
-import {MatStepperModule, MatFormFieldModule, MatInputModule} from "@angular/material";
+import {
+  MatStepperModule, MatFormFieldModule, MatInputModule, MatDatepickerModule,
+  MatNativeDateModule
+} from "@angular/material";
 import {ReactiveFormsModule} from "@angular/forms";
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -87,6 +90,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     FormWizardModule
   ],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
