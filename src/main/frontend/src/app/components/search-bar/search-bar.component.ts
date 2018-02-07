@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {SearchBarService} from "./search-bar.service";
+import {SearchUser} from "./models/search-user.model";
 
 @Component({
   selector: 'app-search-bar',
@@ -7,20 +8,18 @@ import {SearchBarService} from "./search-bar.service";
   styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent implements OnInit {
-  users: any;
-  sessions: any;
   searchQuery: string = "";
-
   constructor(private searchBarService: SearchBarService) { }
 
   ngOnInit() {
   }
 
-  getSearchResults() {
-    this.searchBarService.getSearchResults(this.searchQuery).subscribe(
+  getUserSearchResults(searchQuery: string) {
+    this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        console.log(resBody);
+        console.log(resBody[0]);
+        localStorage.setItem('userSearchResults', resBody[0]);
       }
-    )
+    );
   }
 }

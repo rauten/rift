@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Session } from "./models/session-card/session";
+import { Session } from "../components/session-card/session";
 import { Http, RequestOptions, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";

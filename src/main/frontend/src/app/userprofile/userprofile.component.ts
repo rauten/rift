@@ -5,7 +5,7 @@ import {UserprofileService} from "./userprofile.service";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 
 import {Activity} from "./models/activity";
-import {Session} from "../usersessions/models/session-card/session";
+import {Session} from "../components/session-card/session";
 import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 
@@ -93,7 +93,6 @@ export class UserprofileComponent implements OnInit {
       }
     }
     this.following = false;
-
   }
 
   // getUserSocialMedia(riftTag: string) {

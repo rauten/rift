@@ -9,7 +9,7 @@ import {SessionformComponent} from "./usersessions/sessionform/sessionform.compo
 import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
 
 export const router: Routes = [
-  { path: '', redirectTo: 'therift', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'user/:rifttag', component: UserprofileComponent,
     children: [
       {path: 'update', component: UpdateInfoComponent}
@@ -20,8 +20,9 @@ export const router: Routes = [
       {path: 'create', component: SessionformComponent}
     ]
   },
-  { path: 'therift', component: TheriftComponent },
-  { path: 'riftsessions', component: RiftsessionsComponent}
+  { path: 'home', component: TheriftComponent,
+  },
+  { path: 'therift/:searchQuery', component: RiftsessionsComponent}
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(router);

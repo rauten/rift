@@ -11,7 +11,7 @@
             <h3>@{{currentUser.riftTag}}</h3>
             <h3>{{profile.sub}}</h3>
             <div *ngIf="profile.nickname != currentUser.riftTag">
-              <app-follow-button [following]="isFollowing(currentUser.riftTag)" [currentUser]="currentUser"
+              <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [loggedInUser]="loggedInUser" class="userbtn">
               </app-follow-button>
             </div>
@@ -97,7 +97,7 @@
                 <div class="media-body">
                   <a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
-                  <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [currentUser]="follower"
+                  <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
                                      [loggedInUser]="loggedInUser" *ngIf="profile.nickname != follower.riftTag">
 
                   </app-follow-button>
@@ -112,7 +112,7 @@
                   <div class="media-body">
                     <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
                       <br><span class="text-muted username">@{{following.riftTag}}</span></a>
-                    <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [currentUser]="following"
+                    <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"
                                        [loggedInUser]="loggedInUser" *ngIf="profile.nickname != following.riftTag">
 
                     </app-follow-button>
