@@ -9,7 +9,6 @@
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
             <h3>{{currentUser.firstName}} {{currentUser.lastName}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
-            <h3>{{profile.sub}}</h3>
             <div *ngIf="profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [loggedInUser]="loggedInUser" class="userbtn">
