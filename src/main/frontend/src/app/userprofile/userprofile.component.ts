@@ -155,19 +155,17 @@ export class UserprofileComponent implements OnInit {
         for (var i = 0; i < resBody.rifterSessions.length; i++) {
           var currDateMS = resBody.rifterSessions[i].sessionTime;
           var date = new Date(currDateMS);
-          var currSession = new Session(
-            resBody.firstName,
-            resBody.lastName,
-            resBody.riftTag,
-            resBody.rifterRating,
-            resBody.rifterSessions[i].hostId,
-            resBody.rifterSessions[i].sessionCost,
-            resBody.rifterSessions[i].methodOfContact,
-            resBody.rifterSessions[i].sessionDuration,
-            resBody.rifterSessions[i].title,
-            resBody.rifterSessions[i].hits,
-            date
-          );
+          var currSession = new Session();
+          currSession.firstName = resBody.firstName;
+          currSession.lastName = resBody.lastName;
+          currSession.riftTag = resBody.riftTag;
+          currSession.rifterRating = resBody.rifterRating;
+          currSession.hostId = resBody.rifterSessions[i].hostId;
+          currSession.sessionCost = resBody.rifterSessions[i].sessionCost;
+          currSession.methodOfContact = resBody.rifterSessions[i].methodOfContact;
+          currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
+          currSession.title = resBody.rifterSessions[i].title;
+          currSession.sessionTime = date;
           this.currentUser.rifterSessions.push(currSession);
         }
       },
@@ -176,6 +174,4 @@ export class UserprofileComponent implements OnInit {
       }
     );
   }
-
-
 }

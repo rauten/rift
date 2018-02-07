@@ -7,6 +7,7 @@ import { TheriftComponent } from './therift/therift.component';
 import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.component";
 import {SessionformComponent} from "./usersessions/sessionform/sessionform.component";
 import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
+import {SessionPageComponent} from "./therift/riftsessions/session-page/session-page.component";
 
 export const router: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,7 +23,8 @@ export const router: Routes = [
   },
   { path: 'home', component: TheriftComponent,
   },
-  { path: 'therift/:searchQuery', component: RiftsessionsComponent}
+  { path: 'therift/:searchQuery', component: RiftsessionsComponent},
+  { path: 'session/:sessionId', component: SessionPageComponent}
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(router);

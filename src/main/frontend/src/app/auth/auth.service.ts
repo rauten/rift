@@ -27,6 +27,10 @@ export class AuthService {
       {
         name: "lastName",
         placeholder: "Enter your last name"
+      },
+      {
+        name: "riftTag",
+        placeholder: "Enter your Rift Username"
       }]
   });
 
@@ -46,11 +50,12 @@ export class AuthService {
         this.setSession(authResult, function () {
           var profileJson = localStorage.getItem('profile');
           var profileJsonParse = JSON.parse(profileJson);
+          console.log("http://riftgaming:auth0:com/app_metadata");
           if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
               "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
-              "riftTag" : profileJsonParse.nickname,
+              "riftTag" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].riftTag,
               "auth0Token" : profileJsonParse.sub
             };
             callback(data, true);

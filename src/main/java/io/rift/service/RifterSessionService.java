@@ -85,8 +85,9 @@ public class RifterSessionService {
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
-        if (info.equals("levenshtein")) {
+        if (info.equals("levenshteinSearch")) {
             rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 16, ""));
         }
         return rifterSession;
     }

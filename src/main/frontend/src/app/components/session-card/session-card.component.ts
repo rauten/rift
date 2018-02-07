@@ -17,6 +17,9 @@ export class SessionCardComponent implements OnInit {
   @Input() day: string;
   @Input() month: string;
   @Input() time: string;
+  @Input() console: string;
+  @Input() game: string;
+  @Input() id: number;
 
   constructor() { }
 

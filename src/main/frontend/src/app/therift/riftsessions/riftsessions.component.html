@@ -6,9 +6,22 @@
       </div>
     </mat-tab>
     <mat-tab label="sessions">
-      <h1>Some more tab content</h1>
-      <p>...</p>
+      <div *ngFor="let session of sessions">
+        <app-session-card
+          [hostName]="session.usertable.firstName + ' ' + session.usertable.lastName"
+          [hostRiftTag]="session.usertable.riftTag"
+          [hostRifterRating]=""
+          [title]="session.title"
+          [day]="session.sessionTime | date:'dd'"
+          [month]="session.sessionTime | date:'MMM'"
+          [time]="session.sessionTime | date:'shortTime'"
+          [console]="session.console"
+          [game]="session.game"
+          [id]="session.id">
+        </app-session-card>
+      </div>
     </mat-tab>
   </mat-tab-group>
+
   <router-outlet></router-outlet>
 </div>
