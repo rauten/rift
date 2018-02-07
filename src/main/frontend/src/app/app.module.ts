@@ -44,6 +44,8 @@ import {AuthHttp, AuthConfig} from "angular2-jwt";
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import {SearchBarService} from "./components/search-bar/search-bar.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
+import { SessionPageComponent } from './therift/riftsessions/session-page/session-page.component';
+import {SessionPageService} from "./therift/riftsessions/session-page/session-page.service";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -71,7 +73,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FollowButtonComponent,
     UpdateInfoComponent,
     SearchBarComponent,
-    UserCardComponent
+    UserCardComponent,
+    SessionPageComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FormWizardModule,
     HttpClientModule
   ],
-  providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService,
+  providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}
