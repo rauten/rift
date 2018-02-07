@@ -31,7 +31,7 @@ export class UserCardComponent implements OnInit {
   }
 
   getCurrentLoggedInUser():any {
-    this.userProfileService.getUser(this.profile['http://riftgaming:auth0:com/user_metadata'].riftTag).subscribe(
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;

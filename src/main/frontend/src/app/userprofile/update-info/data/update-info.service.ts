@@ -27,6 +27,7 @@ export class UpdateInfoService {
     user.riftTag = this.updateInfoData.riftTag;
     user.firstName = this.updateInfoData.firstName;
     user.lastName = this.updateInfoData.lastName;
+    user.email = this.updateInfoData.email;
     return user;
   }
 
@@ -35,6 +36,7 @@ export class UpdateInfoService {
     this.updateInfoData.riftTag = data.riftTag;
     this.updateInfoData.lastName = data.lastName;
     this.updateInfoData.firstName = data.firstName;
+    this.updateInfoData.email = data.email;
   }
 
   getFormData(): UpdateInfoData {
@@ -63,7 +65,7 @@ export class UpdateInfoService {
     }
     header.append("FirstName", auth0data["firstName"]);
     header.append("LastName", auth0data["lastName"]);
-    header.append("RiftTag", auth0data["riftTag"]);
+    header.append("Email", auth0data["email"]);
     header.append("Auth0Id", auth0Id);
     console.log("Hello");
     console.log(auth0data);

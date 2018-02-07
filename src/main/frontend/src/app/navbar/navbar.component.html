@@ -17,7 +17,7 @@
           <a routerLink="sessions">Sessions</a>
         </li>
         <li>
-          <a [routerLink]="['user', getCurrentUser()['http://riftgaming:auth0:com/user_metadata'].riftTag]" *ngIf="auth.isAuthenticated()">Profile</a>
+          <a [routerLink]="['user', getCurrentUser().nickname]" *ngIf="auth.isAuthenticated()">Profile</a>
         </li>
         <li>
           <a (click)="auth.login()" *ngIf="!auth.isAuthenticated()">Login</a>

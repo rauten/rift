@@ -27,10 +27,6 @@ export class AuthService {
       {
         name: "lastName",
         placeholder: "Enter your last name"
-      },
-      {
-        name: "riftTag",
-        placeholder: "Enter your Rift Username"
       }]
   });
 
@@ -55,7 +51,7 @@ export class AuthService {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
               "lastName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].lastName,
-              "riftTag" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].riftTag,
+              "riftTag" : profileJsonParse.nickname,
               "auth0Token" : profileJsonParse.sub
             };
             callback(data, true);
