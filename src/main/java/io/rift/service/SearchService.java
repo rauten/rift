@@ -49,9 +49,11 @@ public class SearchService {
         for (int i = 4; i < userSearchArgs.length - 1; i++) {
             userSearchArgs[i] = levenshteinConstraint;
         }
-        Object[] rifterGameArgs = new Object[2];
+        Object[] rifterGameArgs = new Object[4];
         rifterGameArgs[0] = searchParam;
         rifterGameArgs[1] = searchParam;
+        rifterGameArgs[2] = levenshteinConstraint;
+        rifterGameArgs[3] = levenshteinConstraint;
 
         // Init searchResult list
         List<List<Object>> searchResults = new ArrayList<>();

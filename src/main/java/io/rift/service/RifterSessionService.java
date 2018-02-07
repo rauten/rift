@@ -87,7 +87,8 @@ public class RifterSessionService {
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         if (info.equals("levenshteinSearch")) {
             rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
-            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 16, ""));
+            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 16));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 17, ""));
         }
         return rifterSession;
     }

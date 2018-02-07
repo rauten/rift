@@ -232,10 +232,15 @@
     </searchUsertable>
 
     <searchRifterSession>
-        SELECT r.*, levenshtein(game, ?, 2, 3, 3), u.*
-        FROM riftergame r JOIN usertable u
-        ON r.host_id = u.id
-        ORDER BY LEAST(levenshtein(game, ?, 2, 3, 3))
+        SELECT *
+        FROM (
+            SELECT r.*, levenshtein(game, ?, 3, 2, 5) as op, levenshtein(split_part(game, ' ', 1), ?, 3, 2, 5) as op2, u.*
+            FROM riftergame r
+            JOIN usertable u
+            ON r.host_id = u.id
+        ) as t
+        WHERE op &lt; ? OR op2 &lt; ? OR op &lt; (7 + ceil(3*(ln(char_length(t.game))))) OR op2 &lt; (7 + ceil(3*(ln(char_length(split_part(t.game, ' ', 1))))))
+        ORDER BY LEAST(op, op2)
         LIMIT 25;
     </searchRifterSession>
 
