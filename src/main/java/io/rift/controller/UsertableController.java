@@ -166,6 +166,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Rifter Session objects
      * @throws SQLException
      */
+    @JsonView(Views.UserRifterSessions.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable String riftTag) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
