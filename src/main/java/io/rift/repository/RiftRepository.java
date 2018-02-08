@@ -3,7 +3,6 @@ package io.rift.repository;
 import io.rift.model.Usertable;
 import io.rift.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
