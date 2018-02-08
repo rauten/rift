@@ -209,17 +209,21 @@ public class UsertableController {
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
     public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
-        int id = usertable.getId();
-        usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
-        usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
-        usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
-        usertable.setNotificationList(usertableService.getUserNotifications(id));
-        usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "Followers"));
-        usertable.setCreatorActivityList(usertableService.getUserActivity(id, "session"));
-        usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
-        usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
-        usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
-        usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+        try {
+            int id = usertable.getId();
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
+            usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
+            usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
+            usertable.setNotificationList(usertableService.getUserNotifications(id));
+            usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "Followers"));
+            usertable.setCreatorActivityList(usertableService.getUserActivity(id, "session"));
+            usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
+            usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
+            usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
+            usertable.setRifterSessions(usertableService.getUserAndRifterSession(id));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return usertable;
     }
 
