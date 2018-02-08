@@ -40,11 +40,13 @@ public class FollowingService {
         if (resultSet.next()) {
             res[0] = true;
             res[1] = resultSet.getInt(1);
+            resultSet.close();
             return res;
         }
         Usertable usertable = usertableService.getUserByRiftTag(followerRiftTag);
         res[0] = false;
         res[1] = usertable.getId();
+        resultSet.close();
         return res;
     }
 

@@ -26,6 +26,7 @@ public class SessionRequestService {
         sessionRequest.setRifteeId(resultSet.getInt(startPoint));
         sessionRequest.setSessionId(resultSet.getInt(startPoint + 1));
         sessionRequest.setAccepted(resultSet.getBoolean(startPoint + 2));
+        resultSet.close();
         return sessionRequest;
     }
 
@@ -38,6 +39,7 @@ public class SessionRequestService {
             sessionRequest.setAccepted(resultSet.getBoolean(3));
             rifteeSessions.add(sessionRequest);
         }
+        resultSet.close();
         return rifteeSessions;
     }
 
@@ -63,6 +65,7 @@ public class SessionRequestService {
             }
             rifteeSessions.add(sessionRequest);
         }
+        resultSet.close();
         return rifteeSessions;
     }
 

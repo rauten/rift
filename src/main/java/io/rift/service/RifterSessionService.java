@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class RifterSessionService {
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
     private final String getGamePlayersByGameId = "getGamePlayersByGameId";
     private final String createGame = "createGame";
+    private final String createNotification = "createNotification";
+    private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
+
+
+    private final String sessionCreatedType = "New Game";
 
 
     public RifterSession getRifterGameById(Integer id) throws SQLException {
@@ -35,8 +41,11 @@ public class RifterSessionService {
         args[0] = id;
         ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
         if (resultSet.next()) {
-            return populateRifterSession(resultSet, 1, "");
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
+            resultSet.close();
+            return rifterSession;
         }
+        resultSet.close();
         return null;
     }
 
@@ -50,8 +59,10 @@ public class RifterSessionService {
                 Usertable usertable = usertableService.populateUsertable(resultSet, 12, "");
                 rifterSession.setUsertable(usertable);
             }
+            resultSet.close();
             return rifterSession;
         }
+        resultSet.close();
         return null;
     }
 
@@ -65,7 +76,23 @@ public class RifterSessionService {
             Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
             players.add(usertable);
         }
+        resultSet.close();
         return players;
+    }
+
+    public RifterSession getRifterSessionByHostIdAndSessionTime(Integer hostId, Timestamp sessionTime) throws SQLException {
+
+        Object[] args = new Object[2];
+        args[0] = hostId;
+        args[1] = sessionTime;
+        ResultSet resultSet = riftRepository.doQuery(getRifterSessionByHostIdAndSessionTime, args);
+        if (resultSet.next()) {
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
+            resultSet.close();
+            return rifterSession;
+        }
+        resultSet.close();
+        return null;
     }
 
     public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
@@ -93,10 +120,22 @@ public class RifterSessionService {
         return rifterSession;
     }
 
-    public boolean createGame(RifterSession rifterSession) {
-        return riftRepository.doInsert(createGame,
+    public boolean createGame(RifterSession rifterSession) throws SQLException {
+        boolean success2 = false;
+        boolean success = riftRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
                         rifterSession.getSessionTime(), rifterSession.getGame(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
+
+        if (success) {
+            String notificationContent = rifterSession.getHostId() + " has created a new session slot for " + rifterSession.getGame() + " on " + rifterSession.getConsole() + "!";
+
+            RifterSession newRifterSession = getRifterSessionByHostIdAndSessionTime(rifterSession.getHostId(), rifterSession.getSessionTime());
+
+            success2 = riftRepository.doInsert(createNotification,
+                    new Object[]{null, sessionCreatedType, notificationContent, newRifterSession.getId(), rifterSession.getHostId()});
+        }
+
+        return success2;
     }
 
 

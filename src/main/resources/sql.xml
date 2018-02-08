@@ -181,6 +181,12 @@
         WHERE r.id = ?
     </getRifterGameAndHostByGameId>
 
+    <getRifterSessionByHostIdAndSessionTime>
+        SELECT *
+        FROM riftergame
+        WHERE host_id = ? AND session_time = ?
+    </getRifterSessionByHostIdAndSessionTime>
+
     <getGamePlayersByGameId>
         SELECT u.*
         FROM gamerequest g JOIN usertable u
@@ -193,6 +199,12 @@
         (host_id, num_slots, session_cost, title, session_duration, session_time, game, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
+
+    <createNotification>
+        INSERT INTO notification
+        (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+        VALUES(?, ?, ?, ?, current_timestamp, ?)
+    </createNotification>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- - - - - - - - - - - - FOLLOWING SQL COMMANDS - - - - - - - - - - - - - -->
@@ -243,6 +255,7 @@
         ORDER BY LEAST(op, op2)
         LIMIT 25;
     </searchRifterSession>
+
 
 
 </Queries>
