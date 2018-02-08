@@ -33,7 +33,7 @@ export class ResultComponent implements OnInit {
     this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
     var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
-      "hostId":5,
+      "hostId": parseInt(localStorage.getItem("loggedInUserID")),
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,

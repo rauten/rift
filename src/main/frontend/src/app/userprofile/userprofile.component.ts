@@ -27,7 +27,6 @@ export class UserprofileComponent implements OnInit {
   private userSessionsService: UsersessionsService,
   public auth: AuthService, private route: ActivatedRoute) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    console.log(this.profile.nickname);
   }
 
   ngOnInit() {
@@ -50,7 +49,6 @@ export class UserprofileComponent implements OnInit {
         this.loggedInUser.riftTag = resBody.riftTag;
         this.loggedInUser.gender = resBody.gender;
         this.loggedInUser.bio = resBody.bio;
-        this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
