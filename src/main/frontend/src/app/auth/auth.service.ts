@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
+import {UserprofileService} from "../userprofile/userprofile.service";
+import {Userprofile} from "../userprofile/models/userprofile";
 
 @Injectable()
 export class AuthService {
@@ -37,7 +39,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private userprofileService: UserprofileService) {
 
   }
 
@@ -53,7 +55,7 @@ export class AuthService {
         this.setSession(authResult, function () {
           var profileJson = localStorage.getItem('profile');
           var profileJsonParse = JSON.parse(profileJson);
-          console.log("http://riftgaming:auth0:com/app_metadata");
+          // console.log("http://riftgaming:auth0:com/app_metadata");
           if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
@@ -90,6 +92,8 @@ export class AuthService {
       callback();
     })
   }
+
+
 
   public logout(): void {
     // Remove tokens and expiry time from localStorage
