@@ -1,10 +1,10 @@
 .container {
   margin-top: 5%;
 }
-.createASession {
+.btn {
   float: right;
   width: 20%;
   margin-top: 10px;
-  background-color: #293e49;
+  background-color: #293e49!important;
   border: none;
 }

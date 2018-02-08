@@ -11,7 +11,7 @@ import {Timestamp} from "rxjs";
   styleUrls: ['./result.component.scss']
 })
 export class ResultComponent implements OnInit {
-  title = "Your session has been created on The Rift";
+  title = "Review your Submission";
   @Input() formData: FormData;
   isFormValid: boolean = false;
   timeMS: number;
@@ -25,15 +25,14 @@ export class ResultComponent implements OnInit {
   }
 
   submit() {
-    alert('Excellent Job!');
+    alert('Session Created');
     console.log(this.formData);
-    this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"))
-    console.log(this.timeToMilliseconds(this.formData.sessionTimes));
-    console.log(this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime());
+    this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"));
     this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
     var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
       "hostId": parseInt(localStorage.getItem("loggedInUserID")),
+      // "hostId": 41,
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,
@@ -43,9 +42,9 @@ export class ResultComponent implements OnInit {
       "sessionDuration":'1:00:00'
     };
     this.userSessionService.createUserSession(data);
-    // this.userSessionService.createUserSession(this.formData);
-    // this.formData = this.formDataService.resetFormData();
-    // this.isFormValid = false;
+    window.location.reload();
+    this.formData = this.formDataService.resetFormData();
+    this.isFormValid = false;
   }
 
   timeToMilliseconds(time: string) {
@@ -62,6 +61,11 @@ export class ResultComponent implements OnInit {
       return cost.substr(1);
     }
     return cost;
+  }
+
+  clear() {
+    this.formData = this.formDataService.resetFormData();
+    this.isFormValid = false;
   }
 
 }

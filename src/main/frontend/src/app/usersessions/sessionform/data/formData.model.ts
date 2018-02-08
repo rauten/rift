@@ -12,6 +12,7 @@ export class FormData {
 
   sessionDate: any;
   sessionTimes: any;
+  sessionDuration: any;
 
   clear() {
     this.sessionCreatorId = "";
@@ -24,6 +25,7 @@ export class FormData {
     this.sessionCost = "";
     this.sessionDate = "";
     this.sessionTimes = "";
+    this.sessionDuration = "";
   }
 
 }
@@ -42,4 +44,5 @@ export class Step2 {
 export class Step3 {
   sessionDate: any;
   sessionTimes: any;
+  sessionDuration: any;
 }

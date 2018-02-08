@@ -13,16 +13,20 @@ export class AppComponent {
   constructor(public auth: AuthService, private userprofileService: UserprofileService) {
     auth.handleAuthentication(function (data, createUser) {
       if (createUser) {
+        var profile = JSON.parse(localStorage.getItem("profile"));
+        userprofileService.getUser(profile.nickname).subscribe(
+          resBody => {
+            localStorage.setItem("loggedInUserID", resBody.id.toString());
+          }
+        );
         userprofileService.createUser(data);
       }
       var profile = JSON.parse(localStorage.getItem("profile"));
-      console.log(profile.nickname)
       userprofileService.getUser(profile.nickname).subscribe(
         resBody => {
           localStorage.setItem("loggedInUserID", resBody.id.toString());
         }
       )
-      console.log(localStorage.getItem("loggedInUserID"));
     })
   }
 }
