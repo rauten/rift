@@ -41,9 +41,13 @@ public class SearchService {
      */
     public List<List<Object>> search(String searchParam) throws SQLException {
         // Set up query arg lists
-        Object[] userSearchArgs = new Object[8];
-        for (int i = 0; i < userSearchArgs.length; i++) {
+        Object[] userSearchArgs = new Object[7];
+        int levenshteinConstraint = 5 + (int)Math.ceil(3 * Math.log(searchParam.length()));
+        for (int i = 0; i < 4; i++) {
             userSearchArgs[i] = searchParam;
+        }
+        for (int i = 4; i < userSearchArgs.length - 1; i++) {
+            userSearchArgs[i] = levenshteinConstraint;
         }
         Object[] rifterGameArgs = new Object[2];
         rifterGameArgs[0] = searchParam;

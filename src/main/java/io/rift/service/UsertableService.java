@@ -392,6 +392,7 @@ public class UsertableService {
         JavaClass javaClass = parser.parse();
         Field[] fields = javaClass.getFields();
         List<Object> args = new ArrayList<>();
+        boolean didAdd = false;
         for (int i = 1; i < POPULATESIZE; i++) {
             String[] properties = fields[i].toString().split(" ");
             String attribute = properties[2];
@@ -399,6 +400,7 @@ public class UsertableService {
             Method getter = pd.getReadMethod();
             Object f = getter.invoke(usertable);
             if (f != null && !((String) f).equals("")) {
+                didAdd = true;
                 if (properties[1].equals(intStr)) {
                     f = (Integer) f;
                 } else if (properties[1].equals(stringStr)) {
@@ -416,14 +418,17 @@ public class UsertableService {
                 args.add(f);
             }
         }
-        query.delete(query.length() - 2, query.length() - 1);
-        values.delete(values.length() - 2, query.length() - 1);
-        query.append(") = ");
-        values.append(")");
-        query.append(values);
-        query.append(updateUserEnd);
-        args.add(id);
-        return riftRepository.doUpdate(query, args);
+        if (didAdd) {
+            query.delete(query.length() - 2, query.length() - 1);
+            values.delete(values.length() - 2, query.length() - 1);
+            query.append(") = ");
+            values.append(")");
+            query.append(values);
+            query.append(updateUserEnd);
+            args.add(id);
+            return riftRepository.doUpdate(query, args);
+        }
+        return true;
     }
 
 

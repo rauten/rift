@@ -38,7 +38,7 @@
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="numSlots">Platform: </label>
+            <label class="control-label" for="numSlots">Number of slots: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
@@ -48,7 +48,7 @@
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessionCost">Platform: </label>
+            <label class="control-label" for="sessionCost">Cost per slot: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
@@ -58,7 +58,7 @@
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessiondate">Platform: </label>
+            <label class="control-label" for="sessiondate">Session Date: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
@@ -68,11 +68,21 @@
       <div class="row">
         <div class='col-xs-3 col-sm-2'>
           <div class="form-group">
-            <label class="control-label" for="sessiontime">Platform: </label>
+            <label class="control-label" for="sessiontime">Session Time: </label>
           </div>
         </div>
         <div class='col-xs-9 col-sm-10'>
           {{formData.sessionTimes}}
+        </div>
+      </div>
+      <div class="row">
+        <div class='col-xs-3 col-sm-2'>
+          <div class="form-group">
+            <label class="control-label" for="sessiontimeMS">Session Time in MS: </label>
+          </div>
+        </div>
+        <div class='col-xs-9 col-sm-10'>
+          {{timeMS}}
         </div>
       </div>
 

@@ -2,7 +2,7 @@
   <mat-tab-group>
     <mat-tab label="users">
       <div class="user-cards" *ngFor="let user of users">
-        <app-user-card [user]="user"></app-user-card>
+        <app-user-card [user]="user" [isLoggedIn]="isLoggedIn"></app-user-card>
       </div>
     </mat-tab>
     <mat-tab label="sessions">

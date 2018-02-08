@@ -8,6 +8,7 @@ import io.rift.model.Views;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import java.beans.IntrospectionException;
 import java.io.IOException;

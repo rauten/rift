@@ -14,6 +14,7 @@ export class ResultComponent implements OnInit {
   title = "Your session has been created on The Rift";
   @Input() formData: FormData;
   isFormValid: boolean = false;
+  timeMS: number;
 
   constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService) { }
 
@@ -26,8 +27,13 @@ export class ResultComponent implements OnInit {
   submit() {
     alert('Excellent Job!');
     console.log(this.formData);
+    this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"))
     console.log(this.timeToMilliseconds(this.formData.sessionTimes));
     console.log(this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime());
+    this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
+    var data = {
+      "sessionTitle": this.formData.title,
+    }
     // this.userSessionService.createUserSession(this.formData);
     // this.formData = this.formDataService.resetFormData();
     // this.isFormValid = false;

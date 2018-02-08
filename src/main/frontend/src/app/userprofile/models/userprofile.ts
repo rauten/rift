@@ -17,6 +17,7 @@ export class Userprofile {
   feed: Activity[];
   followers: Userprofile[] = [];
   followings: Userprofile[] = [];
+  email: string;
 
   followerUsertable: any;
   followingUsertable: any;

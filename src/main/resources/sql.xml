@@ -221,9 +221,13 @@
     <!-- - - - - - - - - - - - SEARCH SQL COMMANDS - - - - - - - - - - - - - -->
 
     <searchUsertable>
-        SELECT u.*, levenshtein(rift_tag, ?, 2, 3, 3), levenshtein(first_name, ?, 2, 3, 3), CAST(((levenshtein(lower(first_name || ' ' || last_name), lower(?), 2, 3, 3) + levenshtein(first_name || ' ' || last_name, ?, 2,3,3)) / 2.0) as float)
-        FROM usertable u
-        ORDER BY LEAST(levenshtein(rift_tag, ?, 2, 3, 3), levenshtein(first_name, ?, 2, 3, 3), CAST(((levenshtein(lower(first_name || ' ' || last_name), lower(?), 2, 3, 3) + levenshtein(first_name || ' ' || last_name, ?, 2,3,3)) / 2.0) as float))
+        SELECT *
+        FROM (
+            SELECT u.*, levenshtein(rift_tag, ?, 3, 2, 5) as op, levenshtein(first_name, ?, 3, 2, 5) as op2, CAST(((levenshtein(lower(first_name || ' ' || last_name), lower(?), 3, 2, 5) + levenshtein(first_name || ' ' || last_name, ?, 3,2,5)) / 2.0) as float) as op3
+            FROM usertable u
+        ) as t
+        WHERE op &lt; ? OR op2 &lt; ? OR op3 &lt; ? OR op &lt; (7 + ceil(3*(ln(char_length(t.rift_tag))))) OR op2 &lt; (7 + ceil(3*(ln(char_length(t.first_name))))) OR op3 &lt; (7 + ceil(3*(ln(char_length(t.first_name || ' ' || t.last_name)))))
+        ORDER BY LEAST(op, op2, op3)
         LIMIT 25;
     </searchUsertable>
 
