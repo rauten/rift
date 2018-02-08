@@ -226,4 +226,9 @@ public class Views {
             UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, UsertableBio,
             CreateGame, RifterSessionGameLevenshtein, RifterSessionGameFirstWordLevenshtein, RifterSessionId, RifterSessionUsertable {}
 
+    public interface UserRifterSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableProfilePicturePath, UsertableRifterSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
+            RifterSessionExpirationTime, RifterSessionCost, RifterSessionMethodOfContact, RifterSessionSessionTime,
+            RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGame,
+            RifterSessionConsole, RifterSessionSlotsRemaining {}
+
 }
