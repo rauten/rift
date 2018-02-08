@@ -12,13 +12,18 @@ export class RiftsessionsComponent implements OnInit {
   searchQuery: string = "";
   sessions: any;
   users: any;
+  isLoggedIn = false;
 
   constructor(private searchBarService: SearchBarService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.searchQuery = params['searchQuery'];
-      // console.log(this.searchQuery);
+      console.log(JSON.parse(localStorage.getItem('profile')));
+      if (JSON.parse(localStorage.getItem('profile')) != null) {
+        this.isLoggedIn = true;
+      }
+      console.log(this.isLoggedIn);
       this.getUserSearchResults(this.searchQuery);
     })
   }
@@ -26,8 +31,6 @@ export class RiftsessionsComponent implements OnInit {
   getUserSearchResults(searchQuery: string) {
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        // console.log(resBody[0]);
-        // console.log(resBody[1]);
         this.users = resBody[0];
         this.sessions = resBody[1];
       }

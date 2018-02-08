@@ -20,7 +20,7 @@
     <getNumberGamesPlayedByUserId>
         SELECT COUNT(*)
         FROM gamerequest g JOIN riftergame r ON g.session_id = r.id
-        WHERE riftee_id = ? AND accepted = true AND r.game_time &lt; current_timestamp
+        WHERE riftee_id = ? AND accepted = true AND r.session_time &lt; current_timestamp
     </getNumberGamesPlayedByUserId>
 
     <getFollowersById>
@@ -190,7 +190,7 @@
 
     <createGame>
         INSERT INTO riftergame
-        (host_id, num_slots, game_cost, title, game_duration, game_time, game, console, slots_remaining, created_time)
+        (host_id, num_slots, session_cost, title, session_duration, session_time, game, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
 

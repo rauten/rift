@@ -9,6 +9,7 @@ import {UserprofileService} from "../../userprofile/userprofile.service";
 })
 export class UserCardComponent implements OnInit {
   @Input() user: any;
+  @Input() isLoggedIn: boolean;
   loggedInUser: Userprofile = new Userprofile();
   profile: any;
 
@@ -17,7 +18,9 @@ export class UserCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCurrentLoggedInUser();
+    if(this.isLoggedIn) {
+      this.getCurrentLoggedInUser();
+    }
   }
 
   isFollowing(riftTag: string): boolean {

@@ -32,7 +32,11 @@ export class UsersessionsService {
     this.http.put(this.createUserSessionURL, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
-      .subscribe();
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log('Created session')
+      );
   }
 
 }

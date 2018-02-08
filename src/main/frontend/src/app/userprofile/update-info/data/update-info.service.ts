@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {UpdateInfoData} from "./update-info-model";
 import {Userprofile} from "../../models/userprofile";
 import {Http, RequestOptions, Headers} from "@angular/http";
-import {HttpHeaders, HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {AuthHttp} from "angular2-jwt";
 

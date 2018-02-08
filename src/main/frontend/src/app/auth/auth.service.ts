@@ -19,6 +19,13 @@ export class AuthService {
         scope: 'profile openid email user_metadata'
       }
     },
+    theme: {
+      logo: "https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/256x256/plain/crack.png",
+      primaryColor: "#293e49",
+    },
+    languageDictionary: {
+      title: "Rift"
+    },
     additionalSignUpFields: [
       {
         name: "firstName",

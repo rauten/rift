@@ -3,9 +3,10 @@
   <h1 [routerLink]="['../../user/', user.riftTag]">{{user.firstName}} {{user.lastName}}</h1>
   <p class="title">@{{user.riftTag}}</p>
   <p>Harvard University</p>
-
-  <app-follow-button [following]="isFollowing(user.riftTag)" [id]="user.id"
-                     [loggedInUser]="loggedInUser" class="userbtn">
-  </app-follow-button>
+  <div *ngIf="isLoggedIn">
+    <app-follow-button [following]="isFollowing(user.riftTag)" [id]="user.id"
+                       [loggedInUser]="loggedInUser" class="userbtn">
+    </app-follow-button>
+  </div>
 </div>
 

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpModule, Http, RequestOptions} from '@angular/http';
-import {HttpClient, HttpHeaders, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
 
@@ -91,7 +90,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    HttpClientModule,
     MatDatepickerModule,
     MatNativeDateModule,
     FormWizardModule
