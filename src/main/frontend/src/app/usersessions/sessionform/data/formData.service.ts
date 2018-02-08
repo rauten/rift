@@ -51,7 +51,8 @@ export class FormDataService {
   getStep3Info() : Step3{
     var step3: Step3 = {
       sessionDate: this.formData.sessionDate,
-      sessionTimes: this.formData.sessionTimes
+      sessionTimes: this.formData.sessionTimes,
+      sessionDuration: this.formData.sessionDuration
     };
     return step3;
   }
@@ -60,6 +61,7 @@ export class FormDataService {
     this.isStep3Valid = true;
     this.formData.sessionDate = data.sessionDate;
     this.formData.sessionTimes = data.sessionTimes;
+    this.formData.sessionDuration = data.sessionDuration;
     this.workflowService.validateStep(STEPS.step3);
   }
 

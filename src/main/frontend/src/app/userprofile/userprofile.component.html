@@ -14,9 +14,9 @@
               [loggedInUser]="loggedInUser" class="userbtn">
               </app-follow-button>
             </div>
-            <!--<div *ngIf="profile.nickname == currentUser.riftTag">-->
-              <a routerLink="update" type="button" class="btn-primary">Update your Info</a>
-            <!--</div>-->
+            <div *ngIf="profile.nickname == currentUser.riftTag">
+              <button routerLink="update" type="button" class="btn-primary">Update your Info</button>
+            </div>
 
           </div>
           <div class="section">

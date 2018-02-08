@@ -18,10 +18,15 @@
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessiontime">What time</label>
-              <!--<input class="form-control input-md" #sessiontime="ngModel" required id="sessiontime" name="sessiontime" type="text" placeholder="Cost per slot" [(ngModel)]="step3.sessionTimes">-->
               <input matInput type="time" placeholder="Pick a time" #sessiontime="ngModel" required id="sessiontime" name="sessiontime" [(ngModel)]="step3.sessionTimes">
-
               <div class="alert alert-danger" [hidden]="sessiontime.valid">Time is required</div>
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessionduration">Select a Duration</label>
+              <input matInput type="number" placeholder="Select a duration" #sessionduration="ngModel" required id="sessionduration" name="sessionduration" [(ngModel)]="step3.sessionDuration">
+              <div class="alert alert-danger" [hidden]="sessionduration.valid">Duration required</div>
             </div>
           </div>
         </div>

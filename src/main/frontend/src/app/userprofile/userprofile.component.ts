@@ -31,11 +31,11 @@ export class UserprofileComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
+      console.log("Current id: " + localStorage.getItem("loggedInUserID"));
       this.currUser = params['rifttag'];
       this.getUserProfileInformation(params['rifttag']);
       this.getUserFollowersAndFollowing(params['rifttag']);
       this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
-      this.getUserSessions(params['rifttag']);
       this.getCurrentLoggedInUser();
     });
   }
@@ -78,8 +78,26 @@ export class UserprofileComponent implements OnInit {
             // currActivity.rifterSession= this.currentUser.creatorActivityList[i].rifterSession;
             this.currentUser.activities.push(currActivity);
           }
+          this.currentUser.rifterSessions = [];
+          for (var i = 0; i < resBody.rifterSessions.length; i++) {
+            var currDateMS = resBody.rifterSessions[i].sessionTime;
+            var date = new Date(currDateMS);
+            var currSession = new Session();
+            currSession.firstName = resBody.firstName;
+            currSession.lastName = resBody.lastName;
+            currSession.riftTag = resBody.riftTag;
+            currSession.rifterRating = resBody.rifterRating;
+            currSession.hostId = resBody.rifterSessions[i].hostId;
+            currSession.sessionCost = resBody.rifterSessions[i].sessionCost;
+            currSession.methodOfContact = resBody.rifterSessions[i].methodOfContact;
+            currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
+            currSession.title = resBody.rifterSessions[i].title;
+            currSession.sessionTime = date;
+            this.currentUser.rifterSessions.push(currSession);
+          }
+          console.log(this.currentUser.rifterSessions);
       }
-    )
+    );
   }
 
   isFollowing(riftTag: string) {
@@ -92,14 +110,6 @@ export class UserprofileComponent implements OnInit {
     }
     this.following = false;
   }
-
-  // getUserSocialMedia(riftTag: string) {
-  //   this.userProfileService.getUser(riftTag).subscribe(
-  //     resBody => {
-  //       this.currentUser.twitchAccount =
-  //     }
-  //   )
-  // }
 
   getUserFollowersAndFollowing(riftTag: string) {
     this.currentUser.followings = [];
@@ -144,33 +154,5 @@ export class UserprofileComponent implements OnInit {
       }
     );
     return true;
-  }
-
-  getUserSessions(riftTag: string) {
-    this.currentUser.rifterSessions = [];
-    this.userSessionsService.getUserRifterSessions(riftTag).subscribe(
-      resBody => {
-        for (var i = 0; i < resBody.rifterSessions.length; i++) {
-          var currDateMS = resBody.rifterSessions[i].sessionTime;
-          var date = new Date(currDateMS);
-          var currSession = new Session();
-          currSession.firstName = resBody.firstName;
-          currSession.lastName = resBody.lastName;
-          currSession.riftTag = resBody.riftTag;
-          currSession.rifterRating = resBody.rifterRating;
-          currSession.hostId = resBody.rifterSessions[i].hostId;
-          currSession.sessionCost = resBody.rifterSessions[i].sessionCost;
-          currSession.methodOfContact = resBody.rifterSessions[i].methodOfContact;
-          currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
-          currSession.title = resBody.rifterSessions[i].title;
-          currSession.sessionTime = date;
-          this.currentUser.rifterSessions.push(currSession);
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    );
-    console.log(this.currentUser.rifterSessions);
   }
 }

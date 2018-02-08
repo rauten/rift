@@ -1,12 +1,24 @@
 <div class="container" style="width: 80%">
+  <button routerLink="create" type="button" class="btn btn-primary createASession" >
+    Create a Session
+  </button>
   <mat-tab-group>
-    <mat-tab label="card view">
-      <a routerLink="create" type="button" class="btn btn-primary createASession" >
-        Create a Session
-      </a>
 
-      <h1>Some tab content</h1>
-      <p>...</p>
+    <mat-tab label="card view">
+
+      <div *ngFor="let session of currentUser.rifterSessions">
+        <app-session-card
+          hostName="{{session.firstName}} {{session.lastName}}"
+          hostRiftTag="{{session.riftTag}}"
+          hostRifterRating="{{session.rifterRating}}"
+          title="{{session.sessionTitle}}"
+          day="{{session.sessionTime | date:'dd'}}"
+          month="{{session.sessionTime | date:'MMM'}}"
+          time="{{session.sessionTime | date:'shortTime'}}"
+          title="{{session.sessionTitle}}"
+          game="{{session.game}}"
+        ></app-session-card>
+      </div>
     </mat-tab>
     <mat-tab label="calendar">
       <h1>Some more tab content</h1>
