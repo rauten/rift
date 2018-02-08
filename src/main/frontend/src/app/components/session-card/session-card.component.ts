@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {SESSION_ICONS} from "../../constants/session-icon-variables";
 
 @Component({
   selector: 'app-session-card',
@@ -20,10 +21,14 @@ export class SessionCardComponent implements OnInit {
   @Input() console: string;
   @Input() game: string;
   @Input() id: number;
+  sessionIcon: string;
 
   constructor() { }
 
   ngOnInit() {
+    if(this.game == "League of Legends") {
+      this.sessionIcon=SESSION_ICONS.leagueOfLegends;
+    }
   }
 
 }

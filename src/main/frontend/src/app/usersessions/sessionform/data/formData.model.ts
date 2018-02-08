@@ -10,8 +10,8 @@ export class FormData {
   numSlots: string = "";
   sessionCost: string = "";
 
-  sessionDate: string = "";
-  sessionTimes: string = "";
+  sessionDate: any;
+  sessionTimes: any;
 
   clear() {
     this.sessionCreatorId = "";
@@ -40,6 +40,6 @@ export class Step2 {
 }
 
 export class Step3 {
-  sessionDate: string;
-  sessionTimes: string;
+  sessionDate: any;
+  sessionTimes: any;
 }

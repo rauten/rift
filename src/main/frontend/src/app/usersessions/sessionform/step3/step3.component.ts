@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import {FormDataService} from "../data/formData.service";
 import {Step3} from "../data/formData.model";
 
+
 @Component({
   selector: 'app-step3',
   templateUrl: './step3.component.html',
-  styleUrls: ['./step3.component.scss']
+  styleUrls: ['./step3.component.scss'],
 })
 export class Step3Component implements OnInit {
   title = 'Step 3';
-  step3:Step3;
+  step3: Step3;
 
   constructor(private formDataService: FormDataService) { }
 

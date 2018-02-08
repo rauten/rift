@@ -8,15 +8,20 @@
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessiondate">What date</label>
-              <input class="form-control input-md" #sessiondate="ngModel" required id="sessiondate" name="sessiondate" type="text" placeholder="Number of slots for your session" [(ngModel)]="step3.sessionDate">
-              <div class="alert alert-danger" [hidden]="sessiondate.valid">Session title is required</div>
+              <!--<input class="form-control input-md" #sessiondate="ngModel" required id="sessiondate" name="sessiondate" type="text" placeholder="Number of slots for your session" [(ngModel)]="step3.sessionDate">-->
+              <input matInput [matDatepicker]="picker" placeholder="Choose a date" #sessiondate="ngModel" required id="sessiondate" name="sessiondate" [(ngModel)]="step3.sessionDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <div class="alert alert-danger" [hidden]="sessiondate.valid">Date is required</div>
             </div>
           </div>
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessiontime">What time</label>
-              <input class="form-control input-md" #sessiontime="ngModel" required id="sessiontime" name="sessiontime" type="text" placeholder="Cost per slot" [(ngModel)]="step3.sessionTimes">
-              <div class="alert alert-danger" [hidden]="sessiontime.valid">Last Name is required</div>
+              <!--<input class="form-control input-md" #sessiontime="ngModel" required id="sessiontime" name="sessiontime" type="text" placeholder="Cost per slot" [(ngModel)]="step3.sessionTimes">-->
+              <input matInput type="time" placeholder="Pick a time" #sessiontime="ngModel" required id="sessiontime" name="sessiontime" [(ngModel)]="step3.sessionTimes">
+
+              <div class="alert alert-danger" [hidden]="sessiontime.valid">Time is required</div>
             </div>
           </div>
         </div>
