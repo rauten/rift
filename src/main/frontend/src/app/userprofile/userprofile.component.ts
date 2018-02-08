@@ -171,5 +171,6 @@ export class UserprofileComponent implements OnInit {
         console.log(err);
       }
     );
+    console.log(this.currentUser.rifterSessions);
   }
 }
