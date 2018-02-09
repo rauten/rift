@@ -11,8 +11,12 @@ import {UsersessionsService} from "../../usersessions/usersessions.service";
 export class SessionCardComponent implements OnInit {
   sessionIcon: string;
   @Input() session: Session;
+  profile: any;
+  loggedInUserId: number;
 
-  constructor(private userSessionsService: UsersessionsService) { }
+  constructor(private userSessionsService: UsersessionsService) {
+    this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
+  }
 
   ngOnInit() {
     if(this.session.game == "League of Legends") {
@@ -21,15 +25,13 @@ export class SessionCardComponent implements OnInit {
   }
 
   joinUserSession() {
-    var loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
     let data = {
-      "rifteeId": loggedInUserId,
+      "rifteeId": this.loggedInUserId,
       "hostId": this.session.hostId,
       "sessionId": this.session.id,
       "accepted": false
     };
-    console.log(this.session.hostId);
-    // this.userSessionsService.joinUserSession(data);
+    this.userSessionsService.joinUserSession(data);
     alert("Sent request");
   }
 

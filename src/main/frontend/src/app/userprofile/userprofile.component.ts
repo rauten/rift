@@ -70,6 +70,7 @@ export class UserprofileComponent implements OnInit {
   getUserProfileInformation(riftTag: string) {
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -87,7 +88,6 @@ export class UserprofileComponent implements OnInit {
             this.currentUser.activities.push(currActivity);
           }
           this.currentUser.rifterSessions = [];
-          console.log(resBody);
           for (var i = 0; i < resBody.rifterSessions.length; i++) {
             var currDateMS = resBody.rifterSessions[i].sessionTime;
             var date = new Date(currDateMS);
@@ -106,7 +106,6 @@ export class UserprofileComponent implements OnInit {
             this.currentUser.rifterSessions.push(currSession);
           }
           this.getUserRatings(this.currentUser.id);
-          console.log(this.currentUser.rifterSessions);
       }
     );
   }

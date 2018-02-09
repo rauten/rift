@@ -12,7 +12,7 @@
       <p class="desc">Rating: {{hostRifterRating}}</p>
       <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
     </div>
-    <div class="otherstuff">
+    <div class="otherstuff" *ngIf="!(loggedInUserId == session.hostId)">
       <button class="btn-primary" (click)="joinUserSession()">Join</button>
     </div>
   </div>
