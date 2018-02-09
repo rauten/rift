@@ -150,8 +150,10 @@ public class UsertableService {
         usertable.setIsSuspended(resultSet.getBoolean(startPoint + 5));
         usertable.setProfilePicturePath(resultSet.getString(startPoint + 6));
         usertable.setRiftTag(resultSet.getString(startPoint + 7));
-        usertable.setRifteeRating(resultSet.getDouble(startPoint + 8));
-        usertable.setRifterRating(resultSet.getDouble(startPoint + 9));
+        double rifteeRating = resultSet.getDouble(startPoint + 8);
+        double rifterRating = resultSet.getDouble(startPoint + 9);
+        usertable.setRifteeRating(roundRating(rifteeRating));
+        usertable.setRifterRating(roundRating(rifterRating));
         usertable.setTwitchAccount(resultSet.getString(startPoint + 10));
         usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
         usertable.setBio(resultSet.getString(startPoint + 12));
@@ -424,6 +426,10 @@ public class UsertableService {
     private String formatAuth0Token(String auth0Token) {
         String[] str = auth0Token.split("|");
         return str[1];
+    }
+
+    private double roundRating(double rating) {
+        return Math.round(rating * 4)/4f;
     }
 
     public Boolean updateUser(Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {

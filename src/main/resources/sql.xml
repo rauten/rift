@@ -181,6 +181,13 @@
         WHERE id = ?;
     </getRifterGameById>
 
+    <getGameByHostAndPlayerId>
+        SELECT *
+        FROM gamerequest g JOIN riftergame r
+        ON g.host_id = r.host_id AND g.session_id = r.id
+        WHERE g.riftee_id = ? AND g.host_id = ? AND r.session_time &lt; current_timestamp;
+    </getGameByHostAndPlayerId>
+
     <getRifterGameAndHostByGameId>
         SELECT *
         FROM riftergame r JOIN usertable u
@@ -268,6 +275,12 @@
         (rift_id, account_type, rating, review, reviewer_id, created_time)
         VALUES(?, ?, ?, ?, ?, ?);
     </createRating>
+
+    <getUserRatingByIds>
+        SELECT *
+        FROM userrating
+        WHERE rift_id = ? AND reviewer_id = ? AND account_type = ?;
+    </getUserRatingByIds>
 
     <getUserRatingsAndReviewerUsertablesById>
         SELECT *

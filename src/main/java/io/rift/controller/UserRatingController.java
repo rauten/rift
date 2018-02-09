@@ -23,6 +23,7 @@ public class UserRatingController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
     public Boolean createRating(@RequestBody UserRating userRating) throws SQLException {
+
         return userRatingService.createRating(userRating);
     }
 
