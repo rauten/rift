@@ -31,12 +31,34 @@ public class UserRatingService {
 
     private final String createRating = "createRating";
     private final String getUserRatingsAndReviewerUsertablesById = "getUserRatingsAndReviewerUsertablesById";
+    private final String getUserRatingByIds = "getUserRatingByIds";
+    private final String getGameByHostAndPlayerId = "getGameByHostAndPlayerId";
 
     public Boolean createRating(UserRating userRating) throws SQLException {
-        // Add new rating entry to the rating table
-        return riftRepository.doInsert(createRating,
-                new Object[] {userRating.getRiftId(), userRating.getAccountType(), userRating.getRating(),
-                        userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime()});
+
+        if (userRating.getAccountType() == true) {
+            if (riftRepository.doQuery(getGameByHostAndPlayerId,
+                    new Object[] {userRating.getReviewerId(), userRating.getRiftId()}).next() &&
+                    !riftRepository.doQuery(getUserRatingByIds,
+                            new Object[] {userRating.getRiftId(), userRating.getReviewerId(), userRating.getAccountType()}).next()) {
+
+                return riftRepository.doInsert(createRating,
+                        new Object[] {userRating.getRiftId(), userRating.getAccountType(), userRating.getRating(),
+                                userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime()});
+            }
+            return false;
+        } else if (riftRepository.doQuery(getGameByHostAndPlayerId,
+                    new Object[] {userRating.getRiftId(), userRating.getReviewerId()}).next() &&
+                    !riftRepository.doQuery(getUserRatingByIds,
+                            new Object[] {userRating.getRiftId(), userRating.getReviewerId(), userRating.getAccountType()}).next()) {
+
+            return riftRepository.doInsert(createRating,
+                    new Object[] {userRating.getRiftId(), userRating.getAccountType(), userRating.getRating(),
+                            userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime()});
+
+        }
+
+        return false;
 
     }
 

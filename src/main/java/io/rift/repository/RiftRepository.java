@@ -20,14 +20,19 @@ public class RiftRepository {
     @Autowired
     private ConnectionService connectionService;
 
-    public ResultSet doQuery(String queryName, Object[] args) throws SQLException {
+    public ResultSet doQuery(String queryName, Object[] args) {
         HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
-        PreparedStatement preparedStatement = queryDict.get(queryName);
-        for (int i = 1; i <= args.length; i ++) {
-            preparedStatement.setObject(i, args[i - 1]);
+        try {
+            PreparedStatement preparedStatement = queryDict.get(queryName);
+            for (int i = 1; i <= args.length; i++) {
+                preparedStatement.setObject(i, args[i - 1]);
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        ResultSet resultSet = preparedStatement.executeQuery();
-        return resultSet;
     }
 
     public boolean doInsert(String queryName, Object[] args) {
@@ -38,7 +43,6 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args[i - 1]);
             }
             preparedStatement.execute();
-            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
