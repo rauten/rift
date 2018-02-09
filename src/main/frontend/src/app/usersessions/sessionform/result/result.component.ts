@@ -39,7 +39,6 @@ export class ResultComponent implements OnInit {
     var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
       "hostId": parseInt(localStorage.getItem("loggedInUserID")),
-      // "hostId": 41,
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,
@@ -74,15 +73,4 @@ export class ResultComponent implements OnInit {
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
   }
-
-  getCurrentLoggedInUser():any {
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
-      resBody => {
-        this.loggedInUser.firstName = resBody.firstName;
-        this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = resBody.riftTag;
-      }
-    )
-  }
-
 }

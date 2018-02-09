@@ -1,5 +1,6 @@
 import {Activity} from "./activity";
 import {Session} from "../../components/session-card/session";
+import {UserRating} from "./userrating";
 
 export class Userprofile {
   id: number;
@@ -18,6 +19,7 @@ export class Userprofile {
   followers: Userprofile[] = [];
   followings: Userprofile[] = [];
   email: string;
+  ratings: UserRating[] = [];
 
   followerUsertable: any;
   followingUsertable: any;

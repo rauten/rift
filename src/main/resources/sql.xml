@@ -23,6 +23,13 @@
         WHERE riftee_id = ? AND accepted = true AND r.session_time &lt; current_timestamp
     </getNumberGamesPlayedByUserId>
 
+    <getRatingInfoByUserId>
+        SELECT COUNT(*), u.?
+        FROM userrating r, usertable u
+        WHERE r.rift_id = ? AND u.id = ?
+        GROUP BY (u.rifter_rating);
+    </getRatingInfoByUserId>
+
     <getFollowersById>
         SELECT *
         FROM following
@@ -203,7 +210,7 @@
     <createNotification>
         INSERT INTO notification
         (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-        VALUES(?, ?, ?, ?, current_timestamp, ?)
+        VALUES(?, ?, ?, ?, current_timestamp, ?);
     </createNotification>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -256,6 +263,65 @@
         LIMIT 25;
     </searchRifterSession>
 
+    <createRating>
+        INSERT INTO userrating
+        (rift_id, account_type, rating, review, reviewer_id, created_time)
+        VALUES(?, ?, ?, ?, ?, ?);
+    </createRating>
 
+    <getUserRatingsAndReviewerUsertablesById>
+        SELECT *
+        FROM userrating r JOIN usertable u
+        ON r.reviewer_id = u.id
+        WHERE r.rift_id = ?;
+    </getUserRatingsAndReviewerUsertablesById>
+
+    <!--
+        CREATE OR REPLACE FUNCTION create_review()
+            RETURNS trigger AS
+        $BODY$
+        DECLARE
+            current_rifter_rating float;
+            current_riftee_rating float;
+        BEGIN
+            SELECT u.rifter_rating into current_rifter_rating
+            FROM usertable u
+            WHERE id = NEW.rift_id;
+            SELECT u.riftee_rating into current_riftee_rating
+            FROM usertable u
+            WHERE id = NEW.rift_id;
+            IF NEW.account_type = true THEN
+                IF current_rifter_rating IS NULL THEN
+                    current_rifter_rating := 0;
+                END IF;
+                UPDATE usertable
+                SET rifter_rating = n.rifter_rating
+                FROM (
+                    SELECT ((((COUNT(*) - 1) * current_rifter_rating) + NEW.rating) / COUNT(*)) as rifter_rating
+                    FROM usertable u, userrating r
+                    WHERE u.id = NEW.rift_id AND r.rift_id = NEW.rift_id
+                    GROUP BY (u.rifter_rating)
+                    ) as n
+                WHERE id = NEW.rift_id;
+                RETURN NEW;
+            ELSE
+                IF current_riftee_rating IS NULL THEN
+                    current_riftee_rating := 0;
+                END IF;
+                UPDATE usertable
+                SET riftee_rating = n.riftee_rating
+                FROM (
+                    SELECT ((((COUNT(*) - 1) * current_riftee_rating) + NEW.rating) / COUNT(*)) as riftee_rating
+                    FROM usertable u, userrating r
+                    WHERE u.id = NEW.rift_id AND r.rift_id = NEW.rift_id
+                    GROUP BY(u.riftee_rating)
+                    ) as n
+                WHERE id = NEW.rift_id;
+                RETURN NEW;
+            END IF;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+   -->
 
 </Queries>

@@ -19,7 +19,6 @@ export class UserRatingComponent implements OnInit {
   ratedUserRiftTag: string;
   account_type_str: string;
   account_type: boolean;
-  ratingTest: number = 0;
 
 
   constructor(private userRatingService: UserRatingService, private userProfileService: UserprofileService,
@@ -38,20 +37,16 @@ export class UserRatingComponent implements OnInit {
 
   save() {
     this.userRatingService.setUserRatingData(this.currentUserRating);
-    if(this.account_type_str == "true") {
-      this.account_type = true;
-    } else {
-      this.account_type = false;
-    }
+    this.account_type = this.account_type_str == "true";
     let data = {
       "rating" : this.userRatingData.rating,
       "review" : this.userRatingData.review,
-      "creationTime" : UserRatingComponent.getCurrentTimeMS(),
-      "ratedUserId" : this.ratedUserId,
-      "loggedInUserId" : JSON.parse(localStorage.getItem("loggedInUserID")),
-      "account_type" : this.account_type,
+      "createdTime" : UserRatingComponent.getCurrentTimeMS(),
+      "riftId" : this.ratedUserId,
+      "reviewerId" : JSON.parse(localStorage.getItem("loggedInUserID")),
+      "accountType" : this.account_type
     };
-    console.log(data);
+    this.userRatingService.createUserRating(data);
   }
 
   getUserId(riftTag: string) {

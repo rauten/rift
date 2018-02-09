@@ -8,6 +8,8 @@ import {Activity} from "./models/activity";
 import {Session} from "../components/session-card/session";
 import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
+import {UserRatingService} from "./user-rating/data/user-rating.service";
+import {UserRating} from "./models/userrating";
 
 @Component({
   selector: 'app-userprofile',
@@ -25,7 +27,7 @@ export class UserprofileComponent implements OnInit {
   isLoggedIn: boolean = false;
 
   constructor(private userProfileService: UserprofileService,
-  public auth: AuthService, private route: ActivatedRoute) {
+  public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -74,6 +76,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.gender = resBody.gender;
           this.currentUser.bio = resBody.bio;
           this.currentUser.id = resBody.id;
+          this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.creatorActivityList = resBody.creatorActivityList;
           for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
             var currActivity = new Activity();
@@ -99,6 +102,7 @@ export class UserprofileComponent implements OnInit {
             currSession.sessionTime = date;
             this.currentUser.rifterSessions.push(currSession);
           }
+          this.getUserRatings(this.currentUser.id);
       }
     );
   }
@@ -157,5 +161,27 @@ export class UserprofileComponent implements OnInit {
       }
     );
     return true;
+  }
+
+  getUserRatings(id: number) {
+    this.currentUser.ratings = [];
+    this.userRatingService.getUserRating(id).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (var i = 0; i < resBody.length; i++) {
+          var userRating = new UserRating();
+          userRating.review = resBody[i].review;
+          userRating.createdTime = resBody[i].createdTime;
+          userRating.rating = resBody[i].rating;
+          userRating.account_type = resBody[i].accountType;
+          var reviewer = new Userprofile();
+          reviewer.firstName = resBody[i].reviewerUsertable.firstName;
+          reviewer.lastName = resBody[i].reviewerUsertable.lastName;
+          reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
+          userRating.reviewerUsertable = reviewer;
+          this.currentUser.ratings.push(userRating);
+        }
+      }
+    );
   }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.View;
+import java.sql.SQLException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -19,6 +20,18 @@ public class UserRatingController {
 
     @Autowired
     private UserRatingService userRatingService;
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
+    public Boolean createRating(@RequestBody UserRating userRating) throws SQLException {
+        return userRatingService.createRating(userRating);
+    }
+
+    @JsonView(Views.GetUserRatings.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/rating/userRatings/{id}")
+    public List<UserRating> getUserRatingsAndReviewerUsertablesById(@PathVariable Integer id) throws SQLException {
+        return userRatingService.getUserRatingsAndReviewerUsertablesById(id);
+    }
+
 
     /*
     @JsonView(Views.Public.class)

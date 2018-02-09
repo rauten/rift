@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import {HttpModule, Http, RequestOptions} from '@angular/http';
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
+import 'hammerjs';
+
 
 import {MatTabsModule} from '@angular/material/tabs';
 import {
@@ -52,6 +54,7 @@ import { UserRatingComponent } from './userprofile/user-rating/user-rating.compo
 import {UserRatingService} from "./userprofile/user-rating/data/user-rating.service";
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
+import { UserReviewComponent } from './components/user-review/user-review.component';
 
 
 
@@ -83,7 +86,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     SearchBarComponent,
     UserCardComponent,
     SessionPageComponent,
-    UserRatingComponent
+    UserRatingComponent,
+    UserReviewComponent
   ],
   imports: [
     BrowserModule,
