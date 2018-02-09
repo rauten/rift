@@ -56,7 +56,7 @@ public class RifterSessionService {
         if (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             if (rifterSession.getId() != null) {
-                Usertable usertable = usertableService.populateUsertable(resultSet, 12, "");
+                Usertable usertable = usertableService.populateUsertable(resultSet, POPULATESIZE + 1, "");
                 rifterSession.setUsertable(usertable);
             }
             resultSet.close();
