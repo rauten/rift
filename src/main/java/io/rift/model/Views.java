@@ -137,6 +137,8 @@ public class Views {
 
     public interface UserRatingCreatedTime {}
 
+    public interface UserRatingReviewTitle {}
+
     public interface UserRatingRiftUsertable {}
 
     public interface UserRatingReviewerUsertable {}
@@ -236,7 +238,7 @@ public class Views {
             RifterSessionConsole, RifterSessionSlotsRemaining {}
 
     public interface GetUserRatings extends UserRatingAccountType, UserRatingRating, UserRatingReview, UserRatingReviewerId,
-            UserRatingCreatedTime, UserRatingReviewerUsertable, UsertableId, UsertableFirstName, UsertableLastName,
+            UserRatingCreatedTime, UserRatingReviewerUsertable, UserRatingReviewTitle, UsertableId, UsertableFirstName, UsertableLastName,
             UsertableRiftTag, UsertableProfilePicturePath {}
 
 }
