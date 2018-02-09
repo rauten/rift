@@ -8,12 +8,14 @@ import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.compone
 import {SessionformComponent} from "./usersessions/sessionform/sessionform.component";
 import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
 import {SessionPageComponent} from "./therift/riftsessions/session-page/session-page.component";
+import {UserRatingComponent} from "./userprofile/user-rating/user-rating.component";
 
 export const router: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'user/:rifttag', component: UserprofileComponent,
     children: [
-      {path: 'update', component: UpdateInfoComponent}
+      {path: 'update', component: UpdateInfoComponent},
+      {path: 'rate', component: UserRatingComponent}
     ]
   },
   { path: 'sessions', component: UsersessionsComponent,

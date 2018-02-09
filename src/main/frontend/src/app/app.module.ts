@@ -48,6 +48,12 @@ import {SearchBarService} from "./components/search-bar/search-bar.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { SessionPageComponent } from './therift/riftsessions/session-page/session-page.component';
 import {SessionPageService} from "./therift/riftsessions/session-page/session-page.service";
+import { UserRatingComponent } from './userprofile/user-rating/user-rating.component';
+import {UserRatingService} from "./userprofile/user-rating/data/user-rating.service";
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
+
+
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -76,7 +82,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     UpdateInfoComponent,
     SearchBarComponent,
     UserCardComponent,
-    SessionPageComponent
+    SessionPageComponent,
+    UserRatingComponent
   ],
   imports: [
     BrowserModule,
@@ -93,9 +100,11 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatDatepickerModule,
     MatNativeDateModule,
     FormWizardModule,
-    // TimeDurationPickerModule
+    MatSelectModule,
+    MatSliderModule
   ],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
+    UserRatingService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}

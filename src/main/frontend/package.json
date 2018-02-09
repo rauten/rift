@@ -25,6 +25,7 @@
     "@angular/router": "^5.2.2",
     "@uirouter/angular": "^1.0.0",
     "angular-calendar": "^0.23.3",
+    "angular-star-rating": "^3.0.8",
     "angular2-jwt": "^0.2.3",
     "angular2-time-duration-picker": "^1.1.0",
     "angular2-wizard": "^0.4.0",
@@ -33,6 +34,7 @@
     "core-js": "^2.4.1",
     "ng-bootstrap": "^1.6.3",
     "ng2-simple-page-scroll": "^2.0.0",
+    "ngx-rating": "0.0.9",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },

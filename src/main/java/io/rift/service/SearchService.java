@@ -75,6 +75,7 @@ public class SearchService {
         searchResults.add(rifterSessionSearchResults);
 
         // Return search results
+        resultSet.close();
         return searchResults;
     }
 

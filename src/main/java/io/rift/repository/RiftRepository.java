@@ -1,10 +1,12 @@
 package io.rift.repository;
 
+import com.sun.rowset.CachedRowSetImpl;
 import io.rift.model.Usertable;
 import io.rift.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.rowset.CachedRowSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,14 +20,14 @@ public class RiftRepository {
     @Autowired
     private ConnectionService connectionService;
 
-
     public ResultSet doQuery(String queryName, Object[] args) throws SQLException {
         HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
         PreparedStatement preparedStatement = queryDict.get(queryName);
         for (int i = 1; i <= args.length; i ++) {
             preparedStatement.setObject(i, args[i - 1]);
         }
-        return preparedStatement.executeQuery();
+        ResultSet resultSet = preparedStatement.executeQuery();
+        return resultSet;
     }
 
     public boolean doInsert(String queryName, Object[] args) {
@@ -36,6 +38,7 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args[i - 1]);
             }
             preparedStatement.execute();
+            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,6 +54,7 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args[i - 1]);
             }
             preparedStatement.execute();
+            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,6 +69,7 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args.get(i  - 1));
             }
             preparedStatement.execute();
+            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

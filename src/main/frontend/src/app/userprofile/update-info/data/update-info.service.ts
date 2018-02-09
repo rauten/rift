@@ -27,6 +27,7 @@ export class UpdateInfoService {
     user.firstName = this.updateInfoData.firstName;
     user.lastName = this.updateInfoData.lastName;
     user.email = this.updateInfoData.email;
+    user.bio = this.updateInfoData.bio;
     return user;
   }
 
@@ -36,6 +37,7 @@ export class UpdateInfoService {
     this.updateInfoData.lastName = data.lastName;
     this.updateInfoData.firstName = data.firstName;
     this.updateInfoData.email = data.email;
+    this.updateInfoData.bio = data.bio;
   }
 
   getFormData(): UpdateInfoData {
@@ -62,9 +64,15 @@ export class UpdateInfoService {
       const auth = 'Bearer ' + token;
       header = new Headers(({"Authorization": auth}));
     }
-    header.append("FirstName", auth0data["firstName"]);
-    header.append("LastName", auth0data["lastName"]);
-    header.append("Email", auth0data["email"]);
+    if(auth0data["firstName"] != "") {
+      header.append("FirstName", auth0data["firstName"]);
+    }
+    if(auth0data["lastName"] != "") {
+      header.append("LastName", auth0data["lastName"]);
+    }
+    if(auth0data["email"] != "") {
+      header.append("Email", auth0data["email"]);
+    }
     header.append("Auth0Id", auth0Id);
     console.log("Hello");
     console.log(auth0data);

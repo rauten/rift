@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
+import io.rift.repository.RiftRepository;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class UsertableController {
 
     @Autowired
     private UsertableService usertableService;
+
+    @Autowired
+    private RiftRepository riftRepository;
 
     /**
      * The result of a Usertable NATURAL JOIN Notification query
@@ -166,6 +170,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Rifter Session objects
      * @throws SQLException
      */
+
     @JsonView(Views.UserRifterSessions.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable String riftTag) throws SQLException {
@@ -173,6 +178,7 @@ public class UsertableController {
         usertable.setRifterSessions(usertableService.getUserAndRifterSession(usertable.getId()));
         return usertable;
     }
+
 
     @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/{info}", "/user/{id}/rifteeSessions"})
     public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable Integer id, @PathVariable Optional<String> info) throws SQLException {

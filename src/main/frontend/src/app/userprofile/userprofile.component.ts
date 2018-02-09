@@ -22,11 +22,14 @@ export class UserprofileComponent implements OnInit {
   currUser: any;
   following = false;
   isDataAvailable:boolean = false;
+  isLoggedIn: boolean = false;
 
   constructor(private userProfileService: UserprofileService,
-  private userSessionsService: UsersessionsService,
   public auth: AuthService, private route: ActivatedRoute) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    if(this.profile != null) {
+      this.isLoggedIn = true;
+    }
   }
 
   ngOnInit() {
@@ -36,7 +39,9 @@ export class UserprofileComponent implements OnInit {
       this.getUserProfileInformation(params['rifttag']);
       this.getUserFollowersAndFollowing(params['rifttag']);
       this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
-      this.getCurrentLoggedInUser();
+      if(this.isLoggedIn) {
+        this.getCurrentLoggedInUser();
+      }
     });
   }
 
@@ -75,7 +80,6 @@ export class UserprofileComponent implements OnInit {
             currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
             currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
             currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
-            // currActivity.rifterSession= this.currentUser.creatorActivityList[i].rifterSession;
             this.currentUser.activities.push(currActivity);
           }
           this.currentUser.rifterSessions = [];
@@ -95,7 +99,6 @@ export class UserprofileComponent implements OnInit {
             currSession.sessionTime = date;
             this.currentUser.rifterSessions.push(currSession);
           }
-          console.log(this.currentUser.rifterSessions);
       }
     );
   }

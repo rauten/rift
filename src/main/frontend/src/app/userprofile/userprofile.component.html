@@ -9,13 +9,16 @@
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
             <h3>{{currentUser.firstName}} {{currentUser.lastName}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
-            <div *ngIf="profile.nickname != currentUser.riftTag">
+            <div *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [loggedInUser]="loggedInUser" class="userbtn">
               </app-follow-button>
             </div>
-            <div *ngIf="profile.nickname == currentUser.riftTag">
+            <div *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button routerLink="update" type="button" class="btn-primary">Update your Info</button>
+            </div>
+            <div *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
+              <button routerLink="rate" type="button" class="btn-primary">Rate this User</button>
             </div>
 
           </div>
@@ -41,7 +44,7 @@
       <div class="col-md-8">
         <div class="profile-info-right">
           <mat-tab-group>
-            <mat-tab label="feed" *ngIf="profile.nickname == currentUser.riftTag">
+            <mat-tab label="feed" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <div class="media activity-item" *ngFor="let notification of currentUser.feed">
                 <a href="#" class="pull-left">
                   <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
@@ -97,7 +100,7 @@
                   <a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
                   <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
-                                     [loggedInUser]="loggedInUser" *ngIf="profile.nickname != follower.riftTag">
+                                     [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
                   </app-follow-button>
 
 
@@ -111,7 +114,7 @@
                     <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
                       <br><span class="text-muted username">@{{following.riftTag}}</span></a>
                     <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"
-                                       [loggedInUser]="loggedInUser" *ngIf="profile.nickname != following.riftTag">
+                                       [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
 
                     </app-follow-button>
                   </div>
