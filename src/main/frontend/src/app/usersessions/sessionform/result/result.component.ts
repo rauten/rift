@@ -4,6 +4,8 @@ import { FormData } from '../data/formData.model';
 import { FormDataService } from '../data/formData.service';
 import { UsersessionsService} from "../../usersessions.service";
 import {Timestamp} from "rxjs";
+import {Userprofile} from "../../../userprofile/models/userprofile";
+import {UserprofileService} from "../../../userprofile/userprofile.service";
 
 @Component({
   selector: 'app-result',
@@ -15,8 +17,13 @@ export class ResultComponent implements OnInit {
   @Input() formData: FormData;
   isFormValid: boolean = false;
   timeMS: number;
+  loggedInUser: Userprofile = new Userprofile();
+  profile: any;
 
-  constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService) { }
+  constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService,
+  private userProfileService: UserprofileService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
+  }
 
   ngOnInit() {
     this.formData = this.formDataService.getFormData();
@@ -66,6 +73,16 @@ export class ResultComponent implements OnInit {
   clear() {
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
+  }
+
+  getCurrentLoggedInUser():any {
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
+      resBody => {
+        this.loggedInUser.firstName = resBody.firstName;
+        this.loggedInUser.lastName = resBody.lastName;
+        this.loggedInUser.riftTag = resBody.riftTag;
+      }
+    )
   }
 
 }
