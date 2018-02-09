@@ -33,6 +33,9 @@ public class UserRating {
     @JsonView(Views.UserRatingCreatedTime.class)
     private Timestamp createdTime;
 
+    @JsonView(Views.UserRatingReviewTitle.class)
+    private String reviewTitle;
+
     @JsonView(Views.UserRatingRiftUsertable.class)
     private Usertable riftUsertable;
 

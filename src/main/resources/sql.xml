@@ -272,8 +272,8 @@
 
     <createRating>
         INSERT INTO userrating
-        (rift_id, account_type, rating, review, reviewer_id, created_time)
-        VALUES(?, ?, ?, ?, ?, ?);
+        (rift_id, account_type, rating, review, reviewer_id, created_time, review_title)
+        VALUES(?, ?, ?, ?, ?, ?, ?);
     </createRating>
 
     <getUserRatingByIds>

@@ -150,8 +150,8 @@ public class UsertableService {
         usertable.setIsSuspended(resultSet.getBoolean(startPoint + 5));
         usertable.setProfilePicturePath(resultSet.getString(startPoint + 6));
         usertable.setRiftTag(resultSet.getString(startPoint + 7));
-        double rifteeRating = resultSet.getDouble(startPoint + 8);
-        double rifterRating = resultSet.getDouble(startPoint + 9);
+        Double rifteeRating = resultSet.getDouble(startPoint + 8);
+        Double rifterRating = resultSet.getDouble(startPoint + 9);
         usertable.setRifteeRating(roundRating(rifteeRating));
         usertable.setRifterRating(roundRating(rifterRating));
         usertable.setTwitchAccount(resultSet.getString(startPoint + 10));

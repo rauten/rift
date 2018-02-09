@@ -27,7 +27,7 @@ public class UserRatingService {
     @Autowired
     private UsertableService usertableService;
 
-    private final Integer POPULATESIZE = 7;
+    private final Integer POPULATESIZE = 8;
 
     private final String createRating = "createRating";
     private final String getUserRatingsAndReviewerUsertablesById = "getUserRatingsAndReviewerUsertablesById";
@@ -44,7 +44,8 @@ public class UserRatingService {
 
                 return riftRepository.doInsert(createRating,
                         new Object[] {userRating.getRiftId(), userRating.getAccountType(), userRating.getRating(),
-                                userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime()});
+                                userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime(),
+                                userRating.getReviewTitle()});
             }
             return false;
         } else if (riftRepository.doQuery(getGameByHostAndPlayerId,
@@ -54,7 +55,8 @@ public class UserRatingService {
 
             return riftRepository.doInsert(createRating,
                     new Object[] {userRating.getRiftId(), userRating.getAccountType(), userRating.getRating(),
-                            userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime()});
+                            userRating.getReview(), userRating.getReviewerId(), userRating.getCreatedTime(),
+                            userRating.getReviewTitle()});
 
         }
 
@@ -76,6 +78,7 @@ public class UserRatingService {
             userRating.setReview(resultSet.getString(5));
             userRating.setReviewerId(resultSet.getInt(6));
             userRating.setCreatedTime(resultSet.getTimestamp(7));
+            userRating.setReviewTitle(resultSet.getString(8));
             userRating.setReviewerUsertable(usertableService.populateUsertable(resultSet, POPULATESIZE + 1, ""));
             userRatings.add(userRating);
         }
