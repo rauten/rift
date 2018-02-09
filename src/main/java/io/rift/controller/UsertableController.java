@@ -170,7 +170,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Rifter Session objects
      * @throws SQLException
      */
-    /*
+
     @JsonView(Views.UserRifterSessions.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable String riftTag) throws SQLException {
@@ -178,7 +178,7 @@ public class UsertableController {
         usertable.setRifterSessions(usertableService.getUserAndRifterSession(usertable.getId()));
         return usertable;
     }
-    */
+
 
     @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/{info}", "/user/{id}/rifteeSessions"})
     public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable Integer id, @PathVariable Optional<String> info) throws SQLException {
