@@ -218,7 +218,7 @@ public class Views {
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableBroadcastNotificationList,
             UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
             FollowingFollowerUsertable, NotificationType, NotificationContent, NotificationRifterSession, NotificationCreatedTime,
-            RifterSessionId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame, RifterSessionConsole,
+            RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame, RifterSessionConsole,
             RifterSessionSlotsRemaining {}
 
     public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
