@@ -7,7 +7,7 @@
     </mat-tab>
     <mat-tab label="sessions">
       <div *ngFor="let session of sessions">
-        <app-session-card
+        <app-session-card [routerLink]="['../../session', session.id]"
           [hostName]="session.usertable.firstName + ' ' + session.usertable.lastName"
           [hostRiftTag]="session.usertable.riftTag"
           [hostRifterRating]=""

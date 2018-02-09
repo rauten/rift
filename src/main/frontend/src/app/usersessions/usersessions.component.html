@@ -7,7 +7,7 @@
     <mat-tab label="card view">
 
       <div *ngFor="let session of currentUser.rifterSessions">
-        <app-session-card
+        <app-session-card [routerLink]="['../session', session.id]"
           hostName="{{session.firstName}} {{session.lastName}}"
           hostRiftTag="{{session.riftTag}}"
           hostRifterRating="{{session.rifterRating}}"

@@ -37,6 +37,7 @@ export class UsersessionsComponent implements OnInit {
           currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
           currSession.title = resBody.rifterSessions[i].title;
           currSession.sessionTime = date;
+          currSession.id = resBody.rifterSessions[i].id;
           this.currentUser.rifterSessions.push(currSession);
         }
       },

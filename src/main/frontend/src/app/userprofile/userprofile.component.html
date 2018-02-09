@@ -82,7 +82,7 @@
             </mat-tab>
             <mat-tab label="sessions">
               <div class="media activity-item" *ngFor="let session of currentUser.rifterSessions">
-                <app-session-card
+                <app-session-card [routerLink]="['../../session', session.id]"
                   hostName="{{session.firstName}} {{session.lastName}}"
                   hostRiftTag="{{session.riftTag}}"
                   hostRifterRating="{{session.rifterRating}}"

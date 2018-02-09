@@ -18,7 +18,6 @@ export class SessionPageService {
     return this.http.get(this.getSessionURL + id + "/host")
       .map(
         (response: Response) => {
-          console.log(response.json());
           return response.json();
         }
       )
