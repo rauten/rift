@@ -1,9 +1,12 @@
 package io.rift.controller;
 
 
+import io.rift.model.SessionRequest;
 import io.rift.service.SessionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLException;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -12,6 +15,11 @@ public class SessionRequestController {
 
     @Autowired
     private SessionRequestService sessionRequestService;
+
+    @RequestMapping(method = RequestMethod.PUT, value = "sessionRequest/create")
+    public Boolean createSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException {
+        return sessionRequestService.createSessionRequest(sessionRequest);
+    }
 
     /*
     @GetMapping

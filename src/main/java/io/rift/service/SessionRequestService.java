@@ -1,9 +1,11 @@
 package io.rift.service;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
+import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,12 @@ public class SessionRequestService {
     private RifterSessionService rifterSessionService;
 
     @Autowired UsertableService usertableService;
+
+    @Autowired
+    private RiftRepository riftRepository;
+
+    private final String getGameRequestBySessionAndRifteeId = "getGameRequestBySessionAndRifteeId";
+    private final String createSessionRequest = "createSessionRequest";
 
     public SessionRequest populateGameRequest(ResultSet resultSet, int startPoint) throws SQLException {
         SessionRequest sessionRequest = new SessionRequest();
@@ -67,6 +75,17 @@ public class SessionRequestService {
         }
         resultSet.close();
         return rifteeSessions;
+    }
+
+    public Boolean createSessionRequest(SessionRequest sessionRequest) throws SQLException {
+
+        if (!riftRepository.doQuery(getGameRequestBySessionAndRifteeId, new Object[] {sessionRequest.getRifteeId(),
+                sessionRequest.getSessionId()}).next()) {
+
+            return riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
+                    sessionRequest.getSessionId(), sessionRequest.getAccepted(), sessionRequest.getHostId()});
+        }
+        return false;
     }
 
 
