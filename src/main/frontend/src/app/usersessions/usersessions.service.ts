@@ -10,6 +10,7 @@ import {Userprofile} from "../userprofile/models/userprofile";
 @Injectable()
 export class UsersessionsService {
   private createUserSessionURL = "/api/rifterSession/createGame";
+  private joinUserSessionURL = "/api/sessionRequest/create";
 
   constructor(private http: Http) {
   }
@@ -30,6 +31,20 @@ export class UsersessionsService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserSessionURL, data, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log('Created session')
+      );
+  }
+
+  joinUserSession(data) {
+    console.log("running joinUserSession");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.joinUserSessionURL, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe(

@@ -8,14 +8,7 @@
 
       <div *ngFor="let session of currentUser.rifterSessions">
         <app-session-card [routerLink]="['../session', session.id]"
-          hostName="{{session.firstName}} {{session.lastName}}"
-          hostRiftTag="{{session.riftTag}}"
-          hostRifterRating="{{session.rifterRating}}"
-          title="{{session.title}}"
-          day="{{session.sessionTime | date:'dd'}}"
-          month="{{session.sessionTime | date:'MMM'}}"
-          time="{{session.sessionTime | date:'shortTime'}}"
-          game="{{session.game}}"
+          [session]="session"
         ></app-session-card>
       </div>
     </mat-tab>

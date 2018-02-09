@@ -8,16 +8,7 @@
     <mat-tab label="sessions">
       <div *ngFor="let session of sessions">
         <app-session-card [routerLink]="['../../session', session.id]"
-          [hostName]="session.usertable.firstName + ' ' + session.usertable.lastName"
-          [hostRiftTag]="session.usertable.riftTag"
-          [hostRifterRating]=""
-          [title]="session.title"
-          [day]="session.sessionTime | date:'dd'"
-          [month]="session.sessionTime | date:'MMM'"
-          [time]="session.sessionTime | date:'shortTime'"
-          [console]="session.console"
-          [game]="session.game"
-          [id]="session.id">
+          [session]="session">
         </app-session-card>
       </div>
     </mat-tab>

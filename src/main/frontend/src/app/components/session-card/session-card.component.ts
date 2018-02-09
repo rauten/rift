@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {SESSION_ICONS} from "../../constants/session-icon-variables";
+import {Session} from "./session";
+import {UsersessionsService} from "../../usersessions/usersessions.service";
 
 @Component({
   selector: 'app-session-card',
@@ -7,28 +9,28 @@ import {SESSION_ICONS} from "../../constants/session-icon-variables";
   styleUrls: ['session-card.component.scss']
 })
 export class SessionCardComponent implements OnInit {
-  @Input() hostName: string;
-  @Input() hostRiftTag: string;
-  @Input() hostRifterRating: number;
-  @Input() title: string;
-  @Input() cost: number;
-  @Input() contact: string;
-  @Input() duration: string;
-  @Input() hits: number;
-  @Input() day: string;
-  @Input() month: string;
-  @Input() time: string;
-  @Input() console: string;
-  @Input() game: string;
-  @Input() id: number;
   sessionIcon: string;
+  @Input() session: Session;
 
-  constructor() { }
+  constructor(private userSessionsService: UsersessionsService) { }
 
   ngOnInit() {
-    if(this.game == "League of Legends") {
+    if(this.session.game == "League of Legends") {
       this.sessionIcon=SESSION_ICONS.leagueOfLegends;
     }
+  }
+
+  joinUserSession() {
+    var loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
+    let data = {
+      "rifteeId": loggedInUserId,
+      "hostId": this.session.hostId,
+      "sessionId": this.session.id,
+      "accepted": false
+    };
+    console.log(this.session.hostId);
+    // this.userSessionsService.joinUserSession(data);
+    alert("Sent request");
   }
 
 }
