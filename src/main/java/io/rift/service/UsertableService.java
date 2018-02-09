@@ -65,6 +65,8 @@ public class UsertableService {
     private final String getUserAndRifterSessions = "getUserAndRifterSessions";
     private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
 
+    private final String getRatingInfoByUserId = "getRatingInfoByUserId";
+
     private final String getFollowersById = "getFollowersById";
     private final String getFollowingsById = "getFollowingsById";
     private final String getFollowersAndInfoById = "getFollowersAndInfoById";
@@ -470,6 +472,18 @@ public class UsertableService {
             return riftRepository.doUpdate(query, args);
         }
         return true;
+    }
+
+    public Object[] getRatingInfoByUserId(Integer id, String accountType) throws SQLException {
+
+        Object[] ratingInfo = new Object[2];
+        Object[] args = new Object[] {accountType, id, id};
+        ResultSet resultSet = riftRepository.doQuery(getRatingInfoByUserId, args);
+        if (resultSet.next()) {
+            ratingInfo[0] = resultSet.getInt(1);
+            ratingInfo[1] = resultSet.getInt(2);
+        }
+        return ratingInfo;
     }
 
 

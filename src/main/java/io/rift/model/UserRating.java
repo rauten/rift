@@ -4,6 +4,8 @@ package io.rift.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 @Data
 public class UserRating {
 
@@ -27,6 +29,9 @@ public class UserRating {
 
     @JsonView(Views.UserRatingReviewerId.class)
     private Integer reviewerId;
+
+    @JsonView(Views.UserRatingCreatedTime.class)
+    private Timestamp createdTime;
 
     @JsonView(Views.UserRatingRiftUsertable.class)
     private Usertable riftUsertable;
