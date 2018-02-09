@@ -36,7 +36,7 @@ public class UserRatingService {
 
     public Boolean createRating(UserRating userRating) throws SQLException {
 
-        if (userRating.getAccountType() == true) {
+        if (userRating.getAccountType()) {
             if (riftRepository.doQuery(getGameByHostAndPlayerId,
                     new Object[] {userRating.getReviewerId(), userRating.getRiftId()}).next() &&
                     !riftRepository.doQuery(getUserRatingByIds,
