@@ -48,7 +48,6 @@ import {SearchBarService} from "./components/search-bar/search-bar.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { SessionPageComponent } from './therift/riftsessions/session-page/session-page.component';
 import {SessionPageService} from "./therift/riftsessions/session-page/session-page.service";
-import {TimeDurationPickerModule} from "angular2-time-duration-picker/dist";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({

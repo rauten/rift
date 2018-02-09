@@ -212,9 +212,10 @@ public class Views {
     public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableFirstName, UsertableLastName,
             UsertableRiftTag, UsertableGender, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableBroadcastNotificationList,
-            UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable, FollowingFollowerUsertable,
-            NotificationType, NotificationContent, NotificationRifterSession, NotificationCreatedTime, RifterSessionTitle,
-            RifterSessionSessionTime, RifterSessionGame, RifterSessionConsole, RifterSessionSlotsRemaining {}
+            UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
+            FollowingFollowerUsertable, NotificationType, NotificationContent, NotificationRifterSession, NotificationCreatedTime,
+            RifterSessionId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame, RifterSessionConsole,
+            RifterSessionSlotsRemaining {}
 
     public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
             RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame,
@@ -226,7 +227,8 @@ public class Views {
             UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, UsertableBio,
             CreateGame, RifterSessionGameLevenshtein, RifterSessionGameFirstWordLevenshtein, RifterSessionId, RifterSessionUsertable {}
 
-    public interface UserRifterSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableProfilePicturePath, UsertableRifterSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
+    public interface UserRifterSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableProfilePicturePath,
+            UsertableRifterSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
             RifterSessionExpirationTime, RifterSessionCost, RifterSessionMethodOfContact, RifterSessionSessionTime,
             RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGame,
             RifterSessionConsole, RifterSessionSlotsRemaining {}
