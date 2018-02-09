@@ -88,5 +88,11 @@ public class SessionRequestService {
         return false;
     }
 
+    /*
+    public Boolean acceptRequest(SessionRequest sessionRequest) throws SQLException {
+
+    }
+    */
+
 
 }

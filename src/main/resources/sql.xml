@@ -349,4 +349,54 @@
         VALUES(?, ?, ?, ?);
     </createSessionRequest>
 
+    <!--
+        CREATE OR REPLACE FUNCTION create_game_request_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            VALUES(NEW.host_id, 'gameRequest', NEW.riftee_id || ' wants to play in ' || NEW.session_id, NEW.session_id, current_timestamp, NEW.riftee_id);
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+    -->
+
+    <!--
+        CREATE OR REPLACE FUNCTION update_num_slots_remaining()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            IF NEW.accepted = true AND OLD.accepted = false THEN
+                UPDATE riftergame
+                SET slots_remaining = OLD.slots_remaining - 1
+                WHERE id = NEW.session_id;
+            END IF;
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+    -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION update_num_slots_remaining_add()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            IF NEW.accepted = false THEN
+                UPDATE riftergame
+                SET slots_remaining = OLD.slots_remaining + 1
+                WHERE id = NEW.session_id;
+            END IF;
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+    -->
+
 </Queries>
