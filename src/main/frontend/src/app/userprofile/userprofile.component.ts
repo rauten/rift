@@ -77,6 +77,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.bio = resBody.bio;
           this.currentUser.id = resBody.id;
           this.currentUser.rifterRating = resBody.rifterRating;
+          this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.creatorActivityList = resBody.creatorActivityList;
           for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
             var currActivity = new Activity();
@@ -100,6 +101,7 @@ export class UserprofileComponent implements OnInit {
             currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
             currSession.title = resBody.rifterSessions[i].title;
             currSession.sessionTime = date;
+            currSession.id = resBody.rifterSessions[i].id;
             this.currentUser.rifterSessions.push(currSession);
           }
           this.getUserRatings(this.currentUser.id);

@@ -4,6 +4,7 @@ export class UserRating {
   review: string;
   createdTime: any;
   account_type: boolean;
+  reviewTitle: string;
 
   reviewerUsertable: Userprofile = new Userprofile();
 

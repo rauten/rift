@@ -44,7 +44,8 @@ export class UserRatingComponent implements OnInit {
       "createdTime" : UserRatingComponent.getCurrentTimeMS(),
       "riftId" : this.ratedUserId,
       "reviewerId" : JSON.parse(localStorage.getItem("loggedInUserID")),
-      "accountType" : this.account_type
+      "accountType" : this.account_type,
+      "reviewTitle" : this.userRatingData.reviewTitle
     };
     this.userRatingService.createUserRating(data);
   }

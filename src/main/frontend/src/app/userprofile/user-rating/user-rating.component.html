@@ -14,6 +14,12 @@
           </div>
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
+              <label class="control-label" for="reviewtitle">Review title</label>
+              <input class="form-control input-md" #review="ngModel" required id="reviewtitle" name="reviewtitle" type="text" placeholder="Review title" [(ngModel)]="currentUserRating.reviewTitle">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
               <label class="control-label" for="review">Leave a review</label>
               <input class="form-control input-md" #review="ngModel" required id="review" name="review" type="text" placeholder="Leave a review" [(ngModel)]="currentUserRating.review">
             </div>

@@ -22,6 +22,7 @@ export class UserRatingService {
     rating.rating = this.userRatingData.rating;
     rating.review = this.userRatingData.review;
     rating.account_type = this.userRatingData.account_type;
+    rating.reviewTitle = this.userRatingData.reviewTitle;
     return rating;
   }
 
@@ -30,6 +31,7 @@ export class UserRatingService {
     this.userRatingData.rating = data.rating;
     this.userRatingData.review = data.review;
     this.userRatingData.account_type = data.account_type;
+    this.userRatingData.reviewTitle = data.reviewTitle;
   }
 
   createUserRating(data) {

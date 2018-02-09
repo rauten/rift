@@ -9,11 +9,15 @@ import {UserRating} from "../../userprofile/models/userrating";
 })
 export class UserReviewComponent implements OnInit {
   @Input() rating: UserRating;
-
-
+  accountType: string = "";
   constructor() { }
 
   ngOnInit() {
+    if(this.rating.account_type == true) {
+      this.accountType = "Rifter";
+    } else {
+      this.accountType = "Riftee";
+    }
   }
 
 }
