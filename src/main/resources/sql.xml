@@ -205,7 +205,7 @@
         SELECT u.*
         FROM gamerequest g JOIN usertable u
         ON g.riftee_id = u.id
-        WHERE g.session_id = ?
+        WHERE g.session_id = ? AND g.accepted = true;
     </getGamePlayersByGameId>
 
     <createGame>

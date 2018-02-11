@@ -27,7 +27,9 @@ public class RifterSessionController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}")
     public RifterSession getRifterGameById(@PathVariable Integer id) throws SQLException {
-        return rifterSessionService.getRifterGameById(id);
+        RifterSession rifterSession = getRifterGameAndHostByGameId(id);
+        rifterSession.setPlayers(rifterSessionService.getGamePlayersByGameId(id));
+        return rifterSession;
     }
 
     /**
