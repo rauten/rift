@@ -55,34 +55,35 @@ export class UpdateInfoService {
   }
 
   updateAuth0User(auth0data, auth0Id) {
-
-    //auth0data = JSON.parse(auth0data);
-    //console.log(auth0data);
     let header = new Headers();
-    const token = localStorage.getItem("id_token");
-    if (token) {
-      const auth = 'Bearer ' + token;
-      header = new Headers(({"Authorization": auth}));
-    }
-    if(auth0data["firstName"] != "") {
-      header.append("FirstName", auth0data["firstName"]);
-    }
-    if(auth0data["lastName"] != "") {
-      header.append("LastName", auth0data["lastName"]);
-    }
-    if(auth0data["email"] != "") {
-      header.append("Email", auth0data["email"]);
-    }
+    const token = localStorage.getItem("access_token");
+    console.log("access token: " + token);
+    const auth = 'Bearer ' + token;
+    header.append("Authorization", auth);
+    header.append("FirstName", auth0data["firstName"]);
+    header.append("LastName", auth0data["lastName"]);
+    header.append("Email", auth0data["email"]);
+    header.append("Username", auth0data["userName"]);
     header.append("Auth0Id", auth0Id);
     console.log("Hello");
     console.log(auth0data);
-    this.http.get(this.updateUserAuth0, {headers: header})
-      .subscribe(
-        data => console.log(data),
-        error => console.log(error)
-      );
-
+    // this.getUserInfoAuth0(auth0Id);
+    this.http.patch(this.updateUserAuth0, auth0data, {headers: header})
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
   }
+
+  // getUserInfoAuth0(id: number) {
+  //   let url = "https://riftgaming.auth0.com/api/v2/users/" + id;
+  //   const token = localStorage.getItem("access_token");
+  //   const auth = 'Bearer ' + token;
+  //   let headers = new Headers();
+  //   headers.append("Authorization", auth);
+  //   return this.http.get(url, {headers})
+  //     .map((res: Response) => res.json())
+  //     .subscribe(res => console.log(res));
+  // }
 
 
 }

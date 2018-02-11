@@ -17,6 +17,7 @@ export class UpdateInfoComponent implements OnInit {
 
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    console.log(this.profile);
   }
 
   ngOnInit() {
@@ -56,12 +57,17 @@ export class UpdateInfoComponent implements OnInit {
       'username' : this.updateInfoData.riftTag
     };
     */
-    let auth0data = {'firstName': this.updateInfoData.firstName, 'lastName':this.updateInfoData.lastName, 'riftTag': this.updateInfoData.riftTag, 'email':this.updateInfoData.email};
+    let auth0data = {
+      'firstName': this.updateInfoData.firstName,
+      'lastName':this.updateInfoData.lastName,
+      'riftTag': this.updateInfoData.riftTag,
+      'email':this.updateInfoData.email
+    };
     console.log("Herro");
     console.log(auth0data);
     console.log(data);
     this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
-    window.location.reload();
+    // window.location.reload();
   }
 }

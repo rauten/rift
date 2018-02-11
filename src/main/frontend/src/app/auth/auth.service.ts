@@ -18,7 +18,7 @@ export class AuthService {
       audience: `https://${AUTH_CONFIG.domain}/userinfo`,
       // audience: AUTH_CONFIG.apiUrl,
       params: {
-        scope: 'profile openid email user_metadata'
+        scope: 'profile openid email user_metadata read:users'
       }
     },
     theme: {
@@ -85,6 +85,7 @@ export class AuthService {
       if (error) {
         throw new Error(error);
       }
+      console.log(profile);
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
