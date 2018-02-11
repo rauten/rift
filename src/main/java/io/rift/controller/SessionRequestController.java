@@ -1,11 +1,15 @@
 package io.rift.controller;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.SessionRequest;
 import io.rift.service.SessionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.IntrospectionException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -19,6 +23,11 @@ public class SessionRequestController {
     @RequestMapping(method = RequestMethod.PUT, value = "sessionRequest/create")
     public Boolean createSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException {
         return sessionRequestService.createSessionRequest(sessionRequest);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "sessionRequest/update")
+    public Boolean updateSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        return sessionRequestService.updateSessionRequest(sessionRequest);
     }
 
     /*

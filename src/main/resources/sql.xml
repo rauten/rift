@@ -205,7 +205,7 @@
         SELECT u.*
         FROM gamerequest g JOIN usertable u
         ON g.riftee_id = u.id
-        WHERE g.session_id = ?
+        WHERE g.session_id = ? AND g.accepted = true;
     </getGamePlayersByGameId>
 
     <createGame>
@@ -387,10 +387,18 @@
             RETURNS trigger AS
         $BODY$
         BEGIN
-            IF NEW.accepted = false THEN
-                UPDATE riftergame
-                SET slots_remaining = OLD.slots_remaining + 1
-                WHERE id = NEW.session_id;
+            IF (TG_OP = 'UPDATE') THEN
+                IF NEW.accepted = false THEN
+                    UPDATE riftergame
+                    SET slots_remaining = slots_remaining + 1
+                    WHERE id = NEW.session_id;
+                END IF;
+            ELSIF (TG_OP = 'DELETE') THEN
+                IF OLD.accepted = true THEN
+                    UPDATE riftergame
+                    SET slots_remaining = slots_remaining + 1
+                    WHERE id = OLD.session_id;
+                END IF;
             END IF;
             RETURN NEW;
         END;

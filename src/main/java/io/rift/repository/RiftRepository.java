@@ -58,7 +58,6 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args[i - 1]);
             }
             preparedStatement.execute();
-            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +72,6 @@ public class RiftRepository {
                 preparedStatement.setObject(i, args.get(i  - 1));
             }
             preparedStatement.execute();
-            preparedStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
