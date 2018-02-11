@@ -389,7 +389,7 @@
         BEGIN
             IF NEW.accepted = false THEN
                 UPDATE riftergame
-                SET slots_remaining = OLD.slots_remaining + 1
+                SET slots_remaining = slots_remaining + 1
                 WHERE id = NEW.session_id;
             END IF;
             RETURN NEW;
