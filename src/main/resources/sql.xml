@@ -444,8 +444,8 @@
         AFTER UPDATE
         ON riftergame
         FOR EACH ROW
-        WHEN (NEW.slots_remaining = OLD.slots_remaining OR (NEW.slots_remaining <> OLD.slots_remaining AND NEW.num_slots <> OLD.num_slots)) AND NEW.num_slots <> -1
-        EXECUTE PROCEDURE create_session_accepted_or_rejected_notification();
+        WHEN ((NEW.slots_remaining = OLD.slots_remaining OR (NEW.slots_remaining <> OLD.slots_remaining AND NEW.num_slots <> OLD.num_slots)) AND NEW.num_slots <> -1)
+        EXECUTE PROCEDURE create_session_update_notification();
     -->
 
     <!--

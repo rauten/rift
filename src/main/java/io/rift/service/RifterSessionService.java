@@ -1,12 +1,21 @@
 package io.rift.service;
 
+import com.google.common.base.CaseFormat;
 import io.rift.model.RifterSession;
 import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import org.apache.bcel.classfile.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -30,6 +39,16 @@ public class RifterSessionService {
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
+
+    private final String updateRifterSessionStart = "UPDATE riftergame SET(";
+    private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
+    private final String rifterSessionClass = "RifterSession.class";
+    private final String updateRifterSessionEnd = " WHERE id = ?";
+
+    private final String booleanStr = "Boolean";
+    private final String stringStr = "String";
+    private final String intStr = "Integer";
+    private final String doubleStr = "Double";
 
 
     private final String sessionCreatedType = "New Game";
@@ -136,6 +155,54 @@ public class RifterSessionService {
         }
 
         return success2;
+    }
+
+    public Boolean updateRifterSession(RifterSession rifterSession) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        int rifterSessionId = rifterSession.getId();
+        String str = updateRifterSessionStart;
+        StringBuilder query = new StringBuilder(str);
+        StringBuilder values = new StringBuilder("(");
+        ClassParser parser = new ClassParser(RifterSessionService.class.getResourceAsStream(updateRifterSessionPath), rifterSessionClass);
+        JavaClass javaClass = parser.parse();
+        Field[] fields = javaClass.getFields();
+        List<Object> args = new ArrayList<>();
+        boolean didAdd = false;
+        for (int i = 0; i < POPULATESIZE; i++) {
+            String[] properties = fields[i].toString().split(" ");
+            String attribute = properties[2];
+            PropertyDescriptor pd = new PropertyDescriptor(attribute, RifterSession.class);
+            Method getter = pd.getReadMethod();
+            Object f = getter.invoke(rifterSession);
+            if (f != null && !f.toString().equals("")) {
+                didAdd = true;
+                if (properties[1].equals(intStr)) {
+                    f = (Integer) f;
+                } else if (properties[1].equals(stringStr)) {
+                    f = (String) f;
+                } else if (properties[1].equals(doubleStr)) {
+                    f = (Double) f;
+                } else if (properties[2].equals(booleanStr)) {
+                    f = (boolean) f;
+                }
+                attribute = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, attribute);
+                query.append(attribute);
+                query.append(", ");
+                values.append("?");
+                values.append(", ");
+                args.add(f);
+            }
+        }
+        if (didAdd) {
+            query.delete(query.length() - 2, query.length() - 1);
+            values.delete(values.length() - 2, query.length() - 1);
+            query.append(") = ");
+            values.append(")");
+            query.append(values);
+            query.append(updateRifterSessionEnd);
+            args.add(rifterSessionId);
+            return riftRepository.doUpdate(query, args);
+        }
+        return true;
     }
 
 

@@ -8,6 +8,9 @@ import io.rift.service.RifterSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.IntrospectionException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -90,6 +93,11 @@ public class RifterSessionController {
     @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/createGame")
     public Boolean createGame(@RequestBody RifterSession rifterSession) throws SQLException {
         return rifterSessionService.createGame(rifterSession);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/rifterSessioin/update")
+    public Boolean updateSession(@RequestBody RifterSession rifterSession) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        return rifterSessionService.updateRifterSession(rifterSession);
     }
 
     /*

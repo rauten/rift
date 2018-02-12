@@ -15,6 +15,7 @@ import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,8 +32,10 @@ public class UsertableController {
     private RiftRepository riftRepository;
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/id")
-    public Integer getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
-        return usertableService.getRiftIdByRiftTag(riftTag);
+    public Map<String, Integer> getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
+        Map<String, Integer> tagMap = new HashMap<>();
+        tagMap.put("id", usertableService.getRiftIdByRiftTag(riftTag));
+        return tagMap;
     }
 
     /**
