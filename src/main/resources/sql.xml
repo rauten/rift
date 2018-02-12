@@ -561,6 +561,30 @@
 
     -->
 
+    <!--
+
+
+        CREATE OR REPLACE FUNCTION create_session_creation_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            VALUES(null, 'sessionCreated',
+                (SELECT rift_tag
+                FROM usertable u
+                WHERE u.id = NEW.host_id
+                LIMIT(1))
+            || ' has created a new game for ' ||
+                NEW.game,
+            NEW.id, current_timestamp, NEW.host_id);
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+    -->
+
 
 
 </Queries>
