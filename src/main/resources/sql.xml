@@ -24,7 +24,7 @@
     <getNumberGamesPlayedByUserId>
         SELECT COUNT(*)
         FROM gamerequest g JOIN riftergame r ON g.session_id = r.id
-        WHERE riftee_id = ? AND accepted = true AND r.session_time &lt; current_timestamp
+        WHERE riftee_id = ? AND accepted = 2 AND r.session_time &lt; current_timestamp
     </getNumberGamesPlayedByUserId>
 
     <getRatingInfoByUserId>
@@ -219,7 +219,7 @@
         SELECT u.*
         FROM gamerequest g JOIN usertable u
         ON g.riftee_id = u.id
-        WHERE g.session_id = ? AND g.accepted = true;
+        WHERE g.session_id = ? AND g.accepted = 2;
     </getGamePlayersByGameId>
 
     <createGame>
@@ -480,7 +480,7 @@
         $BODY$
         DECLARE temp integer;
         BEGIN
-            IF (TG_OP = 'DELETE')
+            IF (TG_OP = 'DELETE') THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
                 VALUES(NEW.riftee_id, 'sessionDenied',
@@ -495,7 +495,7 @@
                     WHERE r.id = OLD.session_id
                     LIMIT(1)),
                 OLD.session_id, current_timestamp, NEW.host_id);
-            ELSIF NEW.accepted = true AND OLD.accepted = false THEN
+            ELSIF NEW.accepted = 2 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
                 VALUES(NEW.riftee_id, 'sessionAccepted',
@@ -523,9 +523,9 @@
             RETURNS trigger AS
         $BODY$
         BEGIN
-            IF NEW.accepted = true AND OLD.accepted = false THEN
+            IF NEW.accepted = 2 AND OLD.accepted = 1 THEN
                 UPDATE riftergame
-                SET slots_remaining = OLD.slots_remaining - 1
+                SET slots_remaining = slots_remaining - 1
                 WHERE id = NEW.session_id;
             END IF;
             RETURN NEW;
@@ -542,13 +542,13 @@
         $BODY$
         BEGIN
             IF (TG_OP = 'UPDATE') THEN
-                IF NEW.accepted = false THEN
+                IF ((NEW.accepted = 0 OR NEW.accepted = 1) AND OLD.accepted = 2) THEN
                     UPDATE riftergame
                     SET slots_remaining = slots_remaining + 1
                     WHERE id = NEW.session_id;
                 END IF;
             ELSIF (TG_OP = 'DELETE') THEN
-                IF OLD.accepted = true THEN
+                IF OLD.accepted = 2 THEN
                     UPDATE riftergame
                     SET slots_remaining = slots_remaining + 1
                     WHERE id = OLD.session_id;

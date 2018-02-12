@@ -286,15 +286,14 @@ public class UsertableService {
         return followings;
     }
 
-    public List<SessionRequest> getGameRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<String> value) throws SQLException {
+    public List<SessionRequest> getGameRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<Short> value) throws SQLException {
         ResultSet resultSet;
         boolean bool;
         if (info.equals("sessionInfo")) {
             if (!filter.isPresent()) {
                 resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
-                bool = value.get().equals("true") ? true : false;
-                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, value.get()});
             } else {
                 return null;
             }
@@ -305,8 +304,7 @@ public class UsertableService {
             if (!filter.isPresent()) {
                 resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
-                bool = value.get().equals("true") ? true : false;
-                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, value.get()});
             } else {
                 return null;
             }
@@ -317,8 +315,7 @@ public class UsertableService {
             if (!filter.isPresent()) {
                 resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
-                bool = value.get().equals("true") ? true : false;
-                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, value.get()});
             } else {
                 return null;
             }
@@ -329,8 +326,7 @@ public class UsertableService {
             if (!filter.isPresent()) {
                 resultSet = riftRepository.doQuery(getRequestsByUser, new Object[] {id});
             } else if (filter.get().equals("accepted")) {
-                bool = value.get().equals("true") ? true : false;
-                resultSet = riftRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, bool});
+                resultSet = riftRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, value.get()});
             } else {
                 return null;
             }

@@ -210,7 +210,7 @@ public class UsertableController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/filterBy:{filter}={value}/{info}", "/user/{id}/rifteeSessions/filterBy:{filter}={value}"})
-    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable String value, @PathVariable Optional<String> info) throws SQLException {
+    public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable Short value, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         if (info.isPresent()) {
             usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, info.get(), Optional.of(filter), Optional.of(value)));
