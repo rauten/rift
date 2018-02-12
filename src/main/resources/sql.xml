@@ -78,7 +78,7 @@
         SELECT *
         FROM notification n JOIN riftergame r
         ON n.session_id = r.id
-        WHERE n.user_id = ?
+        WHERE n.creator_id = ?
     </getUserActiviyAndUserSession>
 
     <getUserAndRifterSessions>
@@ -154,9 +154,19 @@
     <getBroadcastNotificationsById>
         SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
         FROM usertable us JOIN following f ON us.id = f.follower_id
-        JOIN notification n ON f.following_id = n.creator_id
+        JOIN notification n ON f.following_id = n.creator_id,
         WHERE us.id = ? AND n.notification_type = 'New Game';
     </getBroadcastNotificationsById>
+
+    <getSessionBroadcastsByUserId>
+        SELECT n.*
+        FROM gamerequest g
+        JOIN riftergame r
+        ON g.session_id = r.id
+        JOIN notification n
+        ON r.host_id = n.creator_id
+        WHERE g.riftee_id = ? AND (n.notification_type = 'sessionUpdate' OR n.notification_type = 'sessionDeletion');
+    </getSessionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
         SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, u.auth0_Token
@@ -356,12 +366,126 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.host_id, 'gameRequest', NEW.riftee_id || ' wants to play in ' || NEW.session_id, NEW.session_id, current_timestamp, NEW.riftee_id);
+            VALUES(NEW.host_id, 'gameRequest',
+                (SELECT rift_tag
+                FROM gamerequest g JOIN usertable u
+                ON g.riftee_id = u.id
+                WHERE g.riftee_id = NEW.riftee_id
+                LIMIT(1))
+            || ' wants to play in session: ' ||
+                (SELECT title
+                FROM gamerequest g JOIN riftergame r
+                ON g.session_id = r.id
+                WHERE g.session_id = NEW.session_id
+                LIMIT(1)),
+            NEW.session_id, current_timestamp, NEW.riftee_id);
             RETURN NEW;
         END;
         $BODY$
         LANGUAGE plpgsql;
 
+    -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION create_follow_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            VALUES(NEW.following_id, 'follow',
+                (SELECT rift_tag
+                FROM following f JOIN usertable u
+                ON f.follower_id = u.id
+                WHERE f.follower_id = NEW.follower_id
+                LIMIT(1))
+            || ' has started following you.',
+            null, current_timestamp, NEW.follower_id);
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+    -->
+
+    <!--
+        CREATE TRIGGER create_session_update_notification
+        AFTER UPDATE
+        ON riftergame
+        FOR EACH ROW
+        WHEN (NEW.slots_remaining = OLD.slots_remaining OR (NEW.slots_remaining <> OLD.slots_remaining AND NEW.num_slots <> OLD.num_slots))
+        EXECUTE PROCEDURE create_session_accepted_or_rejected_notification();
+    -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION create_session_update_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            VALUES(null, 'sessionUpdate',
+                (SELECT rift_tag
+                FROM riftergame r JOIN usertable u
+                ON r.host_id = u.id
+                WHERE r.host_id = NEW.host_id
+                LIMIT(1))
+            || ' has updated ' ||
+                (SELECT title
+                FROM riftergame r
+                WHERE r.id = NEW.id
+                LIMIT(1)),
+            NEW.id, current_timestamp, NEW.host_id);
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+    -->
+
+    <!--
+        CREATE OR REPLACE FUNCTION create_session_accepted_or_rejected_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            IF NEW.accepted = true AND OLD.accepted = false THEN
+                INSERT INTO notification
+                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+                VALUES(NEW.riftee_id, 'sessionAccepted',
+                    (SELECT rift_tag
+                    FROM gamerequest g JOIN usertable u
+                    ON g.host_id = u.id
+                    WHERE g.host_id = NEW.host_id
+                    LIMIT(1))
+                || ' has accepted your request to participate ' ||
+                    (SELECT title
+                    FROM riftergame r JOIN gamerequest g
+                    ON r.id = g.session_id
+                    WHERE r.id = NEW.session_id
+                    LIMIT(1)),
+                NEW.session_id, current_timestamp, NEW.host_id);
+            ELSIF (TG_OP = 'DELETE') THEN
+                INSERT INTO notification
+                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+                VALUES(NEW.riftee_id, 'sessionDenied',
+                    (SELECT rift_tag
+                    FROM gamerequest g JOIN usertable u
+                    ON g.host_id = u.id
+                    WHERE g.host_id = NEW.host_id
+                    LIMIT(1))
+                || ' has rejected your request to play in ' ||
+                    (SELECT title
+                    FROM riftergame r JOIN gamerequest g
+                    ON r.id = g.session_id
+                    WHERE r.id = NEW.session_id
+                    LIMIT(1)),
+                NEW.session_id, current_timestamp, NEW.host_id);
+            END IF;
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
     -->
 
     <!--
@@ -406,5 +530,7 @@
         LANGUAGE plpgsql;
 
     -->
+
+
 
 </Queries>
