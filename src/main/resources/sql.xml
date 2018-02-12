@@ -78,7 +78,7 @@
         SELECT *
         FROM notification n JOIN riftergame r
         ON n.session_id = r.id
-        WHERE n.user_id = ?
+        WHERE n.creator_id = ?
     </getUserActiviyAndUserSession>
 
     <getUserAndRifterSessions>
@@ -356,7 +356,19 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.host_id, 'gameRequest', NEW.riftee_id || ' wants to play in ' || NEW.session_id, NEW.session_id, current_timestamp, NEW.riftee_id);
+            VALUES(NEW.host_id, 'gameRequest',
+                (SELECT rift_tag
+                FROM gamerequest g JOIN usertable u
+                ON g.riftee_id = u.id
+                WHERE g.riftee_id = NEW.riftee_id
+                LIMIT(1))
+            || ' wants to play in session: ' ||
+                (SELECT title
+                FROM gamerequest g JOIN riftergame r
+                ON g.session_id = r.id
+                WHERE g.session_id = NEW.session_id
+                LIMIT(1)),
+            NEW.session_id, current_timestamp, NEW.riftee_id);
             RETURN NEW;
         END;
         $BODY$
