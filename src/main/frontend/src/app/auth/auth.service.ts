@@ -39,7 +39,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router, private userprofileService: UserprofileService) {
+  constructor(public router: Router) {
 
   }
 
@@ -85,7 +85,6 @@ export class AuthService {
       if (error) {
         throw new Error(error);
       }
-      console.log(profile);
       localStorage.setItem('access_token', authResult.accessToken);
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);

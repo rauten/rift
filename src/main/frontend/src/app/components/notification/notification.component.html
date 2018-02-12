@@ -1,21 +1,18 @@
-<div class="media activity-item" *ngFor="let activity of currentUser.activities">
+<div class="media activity-item">
   <a href="#" class="pull-left">
     <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
   </a>
   <div class="media-body">
-    <p class="activity-title"><a href="#">{{currentUser.riftTag}}</a> {{activity.notificationContent}} </p>
-    <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
+    <p class="activity-title">{{notification.notificationContent}} </p>
+    <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
   </div>
-  <div class="btn-group pull-right activity-actions">
-    <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-      <i class="fa fa-th"></i>
-      <span class="sr-only">Toggle Dropdown</span>
+  <div class="btn-group pull-right activity-actions" *ngIf="notification.notificationType == 'gameRequest'">
+    <button type="button" class="btn btn-primary btn-xs">
+      Accept
     </button>
-    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-      <li><a href="#">I don't want to see this</a></li>
-      <li><a href="#">Unfollow Antonius</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Get Notification</a></li>
-    </ul>
+    <button type="button" class="btn btn-danger btn-xs">
+      Reject
+    </button>
+
   </div>
 </div>

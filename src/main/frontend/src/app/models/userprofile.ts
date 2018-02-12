@@ -1,6 +1,7 @@
 import {Activity} from "./activity";
 import {Session} from "./session";
 import {UserRating} from "./userrating";
+import {Notification} from "./notification";
 
 export class Userprofile {
   id: number;
@@ -20,10 +21,12 @@ export class Userprofile {
   followings: Userprofile[] = [];
   email: string;
   ratings: UserRating[] = [];
+  notifications: Notification[] = [];
 
   followerUsertable: any;
   followingUsertable: any;
   broadcastNotificationList: any;
+  notificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
 

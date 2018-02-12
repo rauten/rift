@@ -10,6 +10,7 @@ import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {UserRatingService} from "./user-rating/data/user-rating.service";
 import {UserRating} from "../models/userrating";
+import {Notification} from "../models/notification";
 
 @Component({
   selector: 'app-userprofile',
@@ -40,6 +41,7 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       this.getUserProfileInformation(params['rifttag']);
       this.getUserFollowersAndFollowing(params['rifttag']);
+      this.getUserNotifications(params['rifttag']);
       this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
       if(this.isLoggedIn) {
         this.getCurrentLoggedInUser();
@@ -70,7 +72,6 @@ export class UserprofileComponent implements OnInit {
   getUserProfileInformation(riftTag: string) {
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -188,5 +189,22 @@ export class UserprofileComponent implements OnInit {
         }
       }
     );
+  }
+
+  getUserNotifications(riftTag: string) {
+    this.currentUser.notifications = [];
+    this.userProfileService.getUser(riftTag).subscribe(
+      resBody => {
+        for (var i = 0; i < resBody.notificationList.length; i++) {
+          var notification = new Notification();
+          notification.createdTime = resBody.notificationList[i].createdTime;
+          notification.creatorId = resBody.notificationList[i].creatorId;
+          notification.notificationType = resBody.notificationList[i].notificationType;
+          notification.notificationContent = resBody.notificationList[i].notificationContent;
+          notification.sessionId = resBody.notificationList[i].sessionId;
+          this.currentUser.notifications.push(notification);
+        }
+      }
+    )
   }
 }

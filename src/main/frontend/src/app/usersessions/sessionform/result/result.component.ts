@@ -36,14 +36,14 @@ export class ResultComponent implements OnInit {
     console.log(this.formData);
     this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"));
     this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
-    var costNoDollar = this.formatCost(this.formData.sessionCost);
+    // var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
       "hostId": parseInt(localStorage.getItem("loggedInUserID")),
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,
       "numSlots":this.formData.numSlots,
-      "sessionCost":costNoDollar,
+      "sessionCost":this.formData.sessionCost,
       "sessionTime":this.timeMS,
       "sessionDuration":'1:00:00'
     };
@@ -61,13 +61,13 @@ export class ResultComponent implements OnInit {
     return seconds * 1000;
   }
 
-  formatCost(cost): string {
-
-    if (cost.charAt(0) == "$") {
-      return cost.substr(1);
-    }
-    return cost;
-  }
+  // formatCost(cost): string {
+  //
+  //   if (cost.charAt(0) == "$") {
+  //     return cost.substr(1);
+  //   }
+  //   return cost;
+  // }
 
   clear() {
     this.formData = this.formDataService.resetFormData();

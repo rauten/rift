@@ -19,9 +19,10 @@ export class SessionCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.session.game);
     if(this.session.game == "League of Legends") {
       this.sessionIcon=SESSION_ICONS.leagueOfLegends;
+    } else if (this.session.game == "Fortnite") {
+      this.sessionIcon=SESSION_ICONS.fortnite;
     }
   }
 
