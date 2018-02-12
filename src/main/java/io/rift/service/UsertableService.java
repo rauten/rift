@@ -58,6 +58,7 @@ public class UsertableService {
 
     private final String getBroadcastNotifications = "getBroadcastNotificationsById";
     private final String getBroadcastNotificationsForFollower = "getBroadcastNotificationsForFollower";
+    private final String getSessionBroadcastsByUserId = "getSessionBroadcastsByUserId";
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
     private final String getUserActiviyAndUserSession = "getUserActiviyAndUserSession";
@@ -387,7 +388,6 @@ public class UsertableService {
         } else {
             resultSet = riftRepository.doQuery(getBroadcastNotifications, args);
         }
-        int i = 1;
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {
             Notification notification = new Notification();
@@ -414,6 +414,11 @@ public class UsertableService {
             notifications.add(notification);
         }
         resultSet.close();
+        resultSet = riftRepository.doQuery(getSessionBroadcastsByUserId, args);
+        while(resultSet.next()) {
+            Notification notification = notificationService.populateNotification(resultSet, 1, "");
+            notifications.add(notification);
+        }
         return notifications;
     }
 
