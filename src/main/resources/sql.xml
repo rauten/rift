@@ -3,6 +3,10 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- - - - - - - - - - - - USERTABLE SQL COMMANDS - - - - - - - - - - - - - -->
 
+    <getRiftIdByRiftTag>
+        SELECT id FROM usertable WHERE rift_tag = ?;
+    </getRiftIdByRiftTag>
+
     <getUserById>
         SELECT * FROM usertable WHERE id = ?;
     </getUserById>
@@ -165,7 +169,7 @@
         ON g.session_id = r.id
         JOIN notification n
         ON r.host_id = n.creator_id
-        WHERE g.riftee_id = ? AND (n.notification_type = 'sessionUpdate' OR n.notification_type = 'sessionDeletion');
+        WHERE g.riftee_id = ? AND (n.notification_type = 'sessionUpdate' OR n.notification_type = 'sessionDeletion') AND r.num_slots != -1;
     </getSessionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
@@ -387,6 +391,32 @@
     -->
 
     <!--
+        CREATE OR REPLACE FUNCTION create_session_deletion_handler()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            VALUES(null, 'sessionDeletion',
+                (SELECT rift_tag
+                FROM usertable u
+                WHERE u.id = OLD.host_id
+                LIMIT(1))
+            || ' has deleted ' ||
+                (SELECT OLD.title
+                FROM riftergame r
+                WHERE r.id = OLD.id
+                LIMIT(1)),
+            OLD.id, current_timestamp, OLD.host_id);
+            DELETE FROM gamerequest
+            WHERE session_id = OLD.id;
+            RETURN OLD;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+    -->
+
+    <!--
 
         CREATE OR REPLACE FUNCTION create_follow_notification()
             RETURNS trigger AS
@@ -414,7 +444,7 @@
         AFTER UPDATE
         ON riftergame
         FOR EACH ROW
-        WHEN (NEW.slots_remaining = OLD.slots_remaining OR (NEW.slots_remaining <> OLD.slots_remaining AND NEW.num_slots <> OLD.num_slots))
+        WHEN (NEW.slots_remaining = OLD.slots_remaining OR (NEW.slots_remaining <> OLD.slots_remaining AND NEW.num_slots <> OLD.num_slots)) AND NEW.num_slots <> -1
         EXECUTE PROCEDURE create_session_accepted_or_rejected_notification();
     -->
 
@@ -448,8 +478,24 @@
         CREATE OR REPLACE FUNCTION create_session_accepted_or_rejected_notification()
             RETURNS trigger AS
         $BODY$
+        DECLARE temp integer;
         BEGIN
-            IF NEW.accepted = true AND OLD.accepted = false THEN
+            IF (TG_OP = 'DELETE')
+                INSERT INTO notification
+                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+                VALUES(NEW.riftee_id, 'sessionDenied',
+                    (SELECT rift_tag
+                    FROM usertable u
+                    WHERE u.id = OLD.host_id
+                    LIMIT(1))
+                || ' has rejected your request to play in ' ||
+                    (SELECT OLD.title
+                    FROM riftergame r JOIN gamerequest g
+                    ON r.id = g.session_id
+                    WHERE r.id = OLD.session_id
+                    LIMIT(1)),
+                OLD.session_id, current_timestamp, NEW.host_id);
+            ELSIF NEW.accepted = true AND OLD.accepted = false THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
                 VALUES(NEW.riftee_id, 'sessionAccepted',
@@ -459,22 +505,6 @@
                     WHERE g.host_id = NEW.host_id
                     LIMIT(1))
                 || ' has accepted your request to participate ' ||
-                    (SELECT title
-                    FROM riftergame r JOIN gamerequest g
-                    ON r.id = g.session_id
-                    WHERE r.id = NEW.session_id
-                    LIMIT(1)),
-                NEW.session_id, current_timestamp, NEW.host_id);
-            ELSIF (TG_OP = 'DELETE') THEN
-                INSERT INTO notification
-                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, 'sessionDenied',
-                    (SELECT rift_tag
-                    FROM gamerequest g JOIN usertable u
-                    ON g.host_id = u.id
-                    WHERE g.host_id = NEW.host_id
-                    LIMIT(1))
-                || ' has rejected your request to play in ' ||
                     (SELECT title
                     FROM riftergame r JOIN gamerequest g
                     ON r.id = g.session_id

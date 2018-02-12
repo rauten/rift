@@ -30,6 +30,11 @@ public class UsertableController {
     @Autowired
     private RiftRepository riftRepository;
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/id")
+    public Integer getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
+        return usertableService.getRiftIdByRiftTag(riftTag);
+    }
+
     /**
      * The result of a Usertable NATURAL JOIN Notification query
      * @param id The user id we want to get information for
