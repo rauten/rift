@@ -11,7 +11,7 @@ import {Userprofile} from "../models/userprofile";
 export class UsersessionsService {
   private createUserSessionURL = "/api/rifterSession/createGame";
   private joinUserSessionURL = "/api/sessionRequest/create";
-  private acceptSessionRequestURL = "/api/sessionRequestion/update";
+  private acceptSessionRequestURL = "/api/sessionRequest/update";
 
   constructor(private http: Http) {
   }

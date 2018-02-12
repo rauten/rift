@@ -59,9 +59,8 @@ import { NotificationComponent } from './components/notification/notification.co
 import { CalendarModule } from 'angular-calendar';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { RatingComponent } from './components/rating/rating.component';
-
-
-
+import { UpdateSessionComponent } from './therift/riftsessions/session-page/update-session/update-session.component';
+import {UpdateSessionService} from "./therift/riftsessions/session-page/update-session/data/update-session.service";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -94,7 +93,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     UserRatingComponent,
     UserReviewComponent,
     NotificationComponent,
-    RatingComponent
+    RatingComponent,
+    UpdateSessionComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,7 +117,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     NgbModule.forRoot()
   ],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService,
+    UserRatingService, UpdateSessionService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}

@@ -16,6 +16,7 @@ export class UserRatingComponent implements OnInit {
   profile: any;
   sub: any;
   ratedUserId: number;
+  loggedInUserId: number;
   ratedUserRiftTag: string;
   account_type_str: string;
   account_type: boolean;
@@ -43,7 +44,8 @@ export class UserRatingComponent implements OnInit {
       "review" : this.userRatingData.review,
       "createdTime" : UserRatingComponent.getCurrentTimeMS(),
       "riftId" : this.ratedUserId,
-      "reviewerId" : JSON.parse(localStorage.getItem("loggedInUserID")),
+      // "reviewerId" : JSON.parse(localStorage.getItem("loggedInUserID")),
+      "reviewerId" : this.loggedInUserId,
       "accountType" : this.account_type,
       "reviewTitle" : this.userRatingData.reviewTitle
     };
@@ -52,11 +54,16 @@ export class UserRatingComponent implements OnInit {
   }
 
   getUserId(riftTag: string) {
-    this.userProfileService.getUser(riftTag).subscribe(
+    this.userProfileService.getUserId(riftTag).subscribe(
       resBody => {
         this.ratedUserId = resBody.id;
       }
     );
+    this.userProfileService.getUserId(this.profile.nickname).subscribe(
+      resBody => {
+        this.loggedInUserId = resBody.id;
+      }
+    )
   }
 
   static getCurrentTimeMS() {

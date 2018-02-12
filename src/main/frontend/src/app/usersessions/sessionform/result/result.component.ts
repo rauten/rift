@@ -17,7 +17,7 @@ export class ResultComponent implements OnInit {
   @Input() formData: FormData;
   isFormValid: boolean = false;
   timeMS: number;
-  loggedInUser: Userprofile = new Userprofile();
+  loggedInUserId: number;
   profile: any;
 
   constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService,
@@ -26,6 +26,7 @@ export class ResultComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getLoggedInUserId(this.profile.nickname);
     this.formData = this.formDataService.getFormData();
     this.isFormValid = this.formDataService.isFormValid();
     console.log('Result feature loaded!');
@@ -38,7 +39,7 @@ export class ResultComponent implements OnInit {
     this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
     // var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
-      "hostId": parseInt(localStorage.getItem("loggedInUserID")),
+      "hostId": this.loggedInUserId,
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,
@@ -51,6 +52,18 @@ export class ResultComponent implements OnInit {
     window.location.reload();
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
+  }
+
+  getLoggedInUserId(riftTag: string) {
+    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
+      this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
+    } else {
+      this.userProfileService.getUserId(riftTag).subscribe(
+        resBody => {
+          this.loggedInUserId = resBody.id;
+        }
+      )
+    }
   }
 
   timeToMilliseconds(time: string) {

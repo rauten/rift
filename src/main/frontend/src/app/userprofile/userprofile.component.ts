@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Userprofile} from "../models/userprofile"
 
 import {UserprofileService} from "./userprofile.service";
-import {UsersessionsService} from "../usersessions/usersessions.service";
 
 import {Activity} from "../models/activity";
 import {Session} from "../models/session";
@@ -70,8 +69,11 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string) {
+    this.currentUser.activities = [];
+    this.currentUser.rifterSessions = [];
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -88,7 +90,6 @@ export class UserprofileComponent implements OnInit {
             currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
             this.currentUser.activities.push(currActivity);
           }
-          this.currentUser.rifterSessions = [];
           for (var i = 0; i < resBody.rifterSessions.length; i++) {
             var currDateMS = resBody.rifterSessions[i].sessionTime;
             var date = new Date(currDateMS);
@@ -108,6 +109,7 @@ export class UserprofileComponent implements OnInit {
             currSession.game = resBody.rifterSessions[i].game;
             this.currentUser.rifterSessions.push(currSession);
           }
+          console.log("Number of activities: " + this.currentUser.activities.length);
           this.getUserRatings(this.currentUser.id);
       }
     );

@@ -10,15 +10,11 @@ import {AuthHttp} from "angular2-jwt";
 export class UpdateInfoService {
   updateUserURL = "/api/user/updateUser";
   updateUserAuth0 = "/api/user/updateAuth";
-  updateUserAuth = "/api/user/updateAuth0";
-  updateUserAuthTwo = "/api/user/updateAuthTwo";
-  updateAuth0UserURL = "http://riftgaming.auth0.com/api/v2/users/";
-  userData : string;
   private updateInfoData: UpdateInfoData = new UpdateInfoData();
   private isValid: boolean = false;
 
 
-  constructor(private http: Http, private authHttp: AuthHttp) {
+  constructor(private http: Http) {
   }
 
   getUserData(): Userprofile {

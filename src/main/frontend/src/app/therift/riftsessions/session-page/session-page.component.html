@@ -10,6 +10,7 @@
       <a href="#" class="card-link">Another link</a>
     </div>
   </div>
+  <button class="btn btn-primary" routerLink="update">Edit Session</button><br>
   sessionId: {{session.id}}<br>
   sessionTitle: {{session.title}}<br>
   sessionFirstName: {{session.firstName}}<br>
@@ -18,3 +19,4 @@
   sessionTime: {{session.sessionTime}}<br>
   sessionSlots: {{session.numSlots}}
 </div>
+<router-outlet></router-outlet>

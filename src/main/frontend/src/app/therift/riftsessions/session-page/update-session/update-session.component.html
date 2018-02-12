@@ -1,0 +1,72 @@
+<form #updateSession="ngForm" class="editForm" novalidate>
+  <div class="tab-pane fade in active">
+    <h4 class="head text-center">{{title}}</h4>
+    <br/>
+    <div class='row'>
+      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+        <div class="row">
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessiontitle">Give your session a title</label>
+              <input class="form-control input-md" #sessiontitle="ngModel"  id="sessiontitle" name="sessiontitle" type="text" placeholder="Session Title" [(ngModel)]="currentSession.title">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessiongame">What game will you be playing?</label>
+              <input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="sessionplatform">What platform will you be playing on?</label>
+          <input class="form-control input-md" #sessionplatform="ngModel"  id="sessionplatform" name="sessinplatform" type="text" placeholder="Session Platform" [(ngModel)]="currentSession.console">
+        </div>
+        <div class="row">
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessionslots">How many slots in your session</label>
+              <input class="form-control input-md" #sessionslots="ngModel"  id="sessionslots" name="sessionslots" type="number" placeholder="Number of slots for your session" [(ngModel)]="currentSession.numSlots">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessioncost">Cost per slot</label>
+              <input class="form-control input-md" #sessioncost="ngModel"  id="sessioncost" name="sessioncost" type="number" placeholder="Cost per slot" [(ngModel)]="currentSession.sessionCost">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessiondate">What date</label>
+              <!--<input class="form-control input-md" #sessiondate="ngModel"  id="sessiondate" name="sessiondate" type="text" placeholder="Number of slots for your session" [(ngModel)]="step3.sessionDate">-->
+              <input matInput [matDatepicker]="picker" placeholder="Choose a date" #sessiondate="ngModel"  id="sessiondate" name="sessiondate" [(ngModel)]="currentSessionDateTime.sessionDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessiontime">What time</label>
+              <input matInput type="time" placeholder="Pick a time" #sessiontime="ngModel"  id="sessiontime" name="sessiontime" [(ngModel)]="currentSessionDateTime.sessionTime">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="sessionduration">Select a Duration</label>
+              <input matInput type="number" placeholder="Select a duration" #sessionduration="ngModel"  id="sessionduration" name="sessionduration" [(ngModel)]="currentSessionDateTime.sessionDuration">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button [disabled]="!updateSession.valid" (click)="save()" class="btn-primary" type="button">Update</button>
+    <button routerLink="../" class="btn-primary" type="button">Cancel</button>
+  </div>
+</form>
+
+<pre>{{ updateInfoData | json }}</pre>
+<!--[routerLink]="['../', currentUser.riftTag]"-->

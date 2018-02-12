@@ -9,6 +9,7 @@ import {SessionformComponent} from "./usersessions/sessionform/sessionform.compo
 import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
 import {SessionPageComponent} from "./therift/riftsessions/session-page/session-page.component";
 import {UserRatingComponent} from "./userprofile/user-rating/user-rating.component";
+import {UpdateSessionComponent} from "./therift/riftsessions/session-page/update-session/update-session.component";
 
 export const router: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,13 +21,17 @@ export const router: Routes = [
   },
   { path: 'sessions', component: UsersessionsComponent,
     children: [
-      {path: 'create', component: SessionformComponent}
+      {path: 'create', component: SessionformComponent},
     ]
   },
   { path: 'home', component: TheriftComponent,
   },
   { path: 'therift/:searchQuery', component: RiftsessionsComponent},
-  { path: 'session/:sessionId', component: SessionPageComponent}
+  { path: 'session/:sessionId', component: SessionPageComponent,
+    children: [
+      {path: 'update', component: UpdateSessionComponent}
+    ]
+  }
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(router);
