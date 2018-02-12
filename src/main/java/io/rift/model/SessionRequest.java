@@ -13,7 +13,7 @@ public class SessionRequest {
     private Integer sessionId;
 
     @JsonView(Views.SessionRequestAccepted.class)
-    private Boolean accepted;
+    private Short accepted;
 
     @JsonView(Views.SessionRequestHostId.class)
     private Integer hostId;

@@ -54,7 +54,7 @@ public class SessionRequestService {
         SessionRequest sessionRequest = new SessionRequest();
         sessionRequest.setRifteeId(resultSet.getInt(startPoint));
         sessionRequest.setSessionId(resultSet.getInt(startPoint + 1));
-        sessionRequest.setAccepted(resultSet.getBoolean(startPoint + 2));
+        sessionRequest.setAccepted(resultSet.getShort(startPoint + 2));
         resultSet.close();
         return sessionRequest;
     }
@@ -65,7 +65,7 @@ public class SessionRequestService {
             SessionRequest sessionRequest = new SessionRequest();
             sessionRequest.setRifteeId(resultSet.getInt(1));
             sessionRequest.setSessionId(resultSet.getInt(2));
-            sessionRequest.setAccepted(resultSet.getBoolean(3));
+            sessionRequest.setAccepted(resultSet.getShort(3));
             rifteeSessions.add(sessionRequest);
         }
         resultSet.close();
@@ -78,7 +78,7 @@ public class SessionRequestService {
             SessionRequest sessionRequest = new SessionRequest();
             sessionRequest.setRifteeId(resultSet.getInt(1));
             sessionRequest.setSessionId(resultSet.getInt(2));
-            sessionRequest.setAccepted(resultSet.getBoolean(3));
+            sessionRequest.setAccepted(resultSet.getShort(3));
             sessionRequest.setHostId(resultSet.getInt(4));
             int startPoint = 5;
             for (String str : info) {
