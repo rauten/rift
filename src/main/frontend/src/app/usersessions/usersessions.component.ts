@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {SimplePageScroll} from "ng2-simple-page-scroll";
-import {Userprofile} from "../userprofile/models/userprofile";
+import {Userprofile} from "../models/userprofile";
 import {UsersessionsService} from "./usersessions.service";
-import {Session} from "../components/session-card/session";
+import {Session} from "../models/session";
 
 @Component({
   selector: 'app-usersessions',

@@ -55,6 +55,11 @@ import {UserRatingService} from "./userprofile/user-rating/data/user-rating.serv
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import { UserReviewComponent } from './components/user-review/user-review.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { CalendarModule } from 'angular-calendar';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { RatingComponent } from './components/rating/rating.component';
+
 
 
 
@@ -87,7 +92,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     UserCardComponent,
     SessionPageComponent,
     UserRatingComponent,
-    UserReviewComponent
+    UserReviewComponent,
+    NotificationComponent,
+    RatingComponent
   ],
   imports: [
     BrowserModule,
@@ -105,7 +112,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatNativeDateModule,
     FormWizardModule,
     MatSelectModule,
-    MatSliderModule
+    MatSliderModule,
+    CalendarModule.forRoot(),
+    NgbModule.forRoot()
   ],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService,

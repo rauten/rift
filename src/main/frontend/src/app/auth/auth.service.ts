@@ -3,7 +3,7 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
 import {UserprofileService} from "../userprofile/userprofile.service";
-import {Userprofile} from "../userprofile/models/userprofile";
+import {Userprofile} from "../models/userprofile";
 
 @Injectable()
 export class AuthService {

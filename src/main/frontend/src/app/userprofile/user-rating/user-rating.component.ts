@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {UserRating} from "../models/userrating";
+import {UserRating} from "../../models/userrating";
 import {UserRatingService} from "./data/user-rating.service";
 import {UserprofileService} from "../userprofile.service";
 import {ActivatedRoute} from "@angular/router";
@@ -47,7 +47,8 @@ export class UserRatingComponent implements OnInit {
       "accountType" : this.account_type,
       "reviewTitle" : this.userRatingData.reviewTitle
     };
-    this.userRatingService.createUserRating(data);
+    console.log(data);
+    // this.userRatingService.createUserRating(data);
   }
 
   getUserId(riftTag: string) {

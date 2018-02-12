@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Userprofile} from "../../userprofile/models/userprofile";
-import {UserRating} from "../../userprofile/models/userrating";
+import {Userprofile} from "../../models/userprofile";
+import {UserRating} from "../../models/userrating";
 
 @Component({
   selector: 'app-user-review',

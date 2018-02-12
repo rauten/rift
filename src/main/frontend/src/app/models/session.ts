@@ -14,6 +14,7 @@ export class Session {
   rifterSessions: any;
   console: string;
   game: string;
+  numSlots: number;
 
   // constructor(firstName: string, lastName: string, riftTag: string, rifterRating: number,hostId: number,
   //             sessionCost: number, methodOfContact: string, sessionDuration: string, sessionTitle: string,

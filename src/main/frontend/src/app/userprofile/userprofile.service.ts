@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Userprofile } from "./models/userprofile";
+import { Userprofile } from "../models/userprofile";
 import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";

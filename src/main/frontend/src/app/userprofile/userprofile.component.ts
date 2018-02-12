@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {Userprofile} from "./models/userprofile"
+import {Userprofile} from "../models/userprofile"
 
 import {UserprofileService} from "./userprofile.service";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 
-import {Activity} from "./models/activity";
-import {Session} from "../components/session-card/session";
+import {Activity} from "../models/activity";
+import {Session} from "../models/session";
 import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {UserRatingService} from "./user-rating/data/user-rating.service";
-import {UserRating} from "./models/userrating";
+import {UserRating} from "../models/userrating";
 
 @Component({
   selector: 'app-userprofile',
@@ -103,6 +103,8 @@ export class UserprofileComponent implements OnInit {
             currSession.title = resBody.rifterSessions[i].title;
             currSession.sessionTime = date;
             currSession.id = resBody.rifterSessions[i].id;
+            currSession.numSlots = resBody.rifterSessions[i].numSlots;
+            currSession.game = resBody.rifterSessions[i].game;
             this.currentUser.rifterSessions.push(currSession);
           }
           this.getUserRatings(this.currentUser.id);

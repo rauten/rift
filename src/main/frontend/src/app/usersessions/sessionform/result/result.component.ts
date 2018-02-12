@@ -4,7 +4,7 @@ import { FormData } from '../data/formData.model';
 import { FormDataService } from '../data/formData.service';
 import { UsersessionsService} from "../../usersessions.service";
 import {Timestamp} from "rxjs";
-import {Userprofile} from "../../../userprofile/models/userprofile";
+import {Userprofile} from "../../../models/userprofile";
 import {UserprofileService} from "../../../userprofile/userprofile.service";
 
 @Component({

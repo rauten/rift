@@ -1,5 +1,5 @@
 import {Activity} from "./activity";
-import {Session} from "../../components/session-card/session";
+import {Session} from "./session";
 import {UserRating} from "./userrating";
 
 export class Userprofile {

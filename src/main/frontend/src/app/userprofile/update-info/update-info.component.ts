@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Userprofile} from "../models/userprofile";
+import {Userprofile} from "../../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
 

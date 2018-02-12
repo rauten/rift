@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from "./auth/auth.service";
 import {Http} from "@angular/http";
 import {UserprofileService} from "./userprofile/userprofile.service";
-import {Userprofile} from "./userprofile/models/userprofile";
+import {Userprofile} from "./models/userprofile";
 
 @Component({
   selector: 'app-root',

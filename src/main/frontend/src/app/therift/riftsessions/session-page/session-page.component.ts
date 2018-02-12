@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {SessionPageService} from "./session-page.service";
-import {Session} from "../../../components/session-card/session";
+import {Session} from "../../../models/session";
 
 @Component({
   selector: 'app-session-page',
@@ -38,6 +38,7 @@ export class SessionPageComponent implements OnInit {
         this.session.hits = this.response.hits;
         this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
+        this.session.numSlots = this.response.numSlots;
       }
     )
   }

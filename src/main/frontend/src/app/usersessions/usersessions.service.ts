@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Session } from "../components/session-card/session";
+import { Session } from "../models/session";
 import { Http, RequestOptions, Response, Headers } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
-import {Userprofile} from "../userprofile/models/userprofile";
+import {Userprofile} from "../models/userprofile";
 
 
 
@@ -11,6 +11,7 @@ import {Userprofile} from "../userprofile/models/userprofile";
 export class UsersessionsService {
   private createUserSessionURL = "/api/rifterSession/createGame";
   private joinUserSessionURL = "/api/sessionRequest/create";
+  private acceptSessionRequestURL = "/api/sessionRequestion/update";
 
   constructor(private http: Http) {
   }
@@ -51,6 +52,20 @@ export class UsersessionsService {
         data => {console.log(data);},
         err => console.log(err),
         () => console.log('Created session')
+      );
+  }
+
+  acceptSessionRequest(data) {
+    console.log("running acceptSessionRequest");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.acceptSessionRequestURL, data, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log('Accepted session request')
       );
   }
 
