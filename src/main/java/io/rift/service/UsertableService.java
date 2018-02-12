@@ -51,6 +51,7 @@ public class UsertableService {
     /******************************************************************/
     private final String getUserById = "getUserById";
     private final String getUserByRiftTag = "getUserByRiftTag";
+    private final String getRiftIdByRiftTag = "getRiftIdByRiftTag";
 
     private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
     private final String getNumberFollowing = "getNumberFollowingById";
@@ -109,6 +110,16 @@ public class UsertableService {
     @Autowired
     private ConnectionService connectionService;
     */
+
+    public Integer getRiftIdByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getRiftIdByRiftTag, args);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return null;
+    }
 
     public Usertable getUserById(Integer id) throws SQLException {
         Object[] args = new Object[1];
