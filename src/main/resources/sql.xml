@@ -363,6 +363,13 @@
         VALUES(?, ?, ?, ?);
     </createSessionRequest>
 
+    <getSessionRequestByRiftTag>
+        SELECT g.*
+        FROM usertable u JOIN gamerequest g
+        ON u.id = g.riftee_id
+        WHERE u.rift_tag = ?
+    </getSessionRequestByRiftTag>
+
     <!--
         CREATE OR REPLACE FUNCTION create_game_request_notification()
             RETURNS trigger AS
@@ -480,7 +487,7 @@
         $BODY$
         DECLARE temp integer;
         BEGIN
-            IF (TG_OP = 'DELETE') THEN
+            IF NEW.accepted = 0 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
                 VALUES(NEW.riftee_id, 'sessionDenied',
