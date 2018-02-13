@@ -58,7 +58,6 @@ export class UsersessionsComponent implements OnInit {
         for (var i = 0; i < sessions.length; i++) {
           var currSession = new Session();
           var session = sessions[i];
-
         }
       }
     )

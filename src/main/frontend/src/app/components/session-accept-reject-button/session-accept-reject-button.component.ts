@@ -7,7 +7,7 @@ import {UsersessionsService} from "../../usersessions/usersessions.service";
   styleUrls: ['./session-accept-reject-button.component.scss']
 })
 export class SessionAcceptRejectButtonComponent implements OnInit {
-  @Input() accepted: number;
+  @Input() status: number;
   @Input() notification;
 
   constructor(private userSessionService: UsersessionsService) { }
@@ -23,7 +23,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
       "rifteeId": this.notification.creatorId
     };
     this.userSessionService.updateSessionRequest(data);
-    this.accepted = 2;
+    this.status = 2;
     console.log("Accepted request");
 
   }
@@ -36,7 +36,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
       "rifteeId": this.notification.creatorId
     };
     this.userSessionService.updateSessionRequest(data);
-    this.accepted = 0;
+    this.status = 0;
     console.log("Rejected request");
   }
 

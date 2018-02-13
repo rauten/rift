@@ -93,7 +93,14 @@ export class UsersessionsService {
   }
 
   getSessionStatus(rifteeId: number, sessionId: number) {
-    console.log("hello");
+    console.log("running getSessionStatus");
+    return this.http.get("/api/sessionRequest/" + sessionId + "/status/" + rifteeId)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
 }

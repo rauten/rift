@@ -4,12 +4,21 @@
   </a>
   <div class="media-body">
     <p class="activity-title">{{notification.notificationContent}} </p>
+    <div *ngIf="status == 0">
+      rejected
+    </div>
+    <div *ngIf="status == 1">
+      pending
+    </div>
+    <div *ngIf="status == 2">
+      accepted
+    </div>
     <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
   </div>
   <div class="btn-group pull-right activity-actions" *ngIf="notification.notificationType == 'gameRequest'">
     <app-session-accept-reject-button
-    [notification]="notification" [accepted]="1">
-
+    [notification]="notification" [status]="status">
     </app-session-accept-reject-button>
+
   </div>
 </div>

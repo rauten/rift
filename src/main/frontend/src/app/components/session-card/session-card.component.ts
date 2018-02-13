@@ -3,6 +3,7 @@ import {SESSION_ICONS} from "../../constants/session-icon-variables";
 import {Session} from "../../models/session";
 import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {UserprofileService} from "../../userprofile/userprofile.service";
+import {SessionRequest} from "../../models/session-request";
 
 @Component({
   selector: 'app-session-card',
@@ -12,7 +13,7 @@ import {UserprofileService} from "../../userprofile/userprofile.service";
 export class SessionCardComponent implements OnInit {
   sessionIcon: string;
   @Input() session: Session;
-  @Input() request: boolean;
+  @Input() request: SessionRequest;
   @Input() isLoggedIn: boolean;
   @Input() type: boolean;
   profile: any;

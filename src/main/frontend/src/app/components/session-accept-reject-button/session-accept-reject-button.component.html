@@ -1,14 +1,14 @@
-<h3 *ngIf="accepted == 2">
-  <button type="button" class="btn btn-sm btn-toggle-following" onclick="console.log('accepted')">
+<h3 *ngIf="status == 2">
+  <button type="button" class="btn btn-sm btn-primary" onclick="console.log('accepted')">
     <span>Accepted</span>
   </button>
 </h3>
-<h3 *ngIf="accepted == 0">
+<h3 *ngIf="status == 0">
   <button type="button" class="btn btn-sm btn-primary" onclick="console.log('rejected')">
     <i class="fa fa-checkmark-round"></i> <span>Rejected</span>
   </button>
 </h3>
-<h3 *ngIf="accepted == 1">
+<h3 *ngIf="status == 1">
   <button type="button" class="btn btn-primary btn-xs" (click)="acceptRequest()">
     Accept
   </button>

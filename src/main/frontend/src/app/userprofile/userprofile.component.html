@@ -89,7 +89,7 @@
             <mat-tab label="sessions">
               <div class="media" *ngFor="let session of currentUser.rifterSessions">
                 <app-session-card [routerLink]="['../../session', session.id]"
-                  [session]="session" [request]="loggedInUser.sessionRequests.get(session.id)"
+                  [session]="session" [request]="loggedInUser.sessionRequests.get(session.id)" [isLoggedIn]="isLoggedIn"
                 ></app-session-card>
               </div>
             </mat-tab>
