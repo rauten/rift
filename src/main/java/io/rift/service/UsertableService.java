@@ -66,6 +66,7 @@ public class UsertableService {
 
     private final String getUserAndRifterSessions = "getUserAndRifterSessions";
     private final String getUserAndRifteeSessions = "getUserAndRifteeSessions";
+    private final String getRifteeSessionsAndRequestByRiftTag = "getRifteeSessionsAndRequestByRiftTag";
 
     private final String getRatingInfoByUserId = "getRatingInfoByUserId";
 
@@ -372,6 +373,18 @@ public class UsertableService {
             rifterSessions.add(rifterSession);
         }
         resultSet.close();
+        return rifterSessions;
+    }
+
+    public List<RifterSession> getRifteeSessionsAndRequestByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getRifteeSessionsAndRequestByRiftTag, args);
+        List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
+        while (resultSet.next()) {
+            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "request");
+            rifterSessions.add(rifterSession);
+        }
         return rifterSessions;
     }
 

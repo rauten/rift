@@ -63,6 +63,9 @@ public class Usertable {
     @JsonView(Views.UsertableRifteeSessions.class)
     private List<SessionRequest> rifteeSessions;
 
+    @JsonView(Views.UsertableRifteeRiftSessions.class)
+    private List<RifterSession> rifteeRiftSessions;
+
     @JsonView(Views.UsertableRifterSessions.class)
     private List<RifterSession> rifterSessions;
 
