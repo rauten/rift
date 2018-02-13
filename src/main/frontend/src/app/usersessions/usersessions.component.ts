@@ -16,6 +16,7 @@ export class UsersessionsComponent implements OnInit {
     var loggedInUser = JSON.parse(localStorage.getItem("profile"));
     var riftTag = loggedInUser.nickname;
     this.getUserSessions(riftTag);
+    this.getUserRifteeSessions(riftTag);
   }
 
   getUserSessions(riftTag: string) {
@@ -46,4 +47,16 @@ export class UsersessionsComponent implements OnInit {
     );
     console.log(this.currentUser.rifterSessions);
   }
+
+  getUserRifteeSessions(riftTag: string) {
+    this.currentUser.rifteeSessions = [];
+    this.userSessionsService.getUserRifteeSessions(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        console.log(resBody);
+      }
+    )
+
+  }
+
 }
