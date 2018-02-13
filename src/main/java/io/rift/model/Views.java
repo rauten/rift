@@ -242,4 +242,6 @@ public class Views {
             UserRatingCreatedTime, UserRatingReviewerUsertable, UserRatingReviewTitle, UsertableId, UsertableFirstName, UsertableLastName,
             UsertableRiftTag, UsertableProfilePicturePath {}
 
+    public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
+
 }

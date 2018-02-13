@@ -1,6 +1,7 @@
 package io.rift.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.SessionRequest;
 import io.rift.service.SessionRequestService;
@@ -31,6 +32,7 @@ public class SessionRequestController {
         return sessionRequestService.updateSessionRequest(sessionRequest);
     }
 
+    @JsonView(Views.SessionRequestsByRiftTag.class)
     @RequestMapping(method = RequestMethod.GET, value = "/sessionRequest/{riftTag}")
     public List<SessionRequest> getSessionRequestsByRiftTag(@PathVariable String riftTag) throws SQLException {
         return sessionRequestService.getSessionRequestByRiftTag(riftTag);
