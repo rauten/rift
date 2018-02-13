@@ -17,6 +17,7 @@ export class Userprofile {
   youtubeAccount: string;
   creatorActivityList: Activity[];
   rifterSessions: Session[];
+  rifteeSessions: Session[];
   feed: Activity[];
   followers: Userprofile[] = [];
   followings: Userprofile[] = [];

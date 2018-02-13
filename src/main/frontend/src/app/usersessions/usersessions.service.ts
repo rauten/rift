@@ -28,10 +28,16 @@ export class UsersessionsService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  // getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
-  //   console.log("running getUserRifteeSessions");
-  //   return this.http.get("/api/user/" + riftTag + "/rifteeSessions")
-  // }
+  getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
+    console.log("running getUserRifteeSessions");
+    return this.http.get("/api/rifterSession/" + riftTag + "/sessionsParticipating")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
 
   createUserSession(data) : void {
     console.log("running createUserSession");

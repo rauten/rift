@@ -218,6 +218,19 @@ export class UserprofileComponent implements OnInit {
     );
   }
 
+  getUserRifteeSessions(riftTag: string) {
+    this.currentUser.rifteeSessions = [];
+    this.userSessionsService.getUserRifteeSessions(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (var i = 0; i < resBody.length; i++) {
+
+        }
+      }
+    )
+
+  }
+
   getUserSessionRequests(riftTag: string) {
     this.loggedInUser.sessionRequests.clear();
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
