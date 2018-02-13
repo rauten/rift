@@ -73,6 +73,9 @@ public class RifterSession {
     @JsonView(Views.RifterSessionGameFirstWordLevenshtein.class)
     private Double gameFirstWordLevenshtein;
 
+    @JsonView(Views.RifterSessionRiftTagLevenshtein.class)
+    private Double riftTagLevenshtein;
+
     public RifterSession() {}
 
     public RifterSession(Integer id, Integer hostId, Integer numSlots, Timestamp expirationTime, Double sessionCost, String methodOfContact, String sessionType, PGInterval sessionDuration, String title, Integer hits) {
