@@ -188,7 +188,7 @@ public class UsertableController {
     }
 
     @JsonView(Views.UserRifteeSessions.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag/rifteeSession")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifteeSession")
     public Usertable getUserAndRifteeSessions(@PathVariable String riftTag) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         usertable.setRifteeRiftSessions(usertableService.getRifteeSessionsAndRequestByRiftTag(riftTag));
