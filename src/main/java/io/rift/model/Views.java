@@ -187,6 +187,8 @@ public class Views {
 
     public interface UsertableRifterSessions {}
 
+    public interface UsertableRifteeRiftSessions {}
+
     public interface UsertableFollowers {}
 
     public interface UsertableFollowings {}
@@ -245,5 +247,11 @@ public class Views {
             UsertableRiftTag, UsertableProfilePicturePath {}
 
     public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
+
+    public interface UserRifteeSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableRifterRating,
+            UsertableProfilePicturePath, UsertableRifteeRiftSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
+            RifterSessionExpirationTime, RifterSessionCost, RifterSessionMethodOfContact, RifterSessionSessionTime,
+            RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGame,
+            RifterSessionConsole, RifterSessionSlotsRemaining {}
 
 }
