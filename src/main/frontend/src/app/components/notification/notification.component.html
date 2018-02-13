@@ -7,12 +7,11 @@
     <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
   </div>
   <div class="btn-group pull-right activity-actions" *ngIf="notification.notificationType == 'gameRequest'">
-    <button type="button" class="btn btn-primary btn-xs">
+    <button type="button" class="btn btn-primary btn-xs" (click)="acceptRequest()">
       Accept
     </button>
-    <button type="button" class="btn btn-danger btn-xs">
+    <button type="button" class="btn btn-danger btn-xs" (click)="rejectRequest()">
       Reject
     </button>
-
   </div>
 </div>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {SimplePageScroll} from "ng2-simple-page-scroll";
 import {Userprofile} from "../models/userprofile";
 import {UsersessionsService} from "./usersessions.service";
 import {Session} from "../models/session";

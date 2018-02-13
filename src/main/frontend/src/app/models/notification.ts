@@ -5,6 +5,7 @@ export class Notification {
   notificationContent: string;
   notificationType: string;
   createdTime: number;
+  id: number;
 
   constructor(){}
 }

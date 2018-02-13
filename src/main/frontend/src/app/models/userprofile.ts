@@ -2,6 +2,7 @@ import {Activity} from "./activity";
 import {Session} from "./session";
 import {UserRating} from "./userrating";
 import {Notification} from "./notification";
+import {SessionRequest} from "./session-request";
 
 export class Userprofile {
   id: number;
@@ -22,6 +23,7 @@ export class Userprofile {
   email: string;
   ratings: UserRating[] = [];
   notifications: Notification[] = [];
+  sessionRequests: Map = new Map<number, SessionRequest>();
 
   followerUsertable: any;
   followingUsertable: any;
@@ -29,6 +31,7 @@ export class Userprofile {
   notificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
+
 
   constructor() {
 

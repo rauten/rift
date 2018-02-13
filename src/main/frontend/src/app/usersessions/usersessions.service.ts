@@ -55,8 +55,8 @@ export class UsersessionsService {
       );
   }
 
-  acceptSessionRequest(data) {
-    console.log("running acceptSessionRequest");
+  updateSessionRequest(data) {
+    console.log("running updateSessionRequest");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.acceptSessionRequestURL, data, options)
@@ -65,7 +65,7 @@ export class UsersessionsService {
       .subscribe(
         data => {console.log(data);},
         err => console.log(err),
-        () => console.log('Accepted session request')
+        () => console.log('Updated session')
       );
   }
 
