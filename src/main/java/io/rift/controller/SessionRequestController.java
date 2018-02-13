@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -38,6 +39,12 @@ public class SessionRequestController {
     public List<SessionRequest> getSessionRequestsByRiftTag(@PathVariable String riftTag) throws SQLException {
         return sessionRequestService.getSessionRequestByRiftTag(riftTag);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/sessionRequest/{sessionId}/status/{rifteeId}")
+    public Map<String, Integer> getRequestStatus(@PathVariable Integer sessionId, @PathVariable Integer rifteeId) throws SQLException {
+        return sessionRequestService.getRequestStatus(sessionId, rifteeId);
+    }
+
 
     /*
     @GetMapping

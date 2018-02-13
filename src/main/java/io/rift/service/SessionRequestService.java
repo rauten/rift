@@ -21,7 +21,9 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SessionRequestService {
@@ -40,6 +42,7 @@ public class SessionRequestService {
     private final String getGameRequestBySessionAndRifteeId = "getGameRequestBySessionAndRifteeId";
     private final String createSessionRequest = "createSessionRequest";
     private final String getSessionRequestByRiftTag = "getSessionRequestByRiftTag";
+    private final String getRequestStatus = "getRequestStatus";
 
     private final String updateSessionRequestStart = "UPDATE gameRequest SET (";
     private final String updateSessionRequestPath = "/io/rift/model/SessionRequest.class";
@@ -71,6 +74,18 @@ public class SessionRequestService {
             rifteeSessions.add(sessionRequest);
         }
         return rifteeSessions;
+    }
+
+    public Map<String, Integer> getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
+        Object[] args = new Object[2];
+        args[0] = sessionId;
+        args[1] = rifteeId;
+        ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
+        Map<String, Integer> status = new HashMap<>();
+        if (resultSet.next()) {
+            status.put("Status", resultSet.getInt(1));
+        }
+        return status;
     }
 
     public List<SessionRequest> populateGameRequestsWithInfo(ResultSet resultSet, String[] info) throws SQLException {

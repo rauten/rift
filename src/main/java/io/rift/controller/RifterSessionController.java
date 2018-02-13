@@ -101,7 +101,7 @@ public class RifterSessionController {
         return rifterSessionService.updateRifterSession(rifterSession);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/gamesParticipating")
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/sessionsParticipating")
     public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
         return rifterSessionService.getRifteeSessionsAndRequestByRiftTag(riftTag);
     }
