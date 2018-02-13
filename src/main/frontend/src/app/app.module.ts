@@ -61,6 +61,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { RatingComponent } from './components/rating/rating.component';
 import { UpdateSessionComponent } from './therift/riftsessions/session-page/update-session/update-session.component';
 import {UpdateSessionService} from "./therift/riftsessions/session-page/update-session/data/update-session.service";
+import { SessionAcceptRejectButtonComponent } from './components/session-accept-reject-button/session-accept-reject-button.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -95,6 +96,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     NotificationComponent,
     RatingComponent,
     UpdateSessionComponent,
+    SessionAcceptRejectButtonComponent,
   ],
   imports: [
     BrowserModule,

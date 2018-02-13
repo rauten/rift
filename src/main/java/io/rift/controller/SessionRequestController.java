@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.List;
+import io.rift.model.Views;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController

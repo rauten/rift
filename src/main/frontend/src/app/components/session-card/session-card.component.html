@@ -12,8 +12,11 @@
       <p class="desc">Rating: {{hostRifterRating}}</p>
       <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
     </div>
-    <div class="otherstuff" *ngIf="!(loggedInUserId == session.hostId)">
-      <button class="btn-primary" (click)="joinUserSession()">Join</button>
+    <div class="otherstuff" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
+      <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
     </div>
   </div>
 </div>

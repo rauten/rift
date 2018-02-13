@@ -12,6 +12,9 @@ import {UserprofileService} from "../../userprofile/userprofile.service";
 export class SessionCardComponent implements OnInit {
   sessionIcon: string;
   @Input() session: Session;
+  @Input() request: boolean;
+  @Input() isLoggedIn: boolean;
+  @Input() type: boolean;
   profile: any;
   loggedInUserId: number;
 
@@ -32,7 +35,9 @@ export class SessionCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
+    if(this.isLoggedIn) {
+      this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
+    }
     if(this.session.game == "League of Legends") {
       this.sessionIcon=SESSION_ICONS.leagueOfLegends;
     } else if (this.session.game == "Fortnite") {
@@ -45,8 +50,9 @@ export class SessionCardComponent implements OnInit {
       "rifteeId": this.loggedInUserId,
       "hostId": this.session.hostId,
       "sessionId": this.session.id,
-      "accepted": false
+      "accepted": 1
     };
+    console.log(data);
     this.userSessionsService.joinUserSession(data);
     alert("Sent request");
   }

@@ -10,6 +10,8 @@ import {ActivatedRoute} from "@angular/router";
 import {UserRatingService} from "./user-rating/data/user-rating.service";
 import {UserRating} from "../models/userrating";
 import {Notification} from "../models/notification";
+import {UsersessionsService} from "../usersessions/usersessions.service";
+import {SessionRequest} from "../models/session-request";
 
 @Component({
   selector: 'app-userprofile',
@@ -27,7 +29,8 @@ export class UserprofileComponent implements OnInit {
   isLoggedIn: boolean = false;
 
   constructor(private userProfileService: UserprofileService,
-  public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService) {
+  public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
+  private userSessionsService: UsersessionsService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -81,6 +84,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(riftTag);
           this.getUserRifterSessions(riftTag);
           this.getUserFollowersAndFollowing(riftTag);
+          this.getUserSessionRequests(this.profile.nickname);
       }
     );
   }
@@ -212,6 +216,23 @@ export class UserprofileComponent implements OnInit {
         }
       }
     );
+  }
+
+  getUserSessionRequests(riftTag: string) {
+    this.loggedInUser.sessionRequests.clear();
+    this.userSessionsService.getSessionRequests(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (var i = 0; i < resBody.length; i++) {
+          var request = new SessionRequest();
+          request.accepted = resBody[i].accepted;
+          request.hostId = resBody[i].hostId;
+          request.rifteeId = resBody[i].rifteeId;
+          request.sessionId = resBody[i].sessionId;
+          this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
   }
 
   isFollowing(riftTag: string) {

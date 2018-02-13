@@ -12,6 +12,7 @@ export class UsersessionsService {
   private createUserSessionURL = "/api/rifterSession/createGame";
   private joinUserSessionURL = "/api/sessionRequest/create";
   private acceptSessionRequestURL = "/api/sessionRequest/update";
+  private getSessionRequestsURL = "/api/sessionRequest/";
 
   constructor(private http: Http) {
   }
@@ -26,6 +27,11 @@ export class UsersessionsService {
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
+
+  // getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
+  //   console.log("running getUserRifteeSessions");
+  //   return this.http.get("/api/user/" + riftTag + "/rifteeSessions")
+  // }
 
   createUserSession(data) : void {
     console.log("running createUserSession");
@@ -51,7 +57,7 @@ export class UsersessionsService {
       .subscribe(
         data => {console.log(data);},
         err => console.log(err),
-        () => console.log('Created session')
+        () => console.log('Joined session')
       );
   }
 
@@ -67,6 +73,21 @@ export class UsersessionsService {
         err => console.log(err),
         () => console.log('Updated session')
       );
+  }
+
+  getSessionRequests(riftTag: string) {
+    console.log("running getSessionRequest");
+    return this.http.get(this.getSessionRequestsURL + riftTag)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getSessionStatus(rifteeId: number, sessionId: number) {
+    console.log("hello");
   }
 
 }
