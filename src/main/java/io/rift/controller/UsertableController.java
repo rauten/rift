@@ -188,13 +188,13 @@ public class UsertableController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/{info}", "/user/{id}/rifteeSessions"})
-    public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable Integer id, @PathVariable Optional<String> info) throws SQLException {
-        Usertable usertable = usertableService.getUserById(id);
+    @RequestMapping(method = RequestMethod.GET, value = {"/user/{riftTag}/rifteeSessions/{info}", "/user/{riftTag}/rifteeSessions"})
+    public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable String riftTag, @PathVariable Optional<String> info) throws SQLException {
+        Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         if (info.isPresent()) {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, info.get(), Optional.empty(), Optional.empty()));
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(usertable.getId(), info.get(), Optional.empty(), Optional.empty()));
         } else {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "", Optional.empty(), Optional.empty()));
+            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(usertable.getId(), "", Optional.empty(), Optional.empty()));
         }
         return usertable;
     }

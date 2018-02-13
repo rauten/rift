@@ -52,8 +52,14 @@ export class UsersessionsComponent implements OnInit {
     this.currentUser.rifteeSessions = [];
     this.userSessionsService.getUserRifteeSessions(riftTag).subscribe(
       resBody => {
+        var sessions = resBody.rifteeSessions;
         //noinspection TypeScriptUnresolvedVariable
-        console.log(resBody);
+        console.log(resBody.rifteeSessions);
+        for (var i = 0; i < sessions.length; i++) {
+          var currSession = new Session();
+          var session = sessions[i];
+
+        }
       }
     )
 
