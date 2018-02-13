@@ -39,6 +39,7 @@ public class SessionRequestService {
 
     private final String getGameRequestBySessionAndRifteeId = "getGameRequestBySessionAndRifteeId";
     private final String createSessionRequest = "createSessionRequest";
+    private final String getSessionRequestByRiftTag = "getSessionRequestByRiftTag";
 
     private final String updateSessionRequestStart = "UPDATE gameRequest SET (";
     private final String updateSessionRequestPath = "/io/rift/model/SessionRequest.class";
@@ -157,7 +158,18 @@ public class SessionRequestService {
             return riftRepository.doUpdate(query, args);
         }
         return true;
+    }
 
+    public List<SessionRequest> getSessionRequestByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getSessionRequestByRiftTag, args);
+        List<SessionRequest> sessionRequests = new ArrayList<>(resultSet.getFetchSize());
+        while(resultSet.next()) {
+            SessionRequest sessionRequest = populateGameRequest(resultSet, 1);
+            sessionRequests.add(sessionRequest);
+        }
+        return sessionRequests;
     }
 
 
