@@ -10,7 +10,7 @@ import {SessionDateTime} from "./sessionDateTime";
 export class UpdateSessionService {
   private updateSessionData: UpdateSessionData = new UpdateSessionData();
   private isValid: boolean = false;
-  private updateSessionRequestURL = "/api/rifterSessioin/update";
+  private updateSessionRequestURL = "/api/rifterSession/update";
 
   constructor(private http: Http) {
   }
