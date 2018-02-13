@@ -222,15 +222,16 @@
         WHERE g.session_id = ? AND g.accepted = 2;
     </getGamePlayersByGameId>
 
-    <getRifteeSessionsAndRequestByRiftTag>
-        SELECT r.*, g.accepted
-        FROM riftergame r
-        JOIN gamerequest g
-        ON r.id = g.session_id AND r.host_id = g.host_id
+    <getRifteeSessionsAndHostInfoByRiftTag>
+        SELECT r.*, g.accepted, u.*
+        FROM usertable us JOIN gamerequest g
+        ON us.id = g.riftee_id
+        JOIN riftergame r
+        ON g.host_id = r.host_id AND g.session_id = r.id
         JOIN usertable u
-        ON g.riftee_id = u.id
-        WHERE u.rift_tag = ?;
-    </getRifteeSessionsAndRequestByRiftTag>
+        ON r.host_id = u.id
+        WHERE us.rift_tag = ?
+    </getRifteeSessionsAndHostInfoByRiftTag>
 
     <getRequestStatus>
         SELECT accepted

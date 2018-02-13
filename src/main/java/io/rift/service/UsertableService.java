@@ -376,18 +376,6 @@ public class UsertableService {
         return rifterSessions;
     }
 
-    public List<RifterSession> getRifteeSessionsAndRequestByRiftTag(String riftTag) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = riftTag;
-        ResultSet resultSet = riftRepository.doQuery(getRifteeSessionsAndRequestByRiftTag, args);
-        List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
-        while (resultSet.next()) {
-            RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "request");
-            rifterSessions.add(rifterSession);
-        }
-        return rifterSessions;
-    }
-
 
     /**
      *

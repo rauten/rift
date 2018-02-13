@@ -101,9 +101,10 @@ public class RifterSessionController {
         return rifterSessionService.updateRifterSession(rifterSession);
     }
 
+    @JsonView(Views.RifteeSessions.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/sessionsParticipating")
     public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
-        return rifterSessionService.getRifteeSessionsAndRequestByRiftTag(riftTag);
+        return rifterSessionService.getRifteeSessionsAndHostInfoByRiftTag(riftTag);
     }
 
     /*

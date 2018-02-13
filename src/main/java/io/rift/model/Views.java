@@ -45,6 +45,12 @@ public class Views {
     /****************** RifterSession Attributes **********************/
     /******************************************************************/
 
+    public interface RifterSesionInfo extends RifterSessionCardInfo, RifterSessionNumSlots, RifterSessionExpirationTime,
+            RifterSessionMethodOfContact, RifterSessionSessionType, RifterSessionHits, RifterSessionCreatedTime {}
+
+    public interface RifterSessionCardInfo extends RifterSessionId, RifterSessionHostId, RifterSessionSlotsRemaining, RifterSessionCost,
+            RifterSessionSessionTime, RifterSessionConsole, RifterSessionGame, RifterSessionTitle, RifterSessionSessionDuration {}
+
     public interface RifterSessionId {}
 
     public interface RifterSessionHostId {}
@@ -149,6 +155,15 @@ public class Views {
     /****************** Usertable Attributes ***********************/
     /****************************************************************/
 
+    public interface UsertableInfo extends UsertableId, UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag,
+            UsertableGender, UsertableTwitchAccount, UsertableYoutubeAccount, UsertableRifterRating, UsertableRifteeRating,
+            UsertableIsPrivate, UsertableIsSuspended, UsertableProfilePicturePath, UsertableBio {}
+
+    public interface UsertableRestrictedInfo extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag,
+            UsertableProfilePicturePath {}
+
+    public interface UsertableCardInfo extends UsertableRestrictedInfo, UsertableRifterRating, UsertableRifteeRating, UsertableBio {}
+
     public interface UsertableId {}
 
     public interface UsertableAuth0Id {}
@@ -248,10 +263,7 @@ public class Views {
 
     public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
 
-    public interface UserRifteeSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableRifterRating,
-            UsertableProfilePicturePath, UsertableRifteeRiftSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
-            RifterSessionExpirationTime, RifterSessionCost, RifterSessionMethodOfContact, RifterSessionSessionTime,
-            RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGame,
-            RifterSessionConsole, RifterSessionSlotsRemaining {}
+    public interface RifteeSessions extends RifterSessionCardInfo, RifterSessionSessionRequests, RifterSessionUsertable,
+            SessionRequestAccepted, UsertableCardInfo {}
 
 }

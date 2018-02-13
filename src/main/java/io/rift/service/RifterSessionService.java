@@ -40,7 +40,7 @@ public class RifterSessionService {
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
-    private final String getRifteeSessionsAndRequestByRiftTag = "getRifteeSessionsAndRequestByRiftTag";
+    private final String getRifteeSessionsAndHostInfoByRiftTag = "getRifteeSessionsAndHostInfoByRiftTag";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -116,13 +116,13 @@ public class RifterSessionService {
         return null;
     }
 
-    public List<RifterSession> getRifteeSessionsAndRequestByRiftTag(String riftTag) throws SQLException {
+    public List<RifterSession> getRifteeSessionsAndHostInfoByRiftTag(String riftTag) throws SQLException {
         Object[] args = new Object[1];
         args[0] = riftTag;
-        ResultSet resultSet = riftRepository.doQuery(getRifteeSessionsAndRequestByRiftTag, args);
+        ResultSet resultSet = riftRepository.doQuery(getRifteeSessionsAndHostInfoByRiftTag, args);
         List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
         while (resultSet.next()) {
-            RifterSession rifterSession = populateRifterSession(resultSet, 1, "request");
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "requestInfo&Host");
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
@@ -156,6 +156,14 @@ public class RifterSessionService {
             List<SessionRequest> sessionRequests = new ArrayList<>();
             sessionRequests.add(sessionRequest);
             rifterSession.setSessionRequests(sessionRequests);
+        } else if (info.equals("requestInfo&Host")) {
+            SessionRequest sessionRequest = new SessionRequest();
+            sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
+            List<SessionRequest> sessionRequests = new ArrayList<>();
+            sessionRequests.add(sessionRequest);
+            rifterSession.setSessionRequests(sessionRequests);
+            Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 16, "");
+            rifterSession.setUsertable(usertable);
         }
         return rifterSession;
     }
