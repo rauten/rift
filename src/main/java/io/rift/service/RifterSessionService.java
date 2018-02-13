@@ -2,6 +2,7 @@ package io.rift.service;
 
 import com.google.common.base.CaseFormat;
 import io.rift.model.RifterSession;
+import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
 import org.apache.bcel.classfile.ClassParser;
@@ -39,6 +40,7 @@ public class RifterSessionService {
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
+    private final String getRifteeSessionsAndRequestByRiftTag = "getRifteeSessionsAndRequestByRiftTag";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -114,6 +116,18 @@ public class RifterSessionService {
         return null;
     }
 
+    public List<RifterSession> getRifteeSessionsAndRequestByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getRifteeSessionsAndRequestByRiftTag, args);
+        List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
+        while (resultSet.next()) {
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "request");
+            rifterSessions.add(rifterSession);
+        }
+        return rifterSessions;
+    }
+
     public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
         RifterSession rifterSession = new RifterSession();
         rifterSession.setId(resultSet.getInt(startPoint));
@@ -134,7 +148,14 @@ public class RifterSessionService {
         if (info.equals("levenshteinSearch")) {
             rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
             rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 16));
-            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 17, ""));
+            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + 17));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 18, ""));
+        } else if (info.equals("request")) {
+            SessionRequest sessionRequest = new SessionRequest();
+            sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
+            List<SessionRequest> sessionRequests = new ArrayList<>();
+            sessionRequests.add(sessionRequest);
+            rifterSession.setSessionRequests(sessionRequests);
         }
         return rifterSession;
     }

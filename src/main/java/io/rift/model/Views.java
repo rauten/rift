@@ -87,6 +87,8 @@ public class Views {
 
     public interface RifterSessionGameFirstWordLevenshtein {}
 
+    public interface RifterSessionRiftTagLevenshtein {}
+
 
     /****************** SessionRequest Attributes **********************/
     /*******************************************************************/
@@ -230,7 +232,7 @@ public class Views {
 
     public interface Search extends UsertableRiftTagLevenshtein, UsertableFirstNameLevenshtein, UsertableFullNameLevenshtein,
             UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, UsertableBio,
-            CreateGame, RifterSessionGameLevenshtein, RifterSessionGameFirstWordLevenshtein, RifterSessionId, RifterSessionUsertable {}
+            CreateGame, RifterSessionGameLevenshtein, RifterSessionGameFirstWordLevenshtein, RifterSessionRiftTagLevenshtein, RifterSessionId, RifterSessionUsertable {}
 
     public interface UserRifterSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableRifterRating,
             UsertableProfilePicturePath, UsertableRifterSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,

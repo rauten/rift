@@ -12,6 +12,7 @@ import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -98,6 +99,11 @@ public class RifterSessionController {
     @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/update")
     public Boolean updateSession(@RequestBody RifterSession rifterSession) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
         return rifterSessionService.updateRifterSession(rifterSession);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/gamesParticipating")
+    public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
+        return rifterSessionService.getRifteeSessionsAndRequestByRiftTag(riftTag);
     }
 
     /*
