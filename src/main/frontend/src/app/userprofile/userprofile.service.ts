@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Userprofile } from "./models/userprofile";
+import { Userprofile } from "../models/userprofile";
 import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
@@ -22,6 +22,17 @@ export class UserprofileService {
           }
         )
         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getUserId(riftTag: string): Observable<Userprofile> {
+    console.log("running getUserId");
+    return this.http.get("/api/user/" + riftTag + "/id")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   createUser(data): void {

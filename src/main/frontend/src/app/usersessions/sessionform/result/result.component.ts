@@ -4,6 +4,8 @@ import { FormData } from '../data/formData.model';
 import { FormDataService } from '../data/formData.service';
 import { UsersessionsService} from "../../usersessions.service";
 import {Timestamp} from "rxjs";
+import {Userprofile} from "../../../models/userprofile";
+import {UserprofileService} from "../../../userprofile/userprofile.service";
 
 @Component({
   selector: 'app-result',
@@ -15,10 +17,16 @@ export class ResultComponent implements OnInit {
   @Input() formData: FormData;
   isFormValid: boolean = false;
   timeMS: number;
+  loggedInUserId: number;
+  profile: any;
 
-  constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService) { }
+  constructor(private formDataService: FormDataService, private userSessionService: UsersessionsService,
+  private userProfileService: UserprofileService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
+  }
 
   ngOnInit() {
+    this.getLoggedInUserId(this.profile.nickname);
     this.formData = this.formDataService.getFormData();
     this.isFormValid = this.formDataService.isFormValid();
     console.log('Result feature loaded!');
@@ -29,15 +37,14 @@ export class ResultComponent implements OnInit {
     console.log(this.formData);
     this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"));
     this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
-    var costNoDollar = this.formatCost(this.formData.sessionCost);
+    // var costNoDollar = this.formatCost(this.formData.sessionCost);
     var data = {
-      "hostId": parseInt(localStorage.getItem("loggedInUserID")),
-      // "hostId": 41,
+      "hostId": this.loggedInUserId,
       "title":this.formData.title,
       "game":this.formData.game,
       "console":this.formData.console,
       "numSlots":this.formData.numSlots,
-      "sessionCost":costNoDollar,
+      "sessionCost":this.formData.sessionCost,
       "sessionTime":this.timeMS,
       "sessionDuration":'1:00:00'
     };
@@ -45,6 +52,18 @@ export class ResultComponent implements OnInit {
     window.location.reload();
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
+  }
+
+  getLoggedInUserId(riftTag: string) {
+    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
+      this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
+    } else {
+      this.userProfileService.getUserId(riftTag).subscribe(
+        resBody => {
+          this.loggedInUserId = resBody.id;
+        }
+      )
+    }
   }
 
   timeToMilliseconds(time: string) {
@@ -55,17 +74,16 @@ export class ResultComponent implements OnInit {
     return seconds * 1000;
   }
 
-  formatCost(cost): string {
-
-    if (cost.charAt(0) == "$") {
-      return cost.substr(1);
-    }
-    return cost;
-  }
+  // formatCost(cost): string {
+  //
+  //   if (cost.charAt(0) == "$") {
+  //     return cost.substr(1);
+  //   }
+  //   return cost;
+  // }
 
   clear() {
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
   }
-
 }

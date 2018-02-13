@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SearchBarService} from "../../components/search-bar/search-bar.service";
 import {ActivatedRoute} from "@angular/router";
+import {Session} from "../../models/session";
 
 @Component({
   selector: 'app-riftsessions',
@@ -10,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 export class RiftsessionsComponent implements OnInit {
   sub: any;
   searchQuery: string = "";
-  sessions: any;
+  sessions: Session[] = [];
   users: any;
   isLoggedIn = false;
 
@@ -32,7 +33,27 @@ export class RiftsessionsComponent implements OnInit {
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
         this.users = resBody[0];
-        this.sessions = resBody[1];
+        console.log(resBody[1]);
+        for (var i = 0; i < resBody[1].length; i++) {
+          var currDateMS = resBody[1][i].sessionTime;
+          var date = new Date(currDateMS);
+          var currSession = new Session();
+          currSession.firstName = resBody[1][i].usertable.firstName;
+          currSession.lastName = resBody[1][i].usertable.lastName;
+          currSession.riftTag = resBody[1][i].usertable.riftTag;
+          currSession.rifterRating = resBody[1][i].rifterRating;
+          currSession.hostId = resBody[1][i].hostId;
+          currSession.sessionCost = resBody[1][i].sessionCost;
+          currSession.methodOfContact = resBody[1][i].methodOfContact;
+          currSession.sessionDuration = resBody[1][i].sessionDuration;
+          currSession.title = resBody[1][i].title;
+          currSession.sessionTime = date;
+          currSession.id = resBody[1][i].id;
+          currSession.numSlots = resBody[1][i].numSlots;
+          currSession.game = resBody[1][i].game;
+          this.sessions.push(currSession);
+        }
+        console.log(this.sessions);
       }
     );
   }

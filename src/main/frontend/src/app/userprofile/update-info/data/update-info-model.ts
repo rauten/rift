@@ -3,5 +3,6 @@ export class UpdateInfoData {
   firstName: string = "";
   lastName: string = "";
   email: string = "";
+  bio: string = "";
 }
 

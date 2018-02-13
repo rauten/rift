@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from "./auth/auth.service";
 import {Http} from "@angular/http";
 import {UserprofileService} from "./userprofile/userprofile.service";
-import {Userprofile} from "./userprofile/models/userprofile";
+import {Userprofile} from "./models/userprofile";
 
 @Component({
   selector: 'app-root',
@@ -13,21 +13,16 @@ export class AppComponent {
   constructor(public auth: AuthService, private userprofileService: UserprofileService) {
     auth.handleAuthentication(function (data, createUser) {
       if (createUser) {
+        userprofileService.createUser(data)
+      } else {
         var profile = JSON.parse(localStorage.getItem("profile"));
         userprofileService.getUser(profile.nickname).subscribe(
           resBody => {
             localStorage.setItem("loggedInUserID", resBody.id.toString());
-          }
-        );
-        userprofileService.createUser(data);
+            console.log(localStorage.getItem("loggedInUserID"));
+          })
       }
-      var profile = JSON.parse(localStorage.getItem("profile"));
-      userprofileService.getUser(profile.nickname).subscribe(
-        resBody => {
-          localStorage.setItem("loggedInUserID", resBody.id.toString());
-        }
-      )
-    })
+    });
   }
 }
 

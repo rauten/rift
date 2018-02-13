@@ -1,0 +1,70 @@
+.activity-item {
+  overflow: visible;
+  position: relative;
+  margin: 15px 0;
+  border-top: 1px dashed #ccc;
+  padding-top: 15px;
+}
+.activity-item:first-child {
+  border-top: none;
+}
+.activity-item .avatar {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  width: 32px;
+}
+.activity-item > i {
+  font-size: 18px;
+  line-height: 1;
+}
+.activity-item .media-body {
+  position: relative;
+}
+.activity-item .activity-title {
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+.activity-item .activity-attachment {
+  padding-top: 20px;
+}
+.activity-item .well {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: none;
+  border-left: 2px solid #cfcfcf;
+  background: #fff;
+  margin-left: 20px;
+  font-size: 0.85em;
+}
+.activity-item .thumbnail {
+  display: inline;
+  border: none;
+  padding: 0;
+}
+.activity-item .thumbnail img {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  width: auto;
+  margin: 0;
+}
+.activity-item .activity-actions {
+  position: absolute;
+  top: 15px;
+  right: 0;
+}
+.activity-item .activity-actions .btn i {
+  margin: 0;
+}
+.activity-item .activity-actions .dropdown-menu > li > a {
+  font-size: 0.9em;
+  padding: 3px 10px;
+}
+.activity-item + .btn {
+  margin-bottom: 15px;
+}

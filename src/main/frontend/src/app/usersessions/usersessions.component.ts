@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {SimplePageScroll} from "ng2-simple-page-scroll";
-import {Userprofile} from "../userprofile/models/userprofile";
+import {Userprofile} from "../models/userprofile";
 import {UsersessionsService} from "./usersessions.service";
-import {Session} from "../components/session-card/session";
+import {Session} from "../models/session";
 
 @Component({
   selector: 'app-usersessions',
@@ -17,6 +16,7 @@ export class UsersessionsComponent implements OnInit {
     var loggedInUser = JSON.parse(localStorage.getItem("profile"));
     var riftTag = loggedInUser.nickname;
     this.getUserSessions(riftTag);
+    this.getUserRifteeSessions(riftTag);
   }
 
   getUserSessions(riftTag: string) {
@@ -37,6 +37,7 @@ export class UsersessionsComponent implements OnInit {
           currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
           currSession.title = resBody.rifterSessions[i].title;
           currSession.sessionTime = date;
+          currSession.id = resBody.rifterSessions[i].id;
           this.currentUser.rifterSessions.push(currSession);
         }
       },
@@ -46,4 +47,21 @@ export class UsersessionsComponent implements OnInit {
     );
     console.log(this.currentUser.rifterSessions);
   }
+
+  getUserRifteeSessions(riftTag: string) {
+    this.currentUser.rifteeSessions = [];
+    this.userSessionsService.getUserRifteeSessions(riftTag).subscribe(
+      resBody => {
+        var sessions = resBody.rifteeSessions;
+        //noinspection TypeScriptUnresolvedVariable
+        console.log(resBody.rifteeSessions);
+        for (var i = 0; i < sessions.length; i++) {
+          var currSession = new Session();
+          var session = sessions[i];
+        }
+      }
+    )
+
+  }
+
 }

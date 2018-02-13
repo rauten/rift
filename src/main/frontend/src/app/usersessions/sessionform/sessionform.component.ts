@@ -12,8 +12,11 @@ export class SessionformComponent implements OnInit {
   step2:Step2;
   step3:Step3;
   @Input() formData;
+  type: string;
 
-  constructor(private formDataService: FormDataService) { }
+  constructor(private formDataService: FormDataService) {
+
+  }
 
   ngOnInit() {
     this.step1 = this.formDataService.getStep1Info();

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import {HttpModule, Http, RequestOptions} from '@angular/http';
 import {FormsModule} from "@angular/forms";
 import { routes } from './app.router';
+import 'hammerjs';
+
 
 import {MatTabsModule} from '@angular/material/tabs';
 import {
@@ -48,6 +50,18 @@ import {SearchBarService} from "./components/search-bar/search-bar.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { SessionPageComponent } from './therift/riftsessions/session-page/session-page.component';
 import {SessionPageService} from "./therift/riftsessions/session-page/session-page.service";
+import { UserRatingComponent } from './userprofile/user-rating/user-rating.component';
+import {UserRatingService} from "./userprofile/user-rating/data/user-rating.service";
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
+import { UserReviewComponent } from './components/user-review/user-review.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { CalendarModule } from 'angular-calendar';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { RatingComponent } from './components/rating/rating.component';
+import { UpdateSessionComponent } from './therift/riftsessions/session-page/update-session/update-session.component';
+import {UpdateSessionService} from "./therift/riftsessions/session-page/update-session/data/update-session.service";
+import { SessionAcceptRejectButtonComponent } from './components/session-accept-reject-button/session-accept-reject-button.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -76,7 +90,13 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     UpdateInfoComponent,
     SearchBarComponent,
     UserCardComponent,
-    SessionPageComponent
+    SessionPageComponent,
+    UserRatingComponent,
+    UserReviewComponent,
+    NotificationComponent,
+    RatingComponent,
+    UpdateSessionComponent,
+    SessionAcceptRejectButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,9 +113,13 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatDatepickerModule,
     MatNativeDateModule,
     FormWizardModule,
-    // TimeDurationPickerModule
+    MatSelectModule,
+    MatSliderModule,
+    CalendarModule.forRoot(),
+    NgbModule.forRoot()
   ],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
+    UserRatingService, UpdateSessionService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]}

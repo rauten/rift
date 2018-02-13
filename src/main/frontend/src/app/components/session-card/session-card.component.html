@@ -1,16 +1,22 @@
 <div class="event-list">
   <div>
     <time datetime="2014-07-20">
-      <span class="day">{{day}}</span>
-      <span class="month">{{month}}</span>
+      <span class="day">{{session.sessionTime | date:'dd'}}</span>
+      <span class="month">{{session.sessionTime | date:'MMM'}}</span>
     </time>
-    <img alt="{{game}}" src="{{sessionIcon}}" />
+    <img alt="{{session.game}}" src="{{sessionIcon}}" />
     <div class="info">
-      <h2 class="title" [routerLink]="['../../session', id]">{{title}}</h2>
-      <p class="desc">{{hostName}}</p>
-      <p class="desc">@{{hostRiftTag}}</p>
+      <h2 class="title">{{session.title}}</h2>
+      <p class="desc">{{session.firstName}} {{session.lastName}}</p>
+      <p class="desc">@{{session.riftTag}}</p>
       <p class="desc">Rating: {{hostRifterRating}}</p>
-      <p class="desc">{{time}} {{console}} {{game}}</p>
+      <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
+    </div>
+    <div class="otherstuff" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
+      <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
+      <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
     </div>
   </div>
 </div>

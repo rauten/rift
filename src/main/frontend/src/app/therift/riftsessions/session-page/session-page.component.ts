@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {SessionPageService} from "./session-page.service";
-import {Session} from "../../../components/session-card/session";
+import {Session} from "../../../models/session";
 
 @Component({
   selector: 'app-session-page',
@@ -29,13 +29,16 @@ export class SessionPageComponent implements OnInit {
         console.log(resBody);
         this.response = resBody;
         this.session.id = this.response.id;
-        this.session.firstName = "Filler First Name";
-        this.session.lastName = "Filler Last Name";
+        this.session.riftTag = this.response.usertable.riftTag;
+        this.session.rifterRating = this.response.usertable.rifterRating;
+        this.session.firstName = this.response.usertable.firstName;
+        this.session.lastName = this.response.usertable.lastName;
         this.session.methodOfContact = this.response.methodOfContact;
         this.session.title = this.response.title;
         this.session.hits = this.response.hits;
         this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
+        this.session.numSlots = this.response.numSlots;
       }
     )
   }

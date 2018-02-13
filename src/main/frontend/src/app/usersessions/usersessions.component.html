@@ -3,26 +3,17 @@
     Create a Session
   </button>
   <mat-tab-group>
-
     <mat-tab label="card view">
-
       <div *ngFor="let session of currentUser.rifterSessions">
-        <app-session-card
-          hostName="{{session.firstName}} {{session.lastName}}"
-          hostRiftTag="{{session.riftTag}}"
-          hostRifterRating="{{session.rifterRating}}"
-          title="{{session.sessionTitle}}"
-          day="{{session.sessionTime | date:'dd'}}"
-          month="{{session.sessionTime | date:'MMM'}}"
-          time="{{session.sessionTime | date:'shortTime'}}"
-          title="{{session.sessionTitle}}"
-          game="{{session.game}}"
+        <app-session-card [routerLink]="['../session', session.id]"
+          [session]="session"
         ></app-session-card>
       </div>
     </mat-tab>
     <mat-tab label="calendar">
       <h1>Some more tab content</h1>
       <p>...</p>
+
     </mat-tab>
   </mat-tab-group>
   <router-outlet></router-outlet>

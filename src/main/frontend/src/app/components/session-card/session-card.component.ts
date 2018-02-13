@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {SESSION_ICONS} from "../../constants/session-icon-variables";
+import {Session} from "../../models/session";
+import {UsersessionsService} from "../../usersessions/usersessions.service";
+import {UserprofileService} from "../../userprofile/userprofile.service";
+import {SessionRequest} from "../../models/session-request";
 
 @Component({
   selector: 'app-session-card',
@@ -7,28 +11,50 @@ import {SESSION_ICONS} from "../../constants/session-icon-variables";
   styleUrls: ['session-card.component.scss']
 })
 export class SessionCardComponent implements OnInit {
-  @Input() hostName: string;
-  @Input() hostRiftTag: string;
-  @Input() hostRifterRating: number;
-  @Input() title: string;
-  @Input() cost: number;
-  @Input() contact: string;
-  @Input() duration: string;
-  @Input() hits: number;
-  @Input() day: string;
-  @Input() month: string;
-  @Input() time: string;
-  @Input() console: string;
-  @Input() game: string;
-  @Input() id: number;
   sessionIcon: string;
+  @Input() session: Session;
+  @Input() request: SessionRequest;
+  @Input() isLoggedIn: boolean;
+  @Input() type: boolean;
+  profile: any;
+  loggedInUserId: number;
 
-  constructor() { }
+  constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
+  }
 
-  ngOnInit() {
-    if(this.game == "League of Legends") {
-      this.sessionIcon=SESSION_ICONS.leagueOfLegends;
+  getLoggedInUserId(riftTag: string) {
+    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
+      this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
+    } else {
+      console.log("test: " + JSON.parse(localStorage.getItem("loggedInUserID")));
+      this.userProfileService.getUserId(riftTag).subscribe(
+        resBody => {
+          this.loggedInUserId = resBody.id;
+        }
+      )
     }
   }
 
+  ngOnInit() {
+    if(this.isLoggedIn) {
+      this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
+    }
+    if(this.session.game == "League of Legends") {
+      this.sessionIcon=SESSION_ICONS.leagueOfLegends;
+    } else if (this.session.game == "Fortnite") {
+      this.sessionIcon=SESSION_ICONS.fortnite;
+    }
+  }
+
+  joinUserSession() {
+    let data = {
+      "rifteeId": this.loggedInUserId,
+      "hostId": this.session.hostId,
+      "sessionId": this.session.id,
+      "accepted": 1
+    };
+    console.log(data);
+    this.userSessionsService.joinUserSession(data);
+    alert("Sent request");
+  }
 }

@@ -3,7 +3,7 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
 import {UserprofileService} from "../userprofile/userprofile.service";
-import {Userprofile} from "../userprofile/models/userprofile";
+import {Userprofile} from "../models/userprofile";
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
       audience: `https://${AUTH_CONFIG.domain}/userinfo`,
       // audience: AUTH_CONFIG.apiUrl,
       params: {
-        scope: 'profile openid email user_metadata'
+        scope: 'profile openid email user_metadata read:users'
       }
     },
     theme: {
@@ -39,7 +39,7 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router, private userprofileService: UserprofileService) {
+  constructor(public router: Router) {
 
   }
 

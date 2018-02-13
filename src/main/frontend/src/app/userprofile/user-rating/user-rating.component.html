@@ -1,0 +1,50 @@
+<form #userRatingForm="ngForm" class="editForm" novalidate>
+  <div class="tab-pane fade in active">
+    <h4 class="head text-center">{{title}}</h4>
+    <br/>
+    <div class='row'>
+      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+        <div class="row">
+          <div class='col-md-12 col-md-6\'>
+            <div class="form-group">
+              <label class="control-label" for="rating">Rate this User</label>
+              <!--<input class="form-control input-md" #rating="ngModel" required id="rating" name="rating" type="number" placeholder="Rate this user" [(ngModel)]="currentUserRating.rating">-->
+              <mat-slider style="width: 50%;" required id="rating" min="1" max="5" step="0.5" tickInterval="1" name="rating" [(ngModel)]="currentUserRating.rating"></mat-slider>{{currentUserRating.rating}}
+              <!--<app-rating required id="rating" [rating]="currentUserRating.rating" [readonly]="false"></app-rating>{{currentUserRating.rating}}-->
+
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="reviewtitle">Review title</label>
+              <input class="form-control input-md" #review="ngModel" required id="reviewtitle" name="reviewtitle" type="text" placeholder="Review title" [(ngModel)]="currentUserRating.reviewTitle">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label class="control-label" for="review">Leave a review</label>
+              <input class="form-control input-md" #review="ngModel" required id="review" name="review" type="text" placeholder="Leave a review" [(ngModel)]="currentUserRating.review">
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">What type of rating?</label>
+              <select required class="form-control" id="exampleFormControlSelect1" name="type" [(ngModel)]="account_type_str">
+                <option value="" selected disabled>None</option>
+                <option value="true">Rifter Rating</option>
+                <option value="false">Riftee Rating</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button [disabled]="!userRatingForm.valid" (click)="save()" class="btn-primary" type="button">Update</button>
+    <button routerLink="../" class="btn-primary" type="button">Cancel</button>
+  </div>
+</form>
+
+<pre>{{ userRatingData | json }}</pre>
+<!--[routerLink]="['../', currentUser.riftTag]"-->
