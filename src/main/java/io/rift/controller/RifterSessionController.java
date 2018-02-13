@@ -95,7 +95,7 @@ public class RifterSessionController {
         return rifterSessionService.createGame(rifterSession);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/rifterSessioin/update")
+    @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/update")
     public Boolean updateSession(@RequestBody RifterSession rifterSession) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
         return rifterSessionService.updateRifterSession(rifterSession);
     }
