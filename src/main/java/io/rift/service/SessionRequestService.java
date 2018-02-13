@@ -83,7 +83,7 @@ public class SessionRequestService {
         ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
         Map<String, Integer> status = new HashMap<>();
         if (resultSet.next()) {
-            status.put("Status", resultSet.getInt(1));
+            status.put("status", resultSet.getInt(1));
         }
         return status;
     }
