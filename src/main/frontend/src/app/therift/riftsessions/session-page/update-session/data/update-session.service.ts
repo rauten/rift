@@ -10,7 +10,7 @@ import {SessionDateTime} from "./sessionDateTime";
 export class UpdateSessionService {
   private updateSessionData: UpdateSessionData = new UpdateSessionData();
   private isValid: boolean = false;
-  private updateSessionRequestURL = "/api/rifterSession/update";
+  private updateSessionURL = "/api/rifterSession/update";
 
   constructor(private http: Http) {
   }
@@ -45,7 +45,7 @@ export class UpdateSessionService {
     console.log("running updateUserSession");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put(this.updateSessionRequestURL, data, options)
+    this.http.put(this.updateSessionURL, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe(
