@@ -89,6 +89,7 @@
         SELECT *
         FROM riftergame
         WHERE host_id = ?
+        ORDER BY session_time
     </getUserAndRifterSessions>
 
     <getGameRequestsAndGameInfoByUserId>
@@ -231,6 +232,7 @@
         JOIN usertable u
         ON r.host_id = u.id
         WHERE us.rift_tag = ?
+        ORDER BY session_time;
     </getRifteeSessionsAndHostInfoByRiftTag>
 
     <getRequestStatus>
