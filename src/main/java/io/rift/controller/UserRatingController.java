@@ -3,8 +3,10 @@ package io.rift.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.UserRating;
+import io.rift.model.Usertable;
 import io.rift.model.Views;
 import io.rift.service.UserRatingService;
+import io.rift.service.UsertableService;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class UserRatingController {
     @Autowired
     private UserRatingService userRatingService;
 
+    @Autowired
+    private UsertableService usertableService;
+
     @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
     public Boolean createRating(@RequestBody UserRating userRating) throws SQLException {
 
@@ -33,6 +38,18 @@ public class UserRatingController {
         return userRatingService.getUserRatingsAndReviewerUsertablesById(id);
     }
 
+
+    @JsonView(Views.GetUserRatings.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/rating/userRatings/{riftTag}")
+    public List<UserRating> getUserRatingsAndReviewerUsertablesByRiftTag(@PathVariable String riftTag) throws SQLException {
+        Usertable usertable = usertableService.getUserByRiftTag(riftTag);
+        return getUserRatingsAndReviewerUsertablesById(usertable.getId());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/rating/userReviews/{id}")
+    public List<UserRating> getUserReviewsAndRevieweeUsertablesByUserId(@PathVariable Integer id) throws SQLException {
+        return userRatingService.getUserReviewsAndRevieweeUsertablesByUserId(id);
+    }
 
     /*
     @JsonView(Views.Public.class)

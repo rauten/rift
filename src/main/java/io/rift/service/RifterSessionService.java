@@ -36,11 +36,12 @@ public class RifterSessionService {
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
-    private final String getGamePlayersByGameId = "getGamePlayersByGameId";
+    private final String getSessionPlayersBySessionId = "getSessionPlayersBySessionId";
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
     private final String getRifteeSessionsAndHostInfoByRiftTag = "getRifteeSessionsAndHostInfoByRiftTag";
+    private final String getPlayerUsertablesBySessionId = "getPlayerUsertablesBySessionId";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -56,7 +57,7 @@ public class RifterSessionService {
     private final String sessionCreatedType = "New Game";
 
 
-    public RifterSession getRifterGameById(Integer id) throws SQLException {
+    public RifterSession getRifterSessionBySessionId(Integer id) throws SQLException {
 
         Object[] args = new Object[1];
         args[0] = id;
@@ -70,7 +71,8 @@ public class RifterSessionService {
         return null;
     }
 
-    public RifterSession getRifterGameAndHostByGameId(Integer id) throws SQLException {
+
+    public RifterSession getRifterSessionAndHostBySessionId(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
         ResultSet resultSet = riftRepository.doQuery(getRifterGameAndHostByGameId, args);
@@ -87,11 +89,11 @@ public class RifterSessionService {
         return null;
     }
 
-    public List<Usertable> getGamePlayersByGameId(Integer id) throws SQLException {
+    public List<Usertable> getSessionPlayersBySessionId(Integer id) throws SQLException {
 
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getGamePlayersByGameId, args);
+        ResultSet resultSet = riftRepository.doQuery(getSessionPlayersBySessionId, args);
         List<Usertable> players = new ArrayList<>();
         while (resultSet.next()) {
             Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
@@ -126,6 +128,18 @@ public class RifterSessionService {
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
+    }
+
+    public List<Usertable> getPlayerUsertablesBySessionId(Integer sessionId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = sessionId;
+        ResultSet resultSet = riftRepository.doQuery(getPlayerUsertablesBySessionId, args);
+        List<Usertable> players = new ArrayList<>(resultSet.getFetchSize());
+        while (resultSet.next()) {
+            Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
+            players.add(usertable);
+        }
+        return players;
     }
 
     public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
