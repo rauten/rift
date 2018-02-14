@@ -43,8 +43,8 @@ public class RifterSession {
     @JsonView(Views.RifterSessionSessionTime.class)
     private Timestamp sessionTime;
 
-    @JsonView(Views.RifterSessionGame.class)
-    private String game;
+    @JsonView(Views.RifterSessionGameId.class)
+    private Integer gameId;
 
     @JsonView(Views.RifterSessionConsole.class)
     private String console;
@@ -66,6 +66,9 @@ public class RifterSession {
 
     @JsonView(Views.RifterSessionPlayers.class)
     private List<Usertable> players;
+
+    @JsonView(Views.RifterSessionGame.class)
+    private Game game;
 
     @JsonView(Views.RifterSessionGameLevenshtein.class)
     private Double gameLevenshtein;
