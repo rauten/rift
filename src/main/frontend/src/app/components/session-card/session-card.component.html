@@ -9,7 +9,7 @@
       <h2 class="title">{{session.title}}</h2>
       <p class="desc">{{session.firstName}} {{session.lastName}}</p>
       <p class="desc">@{{session.riftTag}}</p>
-      <p class="desc">Rating: {{hostRifterRating}}</p>
+      <p class="desc" *ngIf="!type">Rating: {{session.rifterRating}}</p>
       <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
     </div>
     <div class="otherstuff" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">

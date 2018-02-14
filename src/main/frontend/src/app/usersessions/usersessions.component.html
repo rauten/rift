@@ -4,14 +4,20 @@
   </button>
   <mat-tab-group>
     <mat-tab label="card view">
-      <div *ngFor="let session of currentUser.rifterSessions">
+      <!--<div *ngFor="let session of currentUser.rifterSessions">-->
+        <!--<app-session-card [routerLink]="['../session', session.id]"-->
+          <!--[session]="session" [type]="true"-->
+        <!--&gt;</app-session-card>-->
+      <!--</div>-->
+      <!--<div *ngFor="let session of currentUser.rifteeSessions">-->
+        <!--<app-session-card [routerLink]="['../session', session.id]"-->
+                          <!--[session]="session" [type]="false"-->
+        <!--&gt;</app-session-card>-->
+      <!--</div>-->
+      <div *ngFor="let session of currentUser.sessions">
         <app-session-card [routerLink]="['../session', session.id]"
-          [session]="session" [type]="true"
-        ></app-session-card>
-      </div>
-      <div *ngFor="let session of currentUser.rifteeSessions">
-        <app-session-card [routerLink]="['../session', session.id]"
-                          [session]="session" [type]="false"
+                          [session]="session" [type]="session.type" [isLoggedIn]="true"
+                          [request]="loggedInUser.sessionRequests.get(session.id)"
         ></app-session-card>
       </div>
     </mat-tab>

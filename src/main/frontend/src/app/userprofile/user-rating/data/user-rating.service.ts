@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http, RequestOptions, Headers, Response} from "@angular/http";
 import {Observable} from "rxjs";
-import {AuthHttp} from "angular2-jwt";
 import {UserRating} from "../../../models/userrating";
 import {UserRatingData} from "./user-rating-data-model";
 

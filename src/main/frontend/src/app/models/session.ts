@@ -15,6 +15,7 @@ export class Session {
   console: string;
   game: string;
   numSlots: number;
+  type: boolean;
 
   slotsRemaining: number;
   usertable: any;

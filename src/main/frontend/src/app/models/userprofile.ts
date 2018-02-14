@@ -18,6 +18,7 @@ export class Userprofile {
   creatorActivityList: Activity[];
   rifterSessions: Session[];
   rifteeSessions: Session[];
+  sessions: Session[];
   feed: Activity[];
   followers: Userprofile[] = [];
   followings: Userprofile[] = [];
