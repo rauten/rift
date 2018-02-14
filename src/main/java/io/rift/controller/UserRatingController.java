@@ -32,18 +32,20 @@ public class UserRatingController {
         return userRatingService.createRating(userRating);
     }
 
+    /*
     @JsonView(Views.GetUserRatings.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rating/userRatings/{id}")
     public List<UserRating> getUserRatingsAndReviewerUsertablesById(@PathVariable Integer id) throws SQLException {
         return userRatingService.getUserRatingsAndReviewerUsertablesById(id);
     }
+    */
 
 
     @JsonView(Views.GetUserRatings.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rating/userRatings/{riftTag}")
     public List<UserRating> getUserRatingsAndReviewerUsertablesByRiftTag(@PathVariable String riftTag) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
-        return getUserRatingsAndReviewerUsertablesById(usertable.getId());
+        return userRatingService.getUserRatingsAndReviewerUsertablesById(usertable.getId());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/rating/userReviews/{id}")
