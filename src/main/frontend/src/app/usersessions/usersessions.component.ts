@@ -38,6 +38,9 @@ export class UsersessionsComponent implements OnInit {
           currSession.title = resBody.rifterSessions[i].title;
           currSession.sessionTime = date;
           currSession.id = resBody.rifterSessions[i].id;
+          currSession.game = resBody.rifterSessions[i].game;
+          currSession.console = resBody.rifterSessions[i].game;
+          currSession.numSlots = resBody.rifterSessions[i].slotsRemaining;
           this.currentUser.rifterSessions.push(currSession);
         }
       },
@@ -52,13 +55,25 @@ export class UsersessionsComponent implements OnInit {
     this.currentUser.rifteeSessions = [];
     this.userSessionsService.getUserRifteeSessions(riftTag).subscribe(
       resBody => {
-        var sessions = resBody.rifteeSessions;
-        //noinspection TypeScriptUnresolvedVariable
-        console.log(resBody.rifteeSessions);
+        var sessions = resBody;
         for (var i = 0; i < sessions.length; i++) {
           var currSession = new Session();
           var session = sessions[i];
+          currSession.hostId = session.hostId;
+          currSession.id = session.id;
+          currSession.sessionCost = session.sessionCost;
+          currSession.title = session.title;
+          currSession.sessionTime = session.sessionTime;
+          currSession.game = session.game;
+          currSession.console = session.console;
+          currSession.firstName = session.usertable.firstName;
+          currSession.lastName = session.usertable.lastName;
+          currSession.riftTag = session.usertable.riftTag;
+          currSession.numSlots = session.slotsRemaining;
+          currSession.rifterRating = session.rifterRating;
+          this.currentUser.rifteeSessions.push(currSession);
         }
+        console.log(this.currentUser.rifteeSessions);
       }
     )
 

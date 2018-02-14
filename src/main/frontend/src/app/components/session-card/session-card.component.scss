@@ -6,6 +6,26 @@
   display:inline-block;
 }
 
+.riftee {
+  display: inline-block;
+  width: 100%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(197, 44, 102);
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rifter {
+  display: inline-block;
+  width: 100%;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #293e49;
+}
+
 .otherstuff {
   width: 35%;
   display:inline-block;
@@ -27,15 +47,7 @@
   padding: 0px;
   margin: 0px 0px 20px;
 }
-.event-list > div > time {
-  display: inline-block;
-  width: 100%;
-  color: rgb(255, 255, 255);
-  background-color: rgb(197, 44, 102);
-  padding: 5px;
-  text-align: center;
-  text-transform: uppercase;
-}
+
 .event-list > div:nth-child(even) > time {
   background-color: rgb(165, 82, 167);
 }
@@ -198,3 +210,14 @@
     padding: 10px 0px 9px;
   }
 }
+
+//.event-list > div > time > {
+//  display: inline-block;
+//  width: 100%;
+//  color: rgb(255, 255, 255);
+//  background-color: rgb(197, 44, 102);
+//  padding: 5px;
+//  text-align: center;
+//  text-transform: uppercase;
+//}
+

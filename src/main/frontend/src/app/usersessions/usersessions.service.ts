@@ -30,7 +30,7 @@ export class UsersessionsService {
 
   getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
     console.log("running getUserRifteeSessions");
-    return this.http.get("/api/user/" + riftTag + "/rifteeSessions/hostInfo&sessionInfo")
+    return this.http.get("/api/rifterSession/" + riftTag + "/sessionsParticipating")
       .map(
         (response: Response) => {
           return response.json();

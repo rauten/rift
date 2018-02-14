@@ -6,7 +6,12 @@
     <mat-tab label="card view">
       <div *ngFor="let session of currentUser.rifterSessions">
         <app-session-card [routerLink]="['../session', session.id]"
-          [session]="session"
+          [session]="session" [type]="true"
+        ></app-session-card>
+      </div>
+      <div *ngFor="let session of currentUser.rifteeSessions">
+        <app-session-card [routerLink]="['../session', session.id]"
+                          [session]="session" [type]="false"
         ></app-session-card>
       </div>
     </mat-tab>

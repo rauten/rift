@@ -1,6 +1,6 @@
 <div class="event-list">
   <div>
-    <time datetime="2014-07-20">
+    <time datetime="2014-07-20" [ngClass]="{'rifter': type, 'riftee':!type}">
       <span class="day">{{session.sessionTime | date:'dd'}}</span>
       <span class="month">{{session.sessionTime | date:'MMM'}}</span>
     </time>

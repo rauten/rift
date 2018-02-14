@@ -32,6 +32,7 @@ export class Userprofile {
   notificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
+  length;
 
 
   constructor() {

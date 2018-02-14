@@ -11,10 +11,18 @@
     </div>
   </div>
   <button class="btn btn-primary" routerLink="update">Edit Session</button><br>
+  <div class="otherstuff" *ngIf="isLoggedIn && !(profile.nickname == session.riftTag)">
+    <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
+    <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
+    <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
+    <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
+  </div><br>
+
   sessionId: {{session.id}}<br>
   sessionTitle: {{session.title}}<br>
   sessionFirstName: {{session.firstName}}<br>
   sessionLastName: {{session.lastName}}<br>
+  sessionRiftTag: {{session.riftTag}}<br>
   sessionCost: {{session.sessionCost}}<br>
   sessionTime: {{session.sessionTime}}<br>
   sessionSlots: {{session.numSlots}}
