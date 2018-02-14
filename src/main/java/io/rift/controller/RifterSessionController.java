@@ -47,12 +47,18 @@ public class RifterSessionController {
         return rifterSessionService.getRifterSessionAndHostBySessionId(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/host&player")
-    public RifterSession getRifterSessionAndHostAndPlayersBySessionId(@PathVariable Integer id) throws SQLException {
-        RifterSession rifterSession = rifterSessionService.getRifterSessionAndHostBySessionId(id);
-        rifterSession.setPlayers(rifterSessionService.getSessionPlayersBySessionId(id));
-        return rifterSession;
+    @JsonView(Views.RifteeSessions.class)
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/sessionsParticipating")
+    public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
+        return rifterSessionService.getRifteeSessionsAndHostInfoByRiftTag(riftTag);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/rifterAndRifteeSessions")
+    public List<RifterSession> getRifterAndRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
+        return rifterSessionService.getRifterAndRifteeSessionsByRiftTag(riftTag);
+    }
+
+
 
 
     /**
@@ -95,19 +101,5 @@ public class RifterSessionController {
         return rifterSessionService.updateRifterSession(rifterSession);
     }
 
-    @JsonView(Views.RifteeSessions.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{riftTag}/sessionsParticipating")
-    public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
-        return rifterSessionService.getRifteeSessionsAndHostInfoByRiftTag(riftTag);
-    }
-
-
-    /*
-    @JsonView(Views.InternalRifterGameNotification.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/notification")
-    public RifterSession getRifterGameAndNotificationsById(@PathVariable Integer id) {
-        return rifterGameService.getRifterGameById(id);
-    }
-    */
 
 }

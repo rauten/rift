@@ -235,6 +235,23 @@
         ORDER BY session_time;
     </getRifteeSessionsAndHostInfoByRiftTag>
 
+    <getRifterAndRifteeSessionsByRiftTag>
+        SELECT r.*, g.accepted, u.*
+        FROM usertable us JOIN gamerequest g
+        ON us.id = g.riftee_id
+        JOIN riftergame r
+        ON g.host_id = r.host_id AND g.session_id = r.id
+        JOIN usertable u
+        ON r.host_id = u.id
+        WHERE us.rift_tag = ?
+        UNION
+        SELECT riftergame.*, null, usertable.*
+        FROM riftergame JOIN usertable
+        ON host_id = usertable.id
+        WHERE rift_tag = ?
+        ORDER BY session_time;
+    </getRifterAndRifteeSessionsByRiftTag>
+
     <getRequestStatus>
         SELECT accepted
         FROM gamerequest

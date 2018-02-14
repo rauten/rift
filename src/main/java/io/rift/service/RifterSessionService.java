@@ -41,7 +41,7 @@ public class RifterSessionService {
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
     private final String getRifteeSessionsAndHostInfoByRiftTag = "getRifteeSessionsAndHostInfoByRiftTag";
-    private final String getPlayerUsertablesBySessionId = "getPlayerUsertablesBySessionId";
+    private final String getRifterAndRifteeSessionsByRiftTag = "getRifterAndRifteeSessionsByRiftTag";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -55,21 +55,6 @@ public class RifterSessionService {
 
 
     private final String sessionCreatedType = "New Game";
-
-
-    public RifterSession getRifterSessionBySessionId(Integer id) throws SQLException {
-
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
-        if (resultSet.next()) {
-            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
-            resultSet.close();
-            return rifterSession;
-        }
-        resultSet.close();
-        return null;
-    }
 
 
     public RifterSession getRifterSessionAndHostBySessionId(Integer id) throws SQLException {
@@ -130,17 +115,19 @@ public class RifterSessionService {
         return rifterSessions;
     }
 
-    public List<Usertable> getPlayerUsertablesBySessionId(Integer sessionId) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = sessionId;
-        ResultSet resultSet = riftRepository.doQuery(getPlayerUsertablesBySessionId, args);
-        List<Usertable> players = new ArrayList<>(resultSet.getFetchSize());
+    public List<RifterSession> getRifterAndRifteeSessionsByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[2];
+        args[0] = riftTag;
+        args[1] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getRifterAndRifteeSessionsByRiftTag, args);
+        List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
         while (resultSet.next()) {
-            Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
-            players.add(usertable);
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "requestInfo&Host");
+            rifterSessions.add(rifterSession);
         }
-        return players;
+        return rifterSessions;
     }
+
 
     public RifterSession populateRifterSession(ResultSet resultSet, int startPoint, String info) throws SQLException {
         RifterSession rifterSession = new RifterSession();
@@ -171,13 +158,15 @@ public class RifterSessionService {
             sessionRequests.add(sessionRequest);
             rifterSession.setSessionRequests(sessionRequests);
         } else if (info.equals("requestInfo&Host")) {
-            SessionRequest sessionRequest = new SessionRequest();
-            sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
-            List<SessionRequest> sessionRequests = new ArrayList<>();
-            sessionRequests.add(sessionRequest);
-            rifterSession.setSessionRequests(sessionRequests);
-            Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 16, "");
-            rifterSession.setUsertable(usertable);
+            if (resultSet.getObject(startPoint + 15) != null) {
+                SessionRequest sessionRequest = new SessionRequest();
+                sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
+                List<SessionRequest> sessionRequests = new ArrayList<>();
+                sessionRequests.add(sessionRequest);
+                rifterSession.setSessionRequests(sessionRequests);
+                Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 16, "");
+                rifterSession.setUsertable(usertable);
+            }
         }
         return rifterSession;
     }
