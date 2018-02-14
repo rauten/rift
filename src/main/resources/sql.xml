@@ -215,12 +215,12 @@
         WHERE host_id = ? AND session_time = ?
     </getRifterSessionByHostIdAndSessionTime>
 
-    <getGamePlayersByGameId>
+    <getSessionPlayersBySessionId>
         SELECT u.*
         FROM gamerequest g JOIN usertable u
         ON g.riftee_id = u.id
         WHERE g.session_id = ? AND g.accepted = 2;
-    </getGamePlayersByGameId>
+    </getSessionPlayersBySessionId>
 
     <getRifteeSessionsAndHostInfoByRiftTag>
         SELECT r.*, g.accepted, u.*
@@ -318,6 +318,23 @@
         ON r.reviewer_id = u.id
         WHERE r.rift_id = ?;
     </getUserRatingsAndReviewerUsertablesById>
+
+    <getUserReviewsAndRevieweeUsertablesByUserId>
+        SELECT *
+        FROM userrating r JOIN usertable u
+        ON r.rift_id = u.id
+        WHERE r.reviewer_id = ?;
+    </getUserReviewsAndRevieweeUsertablesByUserId>
+
+    <getPlayerUsertablesBySessionId>
+        SELECT u.*
+        FROM gamerequest g
+        JOIN riftergame r
+        ON g.session_id = r.id AND g.host_id = r.host_id
+        JOIN usertable u
+        ON g.riftee_id = u.id
+        WHERE g.session_id = 40 AND accepted = 2;
+    </getPlayerUsertablesBySessionId>
 
     <!--
         CREATE OR REPLACE FUNCTION create_review()

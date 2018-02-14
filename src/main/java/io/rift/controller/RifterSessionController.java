@@ -30,9 +30,9 @@ public class RifterSessionController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}")
-    public RifterSession getRifterGameById(@PathVariable Integer id) throws SQLException {
-        RifterSession rifterSession = getRifterGameAndHostByGameId(id);
-        rifterSession.setPlayers(rifterSessionService.getGamePlayersByGameId(id));
+    public RifterSession getRifterSessionById(@PathVariable Integer id) throws SQLException {
+        RifterSession rifterSession = getRifterSessionAndHostBySessionId(id);
+        rifterSession.setPlayers(rifterSessionService.getSessionPlayersBySessionId(id));
         return rifterSession;
     }
 
@@ -43,20 +43,14 @@ public class RifterSessionController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/host")
-    public RifterSession getRifterGameAndHostByGameId(@PathVariable Integer id) throws SQLException {
-        return rifterSessionService.getRifterGameAndHostByGameId(id);
+    public RifterSession getRifterSessionAndHostBySessionId(@PathVariable Integer id) throws SQLException {
+        return rifterSessionService.getRifterSessionAndHostBySessionId(id);
     }
 
-    /**
-     *
-     * @param id - The Rifter Session id
-     * @return - Rifter Session object with info and all players Usertable
-     * @throws SQLException
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/players")
-    public RifterSession getRifterGameAndPlayersByGameId(@PathVariable Integer id) throws SQLException {
-        RifterSession rifterSession = getRifterGameById(id);
-        rifterSession.setPlayers(rifterSessionService.getGamePlayersByGameId(id));
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{id}/host&player")
+    public RifterSession getRifterSessionAndHostAndPlayersBySessionId(@PathVariable Integer id) throws SQLException {
+        RifterSession rifterSession = rifterSessionService.getRifterSessionAndHostBySessionId(id);
+        rifterSession.setPlayers(rifterSessionService.getSessionPlayersBySessionId(id));
         return rifterSession;
     }
 
@@ -106,6 +100,7 @@ public class RifterSessionController {
     public List<RifterSession> getRifteeSessionsByRiftTag(@PathVariable String riftTag) throws SQLException {
         return rifterSessionService.getRifteeSessionsAndHostInfoByRiftTag(riftTag);
     }
+
 
     /*
     @JsonView(Views.InternalRifterGameNotification.class)

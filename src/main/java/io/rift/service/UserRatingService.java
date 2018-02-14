@@ -33,6 +33,7 @@ public class UserRatingService {
     private final String getUserRatingsAndReviewerUsertablesById = "getUserRatingsAndReviewerUsertablesById";
     private final String getUserRatingByIds = "getUserRatingByIds";
     private final String getGameByHostAndPlayerId = "getGameByHostAndPlayerId";
+    private final String getUserReviewsAndRevieweeUsertablesByUserId = "getUserReviewsAndRevieweeUsertablesByUserId";
 
     public Boolean createRating(UserRating userRating) throws SQLException {
 
@@ -70,20 +71,40 @@ public class UserRatingService {
         ResultSet resultSet = riftRepository.doQuery(getUserRatingsAndReviewerUsertablesById, args);
         List<UserRating> userRatings = new ArrayList<>();
         while(resultSet.next()) {
-            UserRating userRating = new UserRating();
-            userRating.setId(resultSet.getInt(1));
-            userRating.setRiftId(resultSet.getInt(2));
-            userRating.setAccountType(resultSet.getBoolean(3));
-            userRating.setRating(resultSet.getDouble(4));
-            userRating.setReview(resultSet.getString(5));
-            userRating.setReviewerId(resultSet.getInt(6));
-            userRating.setCreatedTime(resultSet.getTimestamp(7));
-            userRating.setReviewTitle(resultSet.getString(8));
-            userRating.setReviewerUsertable(usertableService.populateUsertable(resultSet, POPULATESIZE + 1, ""));
+            UserRating userRating = populateUserRating(resultSet, 1, "reviewerUsertable");
             userRatings.add(userRating);
         }
         resultSet.close();
         return userRatings;
+    }
+
+    public List<UserRating> getUserReviewsAndRevieweeUsertablesByUserId(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getUserReviewsAndRevieweeUsertablesByUserId, args);
+        List<UserRating> userRatings = new ArrayList<>();
+        while(resultSet.next()) {
+            UserRating userRating = populateUserRating(resultSet, 1, "reviewerUsertable");
+            userRatings.add(userRating);
+        }
+        resultSet.close();
+        return userRatings;
+    }
+
+    public UserRating populateUserRating(ResultSet resultSet, Integer startPoint, String info) throws SQLException {
+        UserRating userRating = new UserRating();
+        userRating.setId(resultSet.getInt(startPoint));
+        userRating.setRiftId(resultSet.getInt(startPoint + 1));
+        userRating.setAccountType(resultSet.getBoolean(startPoint + 2));
+        userRating.setRating(resultSet.getDouble(startPoint + 3));
+        userRating.setReview(resultSet.getString(startPoint + 4));
+        userRating.setReviewerId(resultSet.getInt(startPoint + 5));
+        userRating.setCreatedTime(resultSet.getTimestamp(startPoint + 6));
+        userRating.setReviewTitle(resultSet.getString(startPoint + 7));
+        if (info.equals("reviewerUsertable")) {
+            userRating.setReviewerUsertable(usertableService.populateUsertable(resultSet, POPULATESIZE + 1, ""));
+        }
+        return userRating;
     }
 
     /*
