@@ -237,12 +237,4 @@ public class RifterSessionService {
         return true;
     }
 
-
-
-    /*
-    public RifterSession getRifterGameById(Integer id) {
-        return rifterGameRepository.getRifterGameById(id);
-    }
-    */
-
 }
