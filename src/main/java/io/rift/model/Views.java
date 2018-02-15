@@ -46,7 +46,8 @@ public class Views {
     /******************************************************************/
 
     public interface RifterSesionInfo extends RifterSessionCardInfo, RifterSessionNumSlots, RifterSessionExpirationTime,
-            RifterSessionMethodOfContact, RifterSessionSessionType, RifterSessionHits, RifterSessionCreatedTime {}
+            RifterSessionMethodOfContact, RifterSessionSessionType, RifterSessionHits, RifterSessionCreatedTime,
+            RifterSessionDescription {}
 
     public interface RifterSessionCardInfo extends RifterSessionId, RifterSessionHostId, RifterSessionSlotsRemaining, RifterSessionCost,
             RifterSessionSessionTime, RifterSessionConsole, RifterSessionGameId, RifterSessionTitle, RifterSessionSessionDuration {}
@@ -80,6 +81,8 @@ public class Views {
     public interface RifterSessionSlotsRemaining {}
 
     public interface RifterSessionCreatedTime {}
+
+    public interface RifterSessionDescription {}
 
     public interface RifterSessionSessionRequests {}
 
