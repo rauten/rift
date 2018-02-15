@@ -249,7 +249,7 @@
         FROM riftergame JOIN usertable
         ON host_id = usertable.id
         WHERE rift_tag = ?
-        ORDER BY session_time desc;
+        ORDER BY session_time;
     </getRifterAndRifteeSessionsByRiftTag>
 
     <getRequestStatus>
