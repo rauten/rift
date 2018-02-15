@@ -26,13 +26,25 @@ public class UserRatingController {
     @Autowired
     private UsertableService usertableService;
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
-    public Boolean createRating(@RequestBody UserRating userRating) throws SQLException {
-
-        return userRatingService.createRating(userRating);
+    /**
+     * Returns whether or not a user is allowed to rate another user for anything
+     * @param riftId
+     * @param reviewerId
+     * @return
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "rating/{riftId}/allowedToRate/{reviewerId}")
+    public Integer isAllowedToRate(@PathVariable Integer riftId, @PathVariable Integer reviewerId) throws SQLException {
+        return userRatingService.isAllowedToRate(riftId, reviewerId);
     }
 
-
+    /**
+     * Checks to see whether the user is still allowed to rate another user and if what they are trying to rate them for
+     * is valid or not
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     @JsonView(Views.GetUserRatings.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rating/userRatings/{id}")
     public List<UserRating> getUserRatingsAndReviewerUsertablesById(@PathVariable Integer id) throws SQLException {
@@ -49,9 +61,21 @@ public class UserRatingController {
     }
     */
 
+    /**
+     * Retrieves the reviews of all individuals and usertables of their reviewers
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    @JsonView(Views.UserReviews.class)
     @RequestMapping(method = RequestMethod.GET, value = "/rating/userReviews/{id}")
-    public List<UserRating> getUserReviewsAndRevieweeUsertablesByUserId(@PathVariable Integer id) throws SQLException {
-        return userRatingService.getUserReviewsAndRevieweeUsertablesByUserId(id);
+    public List<UserRating> getUserReviewsAndReviewerUsertablesByUserId(@PathVariable Integer id) throws SQLException {
+        return userRatingService.getUserReviewsAndReviewerUsertablesByUserId(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
+    public Integer createRating(@RequestBody UserRating userRating) throws SQLException {
+        return userRatingService.createRating(userRating);
     }
 
     /*

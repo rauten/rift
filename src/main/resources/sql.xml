@@ -82,12 +82,15 @@
         SELECT *
         FROM notification n JOIN riftergame r
         ON n.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE n.creator_id = ?
     </getUserActiviyAndUserSession>
 
     <getUserAndRifterSessions>
         SELECT *
-        FROM riftergame
+        FROM riftergame r JOIN game g
+        ON r.game_id = g.id
         WHERE host_id = ?
         ORDER BY session_time
     </getUserAndRifterSessions>
@@ -96,6 +99,8 @@
         SELECT *
         FROM gamerequest g JOIN riftergame r
         ON g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE g.riftee_id = ?;
     </getGameRequestsAndGameInfoByUserId>
 
@@ -112,6 +117,8 @@
         ON g.host_id = u.id
         JOIN riftergame r
         ON g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE g.riftee_id = ?;
     </getGameRequestsAndGameInfoAndHostInfoByUserId>
 
@@ -131,6 +138,8 @@
         SELECT *
         FROM gamerequest g JOIN riftergame r
         ON g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE g.riftee_id = ? AND accepted = ?
     </getGameRequestsAndGameInfoByUserIdAndAccepted>
 
@@ -147,6 +156,8 @@
         ON g.host_id = u.id
         JOIN riftergame r
         ON g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE g.riftee_id = ? AND accepted = ?;
     </getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted>
 
@@ -168,6 +179,8 @@
         FROM gamerequest g
         JOIN riftergame r
         ON g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         JOIN notification n
         ON r.host_id = n.creator_id
         WHERE g.riftee_id = ? AND (n.notification_type = 'sessionUpdate' OR n.notification_type = 'sessionDeletion') AND r.num_slots != -1;
@@ -192,7 +205,8 @@
 
     <getRifterGameById>
         SELECT *
-        FROM riftergame
+        FROM riftergame r JOIN game g
+        ON r.game_id = g.id
         WHERE id = ?;
     </getRifterGameById>
 
@@ -200,19 +214,24 @@
         SELECT *
         FROM gamerequest g JOIN riftergame r
         ON g.host_id = r.host_id AND g.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
         WHERE g.riftee_id = ? AND g.host_id = ? AND r.session_time &lt; current_timestamp;
     </getGameByHostAndPlayerId>
 
     <getRifterGameAndHostByGameId>
         SELECT *
-        FROM riftergame r JOIN usertable u
+        FROM riftergame r JOIN game g
+        ON r.game_id = g.id
+        JOIN usertable u
         ON r.host_id = u.id
         WHERE r.id = ?
     </getRifterGameAndHostByGameId>
 
     <getRifterSessionByHostIdAndSessionTime>
         SELECT *
-        FROM riftergame
+        FROM riftergame r JOIN game g
+        ON r.game_id = g.id
         WHERE host_id = ? AND session_time = ?
     </getRifterSessionByHostIdAndSessionTime>
 
@@ -224,11 +243,13 @@
     </getSessionPlayersBySessionId>
 
     <getRifteeSessionsAndHostInfoByRiftTag>
-        SELECT r.*, g.accepted, u.*
+        SELECT r.*, ga.*, g.accepted, u.*
         FROM usertable us JOIN gamerequest g
         ON us.id = g.riftee_id
         JOIN riftergame r
         ON g.host_id = r.host_id AND g.session_id = r.id
+        JOIN game ga
+        on r.game_id = ga.id
         JOIN usertable u
         ON r.host_id = u.id
         WHERE us.rift_tag = ?
@@ -236,17 +257,22 @@
     </getRifteeSessionsAndHostInfoByRiftTag>
 
     <getRifterAndRifteeSessionsByRiftTag>
-        SELECT r.*, g.accepted, u.*
+        SELECT r.*, ga.*, g.accepted, u.*
         FROM usertable us JOIN gamerequest g
         ON us.id = g.riftee_id
         JOIN riftergame r
         ON g.host_id = r.host_id AND g.session_id = r.id
+        JOIN game ga
+        on r.game_id = ga.id
         JOIN usertable u
         ON r.host_id = u.id
         WHERE us.rift_tag = ?
         UNION
-        SELECT riftergame.*, null, usertable.*
-        FROM riftergame JOIN usertable
+        SELECT riftergame.*, game.*, null, usertable.*
+        FROM riftergame
+        JOIN game
+        ON game_id = game.id
+        JOIN usertable
         ON host_id = usertable.id
         WHERE rift_tag = ?
         ORDER BY session_time;
@@ -260,7 +286,7 @@
 
     <createGame>
         INSERT INTO riftergame
-        (host_id, num_slots, session_cost, title, session_duration, session_time, game, console, slots_remaining, created_time)
+        (host_id, num_slots, session_cost, title, session_duration, session_time, game_id, console, slots_remaining, created_time)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
 
@@ -310,10 +336,12 @@
     <searchRifterSession>
         SELECT *
         FROM (
-            SELECT r.*, levenshtein(game, ?, 3, 2, 5) as op, levenshtein(split_part(game, ' ', 1), ?, 3, 2, 5) as op2, levenshtein(rift_tag, ?, 3, 2, 5) as op3, u.*
+            SELECT r.*, g.*, levenshtein(game, ?, 3, 2, 5) as op, levenshtein(split_part(game, ' ', 1), ?, 3, 2, 5) as op2, levenshtein(rift_tag, ?, 3, 2, 5) as op3, u.*
             FROM riftergame r
             JOIN usertable u
             ON r.host_id = u.id
+            JOIN game g
+            ON r.game_id = g.id
             ) as t
         WHERE op &lt; ? OR op2 &lt; ? OR op3 &lt; ? OR op &lt; (7 + ceil(3*(0.09697 + ln(char_length(t.game))))) OR op2 &lt; (7 + ceil(3*(0.09697+ ln(char_length(split_part(t.game, ' ', 1)))))) OR op3 &lt; (7 + ceil(3*(0.09697 + ln(char_length(t.rift_tag)))))
         ORDER BY LEAST(op, op2);
@@ -338,18 +366,20 @@
         WHERE r.rift_id = ?;
     </getUserRatingsAndReviewerUsertablesById>
 
-    <getUserReviewsAndRevieweeUsertablesByUserId>
+    <getUserReviewsAndReviewerUsertablesByUserId>
         SELECT *
         FROM userrating r JOIN usertable u
         ON r.rift_id = u.id
         WHERE r.reviewer_id = ?;
-    </getUserReviewsAndRevieweeUsertablesByUserId>
+    </getUserReviewsAndReviewerUsertablesByUserId>
 
     <getPlayerUsertablesBySessionId>
         SELECT u.*
         FROM gamerequest g
         JOIN riftergame r
         ON g.session_id = r.id AND g.host_id = r.host_id
+        JOIN game ga
+        ON r.game_id = ga.id
         JOIN usertable u
         ON g.riftee_id = u.id
         WHERE g.session_id = 40 AND accepted = 2;

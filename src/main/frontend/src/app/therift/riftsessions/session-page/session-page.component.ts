@@ -61,10 +61,10 @@ export class SessionPageComponent implements OnInit {
         this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
         this.session.numSlots = this.response.numSlots;
-        this.session.game = this.response.game;
-        if (this.session.game == "League of Legends") {
+        this.session.game_id = this.response.game_id;
+        if (this.session.game_id == 0) {
           this.sessionIcon = SESSION_ICONS.leagueOfLegends;
-        } else if (this.session.game == "Fortnite") {
+        } else if (this.session.game_id == 2) {
           this.sessionIcon = SESSION_ICONS.fortnite;
         }
         this.getSessionRiftees(this.response.players);

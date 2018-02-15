@@ -32,6 +32,9 @@ public class RifterSessionService {
     @Autowired
     private UsertableService usertableService;
 
+    @Autowired
+    private GameService gameService;
+
     public final int POPULATESIZE = 15;
 
     private final String getRifterGameById = "getRifterGameById";
@@ -64,7 +67,7 @@ public class RifterSessionService {
         if (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             if (rifterSession.getId() != null) {
-                Usertable usertable = usertableService.populateUsertable(resultSet, POPULATESIZE + 1, "");
+                Usertable usertable = usertableService.populateUsertable(resultSet, POPULATESIZE + gameService.POPULATESIZE + 1, "");
                 rifterSession.setUsertable(usertable);
             }
             resultSet.close();
@@ -142,10 +145,12 @@ public class RifterSessionService {
         rifterSession.setHits(resultSet.getInt(startPoint + 8));
         rifterSession.setSessionDuration((PGInterval)resultSet.getObject(startPoint + 9));
         rifterSession.setSessionTime(resultSet.getTimestamp(startPoint + 10));
-        rifterSession.setGame(resultSet.getString(startPoint + 11));
+        rifterSession.setGameId(resultSet.getInt(startPoint + 11));
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
+        rifterSession.setGame(gameService.populateGame(resultSet, startPoint + 15, ""));
+        startPoint += gameService.POPULATESIZE;
         if (info.equals("levenshteinSearch")) {
             rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
             rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 16));

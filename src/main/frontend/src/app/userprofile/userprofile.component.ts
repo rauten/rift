@@ -211,7 +211,7 @@ export class UserprofileComponent implements OnInit {
           currSession.sessionTime = date;
           currSession.id = resBody.rifterSessions[i].id;
           currSession.numSlots = resBody.rifterSessions[i].numSlots;
-          currSession.game = resBody.rifterSessions[i].game;
+          currSession.game_id = resBody.rifterSessions[i].game_id;
           this.currentUser.rifterSessions.push(currSession);
         }
       }

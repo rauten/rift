@@ -49,7 +49,7 @@ public class Views {
             RifterSessionMethodOfContact, RifterSessionSessionType, RifterSessionHits, RifterSessionCreatedTime {}
 
     public interface RifterSessionCardInfo extends RifterSessionId, RifterSessionHostId, RifterSessionSlotsRemaining, RifterSessionCost,
-            RifterSessionSessionTime, RifterSessionConsole, RifterSessionGame, RifterSessionTitle, RifterSessionSessionDuration {}
+            RifterSessionSessionTime, RifterSessionConsole, RifterSessionGameId, RifterSessionTitle, RifterSessionSessionDuration {}
 
     public interface RifterSessionId {}
 
@@ -73,7 +73,7 @@ public class Views {
 
     public interface RifterSessionSessionTime {}
 
-    public interface RifterSessionGame{}
+    public interface RifterSessionGameId {}
 
     public interface RifterSessionConsole {}
 
@@ -88,6 +88,8 @@ public class Views {
     public interface RifterSessionNotifications {}
 
     public interface RifterSessionPlayers {}
+
+    public interface RifterSessionGame {}
 
     public interface RifterSessionGameLevenshtein {}
 
@@ -130,6 +132,9 @@ public class Views {
 
     /****************** UserRating Attributes ***********************/
     /****************************************************************/
+
+    public interface UserRatingAttributes extends UserRatingId, UserRatingRiftId, UserRatingAccountType, UserRatingRating,
+            UserRatingReview, UserRatingReviewerId, UserRatingCreatedTime, UserRatingReviewTitle {}
 
     public interface UserRatingId {}
 
@@ -229,6 +234,15 @@ public class Views {
     public interface UsertableFullNameLevenshtein {}
 
 
+    /****************** Usertable Attributes ***********************/
+    /****************************************************************/
+
+    public interface GameAttributes extends GameId, GameGame {}
+
+    public interface GameId {}
+
+    public interface GameGame {}
+
     /****************** GetProfilePage View ***********************/
     /**************************************************************/
 
@@ -238,11 +252,11 @@ public class Views {
             UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
             FollowingFollowerUsertable, NotificationId, NotificationUserId, NotificationType, NotificationContent,
             NotificationRifterSession, NotificationSessionId, NotificationCreatedTime, NotificationCreatorId,
-            RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame, RifterSessionConsole,
+            RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId, RifterSessionConsole,
             RifterSessionSlotsRemaining {}
 
     public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
-            RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGame,
+            RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId,
             RifterSessionSlotsRemaining, RifterSessionCreatedTime {}
 
     public interface CreateUser extends UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
@@ -254,7 +268,7 @@ public class Views {
     public interface UserRifterSessions extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableRifterRating,
             UsertableProfilePicturePath, UsertableRifterSessions, RifterSessionId, RifterSessionHostId, RifterSessionNumSlots,
             RifterSessionExpirationTime, RifterSessionCost, RifterSessionMethodOfContact, RifterSessionSessionTime,
-            RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGame,
+            RifterSessionSessionType, RifterSessionSessionDuration, RifterSessionTitle, RifterSessionHits, RifterSessionGameId,
             RifterSessionConsole, RifterSessionSlotsRemaining {}
 
     public interface GetUserRatings extends UserRatingAccountType, UserRatingRating, UserRatingReview, UserRatingReviewerId,
@@ -264,6 +278,8 @@ public class Views {
     public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
 
     public interface RifteeSessions extends RifterSessionCardInfo, RifterSessionSessionRequests, RifterSessionUsertable,
-            SessionRequestAccepted, UsertableCardInfo {}
+            SessionRequestAccepted, UsertableCardInfo, GameAttributes, RifterSessionGame {}
+
+    public interface UserReviews extends UserRatingAttributes, UserRatingReviewerUsertable, UsertableRestrictedInfo {}
 
 }
