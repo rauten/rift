@@ -15,7 +15,7 @@ export class SessionPageService {
 
   getSessionById(id: number) {
     console.log("running getSessionById");
-    return this.http.get(this.getSessionURL + id + "/host")
+    return this.http.get(this.getSessionURL + id)
       .map(
         (response: Response) => {
           return response.json();

@@ -1,3 +1,4 @@
+import {Userprofile} from "./userprofile";
 export class Session {
   id: number;
   firstName: string;
@@ -16,6 +17,7 @@ export class Session {
   game: string;
   numSlots: number;
   type: boolean;
+  riftees: Userprofile[] = [];
 
   slotsRemaining: number;
   usertable: any;

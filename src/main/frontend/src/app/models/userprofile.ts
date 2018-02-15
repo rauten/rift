@@ -25,7 +25,7 @@ export class Userprofile {
   email: string;
   ratings: UserRating[] = [];
   notifications: Notification[] = [];
-  sessionRequests: Map = new Map<number, SessionRequest>();
+  sessionRequests: any;
 
   followerUsertable: any;
   followingUsertable: any;

@@ -1,23 +1,60 @@
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">-->
-
 <div class="container">
-  <div class="card">
-    <div class="card-block">
-      <h4 class="card-title">{{session.title}}</h4>
-      <h6 class="card-subtitle mb-2 text-muted">@{{session.riftTag}}</h6>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default  panel--styled">
+        <div class="panel-body">
+          <div class="col-md-8 panelTop">
+            <div class="col-md-4">
+              <img class="img-responsive img-circle" src="{{sessionIcon}}" alt=""/>
+            </div>
+            <div class="col-md-8">
+              <h2>{{session.title}}</h2>
+              <p class="text-muted">{{session.firstName}} {{session.lastName}} @{{session.riftTag}}</p>
+              <p>Lorem ipsum dolor sit amet, altera propriae iudicabit eos ne. Vel ut accusam tacimates, prima oratio ius ea. Et duo alii verterem principes, te quo putent melius fabulas, ei scripta eligendi appareat duo.</p>
+            </div>
+          </div>
+          <div class="col-md-12 panelBottom">
+            <div class="col-md-4 text-center">
+              <div *ngIf="isLoggedIn && !(profile.nickname == session.riftTag)">
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="!request" (click)="joinUserSession()">Join</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==1">Pending</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==0">Rejected</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==2">Accepted</button>
+              </div>
+              <button class="btn btn-lg btn-add-to-cart" routerLink="update" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
+            </div>
+            <div class="col-md-4 text-left">
+              <h5>Price  <span class="itemPrice">${{session.sessionCost}}.00 / slot</span></h5>
+            </div>
+            <div class="col-md-4">
+                  <app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>
+            </div>
+          </div>
+          <div class="col-md-12 panelBottom">
+            <h4 class="text-center">Riftees</h4>
+            <table class="table table-striped custab">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Riftee Name</th>
+                  <th>Riftee Rift Tag</th>
+                  <th class="text-center">Riftee Rating</th>
+                </tr>
+              </thead>
+              <tr *ngFor="let riftee of session.riftees">
+                <td class="profilepicturehere">profile picture</td>
+                <td>{{riftee.firstName}} {{riftee.lastName}}</td>
+                <td>{{riftee.riftTag}}</td>
+                <td class="text-center">
+                  <app-rating [rating]="riftee.rifteeRating" [readonly]="true"></app-rating>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <button class="btn btn-primary" routerLink="update">Edit Session</button><br>
-  <div class="otherstuff" *ngIf="isLoggedIn && !(profile.nickname == session.riftTag)">
-    <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
-    <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
-    <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
-    <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
-  </div><br>
-
   sessionId: {{session.id}}<br>
   sessionTitle: {{session.title}}<br>
   sessionFirstName: {{session.firstName}}<br>
@@ -25,6 +62,12 @@
   sessionRiftTag: {{session.riftTag}}<br>
   sessionCost: {{session.sessionCost}}<br>
   sessionTime: {{session.sessionTime}}<br>
-  sessionSlots: {{session.numSlots}}
+  sessionSlots: {{session.numSlots}}<br>
+  sessionRifterRating: {{session.rifterRating}}<br>
+  sessionGame: {{session.game}}<br><br><br>
+
+  <button mat-button (click)="openDialog()">Open dialog</button>
+
 </div>
+
 <router-outlet></router-outlet>

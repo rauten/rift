@@ -83,7 +83,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
           this.getUserRifterSessions(riftTag);
-          this.getUserFollowersAndFollowing(riftTag);
+          this.getUserFollowersAndFollowing(riftTag);9
           this.getUserSessionRequests(this.profile.nickname);
       }
     );
@@ -219,7 +219,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserSessionRequests(riftTag: string) {
-    this.loggedInUser.sessionRequests.clear();
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable

@@ -1,8 +1,10 @@
+<mat-dialog-content>
 <form #updateSession="ngForm" class="editForm" novalidate>
   <div class="tab-pane fade in active">
     <h4 class="head text-center">{{title}}</h4>
     <br/>
     <div class='row'>
+      {{data.sessionTime}}
       <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
         <div class="row">
           <div class='col-xs-12 col-sm-6'>
@@ -69,4 +71,5 @@
 </form>
 
 <pre>{{ updateInfoData | json }}</pre>
+</mat-dialog-content>
 <!--[routerLink]="['../', currentUser.riftTag]"-->

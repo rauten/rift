@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import {Session} from "../../../../models/session";
 import {SessionDateTime} from "./data/sessionDateTime";
 import {UpdateSessionService} from "./data/update-session.service";
 import {ActivatedRoute} from "@angular/router";
+import {MAT_DIALOG_DATA} from "@angular/material";
 
 @Component({
   selector: 'app-update-session',
@@ -14,25 +15,34 @@ export class UpdateSessionComponent implements OnInit {
   currentSession: Session = new Session();
   currentSessionDateTime: SessionDateTime = new SessionDateTime();
   sub: any;
-  sessionId: number;
   @Input() updateSessionData;
 
-  constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute) {
-    this.sub = this.route.parent.params.subscribe(params => {
-      this.sessionId = params["sessionId"];
-    });
+  constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
+  @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
     this.currentSession = this.updateSessionService.getSessionData();
     this.updateSessionData = this.updateSessionService.getFormData();
+
   }
 
   save() {
     this.updateSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-    var timeMS = this.timeToMilliseconds(this.updateSessionData.sessionTime) + this.updateSessionData.sessionDate.getTime();
+    var d = new Date(this.data.sessionTime);
+    var currDate = d.toLocaleDateString();
+    var currTime = d.toLocaleTimeString("en-Us", {hour12: false, hour: '2-digit', minute:'2-digit'});
+    if (this.updateSessionData.sessionDate) {
+      var newD = this.updateSessionData.sessionDate;
+      currDate = newD.toLocaleDateString();
+    }
+    if (this.updateSessionData.sessionTime) {
+      currTime = this.updateSessionData.sessionTime;
+    }
+    var date = new Date(currDate);
+    var timeMS = this.timeToMilliseconds(currTime) + date.getTime();
     let data = {
-      "id": this.sessionId,
+      "id": this.data.sessionId,
       "title": this.updateSessionData.title,
       "game": this.updateSessionData.game,
       "console": this.updateSessionData.console,
@@ -53,3 +63,7 @@ export class UpdateSessionComponent implements OnInit {
     return seconds * 1000;
   }
 }
+
+// this.sub = this.route.parent.params.subscribe(params => {
+//   this.sessionId = params["sessionId"];
+// });

@@ -60,7 +60,7 @@ export class UsersessionsComponent implements OnInit {
   }
 
   getUserSessionRequests(riftTag: string) {
-    this.loggedInUser.sessionRequests.clear();
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>();
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
