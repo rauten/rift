@@ -55,6 +55,9 @@ public class RifterSession {
     @JsonView(Views.RifterSessionCreatedTime.class)
     private Timestamp createdTime;
 
+    @JsonView(Views.RifterSessionDescription.class)
+    private String description;
+
     @JsonView(Views.RifterSessionSessionRequests.class)
     private List<SessionRequest> sessionRequests;
 

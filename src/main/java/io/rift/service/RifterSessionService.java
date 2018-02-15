@@ -35,7 +35,7 @@ public class RifterSessionService {
     @Autowired
     private GameService gameService;
 
-    public final int POPULATESIZE = 15;
+    public final int POPULATESIZE = 16;
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
@@ -149,27 +149,28 @@ public class RifterSessionService {
         rifterSession.setConsole(resultSet.getString(startPoint + 12));
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
-        rifterSession.setGame(gameService.populateGame(resultSet, startPoint + 15, ""));
+        rifterSession.setDescription(resultSet.getString(startPoint + 15));
+        rifterSession.setGame(gameService.populateGame(resultSet, startPoint + 16, ""));
         startPoint += gameService.POPULATESIZE;
         if (info.equals("levenshteinSearch")) {
-            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 15));
-            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 16));
-            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + 17));
-            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 18, ""));
+            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 16));
+            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 17));
+            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + 18));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 19, ""));
         } else if (info.equals("request")) {
             SessionRequest sessionRequest = new SessionRequest();
-            sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
+            sessionRequest.setAccepted(resultSet.getShort(startPoint + 16));
             List<SessionRequest> sessionRequests = new ArrayList<>();
             sessionRequests.add(sessionRequest);
             rifterSession.setSessionRequests(sessionRequests);
         } else if (info.equals("requestInfo&Host")) {
-            if (resultSet.getObject(startPoint + 15) != null) {
+            if (resultSet.getObject(startPoint + 16) != null) {
                 SessionRequest sessionRequest = new SessionRequest();
-                sessionRequest.setAccepted(resultSet.getShort(startPoint + 15));
+                sessionRequest.setAccepted(resultSet.getShort(startPoint + 16));
                 List<SessionRequest> sessionRequests = new ArrayList<>();
                 sessionRequests.add(sessionRequest);
                 rifterSession.setSessionRequests(sessionRequests);
-                Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 16, "");
+                Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 17, "");
                 rifterSession.setUsertable(usertable);
             }
         }
