@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {SessionPageService} from "./session-page.service";
 import {Session} from "../../../models/session";
@@ -8,6 +8,7 @@ import {SESSION_ICONS} from "../../../constants/session-icon-variables";
 import {Userprofile} from "../../../models/userprofile";
 import {MatDialog} from "@angular/material";
 import {UpdateSessionComponent} from "./update-session/update-session.component";
+import {Globals} from "../../../global/globals";
 
 
 
@@ -28,7 +29,7 @@ export class SessionPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private sessionPageService: SessionPageService,
               private userProfileService: UserprofileService, private userSessionsService: UsersessionsService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog, private globals: Globals) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if (this.profile != null) {
       this.isLoggedIn = true;
@@ -61,10 +62,11 @@ export class SessionPageComponent implements OnInit {
         this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
         this.session.numSlots = this.response.numSlots;
-        this.session.game_id = this.response.game_id;
-        if (this.session.game_id == 0) {
+        this.session.gameId = this.response.gameId;
+        this.session.console = this.response.console;
+        if (this.session.gameId == 0) {
           this.sessionIcon = SESSION_ICONS.leagueOfLegends;
-        } else if (this.session.game_id == 2) {
+        } else if (this.session.gameId == 2) {
           this.sessionIcon = SESSION_ICONS.fortnite;
         }
         this.getSessionRiftees(this.response.players);

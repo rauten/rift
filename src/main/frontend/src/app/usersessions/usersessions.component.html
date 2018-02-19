@@ -2,6 +2,8 @@
   <button routerLink="create" type="button" class="btn btn-primary createASession" >
     Create a Session
   </button>
+  <button mat-button (click)="openDialog()">Open dialog</button>
+
   <mat-tab-group>
     <mat-tab label="card view">
       <!--<div *ngFor="let session of currentUser.rifterSessions">-->

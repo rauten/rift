@@ -4,6 +4,8 @@ import {SessionDateTime} from "./data/sessionDateTime";
 import {UpdateSessionService} from "./data/update-session.service";
 import {ActivatedRoute} from "@angular/router";
 import {MAT_DIALOG_DATA} from "@angular/material";
+import {GAMES} from "../../../../constants/games";
+import {CONSOLES} from "../../../../constants/consoles";
 
 @Component({
   selector: 'app-update-session',
@@ -16,15 +18,20 @@ export class UpdateSessionComponent implements OnInit {
   currentSessionDateTime: SessionDateTime = new SessionDateTime();
   sub: any;
   @Input() updateSessionData;
+  games: any;
+  consoles: any;
+  gameId: any;
+  platform: any;
 
   constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
   @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.games = GAMES;
+    this.consoles = CONSOLES;
   }
 
   ngOnInit() {
     this.currentSession = this.updateSessionService.getSessionData();
     this.updateSessionData = this.updateSessionService.getFormData();
-
   }
 
   save() {
@@ -44,8 +51,8 @@ export class UpdateSessionComponent implements OnInit {
     let data = {
       "id": this.data.sessionId,
       "title": this.updateSessionData.title,
-      "game": this.updateSessionData.game,
-      "console": this.updateSessionData.console,
+      "game_id": this.gameId,
+      "console": this.platform,
       "numSlots": this.updateSessionData.numSlots,
       "sessionCost": this.updateSessionData.sessionCost,
       "sessionTime": timeMS,

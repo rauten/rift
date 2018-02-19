@@ -66,6 +66,7 @@ import { UpdateSessionComponent } from './therift/riftsessions/session-page/upda
 import { UpdateSessionService } from "./therift/riftsessions/session-page/update-session/data/update-session.service";
 import { SessionAcceptRejectButtonComponent } from './components/session-accept-reject-button/session-accept-reject-button.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import {Globals} from "./global/globals";
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -132,6 +133,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
     { provide: MAT_DIALOG_DATA, useValue: {} },
+    Globals
   ],
   bootstrap: [AppComponent]
 })

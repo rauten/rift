@@ -1,18 +1,7 @@
-export const GAMES = {
-  leagueOfLegends: {
-    id: 0,
-    name: "League of Legends",
-  },
-  overwatch: {
-    id: 1,
-    name: "Overwatch"
-  },
-  fortnite: {
-    id: 2,
-    name: "Fortnite"
-  },
-  nba2k18: {
-    id: 3,
-    name: "NBA 2k18"
-  },
-};
+import {Game} from "../models/game";
+export const GAMES = [
+  new Game(0, "League of Legends"),
+  new Game(1, "Overwatch"),
+  new Game(2, "Fortnite"),
+  new Game(3, "NBA 2k18")
+];

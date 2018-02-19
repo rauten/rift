@@ -14,7 +14,7 @@ export class Session {
   sessionTime: any;
   rifterSessions: any;
   console: string;
-  game_id: number;
+  gameId: number;
   numSlots: number;
   type: boolean;
   riftees: Userprofile[] = [];

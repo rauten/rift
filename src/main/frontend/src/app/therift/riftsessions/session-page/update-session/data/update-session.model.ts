@@ -1,6 +1,6 @@
 export class UpdateSessionData {
   title: string = "";
-  game: string = "";
+  gameId: number;
   console: string = "";
 
   numSlots: any;

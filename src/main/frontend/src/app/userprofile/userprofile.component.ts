@@ -12,6 +12,7 @@ import {UserRating} from "../models/userrating";
 import {Notification} from "../models/notification";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 import {SessionRequest} from "../models/session-request";
+import {Globals} from "../global/globals";
 
 @Component({
   selector: 'app-userprofile',
@@ -30,7 +31,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService) {
+  private userSessionsService: UsersessionsService, private globals: Globals) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -48,6 +49,8 @@ export class UserprofileComponent implements OnInit {
       }
     });
   }
+
+
 
   getCurrentLoggedInUser():any {
     this.userProfileService.getUser(this.profile.nickname).subscribe(
@@ -211,7 +214,7 @@ export class UserprofileComponent implements OnInit {
           currSession.sessionTime = date;
           currSession.id = resBody.rifterSessions[i].id;
           currSession.numSlots = resBody.rifterSessions[i].numSlots;
-          currSession.game_id = resBody.rifterSessions[i].game_id;
+          currSession.gameId = resBody.rifterSessions[i].gameId;
           this.currentUser.rifterSessions.push(currSession);
         }
       }

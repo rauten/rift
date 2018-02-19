@@ -39,9 +39,9 @@ export class SessionCardComponent implements OnInit {
     if(this.isLoggedIn) {
       this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
     }
-    if(this.session.game == "League of Legends") {
+    if(this.session.gameId == 0) {
       this.sessionIcon=SESSION_ICONS.leagueOfLegends;
-    } else if (this.session.game == "Fortnite") {
+    } else if (this.session.gameId == 2) {
       this.sessionIcon=SESSION_ICONS.fortnite;
     }
   }

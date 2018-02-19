@@ -4,6 +4,8 @@ import {UsersessionsService} from "./usersessions.service";
 import {Session} from "../models/session";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {SessionRequest} from "../models/session-request";
+import {MatDialog} from "@angular/material";
+import {SessionformComponent} from "./sessionform/sessionform.component";
 
 @Component({
   selector: 'app-usersessions',
@@ -14,7 +16,8 @@ export class UsersessionsComponent implements OnInit {
   loggedInUser: Userprofile = new Userprofile();
   currentUser: Userprofile = new Userprofile();
   profile: any;
-  constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
+  constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
+              public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
   }
 
@@ -38,7 +41,7 @@ export class UsersessionsComponent implements OnInit {
           currSession.sessionCost = session.sessionCost;
           currSession.title = session.title;
           currSession.sessionTime = session.sessionTime;
-          currSession.game_id = session.game_id;
+          currSession.gameId = session.gameId;
           currSession.console = session.console;
           if (session.usertable) {
             currSession.firstName = session.usertable.firstName;
@@ -74,5 +77,13 @@ export class UsersessionsComponent implements OnInit {
         }
       }
     )
+  }
+
+  openDialog() {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialog.open(SessionformComponent, {
+
+    });
+
   }
 }

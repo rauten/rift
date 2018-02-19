@@ -18,7 +18,7 @@ export class FormDataService {
   getStep1Info(): Step1 {
     var step1: Step1 = {
       title: this.formData.title,
-      game: this.formData.game,
+      gameId: this.formData.gameId,
       console: this.formData.console
     };
     return step1;
@@ -27,7 +27,7 @@ export class FormDataService {
   setStep1Info(data: Step1) {
     this.isStep1Valid = true;
     this.formData.title = data.title;
-    this.formData.game = data.game;
+    this.formData.gameId = data.gameId;
     this.formData.console = data.console;
     this.workflowService.validateStep(STEPS.step1);
   }

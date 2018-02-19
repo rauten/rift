@@ -18,7 +18,7 @@ export class UpdateSessionService {
   getSessionData(): Session {
     var session: Session = new Session();
     session.title = this.updateSessionData.title;
-    session.game = this.updateSessionData.game;
+    session.gameId = this.updateSessionData.gameId;
     session.console = this.updateSessionData.console;
     session.numSlots = this.updateSessionData.numSlots;
     session.sessionCost = this.updateSessionData.sessionCost;
@@ -28,7 +28,7 @@ export class UpdateSessionService {
   setSessionData(data: Session, dateTime: SessionDateTime) {
     this.isValid = true;
     this.updateSessionData.title = data.title;
-    this.updateSessionData.game = data.game;
+    this.updateSessionData.gameId = data.gameId;
     this.updateSessionData.console = data.console;
     this.updateSessionData.numSlots = data.numSlots;
     this.updateSessionData.sessionCost = data.sessionCost;
