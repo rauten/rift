@@ -181,10 +181,10 @@ public class RifterSessionService {
         boolean success2 = false;
         boolean success = riftRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
-                        rifterSession.getSessionTime(), rifterSession.getGame(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
+                        rifterSession.getSessionTime(), rifterSession.getGameId(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
 
         if (success) {
-            String notificationContent = rifterSession.getHostId() + " has created a new session slot for " + rifterSession.getGame() + " on " + rifterSession.getConsole() + "!";
+            String notificationContent = rifterSession.getHostId() + " has created a new session slot for " + rifterSession.getGameId() + " on " + rifterSession.getConsole() + "!";
 
             RifterSession newRifterSession = getRifterSessionByHostIdAndSessionTime(rifterSession.getHostId(), rifterSession.getSessionTime());
 
