@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {Userprofile} from "../../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
+import {MatDialogRef} from "@angular/material";
 
 @Component({
   selector: 'app-update-info',
@@ -15,7 +16,9 @@ export class UpdateInfoComponent implements OnInit {
   profile: any;
   @Input() updateInfoData;
 
-  constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService) {
+  //noinspection JSAnnotator
+  constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
+              private dialogRef: MatDialogRef<UpdateInfoComponent>) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     console.log(this.profile);
   }
@@ -47,16 +50,6 @@ export class UpdateInfoComponent implements OnInit {
       "id" : this.loggedInUser.id,
       "bio" : this.updateInfoData.bio
     };
-
-    /*
-    let auth0data = {
-      'user_metadata': {
-        'firstName': this.updateInfoData.firstName,
-        'lastName': this.updateInfoData.riftTag
-      },
-      'username' : this.updateInfoData.riftTag
-    };
-    */
     let auth0data = {
       'firstName': this.updateInfoData.firstName,
       'lastName':this.updateInfoData.lastName,
@@ -69,5 +62,10 @@ export class UpdateInfoComponent implements OnInit {
     this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
     // window.location.reload();
+  }
+
+  cancel(): void {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialogRef.close();
   }
 }

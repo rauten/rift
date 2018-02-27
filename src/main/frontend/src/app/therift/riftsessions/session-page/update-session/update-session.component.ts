@@ -3,7 +3,7 @@ import {Session} from "../../../../models/session";
 import {SessionDateTime} from "./data/sessionDateTime";
 import {UpdateSessionService} from "./data/update-session.service";
 import {ActivatedRoute} from "@angular/router";
-import {MAT_DIALOG_DATA} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {GAMES} from "../../../../constants/games";
 import {CONSOLES} from "../../../../constants/consoles";
 
@@ -23,8 +23,9 @@ export class UpdateSessionComponent implements OnInit {
   gameId: any;
   platform: any;
 
+  //noinspection JSAnnotator
   constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
-  @Inject(MAT_DIALOG_DATA) public data: any) {
+  @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateSessionComponent>) {
     this.games = GAMES;
     this.consoles = CONSOLES;
   }
@@ -51,7 +52,8 @@ export class UpdateSessionComponent implements OnInit {
     let data = {
       "id": this.data.sessionId,
       "title": this.updateSessionData.title,
-      "game_id": this.gameId,
+      "description": this.updateSessionData.description,
+      "gameId": this.gameId,
       "console": this.platform,
       "numSlots": this.updateSessionData.numSlots,
       "sessionCost": this.updateSessionData.sessionCost,
@@ -60,6 +62,8 @@ export class UpdateSessionComponent implements OnInit {
     };
     console.log(data);
     this.updateSessionService.updateUserSession(data);
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialogRef.close();
   }
 
   timeToMilliseconds(time: string) {
@@ -69,8 +73,9 @@ export class UpdateSessionComponent implements OnInit {
     var seconds = (hour * 60 * 60) + (minute * 60);
     return seconds * 1000;
   }
-}
 
-// this.sub = this.route.parent.params.subscribe(params => {
-//   this.sessionId = params["sessionId"];
-// });
+  cancel(): void {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialogRef.close();
+  }
+}

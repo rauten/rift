@@ -3,17 +3,18 @@
     <div class="col-md-12">
       <div class="panel panel-default  panel--styled">
         <div class="panel-body">
+          <div class="console">
+            <img class="img-responsive img-circle consoleIcon" src="{{consoleIcon}}" alt=""/>
+            <!--<p>{{session.console}}</p>-->
+          </div>
           <div class="col-md-8 panelTop">
             <div class="col-md-4">
-              <img class="img-responsive img-circle" src="{{sessionIcon}}" alt=""/>
-            </div>
-            <div class="col-md-4">
-              <p>{{session.console}}</p>
+              <img class="img-responsive img-circle sessionIcon" src="{{sessionIcon}}" alt=""/>
             </div>
             <div class="col-md-8">
               <h2>{{session.title}}</h2>
               <p class="text-muted">{{session.firstName}} {{session.lastName}} @{{session.riftTag}}</p>
-              <p>Lorem ipsum dolor sit amet, altera propriae iudicabit eos ne. Vel ut accusam tacimates, prima oratio ius ea. Et duo alii verterem principes, te quo putent melius fabulas, ei scripta eligendi appareat duo.</p>
+              <p>{{session.description}}</p>
             </div>
           </div>
           <div class="col-md-12 panelBottom">
@@ -24,7 +25,7 @@
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==0">Rejected</button>
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==2">Accepted</button>
               </div>
-              <button class="btn btn-lg btn-add-to-cart" routerLink="update" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
+              <button class="btn btn-lg btn-add-to-cart" mat-button (click)="openDialog()" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
             </div>
             <div class="col-md-4 text-left">
               <h5>Price  <span class="itemPrice">${{session.sessionCost}}.00 / slot</span></h5>
@@ -69,8 +70,8 @@
   sessionRifterRating: {{session.rifterRating}}<br>
   sessionGame: {{session.gameId}}<br>
   sessionConsole: {{session.console}}<br>
+  sessionDescription: {{session.description}}<br>
   globals: {{globals.role}}<br>
-  globalLoggedInUserFirstName: {{globals.loggedInUser.firstName}}
   <br><br><br>
 
   <button mat-button (click)="openDialog()">Open dialog</button>

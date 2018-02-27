@@ -3,14 +3,17 @@
   margin-top: 5%;
 }
 
-.modal-backdrop.fade
-{
-  opacity: 0.5 !important;
+.console {
+  position: absolute;
+  top: 20px;
+  right: 50px;
 }
-.modal-open .modal
-{
-  opacity: 1 !important;
+
+.consoleIcon {
+  max-height: 100px;
+  max-width: 100px;
 }
+
 
 /*----------------------
 Product Card Styles

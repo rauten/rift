@@ -9,7 +9,7 @@ import 'hammerjs';
 import {MatTabsModule} from '@angular/material/tabs';
 import {
   MatStepperModule, MatFormFieldModule, MatInputModule, MatDatepickerModule,
-  MatNativeDateModule, MAT_DIALOG_DATA
+  MatNativeDateModule, MAT_DIALOG_DATA, MatDialog
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -66,7 +66,18 @@ import { UpdateSessionComponent } from './therift/riftsessions/session-page/upda
 import { UpdateSessionService } from "./therift/riftsessions/session-page/update-session/data/update-session.service";
 import { SessionAcceptRejectButtonComponent } from './components/session-accept-reject-button/session-accept-reject-button.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 import {Globals} from "./global/globals";
+import {CreateSessionService} from "./usersessions/create-session/data/create-session.service";
+import {CreateSessionComponent} from "./usersessions/create-session/create-session.component";
+import {SessionTypePipe} from "./pipes/session-type.pipe";
+import { SessionTimePipe } from './pipes/session-time.pipe';
+import { GameFilterPipe } from './pipes/game-filter.pipe';
+import { ConsoleFilterPipe } from './pipes/console-filter.pipe';
+
+import { BsDropdownModule } from 'ngx-bootstrap';
+
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -85,7 +96,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TheriftComponent,
     RiftsessionsComponent,
     SessionCardComponent,
-    CapitalizePipe,
     SessionformComponent,
     FormnavComponent,
     Step1Component,
@@ -103,7 +113,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     RatingComponent,
     UpdateSessionComponent,
     SessionAcceptRejectButtonComponent,
-    DialogContentExampleDialog
+    DialogContentExampleDialog,
+    CreateSessionComponent,
+
+    CapitalizePipe,
+    SessionTypePipe,
+    SessionTimePipe,
+    GameFilterPipe,
+    ConsoleFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -123,12 +140,15 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FormWizardModule,
     MatSelectModule,
     MatSliderModule,
+    MatCheckboxModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
+    BsDropdownModule.forRoot()
   ],
-  entryComponents: [SessionPageComponent, UpdateSessionComponent],
+  entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
+  UserprofileComponent, UpdateInfoComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService, UpdateSessionService,
+    UserRatingService, UpdateSessionService, CreateSessionService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},

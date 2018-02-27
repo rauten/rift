@@ -18,6 +18,7 @@ export class Session {
   numSlots: number;
   type: boolean;
   riftees: Userprofile[] = [];
+  description: string;
 
   slotsRemaining: number;
   usertable: any;

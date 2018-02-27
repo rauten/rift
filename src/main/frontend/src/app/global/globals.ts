@@ -5,5 +5,4 @@ import {Userprofile} from "../models/userprofile";
 export class Globals {
   role: string = 'test';
   loggedInUser: Userprofile = new Userprofile();
-
 }

@@ -13,6 +13,8 @@ import {Notification} from "../models/notification";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 import {SessionRequest} from "../models/session-request";
 import {Globals} from "../global/globals";
+import {MatDialog} from "@angular/material";
+import {UpdateInfoComponent} from "./update-info/update-info.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -31,7 +33,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService, private globals: Globals) {
+  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -50,8 +52,6 @@ export class UserprofileComponent implements OnInit {
     });
   }
 
-
-
   getCurrentLoggedInUser():any {
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
@@ -60,6 +60,7 @@ export class UserprofileComponent implements OnInit {
         this.loggedInUser.riftTag = resBody.riftTag;
         this.loggedInUser.gender = resBody.gender;
         this.loggedInUser.bio = resBody.bio;
+        this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
@@ -215,6 +216,12 @@ export class UserprofileComponent implements OnInit {
           currSession.id = resBody.rifterSessions[i].id;
           currSession.numSlots = resBody.rifterSessions[i].numSlots;
           currSession.gameId = resBody.rifterSessions[i].gameId;
+          currSession.console = resBody.rifterSessions[i].console;
+          if(currSession.hostId == this.loggedInUser.id) {
+            currSession.type = true;
+          } else {
+            currSession.type = false;
+          }
           this.currentUser.rifterSessions.push(currSession);
         }
       }
@@ -247,6 +254,15 @@ export class UserprofileComponent implements OnInit {
       }
     }
     this.following = false;
+  }
+
+  openDialog() {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialog.open(UpdateInfoComponent, {
+      height: '450px',
+      width: '600px',
+    });
+
   }
 
 }

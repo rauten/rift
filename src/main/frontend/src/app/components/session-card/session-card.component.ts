@@ -4,6 +4,7 @@ import {Session} from "../../models/session";
 import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {UserprofileService} from "../../userprofile/userprofile.service";
 import {SessionRequest} from "../../models/session-request";
+import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
 
 @Component({
   selector: 'app-session-card',
@@ -12,6 +13,8 @@ import {SessionRequest} from "../../models/session-request";
 })
 export class SessionCardComponent implements OnInit {
   sessionIcon: string;
+  consoleIcon: string;
+
   @Input() session: Session;
   @Input() request: SessionRequest;
   @Input() isLoggedIn: boolean;
@@ -39,11 +42,8 @@ export class SessionCardComponent implements OnInit {
     if(this.isLoggedIn) {
       this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
     }
-    if(this.session.gameId == 0) {
-      this.sessionIcon=SESSION_ICONS.leagueOfLegends;
-    } else if (this.session.gameId == 2) {
-      this.sessionIcon=SESSION_ICONS.fortnite;
-    }
+    this.sessionIcon=SESSION_ICONS[this.session.gameId];
+    this.consoleIcon=CONSOLE_ICONS[this.session.console];
   }
 
   joinUserSession() {

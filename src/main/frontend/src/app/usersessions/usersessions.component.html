@@ -1,27 +1,54 @@
 <div class="container" style="width: 80%">
-  <button routerLink="create" type="button" class="btn btn-primary createASession" >
-    Create a Session
-  </button>
-  <button mat-button (click)="openDialog()">Open dialog</button>
 
+  <div class="filters">
+    <button (click)="openDialog()" type="button" class="btn btn-primary createASession" >
+      Create a Session
+    </button>
+    <h5>Filter by Session Type</h5>
+    <div>
+      <div class="category-filter filter-wrapper">
+        <label class="fake-checkbox">
+          <mat-checkbox [(ngModel)]="rifter"> Rifter </mat-checkbox>
+          <mat-checkbox [(ngModel)]="riftee"> Riftee </mat-checkbox>
+        </label>
+      </div>
+    </div>
+    <h5>Filter by Session Time</h5>
+    <div>
+      <div class="category-filter filter-wrapper">
+          <mat-checkbox [(ngModel)]="upcoming"> Upcoming </mat-checkbox>
+          <mat-checkbox [(ngModel)]="past"> Past </mat-checkbox>
+      </div>
+    </div>
+    <h5>Filter by Game</h5>
+    <div>
+      <div class="category-filter filter-wrapper">
+        <div *ngFor="let game of games">
+          <mat-checkbox [(ngModel)]="game.selected"> {{game.name}} </mat-checkbox>
+        </div>
+      </div>
+    </div>
+    <h5>Filter by Console</h5>
+    <div>
+      <div class="category-filter filter-wrapper">
+        <div *ngFor="let console of consoles">
+          <mat-checkbox [(ngModel)]="console.selected"> {{console.name}} </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
   <mat-tab-group>
     <mat-tab label="card view">
-      <!--<div *ngFor="let session of currentUser.rifterSessions">-->
-        <!--<app-session-card [routerLink]="['../session', session.id]"-->
-          <!--[session]="session" [type]="true"-->
-        <!--&gt;</app-session-card>-->
+      <!--<div class="sessions">-->
+        <div *ngFor="let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |
+          gameFilter: selectedGames | consoleFilter: selectedConsoles">
+          <app-session-card [routerLink]="['../session', session.id]"
+                            [session]="session" [type]="session.type" [isLoggedIn]="true"
+                            [request]="loggedInUser.sessionRequests.get(session.id)"
+          ></app-session-card>
+        </div>
       <!--</div>-->
-      <!--<div *ngFor="let session of currentUser.rifteeSessions">-->
-        <!--<app-session-card [routerLink]="['../session', session.id]"-->
-                          <!--[session]="session" [type]="false"-->
-        <!--&gt;</app-session-card>-->
-      <!--</div>-->
-      <div *ngFor="let session of currentUser.sessions">
-        <app-session-card [routerLink]="['../session', session.id]"
-                          [session]="session" [type]="session.type" [isLoggedIn]="true"
-                          [request]="loggedInUser.sessionRequests.get(session.id)"
-        ></app-session-card>
-      </div>
+
     </mat-tab>
     <mat-tab label="calendar">
       <h1>Some more tab content</h1>

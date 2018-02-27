@@ -9,6 +9,7 @@ import {Userprofile} from "../../../models/userprofile";
 import {MatDialog} from "@angular/material";
 import {UpdateSessionComponent} from "./update-session/update-session.component";
 import {Globals} from "../../../global/globals";
+import {CONSOLE_ICONS} from "../../../constants/console-icon-variables";
 
 
 
@@ -25,7 +26,9 @@ export class SessionPageComponent implements OnInit {
   isLoggedIn: boolean = false;
   profile: any;
   loggedInUserId: number;
+
   sessionIcon: string;
+  consoleIcon: string;
 
   constructor(private route: ActivatedRoute, private sessionPageService: SessionPageService,
               private userProfileService: UserprofileService, private userSessionsService: UsersessionsService,
@@ -58,17 +61,15 @@ export class SessionPageComponent implements OnInit {
         this.session.lastName = this.response.usertable.lastName;
         this.session.methodOfContact = this.response.methodOfContact;
         this.session.title = this.response.title;
+        this.session.description = this.response.description;
         this.session.hits = this.response.hits;
         this.session.sessionTime = this.response.sessionTime;
         this.session.sessionCost = this.response.sessionCost;
         this.session.numSlots = this.response.numSlots;
         this.session.gameId = this.response.gameId;
         this.session.console = this.response.console;
-        if (this.session.gameId == 0) {
-          this.sessionIcon = SESSION_ICONS.leagueOfLegends;
-        } else if (this.session.gameId == 2) {
-          this.sessionIcon = SESSION_ICONS.fortnite;
-        }
+        this.sessionIcon=SESSION_ICONS[this.session.gameId];
+        this.consoleIcon = CONSOLE_ICONS[this.session.console];
         this.getSessionRiftees(this.response.players);
       }
     )

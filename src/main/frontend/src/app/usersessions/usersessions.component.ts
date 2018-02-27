@@ -6,6 +6,9 @@ import {UserprofileService} from "../userprofile/userprofile.service";
 import {SessionRequest} from "../models/session-request";
 import {MatDialog} from "@angular/material";
 import {SessionformComponent} from "./sessionform/sessionform.component";
+import {CreateSessionComponent} from "./create-session/create-session.component";
+import {GAMES} from "../constants/games";
+import {CONSOLES} from "../constants/consoles";
 
 @Component({
   selector: 'app-usersessions',
@@ -15,6 +18,8 @@ import {SessionformComponent} from "./sessionform/sessionform.component";
 export class UsersessionsComponent implements OnInit {
   loggedInUser: Userprofile = new Userprofile();
   currentUser: Userprofile = new Userprofile();
+  games: any;
+  consoles: any;
   profile: any;
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
               public dialog: MatDialog) {
@@ -22,6 +27,8 @@ export class UsersessionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.games = GAMES;
+    this.consoles = CONSOLES;
     var riftTag = this.profile.nickname;
     this.getUserRifterAndRifteeSessions(riftTag);
     this.getUserSessionRequests(riftTag);
@@ -81,9 +88,27 @@ export class UsersessionsComponent implements OnInit {
 
   openDialog() {
     //noinspection TypeScriptUnresolvedFunction
-    this.dialog.open(SessionformComponent, {
+    this.dialog.open(CreateSessionComponent, {
 
     });
 
+  }
+
+  get selectedGames() {
+    return this.games.reduce((games, game) => {
+      if (game.selected) {
+        games.push(game.id);
+      }
+      return games;
+    }, [])
+  }
+
+  get selectedConsoles() {
+    return this.consoles.reduce((consoles, console) => {
+      if (console.selected) {
+        consoles.push(console.name);
+      }
+      return consoles;
+    }, [])
   }
 }
