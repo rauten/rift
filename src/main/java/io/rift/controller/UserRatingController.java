@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.View;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -34,8 +36,10 @@ public class UserRatingController {
      * @throws SQLException
      */
     @RequestMapping(method = RequestMethod.GET, value = "rating/{riftId}/allowedToRate/{reviewerId}")
-    public Integer isAllowedToRate(@PathVariable Integer riftId, @PathVariable Integer reviewerId) throws SQLException {
-        return userRatingService.isAllowedToRate(riftId, reviewerId);
+    public Map<String, Integer> isAllowedToRate(@PathVariable Integer riftId, @PathVariable Integer reviewerId) throws SQLException {
+        Map<String, Integer> result = new HashMap<>();
+        result.put("result", userRatingService.isAllowedToRate(riftId, reviewerId));
+        return result;
     }
 
     /**
@@ -74,8 +78,10 @@ public class UserRatingController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/rating/createRating")
-    public Integer createRating(@RequestBody UserRating userRating) throws SQLException {
-        return userRatingService.createRating(userRating);
+    public Map<String, Integer> createRating(@RequestBody UserRating userRating) throws SQLException {
+        Map<String, Integer> result = new HashMap<>();
+        result.put("result", userRatingService.createRating(userRating));
+        return result;
     }
 
     /*

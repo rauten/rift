@@ -1,6 +1,7 @@
 package io.rift.service;
 
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.google.common.base.CaseFormat;
 import io.rift.model.*;
 import io.rift.repository.RiftRepository;
@@ -25,6 +26,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
+
 
 @Service
 public class UsertableService {
@@ -503,6 +507,11 @@ public class UsertableService {
             ratingInfo[1] = resultSet.getInt(2);
         }
         return ratingInfo;
+    }
+
+    public void getProfilePicture() {
+        AWSSecurityTokenServiceClient stsClient = new AWSSecurityTokenServiceClient(new ProfileCredentialsProvider());
+        
     }
 
 

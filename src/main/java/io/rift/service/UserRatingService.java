@@ -76,7 +76,7 @@ public class UserRatingService {
      * 2 - Allowed to rate (have played and haven't rated)
      * 1 - Have played but already rated
      * 0 - Haven't played, not allowed to rate
-     * -1 - 
+     * -1 -
      * @param userRating
      * @return
      * @throws SQLException
