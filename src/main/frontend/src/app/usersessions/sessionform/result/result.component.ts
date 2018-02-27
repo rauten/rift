@@ -41,7 +41,7 @@ export class ResultComponent implements OnInit {
     var data = {
       "hostId": this.loggedInUserId,
       "title":this.formData.title,
-      "game":this.formData.game,
+      "game_id":this.formData.gameId,
       "console":this.formData.console,
       "numSlots":this.formData.numSlots,
       "sessionCost":this.formData.sessionCost,
@@ -49,7 +49,8 @@ export class ResultComponent implements OnInit {
       "sessionDuration":'1:00:00'
     };
     this.userSessionService.createUserSession(data);
-    window.location.reload();
+    console.log(data);
+    // window.location.reload();
     this.formData = this.formDataService.resetFormData();
     this.isFormValid = false;
   }

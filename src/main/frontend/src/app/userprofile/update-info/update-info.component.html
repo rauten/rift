@@ -35,10 +35,10 @@
   </div>
   <div>
     <button [disabled]="!updateInfo.valid" (click)="save()" class="btn-primary" type="button">Update</button>
-    <button routerLink="../" class="btn-primary" type="button">Cancel</button>
+    <button (click)="cancel()" class="btn-primary" type="button">Cancel</button>
 
   </div>
 </form>
 
-<pre>{{ updateInfoData | json }}</pre>
+<!--<pre>{{ updateInfoData | json }}</pre>-->
 <!--[routerLink]="['../', currentUser.riftTag]"-->

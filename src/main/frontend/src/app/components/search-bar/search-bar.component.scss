@@ -1,0 +1,13 @@
+.form-rounded, .btn-rounded {
+  border-radius: 1rem;
+  background-color: transparent;
+  color: white;
+}
+
+.btn-rounded {
+  border-left: none;
+}
+
+.glyphicon .glyphicon-search {
+  color: white !important;
+}

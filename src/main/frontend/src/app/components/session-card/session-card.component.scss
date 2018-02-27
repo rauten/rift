@@ -2,16 +2,40 @@
 @import url("//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css");
 
 .info {
-  width: 50%;
+  width: 60%;
   display:inline-block;
 }
 
+.consoleIcon {
+  max-height: 25px;
+  max-width: 25px;
+}
+
+.riftee {
+  display: inline-block;
+  width: 100%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(197, 44, 102);
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.rifter {
+  display: inline-block;
+  width: 100%;
+  color: rgb(255, 255, 255);
+  padding: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #293e49;
+}
+
 .otherstuff {
-  width: 35%;
   display:inline-block;
   position: absolute;
   top: 10px;
-  right: 0px;
+  right: 20px;
 }
 
 .event-list {
@@ -27,15 +51,7 @@
   padding: 0px;
   margin: 0px 0px 20px;
 }
-.event-list > div > time {
-  display: inline-block;
-  width: 100%;
-  color: rgb(255, 255, 255);
-  background-color: rgb(197, 44, 102);
-  padding: 5px;
-  text-align: center;
-  text-transform: uppercase;
-}
+
 .event-list > div:nth-child(even) > time {
   background-color: rgb(165, 82, 167);
 }
@@ -70,69 +86,6 @@
   font-size: 13pt;
   font-weight: 300;
   margin: 0px;
-}
-.event-list > div > .info > ul,
-.event-list > div > .social > ul {
-  display: table;
-  list-style: none;
-  margin: 10px 0px 0px;
-  padding: 0px;
-  width: 100%;
-  text-align: center;
-}
-.event-list > div > .social > ul {
-  margin: 0px;
-}
-.event-list > div > .info > ul > div,
-.event-list > div > .social > ul > div {
-  display: table-cell;
-  cursor: pointer;
-  color: rgb(30, 30, 30);
-  font-size: 11pt;
-  font-weight: 300;
-  padding: 3px 0px;
-}
-.event-list > div > .info > ul > div > a {
-  display: block;
-  width: 100%;
-  color: rgb(30, 30, 30);
-  text-decoration: none;
-}
-.event-list > div > .social > ul > div {
-  padding: 0px;
-}
-.event-list > div > .social > ul > div > a {
-  padding: 3px 0px;
-}
-.event-list > div > .info > ul > div:hover,
-.event-list > div > .social > ul > div:hover {
-  color: rgb(30, 30, 30);
-  background-color: rgb(200, 200, 200);
-}
-.facebook a,
-.twitter a,
-.google-plus a {
-  display: block;
-  width: 100%;
-  color: rgb(75, 110, 168) !important;
-}
-.twitter a {
-  color: rgb(79, 213, 248) !important;
-}
-.google-plus a {
-  color: rgb(221, 75, 57) !important;
-}
-.facebook:hover a {
-  color: rgb(255, 255, 255) !important;
-  background-color: rgb(75, 110, 168) !important;
-}
-.twitter:hover a {
-  color: rgb(255, 255, 255) !important;
-  background-color: rgb(79, 213, 248) !important;
-}
-.google-plus:hover a {
-  color: rgb(255, 255, 255) !important;
-  background-color: rgb(221, 75, 57) !important;
 }
 
 @media (min-width: 768px) {
@@ -198,3 +151,14 @@
     padding: 10px 0px 9px;
   }
 }
+
+//.event-list > div > time > {
+//  display: inline-block;
+//  width: 100%;
+//  color: rgb(255, 255, 255);
+//  background-color: rgb(197, 44, 102);
+//  padding: 5px;
+//  text-align: center;
+//  text-transform: uppercase;
+//}
+

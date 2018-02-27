@@ -1,7 +1,9 @@
 export class UpdateSessionData {
   title: string = "";
-  game: string = "";
+  gameId: number;
   console: string = "";
+  description: string = "";
+
 
   numSlots: any;
   sessionCost: any;

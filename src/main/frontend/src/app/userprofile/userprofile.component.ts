@@ -12,6 +12,9 @@ import {UserRating} from "../models/userrating";
 import {Notification} from "../models/notification";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 import {SessionRequest} from "../models/session-request";
+import {Globals} from "../global/globals";
+import {MatDialog} from "@angular/material";
+import {UpdateInfoComponent} from "./update-info/update-info.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -30,7 +33,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService) {
+  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -57,6 +60,7 @@ export class UserprofileComponent implements OnInit {
         this.loggedInUser.riftTag = resBody.riftTag;
         this.loggedInUser.gender = resBody.gender;
         this.loggedInUser.bio = resBody.bio;
+        this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
@@ -83,7 +87,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
           this.getUserRifterSessions(riftTag);
-          this.getUserFollowersAndFollowing(riftTag);
+          this.getUserFollowersAndFollowing(riftTag);9
           this.getUserSessionRequests(this.profile.nickname);
       }
     );
@@ -211,7 +215,13 @@ export class UserprofileComponent implements OnInit {
           currSession.sessionTime = date;
           currSession.id = resBody.rifterSessions[i].id;
           currSession.numSlots = resBody.rifterSessions[i].numSlots;
-          currSession.game = resBody.rifterSessions[i].game;
+          currSession.gameId = resBody.rifterSessions[i].gameId;
+          currSession.console = resBody.rifterSessions[i].console;
+          if(currSession.hostId == this.loggedInUser.id) {
+            currSession.type = true;
+          } else {
+            currSession.type = false;
+          }
           this.currentUser.rifterSessions.push(currSession);
         }
       }
@@ -219,7 +229,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserSessionRequests(riftTag: string) {
-    this.loggedInUser.sessionRequests.clear();
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
@@ -244,6 +254,15 @@ export class UserprofileComponent implements OnInit {
       }
     }
     this.following = false;
+  }
+
+  openDialog() {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialog.open(UpdateInfoComponent, {
+      height: '450px',
+      width: '600px',
+    });
+
   }
 
 }

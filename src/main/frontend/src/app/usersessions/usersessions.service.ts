@@ -17,6 +17,17 @@ export class UsersessionsService {
   constructor(private http: Http) {
   }
 
+  getUserRifterAndRifteeSessions(riftTag: string): Observable<Userprofile> {
+    console.log("running getUserRifterAndRifteeSessions");
+    return this.http.get("/api/rifterSession/" + riftTag + "/rifterAndRifteeSessions")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   getUserRifterSessions(riftTag: string): Observable<Userprofile> {
     console.log("running getUserRifterSessions");
     return this.http.get("/api/user/" + riftTag + "/rifterSessions")
@@ -30,7 +41,7 @@ export class UsersessionsService {
 
   getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
     console.log("running getUserRifteeSessions");
-    return this.http.get("/api/user/" + riftTag + "/rifteeSessions/hostInfo&sessionInfo")
+    return this.http.get("/api/rifterSession/" + riftTag + "/sessionsParticipating")
       .map(
         (response: Response) => {
           return response.json();

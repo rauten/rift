@@ -24,7 +24,7 @@ export class NotificationComponent implements OnInit {
     this.userSessionService.getSessionStatus(rifteeId, sessionId).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
-        this.status = resBody.Status;
+        this.status = resBody.status;
       }
     )
   }

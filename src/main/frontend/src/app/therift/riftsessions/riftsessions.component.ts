@@ -50,7 +50,7 @@ export class RiftsessionsComponent implements OnInit {
           currSession.sessionTime = date;
           currSession.id = resBody[1][i].id;
           currSession.numSlots = resBody[1][i].numSlots;
-          currSession.game = resBody[1][i].game;
+          currSession.gameId = resBody[1][i].game_id;
           this.sessions.push(currSession);
         }
         console.log(this.sessions);

@@ -1,0 +1,93 @@
+<mat-dialog-content>
+  <form #createSession="ngForm" class="editForm" novalidate>
+    <div class="tab-pane fade in active">
+      <h4 class="head text-center">{{title}}</h4>
+      <br/>
+      <div class='row'>
+        <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>
+          <div class="row">
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessiontitle">Give your session a title</label>
+                <input class="form-control input-md" #sessiontitle="ngModel"  id="sessiontitle" name="sessiontitle" type="text" placeholder="Session Title" [(ngModel)]="currentSession.title">
+              </div>
+            </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessiongame">What game will you be playing?</label>
+                <!--<input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">-->
+                <mat-form-field>
+                  <mat-select placeholder="Select a Game" [(value)]="gameId">
+                    <mat-option *ngFor="let game of games" [value]="game.id">
+                      {{ game.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessiondesc">Give your session a description</label>
+                <div class="input-group">
+                  <textarea name="sessiondesc" #sessiondesc = "ngModel" id ="sessiondesc" class="form-control" [(ngModel)]="currentSession.description"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="sessionplatform">What platform will you be playing on?</label>
+            <mat-form-field>
+              <mat-select placeholder="Select a Platform" [(value)]="platform">
+                <mat-option *ngFor="let console of consoles" [value]="console">
+                  {{ console.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>        </div>
+          <div class="row">
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessionslots">How many slots in your session</label>
+                <input class="form-control input-md" #sessionslots="ngModel"  id="sessionslots" name="sessionslots" type="number" placeholder="Number of slots for your session" [(ngModel)]="currentSession.numSlots">
+              </div>
+            </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessioncost">Cost per slot</label>
+                <input class="form-control input-md" #sessioncost="ngModel"  id="sessioncost" name="sessioncost" type="number" placeholder="Cost per slot" [(ngModel)]="currentSession.sessionCost">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessiondate">What date</label>
+                <!--<input class="form-control input-md" #sessiondate="ngModel"  id="sessiondate" name="sessiondate" type="text" placeholder="Number of slots for your session" [(ngModel)]="step3.sessionDate">-->
+                <input matInput [matDatepicker]="picker" placeholder="Choose a date" #sessiondate="ngModel"  id="sessiondate" name="sessiondate" [(ngModel)]="currentSessionDateTime.sessionDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </div>
+            </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessiontime">What time</label>
+                <input matInput type="time" placeholder="Pick a time" #sessiontime="ngModel"  id="sessiontime" name="sessiontime" [(ngModel)]="currentSessionDateTime.sessionTime">
+              </div>
+            </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessionduration">Select a Duration</label>
+                <input matInput type="number" placeholder="Select a duration" #sessionduration="ngModel"  id="sessionduration" name="sessionduration" [(ngModel)]="currentSessionDateTime.sessionDuration">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button [disabled]="!createSession.valid" (click)="save()" class="btn btn-lg btn-update" type="button">Create</button>
+      <button (click)="cancel()" class="btn btn-lg btn-cancel" type="button">Cancel</button>
+    </div>
+  </form>
+  <!--<pre>{{ createSessionData | json }}</pre>-->
+</mat-dialog-content>
+

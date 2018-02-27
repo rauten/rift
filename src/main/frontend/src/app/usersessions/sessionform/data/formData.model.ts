@@ -4,7 +4,7 @@ export class FormData {
   sessionCreationTime: any;
 
   title: string = "";
-  game: string = "";
+  gameId: number;
   console: string = "";
 
   numSlots: string = "";
@@ -19,7 +19,7 @@ export class FormData {
     this.sessionCreatorRiftTag = "";
     this.sessionCreationTime = "";
     this.title = "";
-    this.game = "";
+    this.gameId = -1;
     this.console = "";
     this.numSlots = "";
     this.sessionCost = "";
@@ -32,7 +32,7 @@ export class FormData {
 
 export class Step1 {
   title: string = "";
-  game: string = "";
+  gameId: number;
   console: string = "";
 }
 

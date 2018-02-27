@@ -1,3 +1,4 @@
+<mat-dialog-content>
 <form #updateSession="ngForm" class="editForm" novalidate>
   <div class="tab-pane fade in active">
     <h4 class="head text-center">{{title}}</h4>
@@ -14,13 +15,34 @@
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
               <label class="control-label" for="sessiongame">What game will you be playing?</label>
-              <input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">
+              <!--<input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">-->
+              <mat-form-field>
+                <mat-select placeholder="Select a Game" [(value)]="gameId">
+                  <mat-option *ngFor="let game of games" [value]="game.id">
+                    {{ game.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
+          <div class="form-group">
+            <label class="control-label" for="sessionplatform">What platform will you be playing on?</label>
+            <mat-form-field>
+              <mat-select placeholder="Select a Platform" [(value)]="platform">
+                <mat-option *ngFor="let console of consoles" [value]="console">
+                  {{ console.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="control-label" for="sessionplatform">What platform will you be playing on?</label>
-          <input class="form-control input-md" #sessionplatform="ngModel"  id="sessionplatform" name="sessinplatform" type="text" placeholder="Session Platform" [(ngModel)]="currentSession.console">
+        <div class='col-xs-12 col-sm-6'>
+          <div class="form-group">
+            <label class="control-label" for="sessiondesc">Give your session a description</label>
+            <div class="input-group">
+              <textarea name="sessiondesc" #sessiondesc = "ngModel" id ="sessiondesc" class="form-control" [(ngModel)]="currentSession.description"></textarea>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class='col-xs-12 col-sm-6'>
@@ -63,10 +85,8 @@
     </div>
   </div>
   <div>
-    <button [disabled]="!updateSession.valid" (click)="save()" class="btn-primary" type="button">Update</button>
-    <button routerLink="../" class="btn-primary" type="button">Cancel</button>
+    <button [disabled]="!updateSession.valid" (click)="save()" class="btn btn-lg btn-update" type="button">Update</button>
+    <button (click)="cancel()" class="btn btn-lg btn-cancel" type="button">Cancel</button>
   </div>
 </form>
-
-<pre>{{ updateInfoData | json }}</pre>
-<!--[routerLink]="['../', currentUser.riftTag]"-->
+</mat-dialog-content>

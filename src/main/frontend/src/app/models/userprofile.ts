@@ -18,13 +18,14 @@ export class Userprofile {
   creatorActivityList: Activity[];
   rifterSessions: Session[];
   rifteeSessions: Session[];
+  sessions: Session[];
   feed: Activity[];
   followers: Userprofile[] = [];
   followings: Userprofile[] = [];
   email: string;
   ratings: UserRating[] = [];
   notifications: Notification[] = [];
-  sessionRequests: Map = new Map<number, SessionRequest>();
+  sessionRequests: any;
 
   followerUsertable: any;
   followingUsertable: any;
@@ -32,6 +33,7 @@ export class Userprofile {
   notificationList: any;
   activities: Activity[] = [];
   creatorUsertable: any;
+  length;
 
 
   constructor() {

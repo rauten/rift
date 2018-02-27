@@ -1,23 +1,31 @@
 <div class="event-list">
   <div>
-    <time datetime="2014-07-20">
+    <time datetime="2014-07-20" [ngClass]="{'rifter': type, 'riftee':!type}">
       <span class="day">{{session.sessionTime | date:'dd'}}</span>
       <span class="month">{{session.sessionTime | date:'MMM'}}</span>
     </time>
     <img alt="{{session.game}}" src="{{sessionIcon}}" />
     <div class="info">
       <h2 class="title">{{session.title}}</h2>
-      <p class="desc">{{session.firstName}} {{session.lastName}}</p>
+      <!--<p class="desc">{{session.firstName}} {{session.lastName}}</p>-->
       <p class="desc">@{{session.riftTag}}</p>
-      <p class="desc">Rating: {{hostRifterRating}}</p>
+      <div *ngIf="!type">
+      <app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>
+      </div>
       <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
     </div>
-    <div class="otherstuff" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
-      <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
-      <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
-      <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
-      <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
+    <div class="otherstuff">
+      <div class="statusButtons" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
+        <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
+        <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
+        <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
+        <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
+      </div>
+      <div>
+        <img alt="{{session.console}}" class="consoleIcon" src="{{consoleIcon}}" />
+      </div>
     </div>
+
   </div>
 </div>
 

@@ -1,8 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import {Session} from "../../../../models/session";
 import {SessionDateTime} from "./data/sessionDateTime";
 import {UpdateSessionService} from "./data/update-session.service";
 import {ActivatedRoute} from "@angular/router";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {GAMES} from "../../../../constants/games";
+import {CONSOLES} from "../../../../constants/consoles";
 
 @Component({
   selector: 'app-update-session',
@@ -14,13 +17,17 @@ export class UpdateSessionComponent implements OnInit {
   currentSession: Session = new Session();
   currentSessionDateTime: SessionDateTime = new SessionDateTime();
   sub: any;
-  sessionId: number;
   @Input() updateSessionData;
+  games: any;
+  consoles: any;
+  gameId: any;
+  platform: any;
 
-  constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute) {
-    this.sub = this.route.parent.params.subscribe(params => {
-      this.sessionId = params["sessionId"];
-    });
+  //noinspection JSAnnotator
+  constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
+  @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateSessionComponent>) {
+    this.games = GAMES;
+    this.consoles = CONSOLES;
   }
 
   ngOnInit() {
@@ -30,12 +37,24 @@ export class UpdateSessionComponent implements OnInit {
 
   save() {
     this.updateSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-    var timeMS = this.timeToMilliseconds(this.updateSessionData.sessionTime) + this.updateSessionData.sessionDate.getTime();
+    var d = new Date(this.data.sessionTime);
+    var currDate = d.toLocaleDateString();
+    var currTime = d.toLocaleTimeString("en-Us", {hour12: false, hour: '2-digit', minute:'2-digit'});
+    if (this.updateSessionData.sessionDate) {
+      var newD = this.updateSessionData.sessionDate;
+      currDate = newD.toLocaleDateString();
+    }
+    if (this.updateSessionData.sessionTime) {
+      currTime = this.updateSessionData.sessionTime;
+    }
+    var date = new Date(currDate);
+    var timeMS = this.timeToMilliseconds(currTime) + date.getTime();
     let data = {
-      "id": this.sessionId,
+      "id": this.data.sessionId,
       "title": this.updateSessionData.title,
-      "game": this.updateSessionData.game,
-      "console": this.updateSessionData.console,
+      "description": this.updateSessionData.description,
+      "gameId": this.gameId,
+      "console": this.platform,
       "numSlots": this.updateSessionData.numSlots,
       "sessionCost": this.updateSessionData.sessionCost,
       "sessionTime": timeMS,
@@ -43,6 +62,8 @@ export class UpdateSessionComponent implements OnInit {
     };
     console.log(data);
     this.updateSessionService.updateUserSession(data);
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialogRef.close();
   }
 
   timeToMilliseconds(time: string) {
@@ -51,5 +72,10 @@ export class UpdateSessionComponent implements OnInit {
     var minute = (+list[1]);
     var seconds = (hour * 60 * 60) + (minute * 60);
     return seconds * 1000;
+  }
+
+  cancel(): void {
+    //noinspection TypeScriptUnresolvedFunction
+    this.dialogRef.close();
   }
 }

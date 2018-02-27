@@ -1,7 +1,36 @@
 .navbar {
+  min-height: 70px !important;
   margin-bottom: 5% !important;
+  background-color: #293e49;
 }
 a {
   color: white !important;
   cursor: pointer;
+}
+.container-fluid {
+  margin-top: 10px !important;
+}
+.btn-group {
+  margin-top: 9px !important;
+}
+.dropdown-toggle {
+  background-color: transparent !important;
+  border: none !important;
+}
+.dropdown-item {
+  color: black !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
+app-notification {
+  color: black !important;
+}
+.dropdown-menu {
+  max-height: 600px !important;
+  min-width: 500px !important;
+  overflow-y:scroll !important;
+}
+.media {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
 }
