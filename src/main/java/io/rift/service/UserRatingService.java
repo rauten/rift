@@ -37,6 +37,9 @@ public class UserRatingService {
 
     /**
      * Run this function on 'Rate' click from menu to test if, at that moment in time, this user is allowed to rate
+     * 2 - Allowed to rate (have played and haven't rated)
+     * 1 - Have played but already rated
+     * 0 - Haven't played, not allowed to rate
      * @param userRating
      * @return
      * @throws SQLException
@@ -69,7 +72,11 @@ public class UserRatingService {
     /**
      * Run this function on 'Submit rating' click from rating screen, to re-verify that the user is allowed to rate
      * Catches the instance in which a user has two account window's open, gets into the 'create rating' window in both,
-     * and then tries to submit both.Fuck
+     * and then tries to submit both.
+     * 2 - Allowed to rate (have played and haven't rated)
+     * 1 - Have played but already rated
+     * 0 - Haven't played, not allowed to rate
+     * -1 - 
      * @param userRating
      * @return
      * @throws SQLException
