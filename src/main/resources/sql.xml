@@ -284,6 +284,11 @@
         WHERE session_id = ? AND riftee_id = ?
     </getRequestStatus>
 
+    <deleteSession>
+        DELETE FROM riftergame
+        WHERE id = ?;
+    </deleteSession>
+
     <createGame>
         INSERT INTO riftergame
         (host_id, num_slots, session_cost, title, session_duration, session_time, game_id, console, slots_remaining, created_time)
@@ -538,6 +543,14 @@
     -->
 
     <!--
+        CREATE TRIGGER create_session_update_notification
+        BEFORE DELETE
+        ON notification
+        FOR EACH ROW
+        EXECUTE PROCEDURE create_session_deletion_notification();
+    -->
+
+    <!--
 
         CREATE OR REPLACE FUNCTION create_session_update_notification()
             RETURNS trigger AS
@@ -674,6 +687,34 @@
 
     -->
 
+    <!--
+
+        CREATE OR REPLACE FUNCTION create_session_deletion_notification()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            IF (SELECT EXTRACT(EPOCH FROM (OLD.session_time - current_timestamp))) > 360 THEN
+                INSERT INTO notification
+                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+                SELECT user_id, 'herro', 'herro2', null, current_timestamp, creator_id
+                FROM notification
+                WHERE session_id = OLD.id;
+
+                DELETE FROM notification
+                WHERE session_id = OLD.id;
+                RETURN OLD;
+            END IF;
+        END;
+        $BODY$
+        LANGUAGE plpgsql;
+
+        CREATE TRIGGER create_session_deletion_notification
+        BEFORE DELETE
+        ON riftergame
+        FOR EACH ROW
+        EXECUTE PROCEDURE create_session_deletion_notification();
+
+     -->
 
 
 </Queries>

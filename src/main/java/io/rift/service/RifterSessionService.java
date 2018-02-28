@@ -40,6 +40,7 @@ public class RifterSessionService {
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
     private final String getSessionPlayersBySessionId = "getSessionPlayersBySessionId";
+    private final String deleteSession = "deleteSession";
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
@@ -175,6 +176,12 @@ public class RifterSessionService {
             }
         }
         return rifterSession;
+    }
+
+    public boolean deleteSession(Integer sessionId) throws SQLException {
+        Object[] args = new Object[1];
+        boolean success = riftRepository.doDelete(deleteSession, args);
+        return success;
     }
 
     public boolean createGame(RifterSession rifterSession) throws SQLException {
