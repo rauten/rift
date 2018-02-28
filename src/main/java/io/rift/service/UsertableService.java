@@ -541,10 +541,12 @@ public class UsertableService {
                 .build();
 
         String key = keyBase + "profile-picture";
+        /*
         String longStr = StringUtils.join(new String[] {
                 gordonImage1, gordonImage2
         });
-        byte[] bytes = Base64.decodeBase64((longStr.substring(longStr.indexOf(",")+1)).getBytes());
+        */
+        byte[] bytes = Base64.decodeBase64((base64Data.substring(base64Data.indexOf(",")+1)).getBytes());
         InputStream fis = new ByteArrayInputStream(bytes);
 
         ObjectMetadata metadata = new ObjectMetadata();
