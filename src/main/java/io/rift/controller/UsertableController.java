@@ -1,6 +1,7 @@
 package io.rift.controller;
 
 
+import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
@@ -8,12 +9,16 @@ import io.rift.model.Views;
 import io.rift.repository.RiftRepository;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
+import java.awt.*;
 import java.beans.IntrospectionException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -273,6 +278,17 @@ public class UsertableController {
             }
         }
         return usertableService.updateUser(usertable);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}/{image}")
+    public boolean putProfilePicture(@PathVariable String keyBase, @PathVariable String image) throws URISyntaxException {
+        return usertableService.putProfilePicture(keyBase, image);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}", produces = MediaType.IMAGE_PNG_VALUE)
+    public @ResponseBody byte[] getProfilePicture(@PathVariable String keyBase) throws IOException {
+        InputStream in = usertableService.getProfilePicture(keyBase);
+        return IOUtils.toByteArray(in);
     }
 
 }
