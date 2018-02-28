@@ -32,7 +32,7 @@ export class UserprofileComponent implements OnInit {
   isDataAvailable:boolean = false;
   isLoggedIn: boolean = false;
   ratingStatus: number;
-  profilepic: string;
+  profilepic: any;
 
 
   constructor(private userProfileService: UserprofileService,
@@ -282,8 +282,8 @@ export class UserprofileComponent implements OnInit {
         } else {
           //noinspection TypeScriptUnresolvedFunction
           this.dialog.open(UserRatingComponent, {
-            height: '450px',
-            width: '600px',
+            height: '600px',
+            width: '800px',
             data: {
               ratedUserRiftTag: this.currentUser.riftTag,
               raterId: this.loggedInUser.id,

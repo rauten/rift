@@ -20,7 +20,6 @@ export class UpdateInfoComponent implements OnInit {
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
               private dialogRef: MatDialogRef<UpdateInfoComponent>) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    console.log(this.profile);
   }
 
   ngOnInit() {

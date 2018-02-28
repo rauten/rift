@@ -80,6 +80,7 @@ import {BsDropdownModule, AlertModule, TabsModule} from 'ngx-bootstrap';
 
 import {CalendarComponent} from "ap-angular2-fullcalendar/src/calendar/calendar";
 import {ImageUploadModule} from "angular2-image-upload";
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -123,7 +124,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     SessionTypePipe,
     SessionTimePipe,
     GameFilterPipe,
-    ConsoleFilterPipe
+    ConsoleFilterPipe,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
@@ -150,6 +152,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AlertModule.forRoot(),
     TabsModule.forRoot(),
     ImageUploadModule.forRoot()
+  ],
+  exports: [
+    FileUploadComponent
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent],
