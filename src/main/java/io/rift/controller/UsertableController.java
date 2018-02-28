@@ -285,10 +285,11 @@ public class UsertableController {
         return usertableService.putProfilePicture(keyBase, image);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}", produces = MediaType.IMAGE_PNG_VALUE)
-    public @ResponseBody byte[] getProfilePicture(@PathVariable String keyBase) throws IOException {
+    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}")
+    public @ResponseBody String getProfilePicture(@PathVariable String keyBase) throws IOException {
         InputStream in = usertableService.getProfilePicture(keyBase);
-        return IOUtils.toByteArray(in);
+        String byteStr = IOUtils.toByteArray(in).toString();
+        return byteStr;
     }
 
 }
