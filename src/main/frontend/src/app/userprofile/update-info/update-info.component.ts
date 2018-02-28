@@ -42,7 +42,9 @@ export class UpdateInfoComponent implements OnInit {
   }
 
   uploadProfilePic() {
-
+    let base64 = this.profilePic;
+    let riftTag = this.loggedInUser.riftTag;
+    this.userProfileService.uploadProfilePicture(riftTag, base64);
   }
 
   save() {
@@ -65,7 +67,10 @@ export class UpdateInfoComponent implements OnInit {
     console.log(data);
     this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
-    // window.location.reload();
+    if(this.profilePic) {
+      this.uploadProfilePic();
+    }
+    window.location.reload();
   }
 
 

@@ -9,6 +9,7 @@ import "rxjs/Rx";
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
+  private uploadProfilePictureURL = "/api/user/putPicture/";
 
   constructor(private http: Http) {
   }
@@ -68,10 +69,11 @@ export class UserprofileService {
   }
 
   uploadProfilePicture(riftTag: string, base64: string) {
-    console.log("running createUser");
+    console.log("running uploadProfilePicture");
+    console.log(this.uploadProfilePictureURL + riftTag);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put("/api/user/putPicture/" + riftTag + "/" + base64, headers)
+    this.http.put(this.uploadProfilePictureURL + riftTag, base64, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();
