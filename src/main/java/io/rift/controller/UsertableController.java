@@ -280,8 +280,8 @@ public class UsertableController {
         return usertableService.updateUser(usertable);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}/{image}")
-    public boolean putProfilePicture(@PathVariable String keyBase, @PathVariable String image) throws URISyntaxException {
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}")
+    public boolean putProfilePicture(@PathVariable String keyBase, @RequestBody String image) throws URISyntaxException {
         return usertableService.putProfilePicture(keyBase, image);
     }
 
