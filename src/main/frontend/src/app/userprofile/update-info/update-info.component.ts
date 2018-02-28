@@ -15,6 +15,7 @@ export class UpdateInfoComponent implements OnInit {
   loggedInUser: Userprofile = new Userprofile();
   profile: any;
   @Input() updateInfoData;
+  profilePic: any;
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
@@ -40,6 +41,10 @@ export class UpdateInfoComponent implements OnInit {
     )
   }
 
+  uploadProfilePic() {
+
+  }
+
   save() {
     this.updateInfoService.setUserData(this.currentUser);
     let data = {
@@ -62,6 +67,8 @@ export class UpdateInfoComponent implements OnInit {
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
     // window.location.reload();
   }
+
+
 
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction

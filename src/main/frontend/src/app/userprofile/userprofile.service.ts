@@ -67,4 +67,14 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  uploadProfilePicture(riftTag: string, base64: string) {
+    console.log("running createUser");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put("/api/user/putPicture/" + riftTag + "/" + base64, headers)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
 }
