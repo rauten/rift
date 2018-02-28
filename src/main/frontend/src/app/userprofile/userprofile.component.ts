@@ -90,8 +90,9 @@ export class UserprofileComponent implements OnInit {
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
           this.getUserRifterSessions(riftTag);
-          this.getUserFollowersAndFollowing(riftTag);9
+          this.getUserFollowersAndFollowing(riftTag);
           this.getUserSessionRequests(this.profile.nickname);
+          this.getUserProfilePicture(riftTag);
       }
     );
   }
@@ -244,6 +245,15 @@ export class UserprofileComponent implements OnInit {
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
         }
+      }
+    )
+  }
+
+  getUserProfilePicture(riftTag: string) {
+    this.userProfileService.getProfilePicture(riftTag).subscribe(
+      resBody => {
+        this.currentUser.profilePic = resBody.profilePic;
+        console.log(resBody);
       }
     )
   }

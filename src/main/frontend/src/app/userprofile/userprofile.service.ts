@@ -79,8 +79,8 @@ export class UserprofileService {
       .subscribe();
   }
 
-  getProfilePicture(riftTag: string, base64: string) {
-    console.log("running getProfilePicture")
+  getProfilePicture(riftTag: string): Observable<Userprofile> {
+    console.log("running getProfilePicture");
     return this.http.get(this.getProfilePictureURL + riftTag)
       .map(
         (response: Response) => {
