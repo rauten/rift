@@ -20,10 +20,9 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import org.apache.commons.codec.binary.Base64;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -179,7 +178,7 @@ public class UsertableController {
 
     /**
      *
-     * @param id - The user id
+     * @param
      * @return - Usertable object with info and user's Rifter Session objects
      * @throws SQLException
      */
@@ -289,7 +288,9 @@ public class UsertableController {
     public @ResponseBody Map<String, String> getProfilePicture(@PathVariable String keyBase) throws IOException {
         Map<String, String> imageMap = new HashMap<>();
         InputStream in = usertableService.getProfilePicture(keyBase);
-        String byteStr = IOUtils.toByteArray(in).toString();
+        byte[] bytes = IOUtils.toByteArray(in);
+        Base64 base64 = new Base64();
+        String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
         imageMap.put("profilePic", byteStr);
         return imageMap;
     }
