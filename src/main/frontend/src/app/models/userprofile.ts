@@ -26,7 +26,7 @@ export class Userprofile {
   ratings: UserRating[] = [];
   notifications: Notification[] = [];
   sessionRequests: any;
-  profilePicPath: string;
+  profilePic: string;
 
   followerUsertable: any;
   followingUsertable: any;
