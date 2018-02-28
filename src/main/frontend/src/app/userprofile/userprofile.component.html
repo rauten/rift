@@ -6,24 +6,31 @@
       <div class="col-md-4">
         <div class="profile-info-left">
           <div class="text-center">
+            <image-upload url="https://httpbin.org/status/200"></image-upload>
+
             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="avatar img-circle">
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
             <h3>Rifter Rating: {{currentUser.rifterRating}}</h3>
-            <div *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
+            <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [loggedInUser]="loggedInUser" class="userbtn">
               </app-follow-button>
             </div>
-            <div *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
-              <!--<button routerLink="update" type="button" class="btn-primary">Update your Info</button>-->
+            <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>
 
             </div>
-            <div *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
-              <button routerLink="rate" type="button" class="btn-primary">Rate this User</button>
+            <div id="rate_user_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
+              <button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>
             </div>
+            <alert type="danger" *ngIf="ratingStatus == 0">
+              Haven't played with {{currentUser.riftTag}} in past 30 days
+            </alert>
+            <alert type="danger" *ngIf="ratingStatus == 1">
+              Already rated {{currentUser.riftTag}} in past 30 days
+            </alert>
 
           </div>
           <div class="section about">

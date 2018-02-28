@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Userprofile} from "../models/userprofile";
 import {UsersessionsService} from "./usersessions.service";
 import {Session} from "../models/session";
@@ -9,6 +9,7 @@ import {SessionformComponent} from "./sessionform/sessionform.component";
 import {CreateSessionComponent} from "./create-session/create-session.component";
 import {GAMES} from "../constants/games";
 import {CONSOLES} from "../constants/consoles";
+import {CalendarComponent} from "ap-angular2-fullcalendar";
 
 @Component({
   selector: 'app-usersessions',
@@ -21,6 +22,16 @@ export class UsersessionsComponent implements OnInit {
   games: any;
   consoles: any;
   profile: any;
+  @ViewChild(CalendarComponent) myCalendar: CalendarComponent;
+  calendarOptions: Object = {
+    height: '600px',
+    fixedWeekCount : false,
+    editable: true,
+    eventLimit: true, // allow "more" link when too many events
+    events: [
+    ]
+  };
+
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
               public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
@@ -32,6 +43,7 @@ export class UsersessionsComponent implements OnInit {
     var riftTag = this.profile.nickname;
     this.getUserRifterAndRifteeSessions(riftTag);
     this.getUserSessionRequests(riftTag);
+    console.log(this.myCalendar);
   }
 
   getUserRifterAndRifteeSessions(riftTag: string) {
@@ -66,7 +78,7 @@ export class UsersessionsComponent implements OnInit {
           this.currentUser.sessions.push(currSession);
         }
       }
-    )
+    );
   }
 
   getUserSessionRequests(riftTag: string) {
@@ -110,5 +122,33 @@ export class UsersessionsComponent implements OnInit {
       }
       return consoles;
     }, [])
+  }
+
+  renderCalendar() {
+    for (var i = 0; i < this.currentUser.sessions.length; i++) {
+      var currSession = this.currentUser.sessions[i];
+      if (currSession.type) {
+        var newSession = {
+          title: currSession.title,
+          start: new Date(currSession.sessionTime).toISOString(),
+          color: '#293e49'
+        };
+      } else {
+        var newSession = {
+          title: currSession.title,
+          start: new Date(currSession.sessionTime).toISOString(),
+          color: 'rgb(197, 44, 102)'
+        };
+      }
+
+      this.myCalendar.fullCalendar('renderEvent', newSession, 'stick');
+    }
+    this.myCalendar.fullCalendar('render');
+    console.log('render calendar');
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  changeCalendarView(view) {
+    this.myCalendar.fullCalendar('changeView', view);
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, Inject} from '@angular/core';
 import {UserRating} from "../../models/userrating";
 import {UserRatingService} from "./data/user-rating.service";
 import {UserprofileService} from "../userprofile.service";
 import {ActivatedRoute} from "@angular/router";
+import {MAT_DIALOG_DATA} from "@angular/material";
 
 @Component({
   selector: 'app-user-rating',
@@ -21,17 +22,15 @@ export class UserRatingComponent implements OnInit {
   account_type_str: string;
   account_type: boolean;
 
-
   constructor(private userRatingService: UserRatingService, private userProfileService: UserprofileService,
-  private route: ActivatedRoute) {
-    this.sub = this.route.parent.params.subscribe(params => {
-      this.profile = JSON.parse(localStorage.getItem('profile'));
-      this.ratedUserRiftTag = params["rifttag"];
-    });
+  private route: ActivatedRoute, @Inject(MAT_DIALOG_DATA) public data) {
+    this.ratedUserRiftTag = data.ratedUserRiftTag;
+    this.ratedUserId = data.rateeId;
+    this.loggedInUserId = data.raterId;
   }
 
   ngOnInit() {
-    this.getUserId(this.ratedUserRiftTag);
+
     this.currentUserRating = this.userRatingService.getUserRatingData();
     this.userRatingData = this.userRatingService.getFormData();
   }
@@ -53,18 +52,18 @@ export class UserRatingComponent implements OnInit {
     // this.userRatingService.createUserRating(data);
   }
 
-  getUserId(riftTag: string) {
-    this.userProfileService.getUserId(riftTag).subscribe(
-      resBody => {
-        this.ratedUserId = resBody.id;
-      }
-    );
-    this.userProfileService.getUserId(this.profile.nickname).subscribe(
-      resBody => {
-        this.loggedInUserId = resBody.id;
-      }
-    )
-  }
+  // getUserId(riftTag: string) {
+  //   this.userProfileService.getUserId(riftTag).subscribe(
+  //     resBody => {
+  //       this.ratedUserId = resBody.id;
+  //     }
+  //   );
+  //   this.userProfileService.getUserId(this.profile.nickname).subscribe(
+  //     resBody => {
+  //       this.loggedInUserId = resBody.id;
+  //     }
+  //   )
+  // }
 
   static getCurrentTimeMS() {
     var currentDate = new Date();

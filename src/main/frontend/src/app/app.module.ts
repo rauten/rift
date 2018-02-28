@@ -76,8 +76,10 @@ import { SessionTimePipe } from './pipes/session-time.pipe';
 import { GameFilterPipe } from './pipes/game-filter.pipe';
 import { ConsoleFilterPipe } from './pipes/console-filter.pipe';
 
-import { BsDropdownModule } from 'ngx-bootstrap';
+import {BsDropdownModule, AlertModule, TabsModule} from 'ngx-bootstrap';
 
+import {CalendarComponent} from "ap-angular2-fullcalendar/src/calendar/calendar";
+import {ImageUploadModule} from "angular2-image-upload";
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -115,6 +117,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     SessionAcceptRejectButtonComponent,
     DialogContentExampleDialog,
     CreateSessionComponent,
+    CalendarComponent,
 
     CapitalizePipe,
     SessionTypePipe,
@@ -143,10 +146,13 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatCheckboxModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    AlertModule.forRoot(),
+    TabsModule.forRoot(),
+    ImageUploadModule.forRoot()
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
-  UserprofileComponent, UpdateInfoComponent],
+  UserprofileComponent, UpdateInfoComponent, UserRatingComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService,
     {provide: FormDataService, useClass: FormDataService},

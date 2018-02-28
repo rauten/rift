@@ -7,6 +7,7 @@ export class UserRating {
   reviewTitle: string;
 
   reviewerUsertable: Userprofile = new Userprofile();
+  result;
 
   constructor(){}
 }

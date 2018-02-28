@@ -2,9 +2,9 @@
   margin-top: 5%;
 }
 
-mat-tab-group {
+.session-view {
   width: 75% !important;
-  display: inline-block !important;
+  /*display: inline-block !important;*/
   float: right !important;
 }
 
@@ -31,6 +31,7 @@ mat-checkbox {
   border-radius: 4px;
   padding-top: 1px;
   position: relative;
+  float: left;
 }
 
 .filter{
@@ -58,7 +59,7 @@ h5:after{
  }
 
 .sessions {
-  float:right;
+  margin-top: 2%;
   width: 70%;
   display: inline-block;
 }

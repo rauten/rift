@@ -15,6 +15,7 @@ import {SessionRequest} from "../models/session-request";
 import {Globals} from "../global/globals";
 import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
+import {UserRatingComponent} from "./user-rating/user-rating.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -30,6 +31,9 @@ export class UserprofileComponent implements OnInit {
   following = false;
   isDataAvailable:boolean = false;
   isLoggedIn: boolean = false;
+  ratingStatus: number;
+  profilepic: string;
+
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
@@ -265,4 +269,31 @@ export class UserprofileComponent implements OnInit {
 
   }
 
+  openRatingDialog() {
+    var raterId = this.loggedInUser.id;
+    var rateeId = this.currentUser.id;
+    this.userRatingService.isAllowedToRate(raterId, rateeId).subscribe(
+      resBody => {
+        this.ratingStatus = resBody.result;
+        if (this.ratingStatus == 0) {
+          console.log("Haven't played with " + this.currentUser.riftTag + " in the past 30 days");
+        } else if (this.ratingStatus == 1) {
+          console.log("Already rated " + this.currentUser.riftTag + " in the past 30 days");
+        } else {
+          //noinspection TypeScriptUnresolvedFunction
+          this.dialog.open(UserRatingComponent, {
+            height: '450px',
+            width: '600px',
+            data: {
+              ratedUserRiftTag: this.currentUser.riftTag,
+              raterId: this.loggedInUser.id,
+              rateeId: this.currentUser.id
+            }
+          });
+        }
+      }
+    )
+
+
+  }
 }

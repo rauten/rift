@@ -44,6 +44,17 @@ export class UserRatingService {
     window.location.reload();
   }
 
+  isAllowedToRate(raterId, rateeId): Observable<UserRating>{
+    console.log("running isAllowedToRate");
+    return this.http.get("/api/rating/" + rateeId + "/allowedToRate/" + raterId)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   getUserRating(id: number) {
     console.log("running getUserRating");
     return this.http.get(this.getUserRatingURL + id)
