@@ -445,8 +445,6 @@ public class UsertableService {
             usertable.setRifteeRating(resultSet.getDouble(14));
             usertable.setRifterRating(resultSet.getDouble(15));
             usertable.setGender(resultSet.getBoolean(16));
-            usertable.setAuth0Token(resultSet.getString(17));
-            usertable.setBraintreeId(resultSet.getString(18));
             notification.setCreatorUsertable(usertable);
             notifications.add(notification);
         }
