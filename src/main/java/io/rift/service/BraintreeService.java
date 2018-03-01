@@ -37,6 +37,12 @@ public class BraintreeService {
         return clientNonce;
     }
 
+    /**
+     *
+     * @param amount - The amount (as a BigDecimal) that the session costs
+     * @param clientId - The id (as a string) of the customer
+     * @return
+     */
     public String doTransaction(BigDecimal amount, String clientId) {
         TransactionRequest request = new TransactionRequest()
                 .amount(amount)
@@ -58,6 +64,15 @@ public class BraintreeService {
         }
     }
 
+    /**
+     *
+     * @param customerId - The braintree id (as a string) of the customer. This should be persisted in
+     *                   storage after login
+     * @param paymentMetadata - A map consisting of any number of key-value pairs. The only one we care about
+     *                        is "nonce":paymentNonce. This value must be passed in as that format
+     *
+     * @return A boolean - true/false, whether the card was verified
+     */
     public boolean verifyCard(String customerId, Map<String, Object> paymentMetadata) {
 
         PaymentMethodRequest request = new PaymentMethodRequest()
@@ -85,24 +100,41 @@ public class BraintreeService {
 
     }
 
-    public String createCustomer(String firstName, String lastName, String company, String email) {
+    /**
+     *
+     * @param firstName - The new user's first name
+     * @param lastName - The new user's last name
+     * @return Map with single key-value pair. Key will either be 'customerId' if the creation is a success,
+     * or 'resultMessage' in the case of failure
+     */
+    public Map<String, String> createCustomer(String firstName, String lastName,) {
 
         CustomerRequest request = new CustomerRequest()
                 .firstName(firstName)
-                .lastName(lastName)
-                .company(company)
-                .email(email);
+                .lastName(lastName);
 
         Result<Customer> result = gateway.customer().create(request);
-
+        Map<String, String> resultMap = new HashMap<>();
         if (result.isSuccess()) {
             Customer customer = result.getTarget();
-            return customer.getId();
+            resultMap.put("customerId", customer.getId());
+            return resultMap;
         } else {
-            return result.getMessage();
+            resultMap.put("resultMessage", result.getMessage());
+            return resultMap;
         }
     }
 
+    /**
+     *
+     * @param paymentMetadata - A map consisting of any number of key:value pairs. The only one we care about is
+     *                        "nonce":paymentNonce, which must be included in that format.
+     *
+     * @param customerId - The customer id (as a string) of the current user. This value should be persisted in memory
+     *                   on the frontend
+     *
+     * @return - A string denoting whether the update was a success or failure.
+     */
     public String updateCustomer(Map<String, Object> paymentMetadata, String customerId) {
         CustomerRequest request = new CustomerRequest()
                 .paymentMethodNonce((String)paymentMetadata.get("nonce"));

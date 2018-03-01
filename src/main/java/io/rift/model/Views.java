@@ -163,7 +163,7 @@ public class Views {
     /****************** Usertable Attributes ***********************/
     /****************************************************************/
 
-    public interface UsertableInfo extends UsertableId, UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag,
+    public interface UsertableInfo extends UsertableId, UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName, UsertableRiftTag,
             UsertableGender, UsertableTwitchAccount, UsertableYoutubeAccount, UsertableRifterRating, UsertableRifteeRating,
             UsertableIsPrivate, UsertableIsSuspended, UsertableProfilePicturePath, UsertableBio {}
 
@@ -175,6 +175,8 @@ public class Views {
     public interface UsertableId {}
 
     public interface UsertableAuth0Id {}
+
+    public interface UsertableBraintreeId {}
 
     public interface UsertableFirstName {}
 
@@ -249,7 +251,7 @@ public class Views {
     /****************** GetProfilePage View ***********************/
     /**************************************************************/
 
-    public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableFirstName, UsertableLastName,
+    public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName,
             UsertableRiftTag, UsertableGender, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableNotificationList, UsertableBroadcastNotificationList,
             UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
@@ -262,7 +264,7 @@ public class Views {
             RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId,
             RifterSessionSlotsRemaining, RifterSessionCreatedTime {}
 
-    public interface CreateUser extends UsertableAuth0Id, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
+    public interface CreateUser extends UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName, UsertableRiftTag {}
 
     public interface Search extends UsertableRiftTagLevenshtein, UsertableFirstNameLevenshtein, UsertableFullNameLevenshtein,
             UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag, UsertableProfilePicturePath, UsertableBio,
