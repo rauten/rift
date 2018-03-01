@@ -187,7 +187,7 @@
     </getSessionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
-        SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, u.auth0_token
+        SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
         JOIN usertable u ON f.following_id = u.id
