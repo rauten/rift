@@ -1,0 +1,5 @@
+<div class="container" style="margin-top: 5%; width: 80%; text-align: center">
+  <div *ngFor="let notification of currentUser.feed">
+    <app-feed-card [notification]="notification"></app-feed-card>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import {UpdateInfoComponent} from './userprofile/update-info/update-info.compone
 import {SessionPageComponent} from "./therift/riftsessions/session-page/session-page.component";
 import {UserRatingComponent} from "./userprofile/user-rating/user-rating.component";
 import {UpdateSessionComponent} from "./therift/riftsessions/session-page/update-session/update-session.component";
+import {FeedComponent} from "./feed/feed.component";
 
 export const router: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -31,7 +32,8 @@ export const router: Routes = [
     children: [
       {path: 'update', component: UpdateSessionComponent}
     ]
-  }
+  },
+  { path: 'feed', component: FeedComponent}
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(router);

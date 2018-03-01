@@ -43,7 +43,6 @@ export class UsersessionsComponent implements OnInit {
     var riftTag = this.profile.nickname;
     this.getUserRifterAndRifteeSessions(riftTag);
     this.getUserSessionRequests(riftTag);
-    console.log(this.myCalendar);
   }
 
   getUserRifterAndRifteeSessions(riftTag: string) {
@@ -51,7 +50,6 @@ export class UsersessionsComponent implements OnInit {
     this.userSessionsService.getUserRifterAndRifteeSessions(riftTag).subscribe(
       resBody => {
         var sessions = resBody;
-        console.log(sessions);
         for (var i = 0; i < sessions.length; i++) {
           var currSession = new Session();
           var session = sessions[i];
@@ -144,7 +142,6 @@ export class UsersessionsComponent implements OnInit {
       this.myCalendar.fullCalendar('renderEvent', newSession, 'stick');
     }
     this.myCalendar.fullCalendar('render');
-    console.log('render calendar');
     window.dispatchEvent(new Event('resize'));
   }
 

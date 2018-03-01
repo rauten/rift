@@ -45,10 +45,12 @@ export class UserprofileComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      // console.log("Current id: " + localStorage.getItem("loggedInUserID"));
       this.currUser = params['rifttag'];
-      this.getUserProfileInformation(params['rifttag']);
-      this.isDataAvailable = this.getBroadcastNotifications(params['rifttag']);
+      var setData = (function() {
+        this.isDataAvailable = true;
+      }).bind(this);
+
+      this.getUserProfileInformation(params['rifttag'], setData);
       if(this.isLoggedIn) {
         this.getCurrentLoggedInUser();
       }
@@ -75,9 +77,10 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getUserProfileInformation(riftTag: string) {
+  getUserProfileInformation(riftTag: string, callback) {
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          this.getUserProfilePicture(riftTag);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -92,8 +95,9 @@ export class UserprofileComponent implements OnInit {
           this.getUserRifterSessions(riftTag);
           this.getUserFollowersAndFollowing(riftTag);
           this.getUserSessionRequests(this.profile.nickname);
-          this.getUserProfilePicture(riftTag);
-      }
+          this.getBroadcastNotifications(this.profile.nickname);
+          callback();
+        }
     );
   }
 
@@ -253,9 +257,9 @@ export class UserprofileComponent implements OnInit {
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         this.currentUser.profilePic = resBody.profilePic;
-        console.log(resBody);
       }
-    )
+    );
+    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
 
   isFollowing(riftTag: string) {
