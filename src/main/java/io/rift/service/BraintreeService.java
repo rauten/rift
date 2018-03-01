@@ -107,7 +107,7 @@ public class BraintreeService {
      * @return Map with single key-value pair. Key will either be 'customerId' if the creation is a success,
      * or 'resultMessage' in the case of failure
      */
-    public Map<String, String> createCustomer(String firstName, String lastName,) {
+    public Map<String, String> createCustomer(String firstName, String lastName) {
 
         CustomerRequest request = new CustomerRequest()
                 .firstName(firstName)
