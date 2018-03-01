@@ -546,6 +546,7 @@ public class UsertableService {
                 gordonImage1, gordonImage2
         });
         */
+        System.out.println();
         byte[] bytes = Base64.decodeBase64((base64Data.substring(base64Data.indexOf(",")+1)).getBytes());
         InputStream fis = new ByteArrayInputStream(bytes);
 
