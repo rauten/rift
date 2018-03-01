@@ -9,26 +9,27 @@ import com.braintreegateway.Transaction.Status;
 
 import javax.xml.ws.Response;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 
 @Service
 public class BraintreeService {
 
-    @Value("${com.braintreegateway.merchant-id}")
-    private static String merchantId;
+    private static String merchantId = "kh2jy6cypsh2735c";
 
-    @Value("${com.braintreegateway.public-key}")
-    private static String publicKey;
+    private static String publicKey = "sbrqqhjpbp8pcqpm";
 
-    @Value("${com.braintreegateway.private-key}")
-    private static String privateKey;
+    private static String privateKey = "f5a7699f93f8635fc519a74c90405ab7";
 
 
     private static BraintreeGateway gateway = new BraintreeGateway(Environment.SANDBOX, merchantId, publicKey, privateKey);
 
-    public String getClientToken() {
-        return gateway.clientToken().generate();
+    public Map<String, String> getClientToken() {
+        String token = gateway.clientToken().generate();
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        return tokenMap;
     }
 
     public String getClientNonce(Request request) {
