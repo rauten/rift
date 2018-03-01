@@ -9,14 +9,6 @@
             <div id="profile-pic">
               <img src="{{currentUser.profilePic}}" class="avatar img-circle" alt="">
             </div>
-            <ngx-braintree
-              [clientTokenURL]="'/api/braintree/clientToken'"
-              [createPurchaseURL]="updateBraintreeUserURL"
-              [chargeAmount]="0"
-              [buttonText]="'Save Payment Method'"
-              (paymentStatus)="onPaymentStatus($event)">
-            </ngx-braintree>
-            <h3>braintreeId: {{currentUser.braintreeId}}</h3>
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
@@ -39,7 +31,6 @@
             <alert type="danger" *ngIf="ratingStatus == 1">
               Already rated {{currentUser.riftTag}} in past 30 days
             </alert>
-
           </div>
           <div class="section about">
             <h3>About Me</h3>

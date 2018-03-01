@@ -14,6 +14,16 @@ export class PaymentService {
   constructor(private http: Http) {
   }
 
+  doTransaction(customerId: string, amount: number) {
+    console.log("running doTransaction");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put("/api/braintree/transactions/" + customerId + "/" + amount, headers)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
   createBraintreeUser(data): Observable<Userprofile> {
     console.log("running createBraintreeUser");
     let headers = new Headers({ 'Content-Type': 'application/json' });

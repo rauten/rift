@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {UsersessionsService} from "../../usersessions/usersessions.service";
+import {PaymentService} from "../../userprofile/payment.service";
 
 @Component({
   selector: 'app-session-accept-reject-button',
@@ -10,7 +11,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
   @Input() status: number;
   @Input() notification;
 
-  constructor(private userSessionService: UsersessionsService) { }
+  constructor(private userSessionService: UsersessionsService, private paymentService: PaymentService) { }
 
   ngOnInit() {
   }
@@ -38,6 +39,10 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.userSessionService.updateSessionRequest(data);
     this.status = 0;
     console.log("Rejected request");
+  }
+
+  doTransaction() {
+
   }
 
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import {Userprofile} from "../../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
-import {MatDialogRef} from "@angular/material";
+import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material";
 
 @Component({
   selector: 'app-update-info',
@@ -19,7 +19,7 @@ export class UpdateInfoComponent implements OnInit {
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
-              private dialogRef: MatDialogRef<UpdateInfoComponent>) {
+              private dialogRef: MatDialogRef<UpdateInfoComponent>, @Inject(MAT_DIALOG_DATA) public data) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
@@ -72,8 +72,6 @@ export class UpdateInfoComponent implements OnInit {
     }
     window.location.reload();
   }
-
-
 
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction

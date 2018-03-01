@@ -282,6 +282,9 @@ export class UserprofileComponent implements OnInit {
     this.dialog.open(UpdateInfoComponent, {
       height: '450px',
       width: '600px',
+      data: {
+        "updateBraintreeUserURL": this.updateBraintreeUserURL
+      }
     });
 
   }

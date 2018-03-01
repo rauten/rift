@@ -34,6 +34,15 @@
           <app-file-upload name="profilePic"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="profilePic"></app-file-upload>
           <img src={{profilePic}} alt="" class="profilePicPreview"/>
         </div>
+        <div class="form-group">
+          <ngx-braintree
+            [clientTokenURL]="'/api/braintree/clientToken'"
+            [createPurchaseURL]="data.updateBraintreeUserURL"
+            [chargeAmount]="0"
+            [buttonText]="'Save Payment Method'"
+            (paymentStatus)="onPaymentStatus($event)">
+          </ngx-braintree>
+        </div>
       </div>
     </div>
   </div>
