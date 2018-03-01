@@ -9,6 +9,8 @@ import "rxjs/Rx";
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
+  private uploadProfilePictureURL = "/api/user/putPicture/";
+  private getProfilePictureURL = "/api/user/getPicture/";
 
   constructor(private http: Http) {
   }
@@ -59,6 +61,27 @@ export class UserprofileService {
   unfollowUser(riftTag: string, id: number) {
     console.log("running unfollowUser");
     return this.http.get("/api/user/" + riftTag + "/unfollow=" + id)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  uploadProfilePicture(riftTag: string, base64: string) {
+    console.log("running uploadProfilePicture");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.uploadProfilePictureURL + riftTag, base64, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
+  getProfilePicture(riftTag: string): Observable<Userprofile> {
+    console.log("running getProfilePicture");
+    return this.http.get(this.getProfilePictureURL + riftTag)
       .map(
         (response: Response) => {
           return response.json();

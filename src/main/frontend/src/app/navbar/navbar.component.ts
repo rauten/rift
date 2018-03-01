@@ -50,7 +50,6 @@ export class NavbarComponent implements OnInit {
           notification.userId = resBody.notificationList[i].userId;
           this.currentUser.notifications.push(notification);
         }
-        console.log(this.currentUser.notifications);
       }
     )
   }

@@ -15,12 +15,12 @@ export class UpdateInfoComponent implements OnInit {
   loggedInUser: Userprofile = new Userprofile();
   profile: any;
   @Input() updateInfoData;
+  profilePic: any;
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
               private dialogRef: MatDialogRef<UpdateInfoComponent>) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    console.log(this.profile);
   }
 
   ngOnInit() {
@@ -39,6 +39,12 @@ export class UpdateInfoComponent implements OnInit {
         this.loggedInUser.id = resBody.id;
       }
     )
+  }
+
+  uploadProfilePic() {
+    let base64 = this.profilePic;
+    let riftTag = this.loggedInUser.riftTag;
+    this.userProfileService.uploadProfilePicture(riftTag, base64);
   }
 
   save() {
@@ -61,8 +67,13 @@ export class UpdateInfoComponent implements OnInit {
     console.log(data);
     this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
-    // window.location.reload();
+    if(this.profilePic) {
+      this.uploadProfilePic();
+    }
+    window.location.reload();
   }
+
+
 
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction

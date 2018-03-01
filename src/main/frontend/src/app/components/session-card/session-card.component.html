@@ -12,7 +12,7 @@
       <div *ngIf="!type">
       <app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>
       </div>
-      <p class="desc">{{session.sessionTime | date:'shortTime'}} {{session.console}} {{session.game}} </p>
+      <p class="desc">{{session.sessionTime | date:'shortTime'}} </p>
     </div>
     <div class="otherstuff">
       <div class="statusButtons" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">

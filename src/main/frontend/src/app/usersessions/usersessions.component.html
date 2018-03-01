@@ -1,4 +1,4 @@
-<div class="container" style="width: 80%">
+<div class="container" style="width: 95%">
 
   <div class="filters">
     <button (click)="openDialog()" type="button" class="btn btn-primary createASession" >
@@ -37,26 +37,45 @@
       </div>
     </div>
   </div>
-  <mat-tab-group>
-    <mat-tab label="card view">
-      <!--<div class="sessions">-->
-        <div *ngFor="let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |
-          gameFilter: selectedGames | consoleFilter: selectedConsoles">
-          <app-session-card [routerLink]="['../session', session.id]"
-                            [session]="session" [type]="session.type" [isLoggedIn]="true"
-                            [request]="loggedInUser.sessionRequests.get(session.id)"
-          ></app-session-card>
+  <div class="session-view">
+    <tabset>
+      <tab heading="card view" id="tab1" (select)="card = true" [ngClass]="{'display-calendar': !card, 'hide-calendar':card}">
+        <div class="sessions">
+          <div *ngFor="let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |
+            gameFilter: selectedGames | consoleFilter: selectedConsoles">
+            <app-session-card [routerLink]="['../session', session.id]"
+                              [session]="session" [type]="session.type" [isLoggedIn]="true"
+                              [request]="loggedInUser.sessionRequests.get(session.id)"
+            ></app-session-card>
+          </div>
         </div>
-      <!--</div>-->
+      </tab>
+      <tab heading="calendar view" (select)="renderCalendar()" [ngClass]="{'display-calendar': !card, 'hide-calendar':card}">
+        <angular2-fullcalendar [options]="calendarOptions"></angular2-fullcalendar>
+      </tab>
+    </tabset>
 
-    </mat-tab>
-    <mat-tab label="calendar">
-      <h1>Some more tab content</h1>
-      <p>...</p>
+  </div>
 
-    </mat-tab>
-  </mat-tab-group>
   <router-outlet></router-outlet>
 
 </div>
 
+<!--<mat-tab-group>-->
+<!--<mat-tab label="card view">-->
+<!--<div class="sessions">-->
+<!--<div *ngFor="let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |-->
+<!--gameFilter: selectedGames | consoleFilter: selectedConsoles">-->
+<!--<app-session-card [routerLink]="['../session', session.id]"-->
+<!--[session]="session" [type]="session.type" [isLoggedIn]="true"-->
+<!--[request]="loggedInUser.sessionRequests.get(session.id)"-->
+<!--&gt;</app-session-card>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--</mat-tab>-->
+<!--<mat-tab label="calendar" style="display: block">-->
+<!--<angular2-fullcalendar [options]="calendarOptions"></angular2-fullcalendar>-->
+
+<!--</mat-tab>-->
+<!--</mat-tab-group>-->
