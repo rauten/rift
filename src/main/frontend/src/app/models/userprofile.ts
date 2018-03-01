@@ -27,7 +27,9 @@ export class Userprofile {
   notifications: Notification[] = [];
   sessionRequests: any;
   profilePic: string;
+  braintreeId: string;
 
+  customerId: string;
   followerUsertable: any;
   followingUsertable: any;
   broadcastNotificationList: any;

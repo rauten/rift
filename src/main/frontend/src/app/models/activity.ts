@@ -4,6 +4,7 @@ export class Activity {
   notificationType: string;
   createdTime: number;
   rifterSession: Session;
+  riftTag: string;
 
   constructor() {
 

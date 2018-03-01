@@ -33,10 +33,18 @@ body {
 }
 .profile-info-left img.avatar {
   border: 2px solid #fff;
+  overflow: hidden;
+  width: 250px;
+  height: 250px;
+}
+#profile-pic {
+
+
 }
 .profile-info-left h2 {
   font-family: "josefinslab-semibold";
   margin-bottom: 30px;
+
 }
 .profile-info-left .section {
   margin-top: 50px;

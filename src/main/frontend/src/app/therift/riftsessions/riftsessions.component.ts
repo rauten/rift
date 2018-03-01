@@ -53,7 +53,6 @@ export class RiftsessionsComponent implements OnInit {
           currSession.gameId = resBody[1][i].game_id;
           this.sessions.push(currSession);
         }
-        console.log(this.sessions);
       }
     );
   }

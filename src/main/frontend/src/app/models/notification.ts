@@ -1,6 +1,7 @@
 export class Notification {
   creatorId: number;
   userId: number;
+  riftTag: string;
   sessionId: number;
   notificationContent: string;
   notificationType: string;

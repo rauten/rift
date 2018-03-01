@@ -3,6 +3,7 @@ import {AuthService} from "./auth/auth.service";
 import {Http} from "@angular/http";
 import {UserprofileService} from "./userprofile/userprofile.service";
 import {Userprofile} from "./models/userprofile";
+import {PaymentService} from "./userprofile/payment.service";
 
 @Component({
   selector: 'app-root',
@@ -10,10 +11,28 @@ import {Userprofile} from "./models/userprofile";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public auth: AuthService, private userprofileService: UserprofileService) {
+  constructor(public auth: AuthService, private userprofileService: UserprofileService,
+  private paymentService: PaymentService) {
     auth.handleAuthentication(function (data, createUser) {
       if (createUser) {
-        userprofileService.createUser(data)
+        let btData = {
+          "firstName": data.firstName,
+          "lastName": data.lastName
+        };
+        paymentService.createBraintreeUser(btData).subscribe(
+          resBody => {
+            var braintreeId = resBody.customerId;
+            let riftData = {
+              "firstName": data.firstName,
+              "lastName": data.lastName,
+              "riftTag": data.riftTag,
+              "auth0Token": data.auth0Token,
+              "braintreeId": braintreeId
+            };
+            userprofileService.createUser(riftData);
+          }
+        );
+
       } else {
         var profile = JSON.parse(localStorage.getItem("profile"));
         userprofileService.getUser(profile.nickname).subscribe(
@@ -26,22 +45,3 @@ export class AppComponent {
   }
 }
 
-/*
-let data = {
-  "firstName": firstName,
-  "lastName": lastName,
-  "riftTag": riftTag,
-  "auth0Id": auth0Id
-};
-let body = JSON.stringify(data);
-let head = new Headers({
-  'Content-Type': 'application/json'
-});
-this.http.post(this.createUserURL, body, {headers : head})
-  .map(res =>  res.json())
-  .subscribe(
-    data => {console.log(data);},
-    err => console.log(err),
-    () => console.log('Created user')
-  );
- */

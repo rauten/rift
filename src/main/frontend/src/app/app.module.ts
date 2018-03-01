@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
+
 import { FormsModule } from "@angular/forms";
 import { routes } from './app.router';
 import 'hammerjs';
-
 
 import {MatTabsModule} from '@angular/material/tabs';
 import {
@@ -82,6 +83,12 @@ import {CalendarComponent} from "ap-angular2-fullcalendar/src/calendar/calendar"
 import {ImageUploadModule} from "angular2-image-upload";
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
+import { NgxBraintreeModule } from 'ngx-braintree';
+import { FeedComponent } from './feed/feed.component';
+import { FeedCardComponent } from './components/feed-card/feed-card.component';
+import {PaymentService} from "./userprofile/payment.service";
+
+
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -125,11 +132,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     SessionTimePipe,
     GameFilterPipe,
     ConsoleFilterPipe,
-    FileUploadComponent
+    FileUploadComponent,
+    FeedComponent,
+    FeedCardComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     routes,
     FormsModule,
     MatTabsModule,
@@ -146,6 +156,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatSelectModule,
     MatSliderModule,
     MatCheckboxModule,
+    NgxBraintreeModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
     BsDropdownModule.forRoot(),
@@ -159,7 +170,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService, UpdateSessionService, CreateSessionService,
+    UserRatingService, UpdateSessionService, CreateSessionService, PaymentService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
