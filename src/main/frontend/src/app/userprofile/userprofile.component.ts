@@ -16,6 +16,7 @@ import {Globals} from "../global/globals";
 import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
+import {PaymentService} from "./payment.service";
 
 @Component({
   selector: 'app-userprofile',
@@ -32,11 +33,12 @@ export class UserprofileComponent implements OnInit {
   isDataAvailable:boolean = false;
   isLoggedIn: boolean = false;
   ratingStatus: number;
+  updateBraintreeUserURL = '/api/braintree/updateCustomer/';
 
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
+  private userSessionsService: UsersessionsService, public dialog: MatDialog, private paymentService: PaymentService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -90,6 +92,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
+          this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);

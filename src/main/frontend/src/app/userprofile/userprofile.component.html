@@ -11,7 +11,7 @@
             </div>
             <ngx-braintree
               [clientTokenURL]="'/api/braintree/clientToken'"
-              [createPurchaseURL]="'/api/braintree/updateCustomer'"
+              [createPurchaseURL]="updateBraintreeUserURL"
               [chargeAmount]="0"
               [buttonText]="'Save Payment Method'"
               (paymentStatus)="onPaymentStatus($event)">
