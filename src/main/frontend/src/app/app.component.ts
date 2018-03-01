@@ -13,7 +13,19 @@ export class AppComponent {
   constructor(public auth: AuthService, private userprofileService: UserprofileService) {
     auth.handleAuthentication(function (data, createUser) {
       if (createUser) {
-        userprofileService.createUser(data)
+        let btData = {
+          "firstName": data.firstName,
+          "lastName": data.lastName
+        };
+        let braintreeId = userprofileService.createBraintreeUser(btData);
+        let riftData = {
+          "firstName": data.firstName,
+          "lastName": data.lastName,
+          "riftTag": data.riftTag,
+          "auth0Token": data.auth0Token,
+          "braintreeId": braintreeId
+        };
+        userprofileService.createUser(riftData);
       } else {
         var profile = JSON.parse(localStorage.getItem("profile"));
         userprofileService.getUser(profile.nickname).subscribe(

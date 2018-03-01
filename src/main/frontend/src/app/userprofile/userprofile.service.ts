@@ -9,6 +9,7 @@ import "rxjs/Rx";
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
+  private createBraintreeUserURL = "/api/braintree/createUser";
   private uploadProfilePictureURL = "/api/user/putPicture/";
   private getProfilePictureURL = "/api/user/getPicture/";
 
@@ -42,6 +43,19 @@ export class UserprofileService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserURL, data, options)
+      .map((res: Response) => {
+        console.log(res);
+        return res.json();
+      })
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
+  createBraintreeUser(data): void {
+    console.log("running createBraintreeUser");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.createBraintreeUserURL, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();
