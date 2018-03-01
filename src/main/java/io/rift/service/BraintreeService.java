@@ -73,14 +73,13 @@ public class BraintreeService {
      *
      * @return A boolean - true/false, whether the card was verified
      */
-    public boolean verifyCard(String customerId, Map<String, Object> paymentMetadata) {
+    public boolean verifyCard(String customerId, Map<String, String> paymentMetadata) {
 
         PaymentMethodRequest request = new PaymentMethodRequest()
                 .customerId(customerId)
                 .paymentMethodNonce((String)paymentMetadata.get("nonce"))
                 .options()
                     .verifyCard(true)
-                    .verificationAmount("0.00")
                     .done();
 
         Result<? extends PaymentMethod> result = gateway.paymentMethod().create(request);
@@ -135,7 +134,7 @@ public class BraintreeService {
      *
      * @return - A string denoting whether the update was a success or failure.
      */
-    public String updateCustomer(Map<String, Object> paymentMetadata, String customerId) {
+    public String updateCustomer(Map<String, String> paymentMetadata, String customerId) {
         CustomerRequest request = new CustomerRequest()
                 .paymentMethodNonce((String)paymentMetadata.get("nonce"));
 
@@ -157,7 +156,7 @@ public class BraintreeService {
      * @param customerId
      * @return
      */
-    public String updateCustomerInfo(Map<String, Object> customerInfo, String customerId) {
+    public String updateCustomerInfo(Map<String, String> customerInfo, String customerId) {
 
         CustomerRequest request = new CustomerRequest();
         if (customerInfo.containsKey("firstName")) {

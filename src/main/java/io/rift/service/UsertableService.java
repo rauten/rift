@@ -40,9 +40,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
 
@@ -105,6 +104,9 @@ public class UsertableService {
     private final String getGameRequestsAndHostInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoByUserIdAndAccepted";
     private final String getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted";
     private final String getGameRequestsByUserIdAndAccepted = "getGameRequestsByUserIdAndAccepted";
+
+    private final String getSessionCostBySessionId = "getSessionCostBySessionId";
+    private final String getBraintreeIdFromUserId = "getBraintreeIdFromUserId";
 
     /****************************** POST *******************************/
     /*******************************************************************/
@@ -402,6 +404,22 @@ public class UsertableService {
         }
         resultSet.close();
         return rifterSessions;
+    }
+
+    public Map<String, Object> getTransactionDataFromUserAndSessionId(String id, String sessionId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = Integer.valueOf(id);
+        ResultSet resultSet = riftRepository.doQuery(getBraintreeIdFromUserId, args);
+        Map<String, Object> transactionData = new HashMap<>();
+        if (resultSet.next()) {
+            transactionData.put("braintreeId", resultSet.getObject(1));
+        }
+        args[0] = Integer.valueOf(sessionId);
+        resultSet = riftRepository.doQuery(getSessionCostBySessionId, args);
+        if (resultSet.next()) {
+            transactionData.put("sessionCost", resultSet.getObject(1));
+        }
+        return transactionData;
     }
 
 

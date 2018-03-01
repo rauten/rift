@@ -194,6 +194,12 @@
         WHERE us.id = ? AND n.notification_type = 'New Game';
     </getBroadcastNotificationsForFollower>
 
+    <getBraintreeIdFromUserId>
+        SELECT braintree_id
+        FROM usertable
+        WHERE id = ?;
+    </getBraintreeIdFromUserId>
+
     <createUser>
         INSERT INTO usertable
         (first_name, last_name, rift_tag, is_private, is_suspended, auth0_token, braintree_id)
@@ -218,6 +224,12 @@
         ON r.game_id = ga.id
         WHERE g.riftee_id = ? AND g.host_id = ? AND r.session_time &lt; current_timestamp;
     </getGameByHostAndPlayerId>
+
+    <getSessionCostBySessionId>
+        SELECT session_cost
+        FROM riftergame
+        WHERE id = ?;
+    </getSessionCostBySessionId>
 
     <getRifterGameAndHostByGameId>
         SELECT *
