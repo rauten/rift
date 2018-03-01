@@ -14,6 +14,9 @@ public class Usertable {
     @JsonView(Views.UsertableAuth0Id.class)
     private String auth0Token;
 
+    @JsonView(Views.UsertableBraintreeId.class)
+    private String braintreeId;
+
     @JsonView(Views.UsertableFirstName.class)
     private String firstName;
 
