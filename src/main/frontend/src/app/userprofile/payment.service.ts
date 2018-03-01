@@ -18,7 +18,8 @@ export class PaymentService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.put(this.createBraintreeUserURL, data, options)
-      .map(res => {
+      .map((res: Response) => {
+        console.log(res);
         return res.json();
       })
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'));

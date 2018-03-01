@@ -86,6 +86,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { NgxBraintreeModule } from 'ngx-braintree';
 import { FeedComponent } from './feed/feed.component';
 import { FeedCardComponent } from './components/feed-card/feed-card.component';
+import {PaymentService} from "./userprofile/payment.service";
 
 
 
