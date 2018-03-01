@@ -23,6 +23,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
       "sessionId": this.notification.sessionId,
       "rifteeId": this.notification.creatorId
     };
+    this.getTransactionData(data.rifteeId, data.sessionId);
     this.userSessionService.updateSessionRequest(data);
     this.status = 2;
     console.log("Accepted request");
@@ -41,8 +42,17 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     console.log("Rejected request");
   }
 
-  doTransaction() {
+  getTransactionData(riftId: number, sessionId: number) {
+    this.paymentService.getTransactionData(riftId, sessionId).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        this.doTransaction(resBody.braintreeId, resBody.sessionCost)
+      }
+    )
+  }
 
+  doTransaction(customerId: string, amount: number) {
+    this.paymentService.doTransaction(customerId, amount);
   }
 
 }

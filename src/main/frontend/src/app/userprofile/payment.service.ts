@@ -14,6 +14,17 @@ export class PaymentService {
   constructor(private http: Http) {
   }
 
+  getTransactionData(riftId: number, sessionId: number) {
+    console.log("running getTransactionData");
+    return this.http.get("/api/user/" + riftId + "/session/" + sessionId)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   doTransaction(customerId: string, amount: number) {
     console.log("running doTransaction");
     let headers = new Headers({ 'Content-Type': 'application/json' });
