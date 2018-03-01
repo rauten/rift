@@ -19,15 +19,20 @@ export class AppComponent {
           "firstName": data.firstName,
           "lastName": data.lastName
         };
-        let braintreeId = paymentService.createBraintreeUser(btData);
-        let riftData = {
-          "firstName": data.firstName,
-          "lastName": data.lastName,
-          "riftTag": data.riftTag,
-          "auth0Token": data.auth0Token,
-          "braintreeId": braintreeId
-        };
-        userprofileService.createUser(riftData);
+        paymentService.createBraintreeUser(btData).subscribe(
+          resBody => {
+            var braintreeId = resBody.customerId;
+            let riftData = {
+              "firstName": data.firstName,
+              "lastName": data.lastName,
+              "riftTag": data.riftTag,
+              "auth0Token": data.auth0Token,
+              "braintreeId": braintreeId
+            };
+            userprofileService.createUser(riftData);
+          }
+        );
+
       } else {
         var profile = JSON.parse(localStorage.getItem("profile"));
         userprofileService.getUser(profile.nickname).subscribe(
@@ -40,22 +45,3 @@ export class AppComponent {
   }
 }
 
-/*
-let data = {
-  "firstName": firstName,
-  "lastName": lastName,
-  "riftTag": riftTag,
-  "auth0Id": auth0Id
-};
-let body = JSON.stringify(data);
-let head = new Headers({
-  'Content-Type': 'application/json'
-});
-this.http.post(this.createUserURL, body, {headers : head})
-  .map(res =>  res.json())
-  .subscribe(
-    data => {console.log(data);},
-    err => console.log(err),
-    () => console.log('Created user')
-  );
- */

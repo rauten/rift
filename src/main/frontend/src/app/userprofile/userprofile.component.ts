@@ -89,6 +89,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.id = resBody.id;
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
+          this.currentUser.braintreeId = resBody.braintreeId;
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);

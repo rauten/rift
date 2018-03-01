@@ -16,6 +16,7 @@
               [buttonText]="'Save Payment Method'"
               (paymentStatus)="onPaymentStatus($event)">
             </ngx-braintree>
+            <h3>braintreeId: {{currentUser.braintreeId}}</h3>
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
