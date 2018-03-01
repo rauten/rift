@@ -78,13 +78,13 @@ public class BraintreeController {
      *
      * @return - A string denoting the success/failure of the update
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/updateCustomer/{customerId}")
-    public String updateCustomer(@RequestBody Map<String, Object> customerInfo, @PathVariable String customerId) {
+    @RequestMapping(method = RequestMethod.POST, value = "/braintree/updateCustomer/{customerId}")
+    public String updateCustomer(@RequestBody Map<String, String> customerInfo, @PathVariable String customerId) {
         return braintreeService.updateCustomer(customerInfo, customerId);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/braintree/updateCustomerInfo")
-    public String updateCustomerInfo(@RequestBody Map<String, Object> customerInfo) {
+    public String updateCustomerInfo(@RequestBody Map<String, String> customerInfo) {
         return braintreeService.updateCustomerInfo(customerInfo, (String)customerInfo.get("customerId"));
     }
 

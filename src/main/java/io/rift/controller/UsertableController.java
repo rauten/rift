@@ -224,6 +224,11 @@ public class UsertableController {
         return usertable;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftId}/session/{sessionId}")
+    public Map<String, Object> getTransactionDataFromUserAndSessionId(@PathVariable String riftId, @PathVariable String sessionId) throws SQLException {
+        return usertableService.getTransactionDataFromUserAndSessionId(riftId, sessionId);
+    }
+
     @JsonView(Views.ProfilePageView.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
     public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
