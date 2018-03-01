@@ -10,9 +10,9 @@
               <img src="{{currentUser.profilePic}}" class="avatar img-circle" alt="">
             </div>
             <ngx-braintree
-              [clientTokenURL]="'api/braintree/getclienttoken'"
-              [createPurchaseURL]="'api/braintree/createpurchase'"
-              [chargeAmount]="55.55"
+              [clientTokenURL]="'/api/braintree/clientToken'"
+              [createPurchaseURL]="'/api/braintree/updateCustomer'"
+              [chargeAmount]="0"
               (paymentStatus)="onPaymentStatus($event)">
             </ngx-braintree>
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
