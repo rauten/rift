@@ -17,7 +17,7 @@ public class BraintreeController {
     private BraintreeService braintreeService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/braintree/clientToken")
-    public String getClientToken() {
+    public Map<String, String> getClientToken() {
         return braintreeService.getClientToken();
     }
 
