@@ -29,7 +29,7 @@ export class PaymentService {
     console.log("running doTransaction");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put("/api/braintree/transactions/" + customerId + "/" + amount, headers)
+    this.http.put("/api/braintree/transaction/" + customerId + "/" + amount, headers)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();

@@ -1,11 +1,14 @@
 package io.rift.controller;
 
+import com.braintreegateway.CreditCard;
+import com.braintreegateway.Customer;
 import com.braintreegateway.Request;
 import io.rift.service.BraintreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -86,6 +89,26 @@ public class BraintreeController {
     @RequestMapping(method = RequestMethod.PUT, value = "/braintree/updateCustomerInfo")
     public String updateCustomerInfo(@RequestBody Map<String, String> customerInfo) {
         return braintreeService.updateCustomerInfo(customerInfo, (String)customerInfo.get("customerId"));
+    }
+
+    /**
+     *
+     * @param customerId - The customer id as a string
+     * @return - A customer object (includes all the information about the customer you could possibly want)
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/customer/{customerId}")
+    public Customer getCustomer(@PathVariable String customerId) {
+        return braintreeService.getCustomerFromId(customerId);
+    }
+
+    /**
+     *
+     * @param customerId - The customer id as a string
+     * @return - A list of the customer's credit cards
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/customercards/{customerId}")
+    public List<CreditCard> getCustomerCreditCards(@PathVariable String customerId) {
+        return braintreeService.getCustomerCreditCardsFromId(customerId);
     }
 
 
