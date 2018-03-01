@@ -151,6 +151,39 @@ public class BraintreeService {
         return "Failed";
     }
 
+    /**
+     * A more robust update than updateCustomer (should be used when want to update more than just payment info)
+     * @param customerInfo
+     * @param customerId
+     * @return
+     */
+    public String updateCustomerInfo(Map<String, Object> customerInfo, String customerId) {
+
+        CustomerRequest request = new CustomerRequest();
+        if (customerInfo.containsKey("firstName")) {
+            request.firstName((String)customerInfo.get("firstName"));
+        }
+        if (customerInfo.containsKey("lastName")) {
+            request.lastName((String)customerInfo.get("lastName"));
+        }
+        if (customerInfo.containsKey("nonce")) {
+            request.paymentMethodNonce((String)customerInfo.get("nonce"));
+        }
+
+        try {
+            if (!customerInfo.containsKey("nonce") || verifyCard(customerId, customerInfo)) {
+                Result<Customer> updateResult = gateway.customer().update(customerId, request);
+                return updateResult.getMessage();
+            }
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            return "Failed";
+        }
+        return "Failed";
+
+
+    }
+
 
 
 }
