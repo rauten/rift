@@ -65,7 +65,7 @@ public class UsertableService {
     @Autowired
     private ConnectionService connectionService;
 
-    public final int POPULATESIZE = 14;
+    public final int POPULATESIZE = 15;
 
 
     /****************************** GET *******************************/
@@ -198,12 +198,13 @@ public class UsertableService {
         usertable.setYoutubeAccount(resultSet.getString(startPoint + 11));
         usertable.setBio(resultSet.getString(startPoint + 12));
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
+        usertable.setBraintreeId(resultSet.getString(startPoint + 14));
         if (info.equals("activity")) {
-            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 13, ""));
+            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 14, ""));
         } else if (info.equals("levenshtein")) {
-            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + 14));
-            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + 15));
-            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + 16));
+            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + 15));
+            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + 16));
+            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + 17));
         }
         return usertable;
     }
@@ -445,6 +446,7 @@ public class UsertableService {
             usertable.setRifterRating(resultSet.getDouble(15));
             usertable.setGender(resultSet.getBoolean(16));
             usertable.setAuth0Token(resultSet.getString(17));
+            usertable.setBraintreeId(resultSet.getString(18));
             notification.setCreatorUsertable(usertable);
             notifications.add(notification);
         }
@@ -460,7 +462,7 @@ public class UsertableService {
     public Boolean createUser(Usertable usertable) {
         return riftRepository.doInsert(createUser,
                 new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token())});
+                        usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token()), usertable.getBraintreeId()});
     }
 
     private String formatAuth0Token(String auth0Token) {
