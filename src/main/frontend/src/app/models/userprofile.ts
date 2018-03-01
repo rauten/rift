@@ -29,6 +29,7 @@ export class Userprofile {
   profilePic: string;
   braintreeId: string;
 
+  customerId: string;
   followerUsertable: any;
   followingUsertable: any;
   broadcastNotificationList: any;

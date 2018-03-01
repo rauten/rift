@@ -3,6 +3,7 @@ import {AuthService} from "./auth/auth.service";
 import {Http} from "@angular/http";
 import {UserprofileService} from "./userprofile/userprofile.service";
 import {Userprofile} from "./models/userprofile";
+import {PaymentService} from "./userprofile/payment.service";
 
 @Component({
   selector: 'app-root',
@@ -10,14 +11,15 @@ import {Userprofile} from "./models/userprofile";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public auth: AuthService, private userprofileService: UserprofileService) {
+  constructor(public auth: AuthService, private userprofileService: UserprofileService,
+  private paymentService: PaymentService) {
     auth.handleAuthentication(function (data, createUser) {
       if (createUser) {
         let btData = {
           "firstName": data.firstName,
           "lastName": data.lastName
         };
-        let braintreeId = userprofileService.createBraintreeUser(btData);
+        let braintreeId = paymentService.createBraintreeUser(btData);
         let riftData = {
           "firstName": data.firstName,
           "lastName": data.lastName,

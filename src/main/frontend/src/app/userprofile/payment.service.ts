@@ -7,34 +7,20 @@ import "rxjs/Rx";
 
 
 @Injectable()
-export class UserprofileService {
-  private createUserURL = "/api/user/createUser";
-  private uploadProfilePictureURL = "/api/user/putPicture/";
-  private getProfilePictureURL = "/api/user/getPicture/";
+export class PaymentService {
+  private createBraintreeUserURL = "/api/braintree/createUser";
 
   constructor(private http: Http) {
   }
 
-  getUser(riftTag: string): Observable<Userprofile> {
-    console.log("running getUser");
-    return this.http.get("/api/user/" + riftTag + "/profilePage")
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-
-  createUser(data): void {
-    console.log("running createUser");
+  createBraintreeUser(data): Observable<Userprofile> {
+    console.log("running createBraintreeUser");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put(this.createUserURL, data, options)
-      .map(res => res.json())
-      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
-      .subscribe();
+    return this.http.put(this.createBraintreeUserURL, data, options)
+      .map(res => {
+        return res.json();
+      })
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'));
   }
-
 }
