@@ -302,7 +302,9 @@ export class UserprofileComponent implements OnInit {
 
   openRatingDialog() {
     var raterId = this.loggedInUser.id;
+    console.log(raterId);
     var rateeId = this.currentUser.id;
+    console.log(rateeId);
     this.userRatingService.isAllowedToRate(raterId, rateeId).subscribe(
       resBody => {
         this.ratingStatus = resBody.result;

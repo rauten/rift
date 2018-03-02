@@ -57,4 +57,8 @@ export class UpdateSessionService {
       );
   }
 
+  cancelSession(sessionId: number) {
+
+  }
+
 }
