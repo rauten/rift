@@ -39,6 +39,7 @@
             [clientTokenURL]="'/api/braintree/clientToken'"
             [createPurchaseURL]="data.updateBraintreeUserURL"
             [chargeAmount]="0"
+            [allowChoose] = "true"
             [buttonText]="'Save Payment Method'"
             (paymentStatus)="onPaymentStatus($event)">
           </ngx-braintree>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {SearchBarService} from "../../components/search-bar/search-bar.service";
 import {ActivatedRoute} from "@angular/router";
 import {Session} from "../../models/session";
+import {UsersessionsService} from "../../usersessions/usersessions.service";
+import {SessionRequest} from "../../models/session-request";
+import {Userprofile} from "../../models/userprofile";
 
 @Component({
   selector: 'app-riftsessions',
@@ -14,18 +17,22 @@ export class RiftsessionsComponent implements OnInit {
   sessions: Session[] = [];
   users: any;
   isLoggedIn = false;
+  loggedInUser: Userprofile = new Userprofile();
+  profile: any;
 
-  constructor(private searchBarService: SearchBarService, private route: ActivatedRoute) { }
+  constructor(private searchBarService: SearchBarService, private route: ActivatedRoute,
+  private userSessionsService: UsersessionsService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'))
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.searchQuery = params['searchQuery'];
-      console.log(JSON.parse(localStorage.getItem('profile')));
       if (JSON.parse(localStorage.getItem('profile')) != null) {
         this.isLoggedIn = true;
       }
-      console.log(this.isLoggedIn);
       this.getUserSearchResults(this.searchQuery);
+      this.getUserSessionRequests(this.profile.nickname);
     })
   }
 
@@ -55,5 +62,22 @@ export class RiftsessionsComponent implements OnInit {
         }
       }
     );
+  }
+
+  getUserSessionRequests(riftTag: string) {
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>();
+    this.userSessionsService.getSessionRequests(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (var i = 0; i < resBody.length; i++) {
+          var request = new SessionRequest();
+          request.accepted = resBody[i].accepted;
+          request.hostId = resBody[i].hostId;
+          request.rifteeId = resBody[i].rifteeId;
+          request.sessionId = resBody[i].sessionId;
+          this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
   }
 }

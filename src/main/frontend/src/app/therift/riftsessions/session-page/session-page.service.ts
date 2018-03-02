@@ -24,4 +24,15 @@ export class SessionPageService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  checkRifteeStatus(sessionId: number, riftId: number) {
+    console.log("running checkRifteeStatus");
+    return this.http.get("/api/sessionRequest/" + sessionId + "/status/" + riftId)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
 }

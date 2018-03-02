@@ -37,6 +37,7 @@ export class Userprofile {
   activities: Activity[] = [];
   creatorUsertable: any;
   length;
+  profilePicPath;
 
 
   constructor() {

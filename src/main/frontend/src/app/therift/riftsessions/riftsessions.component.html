@@ -8,7 +8,7 @@
     <mat-tab label="sessions">
       <div *ngFor="let session of sessions">
         <app-session-card [routerLink]="['../../session', session.id]"
-          [session]="session" [isLoggedIn]="isLoggedIn">
+          [session]="session" [isLoggedIn]="isLoggedIn" [request]="loggedInUser.sessionRequests.get(session.id)">
         </app-session-card>
       </div>
     </mat-tab>

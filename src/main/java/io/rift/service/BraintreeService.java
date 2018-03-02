@@ -46,6 +46,7 @@ public class BraintreeService {
      * @return
      */
     public String doTransaction(BigDecimal amount, String clientId) {
+        System.out.println("hello");
         TransactionRequest request = new TransactionRequest()
                 .amount(amount)
                 .customerId(clientId)

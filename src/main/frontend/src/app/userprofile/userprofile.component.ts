@@ -80,9 +80,9 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string, callback) {
+    console.log("Get User Profile Information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          this.getUserProfilePicture(riftTag);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -93,6 +93,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
+          this.getUserProfilePicture(riftTag);
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
@@ -203,6 +204,7 @@ export class UserprofileComponent implements OnInit {
           currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
           this.currentUser.activities.push(currActivity);
         }
+        console.log(this.currentUser.activities);
       }
     );
   }
@@ -236,6 +238,8 @@ export class UserprofileComponent implements OnInit {
           }
           this.currentUser.rifterSessions.push(currSession);
         }
+        console.log(this.currentUser.rifterSessions);
+
       }
     );
   }
@@ -253,6 +257,8 @@ export class UserprofileComponent implements OnInit {
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
         }
+        console.log(this.currentUser.sessionRequests);
+
       }
     )
   }
@@ -261,7 +267,12 @@ export class UserprofileComponent implements OnInit {
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         this.currentUser.profilePic = resBody.profilePic;
-      }
+      },
+      error => {
+        console.log(error + ": Using default picture instead");
+        this.currentUser.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
+
+      },
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
