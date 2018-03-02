@@ -75,7 +75,7 @@ export class UpdateSessionComponent implements OnInit {
   }
 
   cancelSession() {
-
+    this.updateSessionService.cancelSession(this.data.sessionId);
   }
 
   cancel(): void {
