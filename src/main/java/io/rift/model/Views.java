@@ -252,7 +252,7 @@ public class Views {
     /**************************************************************/
 
     public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName,
-            UsertableRiftTag, UsertableGender, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
+            UsertableRiftTag, UsertableGender,  UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableNotificationList, UsertableBroadcastNotificationList,
             UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
             FollowingFollowerUsertable, NotificationId, NotificationUserId, NotificationType, NotificationContent,
