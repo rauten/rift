@@ -62,9 +62,6 @@ export class UpdateInfoComponent implements OnInit {
       'riftTag': this.updateInfoData.riftTag,
       'email':this.updateInfoData.email
     };
-    console.log("Herro");
-    console.log(auth0data);
-    console.log(data);
     this.updateInfoService.updateUser(data);
     this.updateInfoService.updateAuth0User(auth0data, this.profile.sub);
     if(this.profilePic) {
