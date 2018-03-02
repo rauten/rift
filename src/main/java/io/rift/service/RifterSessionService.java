@@ -61,6 +61,19 @@ public class RifterSessionService {
     private final String sessionCreatedType = "New Game";
 
 
+    public RifterSession getRifterSessionBySessionId(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
+        if (resultSet.next()) {
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
+            resultSet.close();
+            return rifterSession;
+        }
+        resultSet.close();
+        return null;
+    }
+
     public RifterSession getRifterSessionAndHostBySessionId(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;

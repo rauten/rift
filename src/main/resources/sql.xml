@@ -469,6 +469,13 @@
         WHERE u.rift_tag = ?
     </getSessionRequestByRiftTag>
 
+
+    <deleteSessionRequest>
+        DELETE FROM sessionrequest
+        WHERE riftee_id = ? AND session_id = ?
+    </deleteSessionRequest>
+
+
     <!--
         CREATE OR REPLACE FUNCTION create_game_request_notification()
             RETURNS trigger AS

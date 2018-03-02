@@ -13,6 +13,7 @@ import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,9 @@ public class SessionRequestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/sessionRequest/{sessionId}/status/{rifteeId}")
     public Map<String, Integer> getRequestStatus(@PathVariable Integer sessionId, @PathVariable Integer rifteeId) throws SQLException {
-        return sessionRequestService.getRequestStatus(sessionId, rifteeId);
+        Map<String, Integer> result = new HashMap<>();
+        result.put("status", sessionRequestService.getRequestStatus(sessionId, rifteeId));
+        return result;
     }
 
 
