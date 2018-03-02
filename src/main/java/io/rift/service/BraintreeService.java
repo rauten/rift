@@ -1,6 +1,7 @@
 package io.rift.service;
 
 import com.braintreegateway.*;
+import com.braintreegateway.Customer;
 import com.braintreegateway.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.braintreegateway.Transaction.Status;
 import javax.xml.ws.Response;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -181,7 +183,25 @@ public class BraintreeService {
         }
         return "Failed";
 
+    }
 
+    /**
+     *
+     * @param customerId - The customer id as a string
+     * @return - A customer object (includes all the information about the customer you could possibly want)
+     */
+    public Customer getCustomerFromId(String customerId) {
+        return gateway.customer().find(customerId);
+    }
+
+    /**
+     *
+     * @param customerId - The customer id as a string
+     * @return - A list of the customer's credit cards
+     */
+    public List<CreditCard> getCustomerCreditCardsFromId(String customerId) {
+        Customer customer = gateway.customer().find(customerId);
+        return customer.getCreditCards();
     }
 
 

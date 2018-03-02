@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ public class SessionRequestService {
     private final String createSessionRequest = "createSessionRequest";
     private final String getSessionRequestByRiftTag = "getSessionRequestByRiftTag";
     private final String getRequestStatus = "getRequestStatus";
+    private final String deleteSessionRequest = "deleteSessionRequest";
 
     private final String updateSessionRequestStart = "UPDATE gameRequest SET (";
     private final String updateSessionRequestPath = "/io/rift/model/SessionRequest.class";
@@ -76,16 +78,16 @@ public class SessionRequestService {
         return rifteeSessions;
     }
 
-    public Map<String, Integer> getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
+    public Integer getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
         Object[] args = new Object[2];
         args[0] = sessionId;
         args[1] = rifteeId;
         ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
         Map<String, Integer> status = new HashMap<>();
         if (resultSet.next()) {
-            status.put("status", resultSet.getInt(1));
+            return resultSet.getInt(1);
         }
-        return status;
+        return -1;
     }
 
     public List<SessionRequest> populateGameRequestsWithInfo(ResultSet resultSet, String[] info) throws SQLException {
@@ -172,6 +174,45 @@ public class SessionRequestService {
             return riftRepository.doUpdate(query, args);
         }
         return true;
+    }
+
+    public Integer deleteSessionRequest(Integer rifteeId, Integer sessionId) throws SQLException {
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        Object[] args = new Object[2];
+        args[0] = rifteeId;
+        args[1] = sessionId;
+        Integer sessionRequestStatus = getRequestStatus(sessionId, rifteeId);
+        if (sessionRequestStatus != -1) {
+            if (sessionRequestStatus == 1) {
+                riftRepository.doDelete(deleteSessionRequest, args);
+                // No charge, rifter hasn't accepted
+                return 3;
+            } else if (sessionRequestStatus == 2) {
+                boolean success = riftRepository.doDelete(deleteSessionRequest, args);
+                if (success) {
+                    Object[] args2 = new Object[1];
+                    args2[0] = sessionId;
+                    RifterSession rifterSession = rifterSessionService.getRifterSessionBySessionId(sessionId);
+                    Timestamp timestamp = rifterSession.getSessionTime();
+                    long seconds = (long)Math.ceil((timestamp.getTime() - currentTime.getTime())/1000.0);
+                    if (seconds >= 172800) {
+                        // Flat rate charge
+                        return 2;
+                    } else if (seconds >= 43200) {
+                        // 50% refund, automatically charge card 50%
+                        return 1;
+                    } else {
+                        // 0% refund, automatically charge card full amount
+                        return 0;
+                    }
+                }
+            } else if (sessionRequestStatus == 0) {
+                // Rifter has already rejected your request, no need to do anything
+                return -1;
+            }
+        }
+        // No session request found
+        return -2;
     }
 
     public List<SessionRequest> getSessionRequestByRiftTag(String riftTag) throws SQLException {
