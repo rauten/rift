@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {SessionPageService} from "./session-page.service";
 import {Session} from "../../../models/session";
@@ -8,8 +8,8 @@ import {SESSION_ICONS} from "../../../constants/session-icon-variables";
 import {Userprofile} from "../../../models/userprofile";
 import {MatDialog} from "@angular/material";
 import {UpdateSessionComponent} from "./update-session/update-session.component";
-import {Globals} from "../../../global/globals";
 import {CONSOLE_ICONS} from "../../../constants/console-icon-variables";
+import {BsModalService, BsModalRef} from "ngx-bootstrap";
 
 
 
@@ -26,13 +26,15 @@ export class SessionPageComponent implements OnInit {
   isLoggedIn: boolean = false;
   profile: any;
   loggedInUserId: number;
+  request: any;
+  modalRef: BsModalRef;
 
   sessionIcon: string;
   consoleIcon: string;
 
   constructor(private route: ActivatedRoute, private sessionPageService: SessionPageService,
               private userProfileService: UserprofileService, private userSessionsService: UsersessionsService,
-              public dialog: MatDialog, private globals: Globals) {
+              public dialog: MatDialog, private modalService: BsModalService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if (this.profile != null) {
       this.isLoggedIn = true;
@@ -71,6 +73,15 @@ export class SessionPageComponent implements OnInit {
         this.sessionIcon=SESSION_ICONS[this.session.gameId];
         this.consoleIcon = CONSOLE_ICONS[this.session.console];
         this.getSessionRiftees(this.response.players);
+        this.checkRifteeStatus(this.session.id);
+      }
+    )
+  }
+
+  checkRifteeStatus(sessionId: number){
+    this.sessionPageService.checkRifteeStatus(sessionId, this.loggedInUserId).subscribe(
+      resBody => {
+        this.request = resBody;
       }
     )
   }
@@ -124,12 +135,8 @@ export class SessionPageComponent implements OnInit {
 
   }
 
+  changeStatus(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
 }
-
-  @Component({
-    selector: 'dialog-content-example-dialog',
-    templateUrl: 'dialog-content-example-dialog.html',
-  })
-
-  export class DialogContentExampleDialog {}
-

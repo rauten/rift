@@ -77,7 +77,14 @@
                 </div>
               </div>
             </mat-tab>
-
+            <mat-tab label="sessions">
+              <div class="media" *ngFor="let session of currentUser.rifterSessions">
+                <app-session-card [routerLink]="['../../session', session.id]"
+                                  [session]="session" [request]="loggedInUser.sessionRequests.get(session.id)" [isLoggedIn]="isLoggedIn"
+                                  [type]="session.type"
+                ></app-session-card>
+              </div>
+            </mat-tab>
             <mat-tab label="followers">
               <div class="media user-follower" *ngFor="let follower of currentUser.followers">
                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
@@ -170,14 +177,7 @@
 <!--<app-notification [notification]="notification"></app-notification>-->
 <!--</div>-->
 <!--</mat-tab>-->
-<!--<mat-tab label="sessions">-->
-<!--<div class="media" *ngFor="let session of currentUser.rifterSessions">-->
-<!--<app-session-card [routerLink]="['../../session', session.id]"-->
-<!--[session]="session" [request]="loggedInUser.sessionRequests.get(session.id)" [isLoggedIn]="isLoggedIn"-->
-<!--[type]="session.type"-->
-<!--&gt;</app-session-card>-->
-<!--</div>-->
-<!--</mat-tab>-->
+
 
 <!--<mat-tab label="feed" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
   <!--<div class="media activity-item" *ngFor="let notification of currentUser.feed">-->

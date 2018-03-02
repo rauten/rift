@@ -21,11 +21,22 @@
             <div class="col-md-4 text-center">
               <div *ngIf="isLoggedIn && !(profile.nickname == session.riftTag)">
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="!request" (click)="joinUserSession()">Join</button>
-                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==1">Pending</button>
-                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==0">Rejected</button>
-                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.accepted==2">Accepted</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==1">Pending</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==0">Rejected</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==2" (click)="changeStatus(template)">Accepted</button>
               </div>
               <button class="btn btn-lg btn-add-to-cart" mat-button (click)="openDialog()" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
+              <ng-template #template>
+                <div class="modal-header">
+                  <h4 class="modal-title pull-left">Cancel your Session Join?</h4>
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  This is a modal.
+                </div>
+              </ng-template>
             </div>
             <div class="col-md-4 text-left">
               <h5>Price  <span class="itemPrice">${{session.sessionCost}}.00 / slot</span></h5>
@@ -71,7 +82,6 @@
   sessionGame: {{session.gameId}}<br>
   sessionConsole: {{session.console}}<br>
   sessionDescription: {{session.description}}<br>
-  globals: {{globals.role}}<br>
   <br><br><br>
 
   <button mat-button (click)="openDialog()">Open dialog</button>

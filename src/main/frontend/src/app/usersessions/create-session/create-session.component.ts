@@ -65,7 +65,7 @@ export class CreateSessionComponent implements OnInit {
       "title": this.createSessionData.title,
       "description": this.createSessionData.description,
       "gameId": this.gameId,
-      "console": this.platform,
+      "console": this.platform.console,
       "numSlots": this.createSessionData.numSlots,
       "sessionCost": this.createSessionData.sessionCost,
       "sessionTime": timeMS,
@@ -73,7 +73,7 @@ export class CreateSessionComponent implements OnInit {
     };
     console.log(data);
     this.userSessionService.createUserSession(data);
-    // window.location.reload();
+    window.location.reload();
   }
 
   cancel(): void {

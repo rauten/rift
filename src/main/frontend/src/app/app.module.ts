@@ -51,7 +51,6 @@ import { SearchBarService } from "./components/search-bar/search-bar.service";
 import { UserCardComponent } from './components/user-card/user-card.component';
 import {
   SessionPageComponent,
-  DialogContentExampleDialog
 } from './therift/riftsessions/session-page/session-page.component';
 import { SessionPageService } from "./therift/riftsessions/session-page/session-page.service";
 import { UserRatingComponent } from './userprofile/user-rating/user-rating.component';
@@ -68,6 +67,8 @@ import { UpdateSessionService } from "./therift/riftsessions/session-page/update
 import { SessionAcceptRejectButtonComponent } from './components/session-accept-reject-button/session-accept-reject-button.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { ModalModule } from 'ngx-bootstrap';
+
 
 import {Globals} from "./global/globals";
 import {CreateSessionService} from "./usersessions/create-session/data/create-session.service";
@@ -123,7 +124,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     RatingComponent,
     UpdateSessionComponent,
     SessionAcceptRejectButtonComponent,
-    DialogContentExampleDialog,
     CreateSessionComponent,
     CalendarComponent,
 
@@ -162,6 +162,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     BsDropdownModule.forRoot(),
     AlertModule.forRoot(),
     TabsModule.forRoot(),
+    ModalModule.forRoot(),
     ImageUploadModule.forRoot()
   ],
   exports: [
