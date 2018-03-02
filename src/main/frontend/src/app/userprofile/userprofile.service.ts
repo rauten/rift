@@ -16,7 +16,7 @@ export class UserprofileService {
   }
 
   getUser(riftTag: string): Observable<Userprofile> {
-    console.log("running getUser");
+    // console.log("running getUser");
     return this.http.get("/api/user/" + riftTag + "/profilePage")
       .map(
           (response: Response) => {

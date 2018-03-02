@@ -80,9 +80,9 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string, callback) {
+    console.log("Get User Profile Information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          this.getUserProfilePicture(riftTag);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -93,6 +93,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
+          this.getUserProfilePicture(riftTag);
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
@@ -261,7 +262,12 @@ export class UserprofileComponent implements OnInit {
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         this.currentUser.profilePic = resBody.profilePic;
-      }
+      },
+      error => {
+        console.log(error + ": Using default picture instead");
+        this.currentUser.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
+
+      },
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
