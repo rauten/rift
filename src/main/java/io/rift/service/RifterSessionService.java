@@ -194,6 +194,7 @@ public class RifterSessionService {
 
     public boolean deleteSession(Integer sessionId) throws SQLException {
         Object[] args = new Object[1];
+        args[0] = sessionId;
         boolean success = riftRepository.doDelete(deleteSession, args);
         return success;
     }

@@ -58,6 +58,11 @@ public class RifterSessionController {
         return rifterSessionService.getRifterAndRifteeSessionsByRiftTag(riftTag);
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/rifterSession/delete/{sessionId}")
+    public boolean deleteRequest(@PathVariable Integer sessionId) throws SQLException {
+        return rifterSessionService.deleteSession(sessionId);
+    }
+
 
 
 
