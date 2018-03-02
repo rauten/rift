@@ -419,6 +419,7 @@ public class UsertableService {
         if (resultSet.next()) {
             transactionData.put("sessionCost", resultSet.getObject(1));
         }
+        resultSet.close();
         return transactionData;
     }
 
@@ -472,6 +473,7 @@ public class UsertableService {
             Notification notification = notificationService.populateNotification(resultSet, 1, "");
             notifications.add(notification);
         }
+        resultSet.close();
         return notifications;
     }
 
@@ -547,6 +549,7 @@ public class UsertableService {
             ratingInfo[0] = resultSet.getInt(1);
             ratingInfo[1] = resultSet.getInt(2);
         }
+        resultSet.close();
         return ratingInfo;
     }
 
