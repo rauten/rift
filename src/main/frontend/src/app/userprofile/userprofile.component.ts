@@ -204,6 +204,7 @@ export class UserprofileComponent implements OnInit {
           currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
           this.currentUser.activities.push(currActivity);
         }
+        console.log(this.currentUser.activities);
       }
     );
   }
@@ -237,6 +238,8 @@ export class UserprofileComponent implements OnInit {
           }
           this.currentUser.rifterSessions.push(currSession);
         }
+        console.log(this.currentUser.rifterSessions);
+
       }
     );
   }
@@ -254,6 +257,8 @@ export class UserprofileComponent implements OnInit {
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
         }
+        console.log(this.currentUser.sessionRequests);
+
       }
     )
   }
