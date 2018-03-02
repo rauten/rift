@@ -38,6 +38,7 @@ public class RifterSessionService {
     public final int POPULATESIZE = 16;
 
     private final String getRifterGameById = "getRifterGameById";
+    private final String getRifterSessionById = "getRifterSessionById";
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
     private final String getSessionPlayersBySessionId = "getSessionPlayersBySessionId";
     private final String deleteSession = "deleteSession";

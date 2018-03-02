@@ -78,15 +78,17 @@ public class SessionRequestService {
         return rifteeSessions;
     }
 
-    public Integer getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
+    public int getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
         Object[] args = new Object[2];
         args[0] = sessionId;
         args[1] = rifteeId;
         ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
-        Map<String, Integer> status = new HashMap<>();
         if (resultSet.next()) {
-            return resultSet.getInt(1);
+            int res = resultSet.getInt(1);
+            resultSet.close();
+            return res;
         }
+        resultSet.close();
         return -1;
     }
 
@@ -181,7 +183,7 @@ public class SessionRequestService {
         Object[] args = new Object[2];
         args[0] = rifteeId;
         args[1] = sessionId;
-        Integer sessionRequestStatus = getRequestStatus(sessionId, rifteeId);
+        int sessionRequestStatus = getRequestStatus(sessionId, rifteeId);
         if (sessionRequestStatus != -1) {
             if (sessionRequestStatus == 1) {
                 riftRepository.doDelete(deleteSessionRequest, args);

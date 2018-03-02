@@ -213,8 +213,14 @@
         SELECT *
         FROM riftergame r JOIN game g
         ON r.game_id = g.id
-        WHERE id = ?;
+        WHERE r.id = ?;
     </getRifterGameById>
+
+    <getRifterSessionById>
+        SELECT *
+        FROM riftergame
+        WHERE id = ?;
+    </getRifterSessionById>
 
     <getGameByHostAndPlayerId>
         SELECT *
@@ -471,7 +477,7 @@
 
 
     <deleteSessionRequest>
-        DELETE FROM sessionrequest
+        DELETE FROM gamerequest
         WHERE riftee_id = ? AND session_id = ?
     </deleteSessionRequest>
 
