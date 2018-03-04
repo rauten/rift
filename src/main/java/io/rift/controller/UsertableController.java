@@ -296,7 +296,7 @@ public class UsertableController {
         byte[] bytes = IOUtils.toByteArray(in);
         Base64 base64 = new Base64();
         String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
-        imageMap.put("profilePic", byteStr);
+        imageMap.put("image", byteStr);
         return imageMap;
     }
 

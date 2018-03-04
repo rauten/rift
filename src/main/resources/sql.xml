@@ -489,18 +489,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.host_id, 'gameRequest',
-                (SELECT rift_tag
-                FROM gamerequest g JOIN usertable u
-                ON g.riftee_id = u.id
-                WHERE g.riftee_id = NEW.riftee_id
-                LIMIT(1))
-            || ' wants to play in session: ' ||
-                (SELECT title
-                FROM gamerequest g JOIN riftergame r
-                ON g.session_id = r.id
-                WHERE g.session_id = NEW.session_id
-                LIMIT(1)),
+            VALUES(NEW.host_id, '3', null,
             NEW.session_id, current_timestamp, NEW.riftee_id);
             RETURN NEW;
         END;
@@ -543,13 +532,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.following_id, 'follow',
-                (SELECT rift_tag
-                FROM following f JOIN usertable u
-                ON f.follower_id = u.id
-                WHERE f.follower_id = NEW.follower_id
-                LIMIT(1))
-            || ' has started following you.',
+            VALUES(NEW.following_id, '2', null,
             null, current_timestamp, NEW.follower_id);
             RETURN NEW;
         END;
@@ -568,7 +551,7 @@
     -->
 
     <!--
-        CREATE TRIGGER create_session_update_notification
+        CREATE TRIGGER create_session_deletion_notification
         BEFORE DELETE
         ON notification
         FOR EACH ROW
@@ -583,17 +566,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, 'sessionUpdate',
-                (SELECT rift_tag
-                FROM riftergame r JOIN usertable u
-                ON r.host_id = u.id
-                WHERE r.host_id = NEW.host_id
-                LIMIT(1))
-            || ' has updated ' ||
-                (SELECT title
-                FROM riftergame r
-                WHERE r.id = NEW.id
-                LIMIT(1)),
+            VALUES(null, '1', null,
             NEW.id, current_timestamp, NEW.host_id);
             RETURN NEW;
         END;
@@ -610,33 +583,12 @@
             IF NEW.accepted = 0 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, 'sessionDenied',
-                    (SELECT rift_tag
-                    FROM usertable u
-                    WHERE u.id = OLD.host_id
-                    LIMIT(1))
-                || ' has rejected your request to play in ' ||
-                    (SELECT OLD.title
-                    FROM riftergame r JOIN gamerequest g
-                    ON r.id = g.session_id
-                    WHERE r.id = OLD.session_id
-                    LIMIT(1)),
+                VALUES(NEW.riftee_id, '1', null,
                 OLD.session_id, current_timestamp, NEW.host_id);
             ELSIF NEW.accepted = 2 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, 'sessionAccepted',
-                    (SELECT rift_tag
-                    FROM gamerequest g JOIN usertable u
-                    ON g.host_id = u.id
-                    WHERE g.host_id = NEW.host_id
-                    LIMIT(1))
-                || ' has accepted your request to participate ' ||
-                    (SELECT title
-                    FROM riftergame r JOIN gamerequest g
-                    ON r.id = g.session_id
-                    WHERE r.id = NEW.session_id
-                    LIMIT(1)),
+                VALUES(NEW.riftee_id, '0', null,
                 NEW.session_id, current_timestamp, NEW.host_id);
             END IF;
             RETURN NEW;
@@ -697,14 +649,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, 'sessionCreated',
-                (SELECT rift_tag
-                FROM usertable u
-                WHERE u.id = NEW.host_id
-                LIMIT(1))
-            || ' has created a new game for ' ||
-                NEW.game,
-            NEW.id, current_timestamp, NEW.host_id);
+            VALUES(null, '0', null, NEW.id, current_timestamp, NEW.host_id);
             RETURN NEW;
         END;
         $BODY$
@@ -718,17 +663,15 @@
             RETURNS trigger AS
         $BODY$
         BEGIN
-            IF (SELECT EXTRACT(EPOCH FROM (OLD.session_time - current_timestamp))) > 360 THEN
-                INSERT INTO notification
-                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                SELECT user_id, 'herro', 'herro2', null, current_timestamp, creator_id
-                FROM notification
-                WHERE session_id = OLD.id;
+            INSERT INTO notification
+            (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+            SELECT user_id, '2', title, null, current_timestamp, creator_id
+            FROM notification
+            WHERE session_id = OLD.id;
 
-                DELETE FROM notification
-                WHERE session_id = OLD.id;
-                RETURN OLD;
-            END IF;
+            DELETE FROM notification
+            WHERE session_id = OLD.id;
+            RETURN OLD;
         END;
         $BODY$
         LANGUAGE plpgsql;
