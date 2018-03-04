@@ -17,6 +17,7 @@
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [loggedInUser]="loggedInUser" class="userbtn">
               </app-follow-button>
+              loggedInUser: {{loggedInUser.riftTag}}
             </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>

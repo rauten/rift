@@ -17,6 +17,7 @@ import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
+import {ACTIVITY_CONTENT} from "../constants/activity-content";
 
 @Component({
   selector: 'app-userprofile',
@@ -203,7 +204,12 @@ export class UserprofileComponent implements OnInit {
         for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
           var currActivity = new Activity();
           currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-          currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
+          if(currActivity.notificationType == "0") {
+            currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
+                this.currentUser.creatorActivityList[i].rifterSession.title;
+          } else {
+            currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
+          }
           currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
           this.currentUser.activities.push(currActivity);
         }
