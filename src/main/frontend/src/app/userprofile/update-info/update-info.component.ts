@@ -16,6 +16,7 @@ export class UpdateInfoComponent implements OnInit {
   profile: any;
   @Input() updateInfoData;
   profilePic: any;
+  coverPhoto: any;
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
@@ -47,6 +48,12 @@ export class UpdateInfoComponent implements OnInit {
     this.userProfileService.uploadProfilePicture(riftTag, base64);
   }
 
+  uploadCoverPhoto() {
+    let base64 = this.profilePic;
+    let riftTag = this.loggedInUser.riftTag;
+    this.userProfileService.uploadCoverPhoto(riftTag, base64);
+  }
+
   save() {
     this.updateInfoService.setUserData(this.currentUser);
     let data = {
@@ -67,6 +74,10 @@ export class UpdateInfoComponent implements OnInit {
     if(this.profilePic) {
       this.uploadProfilePic();
     }
+    if(this.coverPhoto) {
+      this.uploadCoverPhoto();
+    }
+
     window.location.reload();
   }
 

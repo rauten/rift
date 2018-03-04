@@ -9,8 +9,8 @@ import "rxjs/Rx";
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
-  private uploadProfilePictureURL = "/api/user/putPicture/";
-  private getProfilePictureURL = "/api/user/getPicture/";
+  private uploadPictureURL = "/api/user/putPicture/";
+  private getPictureURL = "/api/user/getPicture/";
 
   constructor(private http: Http) {
   }
@@ -73,7 +73,17 @@ export class UserprofileService {
     console.log("running uploadProfilePicture");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put(this.uploadProfilePictureURL + riftTag, base64, options)
+    this.http.put(this.uploadPictureURL + riftTag + "/profile-pic", base64, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
+
+  uploadCoverPhoto(riftTag: string, base64: string) {
+    console.log("running uploadProfilePicture");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put(this.uploadPictureURL + riftTag + "/profile-pic", base64, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();
@@ -81,7 +91,18 @@ export class UserprofileService {
 
   getProfilePicture(riftTag: string): Observable<Userprofile> {
     console.log("running getProfilePicture");
-    return this.http.get(this.getProfilePictureURL + riftTag)
+    return this.http.get(this.getPictureURL + riftTag + "/rift-profilepictures")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getCoverPhoto(riftTag: string): Observable<Userprofile> {
+    console.log("running getProfilePicture");
+    return this.http.get(this.getPictureURL + riftTag + "/rift-coverphotos")
       .map(
         (response: Response) => {
           return response.json();

@@ -94,6 +94,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.braintreeId = resBody.braintreeId;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(riftTag);
+          this.getUserCoverPhoto(riftTag);
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
@@ -117,6 +118,7 @@ export class UserprofileComponent implements OnInit {
           currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
           currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
           currFollower.id = resBody.followers[i].followerUsertable.id;
+          currFollower.profilePic = this.getUserProfilePicture(currFollower.riftTag);
           this.currentUser.followers.push(currFollower);
         }
         for (var i = 0; i < resBody.followings.length; i++) {
@@ -125,6 +127,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           currFollowing.id = resBody.followings[i].followingUsertable.id;
+          currFollower.profilePic = this.getUserProfilePicture(currFollower.riftTag);
           this.currentUser.followings.push(currFollowing);
         }
       },
@@ -258,7 +261,6 @@ export class UserprofileComponent implements OnInit {
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
         }
         console.log(this.currentUser.sessionRequests);
-
       }
     )
   }
@@ -272,6 +274,19 @@ export class UserprofileComponent implements OnInit {
         console.log(error + ": Using default picture instead");
         this.currentUser.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
 
+      },
+    );
+    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
+  }
+
+  getUserCoverPhoto(riftTag: string) {
+    this.userProfileService.getCoverPhoto(riftTag).subscribe(
+      resBody => {
+        this.currentUser.coverPhoto = resBody.profilePic;
+      },
+      error => {
+        console.log(error + ": Using default picture instead");
+        this.currentUser.coverPhoto = "https://atiinc.org/wp-content/uploads/2017/01/cover-default.jpg";
       },
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
