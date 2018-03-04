@@ -2,6 +2,7 @@ package io.rift.service;
 
 import io.rift.model.Notification;
 import io.rift.repository.NotificationRepository;
+import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,15 @@ public class NotificationService {
     @Autowired
     private RifterSessionService rifterSessionService;
 
+    @Autowired
+    private RiftRepository riftRepository;
+
+    @Autowired
+    private UsertableService usertableService;
+
+    private final String getUserById = "getUserById";
+    private final String getRifterGameById = "getRifterGameById";
+
     public List<Notification> populateNotifications(ResultSet resultSet, int startPoint, String info) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {
@@ -31,8 +41,21 @@ public class NotificationService {
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notifications.add(notification);
-            if (info.equals("session") && !notification.getNotificationType().equals("2")) {
-                notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + 7, ""));
+            if (notification.getCreatorId() != null) {
+                Object[] args = new Object[1];
+                args[0] = notification.getCreatorId();
+                ResultSet res = riftRepository.doQuery(getUserById, args);
+                if (res.next()) {
+                    notification.setCreatorUsertable(usertableService.populateUsertable(res, 1, ""));
+                }
+            }
+            if (notification.getSessionId() != null) {
+                Object[] args = new Object[1];
+                args[0] = notification.getSessionId();
+                ResultSet res = riftRepository.doQuery(getRifterGameById, args);
+                if (res.next()) {
+                    notification.setRifterSession(rifterSessionService.populateRifterSession(res, 1, ""));
+                }
             }
         }
         return notifications;

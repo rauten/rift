@@ -256,7 +256,7 @@ public class Views {
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableNotificationList, UsertableBroadcastNotificationList,
             UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
             FollowingFollowerUsertable, NotificationId, NotificationUserId, NotificationType, NotificationContent,
-            NotificationRifterSession, NotificationSessionId, NotificationCreatedTime, NotificationCreatorId,
+            NotificationRifterSession, NotificationSessionId, NotificationCreatedTime, NotificationCreatorId, NotificationCreatorUsertable,
             RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId, RifterSessionConsole,
             RifterSessionSlotsRemaining {}
 
