@@ -31,7 +31,7 @@ public class NotificationService {
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notifications.add(notification);
-            if (info.equals("session")) {
+            if (info.equals("session") && !notification.getNotificationType().equals("2")) {
                 notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + 7, ""));
             }
         }
@@ -47,7 +47,7 @@ public class NotificationService {
         notification.setSessionId(resultSet.getInt(startPoint + 4));
         notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
         notification.setCreatorId(resultSet.getInt(startPoint + 6));
-        if (info.equals("session")) {
+        if (info.equals("session") && !notification.getNotificationType().equals("2")) {
             notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + 7, ""));
         }
         return notification;
