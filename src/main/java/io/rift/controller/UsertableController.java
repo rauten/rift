@@ -284,15 +284,15 @@ public class UsertableController {
         return usertableService.updateUser(usertable);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}")
-    public boolean putProfilePicture(@PathVariable String keyBase, @RequestBody String image) throws URISyntaxException {
-        return usertableService.putProfilePicture(keyBase, image);
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}/{bucket}")
+    public boolean putProfilePicture(@PathVariable String keyBase, @RequestBody String image, @PathVariable String bucket) throws URISyntaxException {
+        return usertableService.putPicture(keyBase, image, bucket);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}")
-    public @ResponseBody Map<String, String> getProfilePicture(@PathVariable String keyBase) throws IOException {
+    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}/{bucket}")
+    public @ResponseBody Map<String, String> getProfilePicture(@PathVariable String keyBase, @PathVariable String bucket) throws IOException {
         Map<String, String> imageMap = new HashMap<>();
-        InputStream in = usertableService.getProfilePicture(keyBase);
+        InputStream in = usertableService.getPicture(keyBase, bucket);
         byte[] bytes = IOUtils.toByteArray(in);
         Base64 base64 = new Base64();
         String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
