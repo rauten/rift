@@ -292,11 +292,13 @@ public class UsertableController {
     @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}/{bucket}")
     public @ResponseBody Map<String, String> getProfilePicture(@PathVariable String keyBase, @PathVariable String bucket) throws IOException {
         Map<String, String> imageMap = new HashMap<>();
-        InputStream in = usertableService.getPicture(keyBase, bucket);
+        String str = usertableService.getPicture(keyBase, bucket);
+        /*
         byte[] bytes = IOUtils.toByteArray(in);
         Base64 base64 = new Base64();
         String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
-        imageMap.put("image", byteStr);
+        */
+        imageMap.put("image", str);
         return imageMap;
     }
 

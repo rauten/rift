@@ -68,10 +68,10 @@ public class RifterSessionService {
         ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args);
         if (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
-            resultSet.close();
+            //resultSet.close();
             return rifterSession;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -85,10 +85,10 @@ public class RifterSessionService {
                 Usertable usertable = usertableService.populateUsertable(resultSet, POPULATESIZE + gameService.POPULATESIZE + 1, "");
                 rifterSession.setUsertable(usertable);
             }
-            resultSet.close();
+            //resultSet.close();
             return rifterSession;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -102,7 +102,7 @@ public class RifterSessionService {
             Usertable usertable = usertableService.populateUsertable(resultSet, 1, "");
             players.add(usertable);
         }
-        resultSet.close();
+        //resultSet.close();
         return players;
     }
 
@@ -114,10 +114,10 @@ public class RifterSessionService {
         ResultSet resultSet = riftRepository.doQuery(getRifterSessionByHostIdAndSessionTime, args);
         if (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
-            resultSet.close();
+            //resultSet.close();
             return rifterSession;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 

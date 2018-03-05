@@ -130,7 +130,7 @@ public class UserRatingService {
             UserRating userRating = populateUserRating(resultSet, 1, "reviewerUsertable");
             userRatings.add(userRating);
         }
-        resultSet.close();
+        //resultSet.close();
         return userRatings;
     }
 
@@ -143,7 +143,7 @@ public class UserRatingService {
             UserRating userRating = populateUserRating(resultSet, 1, "reviewerUsertable");
             userRatings.add(userRating);
         }
-        resultSet.close();
+        //resultSet.close();
         return userRatings;
     }
 
