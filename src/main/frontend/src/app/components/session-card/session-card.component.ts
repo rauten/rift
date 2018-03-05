@@ -29,7 +29,6 @@ export class SessionCardComponent implements OnInit {
     if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
       this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
     } else {
-      console.log("test: " + JSON.parse(localStorage.getItem("loggedInUserID")));
       this.userProfileService.getUserId(riftTag).subscribe(
         resBody => {
           this.loggedInUserId = resBody.id;

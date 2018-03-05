@@ -15,9 +15,8 @@
             <h3>Rifter Rating: {{currentUser.rifterRating}}</h3>
             <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
-              [loggedInUser]="loggedInUser" class="userbtn">
+              [riftTag]="profile.nickname" class="userbtn">
               </app-follow-button>
-              loggedInUser: {{loggedInUser.riftTag}}
             </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>
@@ -93,7 +92,7 @@
                   <a [routerLink]="['../../user', follower.riftTag]" (click)="window.location.reload()">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
                   <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
-                                     [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
+                                     [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
                   </app-follow-button>
 
 
@@ -107,7 +106,7 @@
                     <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
                       <br><span class="text-muted username">@{{following.riftTag}}</span></a>
                     <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"
-                                       [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
+                                       [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
 
                     </app-follow-button>
                   </div>

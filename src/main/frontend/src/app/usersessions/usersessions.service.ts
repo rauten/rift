@@ -93,7 +93,7 @@ export class UsersessionsService {
   }
 
   getSessionRequests(riftTag: string) {
-    console.log("running getSessionRequest");
+    // console.log("running getSessionRequest");
     return this.http.get(this.getSessionRequestsURL + riftTag)
       .map(
         (response: Response) => {

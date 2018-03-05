@@ -5,7 +5,7 @@
   <p>{{user.bio}}</p>
   <div *ngIf="isLoggedIn">
     <app-follow-button [following]="isFollowing(user.riftTag)" [id]="user.id"
-                       [loggedInUser]="loggedInUser" class="userbtn">
+                       [riftTag]="profile.nickname" class="userbtn">
     </app-follow-button>
   </div>
 </div>
