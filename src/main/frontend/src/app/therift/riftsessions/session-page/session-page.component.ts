@@ -139,4 +139,8 @@ export class SessionPageComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
+  cancelSessionRequest() {
+    this.sessionPageService.cancelSessionRequest(this.session.id, this.loggedInUserId);
+  }
+
 }

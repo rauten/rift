@@ -11,6 +11,7 @@ export class UpdateSessionService {
   private updateSessionData: UpdateSessionData = new UpdateSessionData();
   private isValid: boolean = false;
   private updateSessionURL = "/api/rifterSession/update";
+  private cancelSessionURL = "/api/rifterSession/delete/";
 
   constructor(private http: Http) {
   }
@@ -54,6 +55,20 @@ export class UpdateSessionService {
         data => {console.log(data);},
         err => console.log(err),
         () => console.log('Updated session')
+      );
+  }
+
+  cancelSession(sessionId: number) {
+    console.log("Cancelling Session: " + sessionId);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.delete(this.cancelSessionURL + sessionId, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log('Canceled session')
       );
   }
 

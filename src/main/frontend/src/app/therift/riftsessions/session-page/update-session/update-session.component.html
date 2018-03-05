@@ -80,6 +80,11 @@
               <input matInput type="number" placeholder="Select a duration" #sessionduration="ngModel"  id="sessionduration" name="sessionduration" [(ngModel)]="currentSessionDateTime.sessionDuration">
             </div>
           </div>
+          <div class="col-xs-12 col-sm-6">
+            <button (click)="cancelSession()" class="btn btn-lg btn-cancel" type="button">Cancel Session</button>
+          </div>
+          <br>
+          <br>
         </div>
       </div>
     </div>

@@ -35,6 +35,10 @@
           <img src={{profilePic}} alt="" class="profilePicPreview"/>
         </div>
         <div class="form-group">
+          <app-file-upload name="coverPhoto"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="coverPhoto"></app-file-upload>
+          <img src={{coverPhoto}} alt="" class="profilePicPreview"/>
+        </div>
+        <div class="form-group">
           <ngx-braintree
             [clientTokenURL]="'/api/braintree/clientToken'"
             [createPurchaseURL]="data.updateBraintreeUserURL"

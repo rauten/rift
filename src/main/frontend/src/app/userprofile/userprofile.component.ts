@@ -17,6 +17,7 @@ import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
+import {ACTIVITY_CONTENT} from "../constants/activity-content";
 
 @Component({
   selector: 'app-userprofile',
@@ -38,7 +39,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService, public dialog: MatDialog, private paymentService: PaymentService) {
+  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -48,11 +49,8 @@ export class UserprofileComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
-      var setData = (function() {
-        this.isDataAvailable = true;
-      }).bind(this);
-
-      this.getUserProfileInformation(params['rifttag'], setData);
+      this.isDataAvailable = true;
+      this.getUserProfileInformation(params['rifttag']);
       if(this.isLoggedIn) {
         this.getCurrentLoggedInUser();
       }
@@ -60,11 +58,13 @@ export class UserprofileComponent implements OnInit {
   }
 
   getCurrentLoggedInUser():any {
+    console.log("Getting currently logged in user");
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
+        console.log(resBody);
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = resBody.riftTag;
+        this.loggedInUser.riftTag = this.profile.nickname;
         this.loggedInUser.gender = resBody.gender;
         this.loggedInUser.bio = resBody.bio;
         this.loggedInUser.id = resBody.id;
@@ -75,12 +75,13 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
+        console.log("after for loop for followings");
       }
     )
   }
 
-  getUserProfileInformation(riftTag: string, callback) {
-    console.log("Get User Profile Information");
+  getUserProfileInformation(riftTag: string) {
+    console.log("Getting user's profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -94,19 +95,20 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.braintreeId = resBody.braintreeId;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(riftTag);
+          this.getUserCoverPhoto(riftTag);
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
           this.getUserActivities(riftTag);
           this.getUserRifterSessions(riftTag);
           this.getUserFollowersAndFollowing(riftTag);
           this.getUserSessionRequests(this.profile.nickname);
-          this.getBroadcastNotifications(this.profile.nickname);
-          callback();
+          // this.getBroadcastNotifications(this.profile.nickname);
         }
     );
   }
 
   getUserFollowersAndFollowing(riftTag: string) {
+    console.log("Getting user's followers and followings");
     this.currentUser.followings = [];
     this.currentUser.followers = [];
     this.userProfileService.getUser(riftTag).subscribe(
@@ -117,6 +119,7 @@ export class UserprofileComponent implements OnInit {
           currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
           currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
           currFollower.id = resBody.followers[i].followerUsertable.id;
+          // this.getUserProfilePicture(currFollower.riftTag);
           this.currentUser.followers.push(currFollower);
         }
         for (var i = 0; i < resBody.followings.length; i++) {
@@ -125,6 +128,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           currFollowing.id = resBody.followings[i].followingUsertable.id;
+          // this.getUserProfilePicture(currFollower.riftTag);
           this.currentUser.followings.push(currFollowing);
         }
       },
@@ -134,24 +138,8 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getBroadcastNotifications(riftTag: string):any {
-    this.currentUser.feed = [];
-    this.userProfileService.getUser(riftTag).subscribe(
-      resBody => {
-        for (var i = 0; i < resBody.broadcastNotificationList.length; i++) {
-          var currNotification = new Activity();
-          currNotification.notificationType = resBody.broadcastNotificationList[i].notificationType;
-          currNotification.notificationContent = resBody.broadcastNotificationList[i].notificationContent;
-          currNotification.createdTime = resBody.broadcastNotificationList[i].createdTime;
-          currNotification.rifterSession = resBody.broadcastNotificationList[i].rifterSession;
-          this.currentUser.feed.push(currNotification);
-        }
-      }
-    );
-    return true;
-  }
-
   getUserRatings(id: number) {
+    console.log("Getting user's ratings");
     this.currentUser.ratings = [];
     this.userRatingService.getUserRating(id).subscribe(
       resBody => {
@@ -174,6 +162,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserNotifications(riftTag: string) {
+    console.log("Getting user's notifications");
     this.currentUser.notifications = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
@@ -193,6 +182,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserActivities(riftTag: string) {
+    console.log("Getting user's activities");
     this.currentUser.activities = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
@@ -200,16 +190,21 @@ export class UserprofileComponent implements OnInit {
         for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
           var currActivity = new Activity();
           currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-          currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
+          if(currActivity.notificationType == "0") {
+            currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
+                this.currentUser.creatorActivityList[i].rifterSession.title;
+          } else {
+            currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
+          }
           currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
           this.currentUser.activities.push(currActivity);
         }
-        console.log(this.currentUser.activities);
       }
     );
   }
 
   getUserRifterSessions(riftTag: string) {
+    console.log("Getting user's rifter sessions");
     this.currentUser.rifterSessions = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
@@ -238,13 +233,12 @@ export class UserprofileComponent implements OnInit {
           }
           this.currentUser.rifterSessions.push(currSession);
         }
-        console.log(this.currentUser.rifterSessions);
-
       }
     );
   }
 
   getUserSessionRequests(riftTag: string) {
+    console.log("Getting user's session requests");
     this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
@@ -257,13 +251,13 @@ export class UserprofileComponent implements OnInit {
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
         }
-        console.log(this.currentUser.sessionRequests);
-
+        // console.log(this.currentUser.sessionRequests);
       }
     )
   }
 
   getUserProfilePicture(riftTag: string) {
+    console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         this.currentUser.profilePic = resBody.profilePic;
@@ -272,6 +266,20 @@ export class UserprofileComponent implements OnInit {
         console.log(error + ": Using default picture instead");
         this.currentUser.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
 
+      },
+    );
+    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
+  }
+
+  getUserCoverPhoto(riftTag: string) {
+    console.log("Getting user's cover photo");
+    this.userProfileService.getCoverPhoto(riftTag).subscribe(
+      resBody => {
+        this.currentUser.coverPhoto = resBody.profilePic;
+      },
+      error => {
+        console.log(error + ": Using default picture instead");
+        this.currentUser.coverPhoto = "https://atiinc.org/wp-content/uploads/2017/01/cover-default.jpg";
       },
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
@@ -302,7 +310,9 @@ export class UserprofileComponent implements OnInit {
 
   openRatingDialog() {
     var raterId = this.loggedInUser.id;
+    console.log(raterId);
     var rateeId = this.currentUser.id;
+    console.log(rateeId);
     this.userRatingService.isAllowedToRate(raterId, rateeId).subscribe(
       resBody => {
         this.ratingStatus = resBody.result;

@@ -74,6 +74,10 @@ export class UpdateSessionComponent implements OnInit {
     return seconds * 1000;
   }
 
+  cancelSession() {
+    this.updateSessionService.cancelSession(this.data.sessionId);
+  }
+
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();

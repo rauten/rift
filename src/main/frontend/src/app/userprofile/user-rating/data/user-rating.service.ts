@@ -56,7 +56,7 @@ export class UserRatingService {
   }
 
   getUserRating(id: number) {
-    console.log("running getUserRating");
+    // console.log("running getUserRating");
     return this.http.get(this.getUserRatingURL + id)
       .map(
         (response: Response) => {

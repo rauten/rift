@@ -2,7 +2,7 @@
   <base href="/">
   <div class="user-profile">
     <div class="row">
-      <div class="profile-header-background"><img src="http://demo.thedevelovers.com/dashboard/queenadmin-1.2/assets/img/city.jpg" alt="Profile Header Background"></div>
+      <div class="profile-header-background"><img src="{{currentUser.coverPhoto}}" alt="Profile Header Background"></div>
       <div class="col-md-4">
         <div class="profile-info-left">
           <div class="text-center">
@@ -15,7 +15,7 @@
             <h3>Rifter Rating: {{currentUser.rifterRating}}</h3>
             <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
-              [loggedInUser]="loggedInUser" class="userbtn">
+              [riftTag]="profile.nickname" class="userbtn">
               </app-follow-button>
             </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
@@ -57,7 +57,7 @@
             <mat-tab label="activity">
               <div class="media activity-item" *ngFor="let activity of currentUser.activities">
                 <a href="#" class="pull-left">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">
+                  <img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">
                 </a>
                 <div class="media-body">
                   <p class="activity-title"><a href="#">{{currentUser.riftTag}}</a> {{activity.notificationContent}} </p>
@@ -87,12 +87,12 @@
             </mat-tab>
             <mat-tab label="followers">
               <div class="media user-follower" *ngFor="let follower of currentUser.followers">
-                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
+                <img src="{{follower.profilePic}}" alt="User Avatar" class="media-object pull-left">
                 <div class="media-body">
                   <a [routerLink]="['../../user', follower.riftTag]" (click)="window.location.reload()">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
                   <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
-                                     [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
+                                     [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
                   </app-follow-button>
 
 
@@ -101,12 +101,12 @@
             </mat-tab>
             <mat-tab label="following">
               <div class="media user-following" *ngFor="let following of currentUser.followings">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="User Avatar" class="media-object pull-left">
+                  <img src="{{following.profilePic}}" alt="User Avatar" class="media-object pull-left">
                   <div class="media-body">
                     <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
                       <br><span class="text-muted username">@{{following.riftTag}}</span></a>
                     <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"
-                                       [loggedInUser]="loggedInUser" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
+                                       [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
 
                     </app-follow-button>
                   </div>

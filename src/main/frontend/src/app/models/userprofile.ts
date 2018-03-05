@@ -38,6 +38,7 @@ export class Userprofile {
   creatorUsertable: any;
   length;
   profilePicPath;
+  coverPhoto;
 
 
   constructor() {

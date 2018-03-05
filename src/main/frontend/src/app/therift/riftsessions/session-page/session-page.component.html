@@ -20,21 +20,17 @@
           <div class="col-md-12 panelBottom">
             <div class="col-md-4 text-center">
               <div *ngIf="isLoggedIn && !(profile.nickname == session.riftTag)">
-                <button class="btn btn-lg btn-add-to-cart" *ngIf="!request" (click)="joinUserSession()">Join</button>
+                <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status != 1 && request.status != 0 && request.status != 2" (click)="joinUserSession()">Join</button>
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==1">Pending</button>
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==0">Rejected</button>
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==2" (click)="changeStatus(template)">Accepted</button>
               </div>
               <button class="btn btn-lg btn-add-to-cart" mat-button (click)="openDialog()" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
-              <ng-template #template>
-                <div class="modal-header">
-                  <h4 class="modal-title pull-left">Cancel your Session Join?</h4>
-                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  This is a modal.
+              <ng-template #template style="margin-top:20%">
+                <div class="modal-body text-center">
+                  <p>Are you sure you want to cancel your request?</p>
+                  <button type="button" class="btn btn-default" (click)="cancelSessionRequest()" >Yes</button>
+                  <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
                 </div>
               </ng-template>
             </div>
