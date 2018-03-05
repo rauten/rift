@@ -26,7 +26,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.getTransactionData(data.rifteeId, data.sessionId);
     this.userSessionService.updateSessionRequest(data);
     this.status = 2;
-    console.log("Accepted request");
+    console.log("Accepted request lol");
 
   }
 

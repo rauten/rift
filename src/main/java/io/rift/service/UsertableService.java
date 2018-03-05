@@ -143,11 +143,8 @@ public class UsertableService {
         args[0] = riftTag;
         ResultSet resultSet = riftRepository.doQuery(getRiftIdByRiftTag, args);
         if (resultSet.next()) {
-            Integer riftId = resultSet.getInt(1);
-            resultSet.close();
-            return riftId;
+            return resultSet.getInt(1);
         }
-        resultSet.close();
         return null;
     }
 
@@ -157,10 +154,10 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getUserById, args);
         if (resultSet.next()) {
             Usertable usertable = populateUsertable(resultSet, 1, "");
-            resultSet.close();
+            //resultSet.close();
             return usertable;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -170,10 +167,10 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getUserByRiftTag, args);
         if (resultSet.next()) {
             Usertable usertable = populateUsertable(resultSet, 1, "");
-            resultSet.close();
+            //resultSet.close();
             return usertable;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -217,10 +214,10 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getNumberGamesPlayedByUserId, args);
         if (resultSet.next()) {
             Integer num = resultSet.getInt(1);
-            resultSet.close();
+            //resultSet.close();
             return num;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -230,10 +227,10 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getNumberFollowing, args);
         if (resultSet.next()) {
             Integer num = resultSet.getInt(1);
-            resultSet.close();
+            //resultSet.close();
             return num;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -243,10 +240,10 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getNumberFollowers, args);
         if (resultSet.next()) {
             Integer num = resultSet.getInt(1);
-            resultSet.close();
+            //resultSet.close();
             return num;
         }
-        resultSet.close();
+        //resultSet.close();
         return null;
     }
 
@@ -263,7 +260,7 @@ public class UsertableService {
             following.setAccepted(resultSet.getBoolean(3));
             followings.add(following);
         }
-        resultSet.close();
+        //resultSet.close();
         return followings;
     }
 
@@ -279,7 +276,7 @@ public class UsertableService {
             following.setAccepted(resultSet.getBoolean(3));
             followers.add(following);
         }
-        resultSet.close();
+        //resultSet.close();
         return followers;
     }
 
@@ -296,7 +293,7 @@ public class UsertableService {
             following.setFollowingUsertable(populateUsertable(resultSet, 4, ""));
             followings.add(following);
         }
-        resultSet.close();
+        ////resultSet.close();
         return followings;
     }
 
@@ -313,7 +310,7 @@ public class UsertableService {
             following.setFollowerUsertable(populateUsertable(resultSet, 4, ""));
             followings.add(following);
         }
-        resultSet.close();
+        //resultSet.close();
         return followings;
     }
 
@@ -329,7 +326,7 @@ public class UsertableService {
                 return null;
             }
             List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"sessionInfo"});
-            resultSet.close();
+            //resultSet.close();
             return sessionRequests;
         } else if (info.equals("hostInfo")) {
             if (!filter.isPresent()) {
@@ -340,7 +337,7 @@ public class UsertableService {
                 return null;
             }
             List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo"});
-            resultSet.close();
+            //resultSet.close();
             return sessionRequests;
         } else if (info.equals("hostInfo&sessionInfo")) {
             if (!filter.isPresent()) {
@@ -351,7 +348,7 @@ public class UsertableService {
                 return null;
             }
             List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo", "sessionInfo"});
-            resultSet.close();
+            //resultSet.close();
             return sessionRequests;
         } else {
             if (!filter.isPresent()) {
@@ -362,7 +359,7 @@ public class UsertableService {
                 return null;
             }
             List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {});
-            resultSet.close();
+            //resultSet.close();
             return sessionRequests;
         }
     }
@@ -379,18 +376,20 @@ public class UsertableService {
             resultSet = riftRepository.doQuery(getUserActivity, args);
         }
         List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, info);
-        resultSet.close();
+        //resultSet.close();
         return notifications;
     }
 
     public List<Notification> getUserNotifications(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
-        ResultSet resultSet;
-        resultSet = riftRepository.doQuery(getUserNotifications, args);
-        List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, "");
-        resultSet.close();
-        return notifications;
+        ResultSet resultSet = riftRepository.doQuery(getUserNotifications, args);
+        if (resultSet.next()) {
+            List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, "");
+            //resultSet.close();
+            return notifications;
+        }
+        return null;
     }
 
     public List<RifterSession> getUserAndRifterSession(Integer id) throws SQLException {
@@ -402,7 +401,7 @@ public class UsertableService {
             RifterSession rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "");
             rifterSessions.add(rifterSession);
         }
-        resultSet.close();
+        //resultSet.close();
         return rifterSessions;
     }
 
@@ -419,7 +418,7 @@ public class UsertableService {
         if (resultSet.next()) {
             transactionData.put("sessionCost", resultSet.getObject(1));
         }
-        resultSet.close();
+        //resultSet.close();
         return transactionData;
     }
 
@@ -467,13 +466,13 @@ public class UsertableService {
             notification.setCreatorUsertable(usertable);
             notifications.add(notification);
         }
-        resultSet.close();
+        //resultSet.close();
         resultSet = riftRepository.doQuery(getSessionBroadcastsByUserId, args);
         while(resultSet.next()) {
             Notification notification = notificationService.populateNotification(resultSet, 1, "");
             notifications.add(notification);
         }
-        resultSet.close();
+        //resultSet.close();
         return notifications;
     }
 
@@ -549,7 +548,7 @@ public class UsertableService {
             ratingInfo[0] = resultSet.getInt(1);
             ratingInfo[1] = resultSet.getInt(2);
         }
-        resultSet.close();
+        //resultSet.close();
         return ratingInfo;
     }
 
