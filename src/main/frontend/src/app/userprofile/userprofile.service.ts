@@ -16,7 +16,7 @@ export class UserprofileService {
   }
 
   getUser(riftTag: string): Observable<Userprofile> {
-    // console.log("running getUser");
+    // console.log("running getUser: " + riftTag);
     return this.http.get("/api/user/" + riftTag + "/profilePage")
       .map(
           (response: Response) => {
@@ -27,7 +27,7 @@ export class UserprofileService {
   }
 
   getUserId(riftTag: string): Observable<Userprofile> {
-    console.log("running getUserId");
+    // console.log("running getUserId");
     return this.http.get("/api/user/" + riftTag + "/id")
       .map(
         (response: Response) => {
@@ -38,7 +38,7 @@ export class UserprofileService {
   }
 
   createUser(data): void {
-    console.log("running createUser");
+    // console.log("running createUser");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserURL, data, options)
@@ -48,7 +48,7 @@ export class UserprofileService {
   }
 
   followUser(riftTag: string, id: number) {
-    console.log("running followUser");
+    // console.log("running followUser");
     return this.http.get("/api/user/" + riftTag + "/follow=" + id)
       .map(
         (response: Response) => {
@@ -59,7 +59,7 @@ export class UserprofileService {
   }
 
   unfollowUser(riftTag: string, id: number) {
-    console.log("running unfollowUser");
+    // console.log("running unfollowUser");
     return this.http.get("/api/user/" + riftTag + "/unfollow=" + id)
       .map(
         (response: Response) => {
@@ -70,7 +70,7 @@ export class UserprofileService {
   }
 
   uploadProfilePicture(riftTag: string, base64: string) {
-    console.log("running uploadProfilePicture");
+    // console.log("running uploadProfilePicture");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.uploadPictureURL + riftTag + "/profile-pic", base64, options)
@@ -80,7 +80,7 @@ export class UserprofileService {
   }
 
   uploadCoverPhoto(riftTag: string, base64: string) {
-    console.log("running uploadProfilePicture");
+    // console.log("running uploadProfilePicture");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.uploadPictureURL + riftTag + "/profile-pic", base64, options)

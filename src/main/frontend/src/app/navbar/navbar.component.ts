@@ -12,7 +12,6 @@ import {NOTIFICATION_CONTENT} from "../constants/notification-content";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  searchQuery: string = "";
   currentUser: Userprofile = new Userprofile();
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService) {
