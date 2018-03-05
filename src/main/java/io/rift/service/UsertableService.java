@@ -143,8 +143,11 @@ public class UsertableService {
         args[0] = riftTag;
         ResultSet resultSet = riftRepository.doQuery(getRiftIdByRiftTag, args);
         if (resultSet.next()) {
-            return resultSet.getInt(1);
+            Integer riftId = resultSet.getInt(1);
+            resultSet.close();
+            return riftId;
         }
+        resultSet.close();
         return null;
     }
 
