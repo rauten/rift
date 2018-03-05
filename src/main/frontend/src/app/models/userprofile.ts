@@ -39,6 +39,7 @@ export class Userprofile {
   length;
   profilePicPath;
   coverPhoto;
+  image;
 
 
   constructor() {

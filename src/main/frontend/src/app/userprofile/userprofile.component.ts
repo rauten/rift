@@ -61,6 +61,7 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting currently logged in user");
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
+        console.log("in logged in user resbody");
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
         this.loggedInUser.riftTag = this.profile.nickname;
@@ -74,8 +75,12 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
+      },
+      error => {
+        console.log(error);
       }
     )
+    console.log("done running getCurrentLoggedInUser");
   }
 
   getUserProfileInformation(riftTag: string) {
@@ -95,44 +100,35 @@ export class UserprofileComponent implements OnInit {
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
           this.getUserRatings(this.currentUser.id);
-          this.getUserNotifications(riftTag);
-          this.getUserActivities(riftTag);
-          this.getUserRifterSessions(riftTag);
-          this.getUserFollowersAndFollowing(riftTag);
-          this.getUserSessionRequests(this.profile.nickname);
+          this.getUserActivities(resBody.creatorActivityList);
+          this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
+          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
         }
     );
   }
 
-  getUserFollowersAndFollowing(riftTag: string) {
+  getUserFollowersAndFollowing(followers, followings) {
     console.log("Getting user's followers and followings");
     this.currentUser.followings = [];
     this.currentUser.followers = [];
-    this.userProfileService.getUser(riftTag).subscribe(
-      resBody => {
-        for (var i = 0; i < resBody.followers.length-1; i++) {
-          var currFollower = new Userprofile();
-          currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
-          currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
-          currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
-          currFollower.id = resBody.followers[i].followerUsertable.id;
-          this.getUserProfilePicture(currFollower.riftTag, currFollower);
-          this.currentUser.followers.push(currFollower);
-        }
-        for (var i = 0; i < resBody.followings.length; i++) {
-          var currFollowing = new Userprofile();
-          currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
-          currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
-          currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
-          currFollowing.id = resBody.followings[i].followingUsertable.id;
-          this.getUserProfilePicture(currFollowing.riftTag, currFollowing);
-          this.currentUser.followings.push(currFollowing);
-        }
-      },
-      err => {
-        console.log(err);
-      }
-    )
+    for (var i = 0; i < followers.length; i++) {
+      var currFollower = new Userprofile();
+      currFollower.firstName = followers[i].followerUsertable.firstName;
+      currFollower.lastName = followers[i].followerUsertable.lastName;
+      currFollower.riftTag = followers[i].followerUsertable.riftTag;
+      currFollower.id = followers[i].followerUsertable.id;
+      this.getUserProfilePicture(currFollower.riftTag, currFollower);
+      this.currentUser.followers.push(currFollower);
+    }
+    for (var i = 0; i < followings.length; i++) {
+      var currFollowing = new Userprofile();
+      currFollowing.firstName = followings[i].followingUsertable.firstName;
+      currFollowing.lastName = followings[i].followingUsertable.lastName;
+      currFollowing.riftTag = followings[i].followingUsertable.riftTag;
+      currFollowing.id = followings[i].followingUsertable.id;
+      this.getUserProfilePicture(currFollowing.riftTag, currFollowing);
+      this.currentUser.followings.push(currFollowing);
+    }
   }
 
   getUserRatings(id: number) {
@@ -158,111 +154,83 @@ export class UserprofileComponent implements OnInit {
     );
   }
 
-  getUserNotifications(riftTag: string) {
-    console.log("Getting user's notifications");
-    this.currentUser.notifications = [];
-    this.userProfileService.getUser(riftTag).subscribe(
-      resBody => {
-        for (var i = 0; i < resBody.notificationList.length; i++) {
-          var notification = new Notification();
-          notification.id = resBody.notificationList[i].id;
-          notification.createdTime = resBody.notificationList[i].createdTime;
-          notification.creatorId = resBody.notificationList[i].creatorId;
-          notification.notificationType = resBody.notificationList[i].notificationType;
-          notification.notificationContent = resBody.notificationList[i].notificationContent;
-          notification.sessionId = resBody.notificationList[i].sessionId;
-          notification.userId = resBody.notificationList[i].userId;
-          this.currentUser.notifications.push(notification);
-        }
-      }
-    )
-  }
-
-  getUserActivities(riftTag: string) {
+  getUserActivities(creatorActivityList) {
     console.log("Getting user's activities");
     this.currentUser.activities = [];
-    this.userProfileService.getUser(riftTag).subscribe(
-      resBody => {
-        this.currentUser.creatorActivityList = resBody.creatorActivityList;
-        for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
-          var currActivity = new Activity();
-          currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-          if(currActivity.notificationType == "0") {
-            currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
-                this.currentUser.creatorActivityList[i].rifterSession.title;
-          } else {
-            currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
-          }
-          currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
-          this.currentUser.activities.push(currActivity);
-        }
+    this.currentUser.creatorActivityList = creatorActivityList;
+    for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+      var currActivity = new Activity();
+      currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
+      if(currActivity.notificationType == "0") {
+        currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
+            this.currentUser.creatorActivityList[i].rifterSession.title;
+      } else {
+        currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
       }
-    );
+      currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
+      this.currentUser.activities.push(currActivity);
+    }
   }
 
-  getUserRifterSessions(riftTag: string) {
+  getUserRifterSessions(rifterSessions, user) {
     console.log("Getting user's rifter sessions");
     this.currentUser.rifterSessions = [];
-    this.userProfileService.getUser(riftTag).subscribe(
-      resBody => {
-        for (var i = 0; i < resBody.rifterSessions.length; i++) {
-          var currDateMS = resBody.rifterSessions[i].sessionTime;
-          var date = new Date(currDateMS);
-          var currSession = new Session();
-          currSession.firstName = resBody.firstName;
-          currSession.lastName = resBody.lastName;
-          currSession.riftTag = resBody.riftTag;
-          currSession.rifterRating = resBody.rifterRating;
-          currSession.hostId = resBody.rifterSessions[i].hostId;
-          currSession.sessionCost = resBody.rifterSessions[i].sessionCost;
-          currSession.methodOfContact = resBody.rifterSessions[i].methodOfContact;
-          currSession.sessionDuration = resBody.rifterSessions[i].sessionDuration;
-          currSession.title = resBody.rifterSessions[i].title;
-          currSession.sessionTime = date;
-          currSession.id = resBody.rifterSessions[i].id;
-          currSession.numSlots = resBody.rifterSessions[i].numSlots;
-          currSession.gameId = resBody.rifterSessions[i].gameId;
-          currSession.console = resBody.rifterSessions[i].console;
-          if(currSession.hostId == this.loggedInUser.id) {
-            currSession.type = true;
-          } else {
-            currSession.type = false;
-          }
-          this.currentUser.rifterSessions.push(currSession);
-        }
+    for (var i = 0; i < rifterSessions.length; i++) {
+      var currDateMS = rifterSessions[i].sessionTime;
+      var date = new Date(currDateMS);
+      var currSession = new Session();
+      currSession.firstName = user.firstName;
+      currSession.lastName = user.lastName;
+      currSession.riftTag = user.riftTag;
+      currSession.rifterRating = user.rifterRating;
+      currSession.hostId = rifterSessions[i].hostId;
+      currSession.sessionCost = rifterSessions[i].sessionCost;
+      currSession.methodOfContact = rifterSessions[i].methodOfContact;
+      currSession.sessionDuration = rifterSessions[i].sessionDuration;
+      currSession.title = rifterSessions[i].title;
+      currSession.sessionTime = date;
+      currSession.id = rifterSessions[i].id;
+      currSession.numSlots = rifterSessions[i].numSlots;
+      currSession.gameId = rifterSessions[i].gameId;
+      currSession.console = rifterSessions[i].console;
+      if(currSession.hostId == 41) {
+        currSession.type = true;
+      } else {
+        currSession.type = false;
       }
-    );
+      this.currentUser.rifterSessions.push(currSession);
+    }
   }
 
-  getUserSessionRequests(riftTag: string) {
-    console.log("Getting user's session requests");
-    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
-    this.userSessionsService.getSessionRequests(riftTag).subscribe(
-      resBody => {
-        //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var request = new SessionRequest();
-          request.accepted = resBody[i].accepted;
-          request.hostId = resBody[i].hostId;
-          request.rifteeId = resBody[i].rifteeId;
-          request.sessionId = resBody[i].sessionId;
-          this.loggedInUser.sessionRequests.set(request.sessionId, request);
-        }
-        // console.log(this.currentUser.sessionRequests);
-      }
-    )
-  }
+  // getUserSessionRequests(riftTag: string) {
+  //   console.log("Getting user's session requests");
+  //   this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
+  //   this.userSessionsService.getSessionRequests(riftTag).subscribe(
+  //     resBody => {
+  //       //noinspection TypeScriptUnresolvedVariable
+  //       for (var i = 0; i < resBody.length; i++) {
+  //         var request = new SessionRequest();
+  //         request.accepted = resBody[i].accepted;
+  //         request.hostId = resBody[i].hostId;
+  //         request.rifteeId = resBody[i].rifteeId;
+  //         request.sessionId = resBody[i].sessionId;
+  //         this.loggedInUser.sessionRequests.set(request.sessionId, request);
+  //       }
+  //       // console.log(this.currentUser.sessionRequests);
+  //     }
+  //   )
+  // }
 
   getUserProfilePicture(riftTag: string, user: Userprofile): string {
     console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
-        user.profilePic = resBody.profilePic;
-      },
-      error => {
-        // console.log(error + ": Using default picture instead");
-        user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
-      },
+        if (resBody.image == "") {
+          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
+        } else {
+          user.profilePic = resBody.image;
+        }
+      }
     );
     return;
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
@@ -272,12 +240,12 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting user's cover photo");
     this.userProfileService.getCoverPhoto(riftTag).subscribe(
       resBody => {
-        this.currentUser.coverPhoto = resBody.profilePic;
-      },
-      error => {
-        console.log(error + ": Using default picture instead");
-        this.currentUser.coverPhoto = "https://atiinc.org/wp-content/uploads/2017/01/cover-default.jpg";
-      },
+        if (resBody.image == "") {
+          this.currentUser.coverPhoto = "https://atiinc.org/wp-content/uploads/2017/01/cover-default.jpg"
+        } else {
+          this.currentUser.coverPhoto = resBody.image;
+        }
+      }
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
