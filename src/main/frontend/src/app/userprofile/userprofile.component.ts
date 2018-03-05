@@ -39,7 +39,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
+  public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -59,9 +59,10 @@ export class UserprofileComponent implements OnInit {
 
   getCurrentLoggedInUser():any {
     console.log("Getting currently logged in user");
+    console.log(this.profile.nickname);
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
-        console.log("in logged in user resbody");
+        console.log(this.profile.nickname);
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
         this.loggedInUser.riftTag = this.profile.nickname;
@@ -79,8 +80,7 @@ export class UserprofileComponent implements OnInit {
       error => {
         console.log(error);
       }
-    )
-    console.log("done running getCurrentLoggedInUser");
+    );
   }
 
   getUserProfileInformation(riftTag: string) {
@@ -103,6 +103,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
+          console.log("-----------------");
         }
     );
   }

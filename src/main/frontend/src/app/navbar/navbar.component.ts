@@ -22,27 +22,31 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
+    if(JSON.parse(localStorage.getItem('profile'))) {
+      this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
+    }
   }
 
   getUserNotifications(riftTag: string) {
     this.currentUser.notifications = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        for (var i = 0; i < resBody.notificationList.length; i++) {
-          var notification = new Notification();
-          notification.id = resBody.notificationList[i].id;
-          notification.createdTime = resBody.notificationList[i].createdTime;
-          notification.creatorId = resBody.notificationList[i].creatorId;
-          notification.notificationType = resBody.notificationList[i].notificationType;
-          if (notification.notificationType == "2") {
-            notification.notificationContent = notification.userId + NOTIFICATION_CONTENT[2]
-          } else {
-            notification.notificationContent = resBody.notificationList[i].notificationContent;
+        if(resBody.notificationList) {
+          for (var i = 0; i < resBody.notificationList.length; i++) {
+            var notification = new Notification();
+            notification.id = resBody.notificationList[i].id;
+            notification.createdTime = resBody.notificationList[i].createdTime;
+            notification.creatorId = resBody.notificationList[i].creatorId;
+            notification.notificationType = resBody.notificationList[i].notificationType;
+            if (notification.notificationType == "2") {
+              notification.notificationContent = notification.userId + NOTIFICATION_CONTENT[2]
+            } else {
+              notification.notificationContent = resBody.notificationList[i].notificationContent;
+            }
+            notification.sessionId = resBody.notificationList[i].sessionId;
+            notification.userId = resBody.notificationList[i].userId;
+            this.currentUser.notifications.push(notification);
           }
-          notification.sessionId = resBody.notificationList[i].sessionId;
-          notification.userId = resBody.notificationList[i].userId;
-          this.currentUser.notifications.push(notification);
         }
       }
     )

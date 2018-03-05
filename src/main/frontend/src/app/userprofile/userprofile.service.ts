@@ -38,7 +38,7 @@ export class UserprofileService {
   }
 
   createUser(data): void {
-    // console.log("running createUser");
+    console.log("running createUser");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserURL, data, options)

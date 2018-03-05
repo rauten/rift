@@ -32,7 +32,6 @@ export class AppComponent {
             userprofileService.createUser(riftData);
           }
         );
-
       } else {
         var profile = JSON.parse(localStorage.getItem("profile"));
         userprofileService.getUser(profile.nickname).subscribe(
