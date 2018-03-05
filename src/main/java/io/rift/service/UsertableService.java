@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import com.google.common.base.CaseFormat;
 import io.rift.model.*;
 import io.rift.repository.RiftRepository;
@@ -580,7 +581,7 @@ public class UsertableService {
         return true;
     }
 
-    public InputStream getPicture(String keyBase, String bucket) throws IOException {
+    public String getPicture(String keyBase, String bucket) throws IOException {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(s3AccessKey, s3AccessSecret);
         AmazonS3 s3Client = AmazonS3ClientBuilder
                 .standard()
@@ -588,10 +589,17 @@ public class UsertableService {
                 .withRegion(Regions.US_EAST_2)
                 .build();
         String key = keyBase + "profile-picture";
-        S3Object object = s3Client.getObject(new GetObjectRequest(bucket, key));
-        InputStream objectData = object.getObjectContent();
-        return objectData;
+        try {
+            S3Object object = s3Client.getObject(new GetObjectRequest(bucket, key));
+            InputStream objectData = object.getObjectContent();
+            byte[] bytes = IOUtils.toByteArray(objectData);
+            Base64 base64 = new Base64();
+            String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
+            return byteStr;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
-
 
 }
