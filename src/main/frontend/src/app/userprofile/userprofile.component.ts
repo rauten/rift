@@ -61,7 +61,6 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting currently logged in user");
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
-        console.log(resBody);
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
         this.loggedInUser.riftTag = this.profile.nickname;
@@ -75,7 +74,6 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
-        console.log("after for loop for followings");
       }
     )
   }
@@ -94,7 +92,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
-          this.getUserProfilePicture(riftTag);
+          this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
           this.getUserRatings(this.currentUser.id);
           this.getUserNotifications(riftTag);
@@ -102,7 +100,6 @@ export class UserprofileComponent implements OnInit {
           this.getUserRifterSessions(riftTag);
           this.getUserFollowersAndFollowing(riftTag);
           this.getUserSessionRequests(this.profile.nickname);
-          // this.getBroadcastNotifications(this.profile.nickname);
         }
     );
   }
@@ -113,13 +110,13 @@ export class UserprofileComponent implements OnInit {
     this.currentUser.followers = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        for (var i = 0; i < resBody.followers.length; i++) {
+        for (var i = 0; i < resBody.followers.length-1; i++) {
           var currFollower = new Userprofile();
           currFollower.firstName = resBody.followers[i].followerUsertable.firstName;
           currFollower.lastName = resBody.followers[i].followerUsertable.lastName;
           currFollower.riftTag = resBody.followers[i].followerUsertable.riftTag;
           currFollower.id = resBody.followers[i].followerUsertable.id;
-          // this.getUserProfilePicture(currFollower.riftTag);
+          this.getUserProfilePicture(currFollower.riftTag, currFollower);
           this.currentUser.followers.push(currFollower);
         }
         for (var i = 0; i < resBody.followings.length; i++) {
@@ -128,7 +125,7 @@ export class UserprofileComponent implements OnInit {
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           currFollowing.id = resBody.followings[i].followingUsertable.id;
-          // this.getUserProfilePicture(currFollower.riftTag);
+          this.getUserProfilePicture(currFollowing.riftTag, currFollowing);
           this.currentUser.followings.push(currFollowing);
         }
       },
@@ -256,18 +253,18 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getUserProfilePicture(riftTag: string) {
+  getUserProfilePicture(riftTag: string, user: Userprofile): string {
     console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
-        this.currentUser.profilePic = resBody.profilePic;
+        user.profilePic = resBody.profilePic;
       },
       error => {
-        console.log(error + ": Using default picture instead");
-        this.currentUser.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
-
+        // console.log(error + ": Using default picture instead");
+        user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
       },
     );
+    return;
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
 
