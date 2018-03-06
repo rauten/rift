@@ -28,12 +28,11 @@ export class NavbarComponent implements OnInit {
   }
 
   getUserNotifications(riftTag: string) {
-    console.log("Getting user notifications")
+    console.log("Getting user notifications");
     this.currentUser.notifications = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        console.log(resBody);
-        if(resBody.notificationList) {
+        if(resBody.notificationList.length > 0) {
           for (var i = 0; i < resBody.notificationList.length; i++) {
             var notification = new Notification();
             notification.id = resBody.notificationList[i].id;
@@ -49,6 +48,10 @@ export class NavbarComponent implements OnInit {
             notification.userId = resBody.notificationList[i].userId;
             this.currentUser.notifications.push(notification);
           }
+        } else {
+          var notification = new Notification();
+          notification.notificationContent = "No notifications";
+          this.currentUser.notifications.push(notification);
         }
       }
     )
