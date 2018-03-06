@@ -8,6 +8,7 @@ import io.rift.repository.RiftRepository;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.postgresql.util.PGInterval;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -165,7 +166,11 @@ public class RifterSessionService {
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         rifterSession.setDescription(resultSet.getString(startPoint + 15));
-        rifterSession.setGame(gameService.populateGame(resultSet, startPoint + 16, ""));
+        try {
+            rifterSession.setGame(gameService.populateGame(resultSet, startPoint + POPULATESIZE, ""));
+        } catch (PSQLException e) {
+            e.printStackTrace();
+        }
         startPoint += gameService.POPULATESIZE;
         if (info.equals("levenshteinSearch")) {
             rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 16));
@@ -188,6 +193,11 @@ public class RifterSessionService {
                 Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 17, "");
                 rifterSession.setUsertable(usertable);
             }
+        } else if (info.equals("host")) {
+            Usertable usertable = new Usertable();
+            usertable.setRiftTag(resultSet.getString(startPoint + 16));
+            usertable.setRifterRating(resultSet.getDouble(startPoint + 17));
+            rifterSession.setUsertable(usertable);
         }
         return rifterSession;
     }

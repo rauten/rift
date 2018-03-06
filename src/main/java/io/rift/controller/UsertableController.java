@@ -7,6 +7,8 @@ import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
 import io.rift.repository.RiftRepository;
+import io.rift.service.AbstractNotificationService;
+import io.rift.service.ActivityNotificationService;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,6 +33,12 @@ public class UsertableController {
 
     @Autowired
     private UsertableService usertableService;
+
+    @Autowired
+    private AbstractNotificationService abstractNotificationService;
+
+    @Autowired
+    private ActivityNotificationService activityNotificationService;
 
     @Autowired
     private RiftRepository riftRepository;

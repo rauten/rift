@@ -1,5 +1,7 @@
 package io.rift.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
@@ -40,15 +42,42 @@ public class Notification {
 
     public Notification() {}
 
-    /*
+
     public enum NotificationType {
 
-        FR, // Follow Request - Directed
-        GR, // Game Request - Directed
-        GP, // Game Posted - Broadcast
-        SS  // Stream Starting - Broadcast
+        FOL("fol"), // Follow - Directed
+        SRQ("srq"), // Session Request - Directed
+        SRA("sra"), // Session Request Accepted - Directed
+        SRR("srr"), // Session Request Rejected - Directed
+        SPO("spo"), // Session Posted - Broadcast
+        SUP("sup"), // Session Updated - Broadcast
+        SDE("sde"), // Session Deleted - Broadcast
+        SST("sst");  // Stream Starting - Broadcast
+
+        private String value;
+
+        NotificationType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static NotificationType fromValue(String text) {
+            for (NotificationType b : NotificationType.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
 
     }
-    */
+
+
 
 }

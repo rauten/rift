@@ -1,6 +1,5 @@
 package io.rift.repository;
 
-import com.sun.rowset.CachedRowSetImpl;
 import io.rift.model.Usertable;
 import io.rift.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
