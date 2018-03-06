@@ -2,7 +2,6 @@ package io.rift.service;
 
 
 import com.google.common.base.CaseFormat;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;

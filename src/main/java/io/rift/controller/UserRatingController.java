@@ -1,7 +1,6 @@
 package io.rift.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.rift.model.UserRating;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
