@@ -157,12 +157,9 @@ export class UserprofileComponent implements OnInit {
     for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
       var currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-      if(currActivity.notificationType == "0") {
-        currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
-            this.currentUser.creatorActivityList[i].rifterSession.title;
-      } else {
-        currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
-      }
+      currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)];
+      currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
+      currActivity.sessionId = this.currentUser.creatorActivityList[i].sessionId;
       currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
       this.currentUser.activities.push(currActivity);
     }
@@ -189,7 +186,7 @@ export class UserprofileComponent implements OnInit {
       currSession.numSlots = rifterSessions[i].numSlots;
       currSession.gameId = rifterSessions[i].gameId;
       currSession.console = rifterSessions[i].console;
-      if(currSession.hostId == 41) {
+      if(currSession.hostId == currSession.hostId) {
         currSession.type = true;
       } else {
         currSession.type = false;

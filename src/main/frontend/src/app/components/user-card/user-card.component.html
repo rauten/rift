@@ -1,9 +1,8 @@
 <div class="card">
-  <img src="https://ak4.picdn.net/shutterstock/videos/12360614/thumb/9.jpg" alt="John" style="width:100%">
+  <img src="{{user.profilePic}}" alt="John" style="width:100%">
   <h1 [routerLink]="['../../user/', user.riftTag]">{{user.firstName}} {{user.lastName}}</h1>
   <p class="title">@{{user.riftTag}}</p>
-  <p>{{user.bio}}</p>
-  <div *ngIf="isLoggedIn">
+  <div *ngIf="isLoggedIn && loggedInUser.id != user.id">
     <app-follow-button [following]="isFollowing(user.riftTag)" [id]="user.id"
                        [riftTag]="profile.nickname" class="userbtn">
     </app-follow-button>

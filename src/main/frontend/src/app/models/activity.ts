@@ -5,6 +5,9 @@ export class Activity {
   createdTime: number;
   rifterSession: Session;
   riftTag: string;
+  title;
+  sessionId;
+  creatorProfilePic: string;
 
   constructor() {
 
