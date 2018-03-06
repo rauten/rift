@@ -73,7 +73,7 @@ export class CreateSessionComponent implements OnInit {
     };
     console.log(data);
     this.userSessionService.createUserSession(data);
-    // window.location.reload();
+    window.location.reload();
   }
 
   cancel(): void {

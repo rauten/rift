@@ -8,6 +8,8 @@ export class Activity {
   title;
   sessionId;
   creatorProfilePic: string;
+  firstName;
+  lastName;
 
   constructor() {
 

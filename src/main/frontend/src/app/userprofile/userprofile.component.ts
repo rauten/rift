@@ -60,11 +60,6 @@ export class UserprofileComponent implements OnInit {
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
         console.log("in logged in user resbody");
-        this.loggedInUser.firstName = resBody.firstName;
-        this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = this.profile.nickname;
-        this.loggedInUser.gender = resBody.gender;
-        this.loggedInUser.bio = resBody.bio;
         this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
@@ -82,7 +77,6 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;

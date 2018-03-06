@@ -6,12 +6,14 @@
         <div class="box-icon">
           <img src="{{notification.creatorProfilePic}}" class="profile-pic">
         </div>
+
         <div class="info">
-          <h4 class="text-center">{{notification.riftTag}}</h4>
-          <p><b>{{notification.riftTag}}</b> {{notification.notificationContent}}</p>
-          <app-session-card [routerLink]="['../../session', session.id]"
+          <h4 class="text-center">{{notification.firstName}} {{notification.lastName}}</h4>
+          <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
+          <p><b>{{notification.riftTag}}</b> {{notification.notificationContent}} {{notification.rifterSession.title}}</p>
+          <app-session-card [routerLink]="['../session', notification.rifterSession.id]"
                             [session]="notification.rifterSession" [isLoggedIn]="isLoggedIn"
-                            [type]="session.type"
+                            [type]="notification.rifterSession.type"
           ></app-session-card>
         </div>
       </div>

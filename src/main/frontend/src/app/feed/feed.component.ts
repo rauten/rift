@@ -27,18 +27,26 @@ export class FeedComponent implements OnInit {
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
         for (var i = 0; i < resBody.broadcastNotificationList.length; i++) {
+          var currFeed = resBody.broadcastNotificationList[i];
           var currNotification = new Activity();
-          console.log(resBody);
-          currNotification.notificationType = resBody.broadcastNotificationList[i].notificationType;
+          currNotification.notificationType = currFeed.notificationType;
           currNotification.notificationContent = ACTIVITY_CONTENT[currNotification.notificationType];
-          currNotification.createdTime = resBody.broadcastNotificationList[i].createdTime;
-          currNotification.riftTag = resBody.riftTag;
-
-          var rifterSession = new Session();
-          currNotification.rifterSession = resBody.broadcastNotificationList[i].rifterSession;
-
-
+          currNotification.createdTime = currFeed.createdTime;
+          currNotification.riftTag = currFeed.creatorUsertable.riftTag;
+          currNotification.firstName = currFeed.creatorUsertable.firstName;
+          currNotification.lastName = currFeed.creatorUsertable.lastName;
           this.getActivityProfilePicture(currNotification.riftTag, currNotification);
+
+          var session = new Session();
+          var currSession = currFeed.rifterSession;
+          session.id = currSession.id;
+          session.gameId = currSession.gameId;
+          session.console = currSession.console;
+          session.title = currSession.title;
+          session.sessionTime = currSession.sessionTime;
+          session.slotsRemaining = currSession.slotsRemaining;
+          session.riftTag = currNotification.riftTag;
+          currNotification.rifterSession = session;
           this.currentUser.feed.push(currNotification);
         }
       }
