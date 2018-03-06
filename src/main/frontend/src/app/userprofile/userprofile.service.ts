@@ -4,8 +4,6 @@ import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
 
-
-
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
@@ -43,6 +41,10 @@ export class UserprofileService {
         }
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  getUserBroadcastNotifications(riftTag: string): Observable<Userprofile> {
+
   }
 
   createUser(data): void {
