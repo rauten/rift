@@ -29,7 +29,7 @@ public class NotificationController {
         return usertableService.getUserNotifications(riftId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "notification/{riftTag}/broadcastNotifications")
+    @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/broadcastNotifications")
     public List<Notification> getBroadcastNotifications(String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
         return usertableService.getBroadcastNotifications(riftId, "Followers");
