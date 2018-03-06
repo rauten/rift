@@ -79,7 +79,8 @@ public class UsertableService {
 
     private final String getBroadcastNotifications = "getBroadcastNotificationsById";
     private final String getBroadcastNotificationsForFollower = "getBroadcastNotificationsForFollower";
-    private final String getSessionBroadcastsByUserId = "getSessionBroadcastsByUserId";
+    private final String getSessionUpdateBroadcastsByUserId = "getSessionUpdateBroadcastsByUserId";
+    private final String getSessionDeletionBroadcastsByUserId = "getSessionDeletionBroadcastsByUserId";
     private final String getUserActivity = "getUserActivity";
     private final String getUserNotifications = "getUserNotifications";
     private final String getUserActiviyAndUserSession = "getUserActiviyAndUserSession";
@@ -440,44 +441,65 @@ public class UsertableService {
             resultSet = riftRepository.doQuery(getBroadcastNotifications, args);
         }
         List<Notification> notifications = new ArrayList<>();
-        while (resultSet.next()) {
-            Notification notification = new Notification();
-            notification = notificationService.populateNotification(resultSet, 1, "");
-            Usertable usertable = new Usertable();
-            usertable.setId(notification.getCreatorId());
-            usertable.setFirstName(resultSet.getString(8));
-            usertable.setLastName(resultSet.getString(9));
-            usertable.setIsPrivate(resultSet.getBoolean(10));
-            usertable.setIsSuspended(resultSet.getBoolean(11));
-            usertable.setProfilePicturePath(resultSet.getString(12));
-            usertable.setRiftTag(resultSet.getString(13));
-            usertable.setRifteeRating(resultSet.getDouble(14));
-            usertable.setRifterRating(resultSet.getDouble(15));
-            usertable.setGender(resultSet.getBoolean(16));
-            notification.setCreatorUsertable(usertable);
-            try {
-                RifterSession rifterSession = new RifterSession();
-                rifterSession = rifterSessionService.populateRifterSession(resultSet, 17, "host");
-                notification.setRifterSession(rifterSession);
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            while (resultSet.next()) {
+                Notification notification = new Notification();
+                notification = notificationService.populateNotification(resultSet, 1, "");
+                Usertable usertable = new Usertable();
+                usertable.setId(notification.getCreatorId());
+                usertable.setFirstName(resultSet.getString(8));
+                usertable.setLastName(resultSet.getString(9));
+                usertable.setIsPrivate(resultSet.getBoolean(10));
+                usertable.setIsSuspended(resultSet.getBoolean(11));
+                usertable.setProfilePicturePath(resultSet.getString(12));
+                usertable.setRiftTag(resultSet.getString(13));
+                usertable.setRifteeRating(resultSet.getDouble(14));
+                usertable.setRifterRating(resultSet.getDouble(15));
+                usertable.setGender(resultSet.getBoolean(16));
+                notification.setCreatorUsertable(usertable);
+                try {
+                    RifterSession rifterSession = new RifterSession();
+                    rifterSession = rifterSessionService.populateRifterSession(resultSet, 17, "host");
+                    notification.setRifterSession(rifterSession);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                notifications.add(notification);
             }
-            notifications.add(notification);
+            resultSet.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        resultSet.close();
-        resultSet = riftRepository.doQuery(getSessionBroadcastsByUserId, args);
-        while(resultSet.next()) {
-            Notification notification = notificationService.populateNotification(resultSet, 1, "");
-            try {
+        resultSet = riftRepository.doQuery(getSessionUpdateBroadcastsByUserId, args);
+        try {
+            while (resultSet.next()) {
+                Notification notification = notificationService.populateNotification(resultSet, 1, "");
                 RifterSession rifterSession = new RifterSession();
                 rifterSession = rifterSessionService.populateRifterSession(resultSet, 8, "");
                 notification.setRifterSession(rifterSession);
-            } catch (PSQLException e) {
-                e.printStackTrace();
+                Usertable usertable = new Usertable();
+                usertable.setRiftTag(resultSet.getString(8 + rifterSessionService.POPULATESIZE));
+                usertable.setRifterRating(resultSet.getDouble(9 + rifterSessionService.POPULATESIZE));
+                notification.setCreatorUsertable(usertable);
+                notifications.add(notification);
             }
-            notifications.add(notification);
+            resultSet.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        resultSet.close();
+        resultSet = riftRepository.doQuery(getSessionDeletionBroadcastsByUserId, args);
+        try {
+            while (resultSet.next()) {
+                Notification notification = notificationService.populateNotification(resultSet, 1, "");
+                Usertable usertable = new Usertable();
+                usertable.setRiftTag(resultSet.getString(8));
+                usertable.setRifterRating(resultSet.getDouble(9));
+                notification.setCreatorUsertable(usertable);
+                notifications.add(notification);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return notifications;
     }
 

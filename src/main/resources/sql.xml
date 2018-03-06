@@ -174,17 +174,20 @@
         WHERE us.id = ? AND n.notification_type = 0;
     </getBroadcastNotificationsById>
 
-    <getSessionBroadcastsByUserId>
-        SELECT n.*, r.*
-        FROM gamerequest g
-        JOIN riftergame r
-        ON g.session_id = r.id
-        JOIN game ga
-        ON r.game_id = ga.id
-        JOIN notification n
-        ON r.host_id = n.creator_id
-        WHERE g.riftee_id = ? AND (n.notification_type = 1 OR n.notification_type = 2) AND r.num_slots != -1;
-    </getSessionBroadcastsByUserId>
+    <getSessionUpdateBroadcastsByUserId>
+        SELECT n.*, r.*, u.rift_tag, u.rifter_rating
+        FROM notification n
+        JOIN riftergame r ON n.session_id = r.id
+        JOIN usertable u ON n.creator_id = u.id
+        WHERE notification_type = 2 OR notification_type = 1 AND user_id = ? AND notification_content is not null;
+    </getSessionUpdateBroadcastsByUserId>
+
+    <getSessionDeletionBroadcastsByUserId>
+        SELECT n.*, u.rift_tag, u.rifter_rating
+        FROM notification n
+        JOIN usertable u ON n.creator_id = u.id
+        WHERE notification_type = 2 AND user_id = ? AND notification_content is not null;
+    </getSessionDeletionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
         SELECT n.id, user_id, notification_type, notification_content, session_id, n.created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, r.*, g.*, usr.rift_tag, usr.rifter_rating
@@ -194,7 +197,7 @@
         JOIN riftergame r ON n.session_id = r.id
         JOIN game g ON g.id = r.game_id
         JOIN usertable usr ON r.host_id = usr.id
-        WHERE us.id = 77 AND n.notification_type = 0;
+        WHERE us.id = ? AND n.notification_type = 0;
     </getBroadcastNotificationsForFollower>
 
     <getBraintreeIdFromUserId>
@@ -562,16 +565,18 @@
     -->
 
     <!--
-
         CREATE OR REPLACE FUNCTION create_session_update_notification()
             RETURNS trigger AS
         $BODY$
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, '1', null,
-            NEW.id, current_timestamp, NEW.host_id);
+            SELECT g.riftee_id, 1, r.title, r.id, current_timestamp, g.host_id
+            FROM riftergame r JOIN gamerequest g
+            ON g.session_id = r.id
+            WHERE session_id = NEW.id;
             RETURN NEW;
+
         END;
         $BODY$
         LANGUAGE plpgsql;
@@ -668,9 +673,9 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            SELECT n.user_id, '2', r.title, null, current_timestamp, n.creator_id
-            FROM riftergame r JOIN notification n
-            ON n.session_id = r.id
+            SELECT g.riftee_id, 2, r.title, null, current_timestamp, g.host_id
+            FROM riftergame r JOIN gamerequest g
+            ON g.session_id = r.id
             WHERE session_id = OLD.id;
 
             DELETE FROM notification
@@ -679,6 +684,7 @@
         END;
         $BODY$
         LANGUAGE plpgsql
+
 
         CREATE TRIGGER create_session_deletion_notification
         BEFORE DELETE
