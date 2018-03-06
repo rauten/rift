@@ -24,10 +24,11 @@ export class FeedComponent implements OnInit {
 
   getBroadcastNotifications(riftTag: string):any {
     this.currentUser.feed = [];
-    this.userProfileService.getUser(riftTag).subscribe(
+    this.userProfileService.getUserBroadcastNotifications(riftTag).subscribe(
       resBody => {
-        for (var i = 0; i < resBody.broadcastNotificationList.length; i++) {
-          var currFeed = resBody.broadcastNotificationList[i];
+        console.log(resBody);
+        for (var i = 0; i < resBody.length; i++) {
+          var currFeed = resBody[i];
           var currNotification = new Activity();
           currNotification.notificationType = currFeed.notificationType;
           currNotification.notificationContent = ACTIVITY_CONTENT[currNotification.notificationType];

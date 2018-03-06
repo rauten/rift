@@ -44,7 +44,14 @@ export class UserprofileService {
   }
 
   getUserBroadcastNotifications(riftTag: string): Observable<Userprofile> {
-
+    return this.http.get("/api/notification/" + riftTag + "/broadcastNotifications")
+      .map(
+        (response: Response) => {
+          console.log(response.json());
+          return response.json();
+        }
+      )
+      .catch((error: any) => Observable.throw(error.json().error || "Server Error"))
   }
 
   createUser(data): void {
