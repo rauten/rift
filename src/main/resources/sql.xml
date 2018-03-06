@@ -175,9 +175,10 @@
     </getBroadcastNotificationsById>
 
     <getSessionUpdateBroadcastsByUserId>
-        SELECT n.*, r.*, u.rift_tag, u.rifter_rating
+        SELECT n.*, r.*, g.*, u.rift_tag, u.rifter_rating
         FROM notification n
         JOIN riftergame r ON n.session_id = r.id
+        JOIN game g ON g.id = r.game_id
         JOIN usertable u ON n.creator_id = u.id
         WHERE notification_type = 2 OR notification_type = 1 AND user_id = ? AND notification_content is not null;
     </getSessionUpdateBroadcastsByUserId>
