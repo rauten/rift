@@ -9,6 +9,7 @@ import {Http} from "@angular/http";
 })
 export class NotificationComponent implements OnInit {
   @Input() notification;
+  hasProfilePic = true;
   status: number;
   constructor(private userSessionService: UsersessionsService) {
   }
@@ -17,6 +18,9 @@ export class NotificationComponent implements OnInit {
     // console.log(this.notification);
     if(this.notification.notificationType == "gameRequest") {
       this.getSessionStatus(this.notification.creatorId, this.notification.sessionId);
+    }
+    if(this.notification.creatorProfilePic == "") {
+      this.hasProfilePic = false;
     }
   }
 

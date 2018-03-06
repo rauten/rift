@@ -25,9 +25,6 @@
               <span class="glyphicon glyphicon-bell"></span>
             </button>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
-              <li *ngIf="currentUser.notifications.length == 0">
-                No new notifications
-              </li>
               <li class="media" *ngFor="let notification of currentUser.notifications">
                 <app-notification [notification]="notification"></app-notification>
               </li>
