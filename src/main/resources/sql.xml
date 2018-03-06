@@ -666,7 +666,7 @@
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
             SELECT n.user_id, '2', r.title, null, current_timestamp, n.creator_id
-            FROM notification JOIN riftergame
+            FROM riftergame r JOIN notification n
             ON n.session_id = r.id
             WHERE session_id = OLD.id;
 
@@ -675,7 +675,7 @@
             RETURN OLD;
         END;
         $BODY$
-        LANGUAGE plpgsql;
+        LANGUAGE plpgsql
 
         CREATE TRIGGER create_session_deletion_notification
         BEFORE DELETE

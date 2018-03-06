@@ -15,7 +15,7 @@ public class Notification {
     private Integer userId;
 
     @JsonView(Views.NotificationType.class)
-    private String notificationType;
+    private Integer notificationType;
 
     @JsonView(Views.NotificationContent.class)
     private String notificationContent;
