@@ -28,9 +28,11 @@ export class NavbarComponent implements OnInit {
   }
 
   getUserNotifications(riftTag: string) {
+    console.log("Getting user notifications")
     this.currentUser.notifications = [];
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
+        console.log(resBody);
         if(resBody.notificationList) {
           for (var i = 0; i < resBody.notificationList.length; i++) {
             var notification = new Notification();

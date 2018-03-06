@@ -51,18 +51,15 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       this.isDataAvailable = true;
       this.getUserProfileInformation(params['rifttag']);
-      if(this.isLoggedIn) {
-        this.getCurrentLoggedInUser();
-      }
     });
+
   }
 
-  getCurrentLoggedInUser():any {
+  getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
-    console.log(this.profile.nickname);
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
+    this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        console.log(this.profile.nickname);
+        console.log("in logged in user resbody");
         this.loggedInUser.firstName = resBody.firstName;
         this.loggedInUser.lastName = resBody.lastName;
         this.loggedInUser.riftTag = this.profile.nickname;
@@ -76,15 +73,13 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
-      },
-      error => {
-        console.log(error);
+        console.log("-----------------");
       }
     );
   }
 
   getUserProfileInformation(riftTag: string) {
-    console.log("Getting user's profile information");
+    console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -103,7 +98,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
-          console.log("-----------------");
+          this.getCurrentLoggedInUser(this.profile.nickname);
         }
     );
   }

@@ -12,7 +12,6 @@
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
-            <!--<h3>Rifter Rating: {{currentUser.rifterRating}}</h3>-->
             <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [riftTag]="profile.nickname" class="userbtn">
