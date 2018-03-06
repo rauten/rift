@@ -38,12 +38,9 @@ export class NavbarComponent implements OnInit {
             notification.createdTime = resBody.notificationList[i].createdTime;
             notification.creatorRiftTag = resBody.notificationList[i].creatorUsertable.riftTag;
             this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
+
             notification.notificationType = resBody.notificationList[i].notificationType;
-            if (notification.notificationType == "2") {
-              notification.notificationContent = notification.userId + NOTIFICATION_CONTENT[2]
-            } else {
-              notification.notificationContent = resBody.notificationList[i].notificationContent;
-            }
+            notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
             notification.sessionId = resBody.notificationList[i].sessionId;
             this.currentUser.notifications.push(notification);
           }
