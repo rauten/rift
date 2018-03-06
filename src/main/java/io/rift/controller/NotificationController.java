@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Notification;
 import io.rift.model.Views;
 import io.rift.service.NotificationService;
+import io.rift.service.UsertableService;
 import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,21 @@ public class NotificationController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private UsertableService usertableService;
+
+    @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/notifications")
+    public List<Notification> getNotifications(String riftTag) throws SQLException {
+        Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
+        return usertableService.getUserNotifications(riftId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "notification/{riftTag}/broadcastNotifications")
+    public List<Notification> getBroadcastNotifications(String riftTag) throws SQLException {
+        Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
+        return usertableService.getBroadcastNotifications(riftId, "Followers");
+    }
 
     /*
     @JsonView(Views.Public.class)
