@@ -26,6 +26,14 @@ export class UserprofileService {
         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  // getUser(riftTag: string): Observable<Userprofile> {
+  //   // console.log("running getUser: " + riftTag);
+  //   let url = "/api/user/" + riftTag + "/profilePage";
+  //   return Observable.interval(2000)
+  //     .switchMap(() => this.http.get(url))
+  //     .map((res:Response) => res.json());
+  // }
+
   getUserId(riftTag: string): Observable<Userprofile> {
     // console.log("running getUserId");
     return this.http.get("/api/user/" + riftTag + "/id")

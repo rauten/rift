@@ -82,6 +82,7 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -94,10 +95,10 @@ export class UserprofileComponent implements OnInit {
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
+          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
           this.getUserRatings(this.currentUser.id);
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
-          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
           this.getCurrentLoggedInUser(this.profile.nickname);
         }
     );
