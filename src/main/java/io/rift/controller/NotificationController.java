@@ -24,13 +24,13 @@ public class NotificationController {
     private UsertableService usertableService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/notifications")
-    public List<Notification> getNotifications(String riftTag) throws SQLException {
+    public List<Notification> getNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
         return usertableService.getUserNotifications(riftId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/broadcastNotifications")
-    public List<Notification> getBroadcastNotifications(String riftTag) throws SQLException {
+    public List<Notification> getBroadcastNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
         return usertableService.getBroadcastNotifications(riftId, "Followers");
     }
