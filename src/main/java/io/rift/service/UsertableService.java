@@ -29,7 +29,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import org.apache.bcel.classfile.Field;
-import sun.misc.Cache;
 
 import javax.imageio.ImageIO;
 import javax.mail.Session;

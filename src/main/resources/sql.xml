@@ -171,7 +171,7 @@
         SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id,
-        WHERE us.id = ? AND n.notification_type = 'New Game';
+        WHERE us.id = ? AND n.notification_type = 0;
     </getBroadcastNotificationsById>
 
     <getSessionBroadcastsByUserId>
@@ -183,7 +183,7 @@
         ON r.game_id = ga.id
         JOIN notification n
         ON r.host_id = n.creator_id
-        WHERE g.riftee_id = ? AND (n.notification_type = 'sessionUpdate' OR n.notification_type = 'sessionDeletion') AND r.num_slots != -1;
+        WHERE g.riftee_id = ? AND (n.notification_type = 1 OR n.notification_type = 2) AND r.num_slots != -1;
     </getSessionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
@@ -191,7 +191,7 @@
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
         JOIN usertable u ON f.following_id = u.id
-        WHERE us.id = ? AND n.notification_type = 'New Game';
+        WHERE us.id = ? AND n.notification_type = 0;
     </getBroadcastNotificationsForFollower>
 
     <getBraintreeIdFromUserId>
