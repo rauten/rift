@@ -239,7 +239,7 @@ public class Views {
     public interface UsertableFullNameLevenshtein {}
 
 
-    /****************** Usertable Attributes ***********************/
+    /****************** Game Attributes ***********************/
     /****************************************************************/
 
     public interface GameAttributes extends GameId, GameGame {}
@@ -258,7 +258,7 @@ public class Views {
             FollowingFollowerUsertable, NotificationId, NotificationUserId, NotificationType, NotificationContent,
             NotificationRifterSession, NotificationSessionId, NotificationCreatedTime, NotificationCreatorId, NotificationCreatorUsertable,
             RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId, RifterSessionConsole,
-            RifterSessionSlotsRemaining {}
+            RifterSessionSlotsRemaining, RifterSessionGame, RifterSessionUsertable, GameId, GameGame {}
 
     public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
             RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId,

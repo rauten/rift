@@ -442,13 +442,7 @@ public class UsertableService {
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {
             Notification notification = new Notification();
-            notification.setId(resultSet.getInt(1));
-            notification.setUserId(resultSet.getInt(2));
-            notification.setNotificationType(resultSet.getInt(3));
-            notification.setNotificationContent(resultSet.getString(4));
-            notification.setSessionId(resultSet.getInt(5));
-            notification.setCreatedTime(resultSet.getTimestamp(6));
-            notification.setCreatorId(resultSet.getInt(7));
+            notification = notificationService.populateNotification(resultSet, 1, "");
             Usertable usertable = new Usertable();
             usertable.setId(notification.getCreatorId());
             usertable.setFirstName(resultSet.getString(8));
@@ -461,12 +455,26 @@ public class UsertableService {
             usertable.setRifterRating(resultSet.getDouble(15));
             usertable.setGender(resultSet.getBoolean(16));
             notification.setCreatorUsertable(usertable);
+            try {
+                RifterSession rifterSession = new RifterSession();
+                rifterSession = rifterSessionService.populateRifterSession(resultSet, 17, "host");
+                notification.setRifterSession(rifterSession);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             notifications.add(notification);
         }
         resultSet.close();
         resultSet = riftRepository.doQuery(getSessionBroadcastsByUserId, args);
         while(resultSet.next()) {
             Notification notification = notificationService.populateNotification(resultSet, 1, "");
+            try {
+                RifterSession rifterSession = new RifterSession();
+                rifterSession = rifterSessionService.populateRifterSession(resultSet, 8, "");
+                notification.setRifterSession(rifterSession);
+            } catch (PSQLException e) {
+                e.printStackTrace();
+            }
             notifications.add(notification);
         }
         resultSet.close();
