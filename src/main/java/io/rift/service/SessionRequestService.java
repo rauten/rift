@@ -85,10 +85,10 @@ public class SessionRequestService {
         ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
         if (resultSet.next()) {
             int res = resultSet.getInt(1);
-            //resultSet.close();
+            resultSet.close();
             return res;
         }
-        //resultSet.close();
+        resultSet.close();
         return -1;
     }
 
@@ -226,7 +226,7 @@ public class SessionRequestService {
             SessionRequest sessionRequest = populateGameRequest(resultSet, 1);
             sessionRequests.add(sessionRequest);
         }
-        //resultSet.close();
+        resultSet.close();
         return sessionRequests;
     }
 
