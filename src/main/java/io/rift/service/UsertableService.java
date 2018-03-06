@@ -445,7 +445,7 @@ public class UsertableService {
             Notification notification = new Notification();
             notification.setId(resultSet.getInt(1));
             notification.setUserId(resultSet.getInt(2));
-            notification.setNotificationType(resultSet.getString(3));
+            notification.setNotificationType(resultSet.getInt(3));
             notification.setNotificationContent(resultSet.getString(4));
             notification.setSessionId(resultSet.getInt(5));
             notification.setCreatedTime(resultSet.getTimestamp(6));

@@ -23,7 +23,7 @@ public class CustomListSerializer extends StdSerializer<List<Notification>> {
     @Override
     public void serialize(List<Notification> notifications, JsonGenerator generator, SerializerProvider provider) throws IOException, JsonProcessingException {
         List<Integer> ids = new ArrayList<>();
-        List<String> notificationTypes = new ArrayList<>();
+        List<Integer> notificationTypes = new ArrayList<>();
         List<String> notificationContents = new ArrayList<>();
 
         for (Notification notification : notifications) {
