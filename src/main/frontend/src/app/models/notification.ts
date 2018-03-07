@@ -9,6 +9,7 @@ export class Notification {
   id: number;
   creatorRiftTag: string;
   creatorProfilePic: string;
+  sessionTitle: string;
 
   constructor(){}
 }

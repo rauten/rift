@@ -5,6 +5,7 @@ import {Userprofile} from "../models/userprofile";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Notification} from "../models/notification";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+import {Globals} from "../global/globals";
 
 @Component({
   selector: 'app-navbar',
@@ -13,8 +14,10 @@ import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 })
 export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
+  numUnseen: number;
 
-  constructor(public auth: AuthService, private userProfileService: UserprofileService) {
+  constructor(public auth: AuthService, private userProfileService: UserprofileService,
+  private globals: Globals) {
   }
 
   getCurrentUser() {
@@ -27,20 +30,34 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  clearUnseen() {
+    this.globals.unseenNotifications = 0;
+    console.log("global unseen: " + this.globals.unseenNotifications);
+  }
+
   getUserNotifications(riftTag: string) {
     console.log("Getting user notifications");
-    this.currentUser.notifications = [];
-    this.userProfileService.getUser(riftTag).subscribe(
+    this.userProfileService.getUserNotifications(riftTag).subscribe(
       resBody => {
-        if(resBody.notificationList.length > 0) {
-          for (var i = 0; i < resBody.notificationList.length; i++) {
+        if(resBody.length > this.globals.previousNumNotifications) {
+          this.globals.unseenNotifications = resBody.length-this.globals.unseenNotifications;
+          this.numUnseen = this.globals.unseenNotifications;
+          this.globals.previousNumNotifications = resBody.length;
+          console.log("num unseen: " + this.numUnseen);
+        }
+        this.currentUser.notifications = [];
+        if(resBody.length > 0) {
+          for (var i = 0; i < resBody.length; i++) {
             var notification = new Notification();
-            notification.createdTime = resBody.notificationList[i].createdTime;
-            notification.creatorRiftTag = resBody.notificationList[i].creatorUsertable.riftTag;
+            notification.createdTime = resBody[i].createdTime;
+            notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
             this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
-            notification.notificationType = resBody.notificationList[i].notificationType;
+            notification.notificationType = resBody[i].notificationType;
             notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
-            notification.sessionId = resBody.notificationList[i].sessionId;
+            notification.sessionId = resBody[i].sessionId;
+            if(notification.sessionId > 0) {
+              notification.sessionTitle = resBody[i].rifterSession.title;
+            }
             this.currentUser.notifications.push(notification);
           }
         } else {
@@ -55,7 +72,6 @@ export class NavbarComponent implements OnInit {
   }
 
   getNotificationProfilePicture(riftTag: string, notification: Notification): string {
-    console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {
