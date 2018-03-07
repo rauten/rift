@@ -54,6 +54,9 @@ public class Usertable {
     @JsonView(Views.UsertableBio.class)
     private String bio;
 
+    @JsonView(Views.UsertableEmail.class)
+    private String email;
+
     @JsonView(Views.UsertableNotificationList.class)
     private List<Notification> notificationList;
 
