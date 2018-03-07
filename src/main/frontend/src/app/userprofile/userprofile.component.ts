@@ -39,7 +39,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  private userSessionsService: UsersessionsService, public dialog: MatDialog) {
+  public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -51,22 +51,15 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       this.isDataAvailable = true;
       this.getUserProfileInformation(params['rifttag']);
-      if(this.isLoggedIn) {
-        this.getCurrentLoggedInUser();
-      }
     });
+
   }
 
-  getCurrentLoggedInUser():any {
+  getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
+    this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
         console.log("in logged in user resbody");
-        this.loggedInUser.firstName = resBody.firstName;
-        this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = this.profile.nickname;
-        this.loggedInUser.gender = resBody.gender;
-        this.loggedInUser.bio = resBody.bio;
         this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
@@ -75,16 +68,13 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
-      },
-      error => {
-        console.log(error);
+        console.log("-----------------");
       }
-    )
-    console.log("done running getCurrentLoggedInUser");
+    );
   }
 
   getUserProfileInformation(riftTag: string) {
-    console.log("Getting user's profile information");
+    console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -99,10 +89,11 @@ export class UserprofileComponent implements OnInit {
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
+          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
           this.getUserRatings(this.currentUser.id);
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
-          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
+          this.getCurrentLoggedInUser(this.profile.nickname);
         }
     );
   }
@@ -161,12 +152,9 @@ export class UserprofileComponent implements OnInit {
     for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
       var currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-      if(currActivity.notificationType == "0") {
-        currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)] +
-            this.currentUser.creatorActivityList[i].rifterSession.title;
-      } else {
-        currActivity.notificationContent = this.currentUser.creatorActivityList[i].notificationContent;
-      }
+      currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)];
+      currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
+      currActivity.sessionId = this.currentUser.creatorActivityList[i].sessionId;
       currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
       this.currentUser.activities.push(currActivity);
     }
@@ -193,7 +181,7 @@ export class UserprofileComponent implements OnInit {
       currSession.numSlots = rifterSessions[i].numSlots;
       currSession.gameId = rifterSessions[i].gameId;
       currSession.console = rifterSessions[i].console;
-      if(currSession.hostId == 41) {
+      if(currSession.hostId == currSession.hostId) {
         currSession.type = true;
       } else {
         currSession.type = false;

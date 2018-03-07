@@ -4,12 +4,17 @@
     <div class="col-xs-8">
       <div class="box">
         <div class="box-icon">
-          <span class="fa fa-4x fa-css3"></span>
+          <img src="{{notification.creatorProfilePic}}" class="profile-pic">
         </div>
+
         <div class="info">
-          <h4 class="text-center">{{notification.riftTag}}</h4>
-          <p>{{notification.notificationContent}}</p>
-          <a href="" class="btn">Link</a>
+          <h4 class="text-center">{{notification.firstName}} {{notification.lastName}}</h4>
+          <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
+          <p><b>{{notification.riftTag}}</b> {{notification.notificationContent}} {{notification.rifterSession.title}}</p>
+          <app-session-card [routerLink]="['../session', notification.rifterSession.id]"
+                            [session]="notification.rifterSession" [isLoggedIn]="isLoggedIn"
+                            [type]="notification.rifterSession.type"
+          ></app-session-card>
         </div>
       </div>
     </div>

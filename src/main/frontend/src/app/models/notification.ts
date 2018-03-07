@@ -7,6 +7,8 @@ export class Notification {
   notificationType: string;
   createdTime: number;
   id: number;
+  creatorRiftTag: string;
+  creatorProfilePic: string;
 
   constructor(){}
 }

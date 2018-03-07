@@ -5,6 +5,7 @@ import {Session} from "../../models/session";
 import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {SessionRequest} from "../../models/session-request";
 import {Userprofile} from "../../models/userprofile";
+import {UserprofileService} from "../../userprofile/userprofile.service";
 
 @Component({
   selector: 'app-riftsessions',
@@ -15,13 +16,13 @@ export class RiftsessionsComponent implements OnInit {
   sub: any;
   searchQuery: string = "";
   sessions: Session[] = [];
-  users: any;
+  users: Userprofile[] = [];
   isLoggedIn = false;
   loggedInUser: Userprofile = new Userprofile();
   profile: any;
 
   constructor(private searchBarService: SearchBarService, private route: ActivatedRoute,
-  private userSessionsService: UsersessionsService) {
+  private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem('profile'))
   }
 
@@ -37,10 +38,20 @@ export class RiftsessionsComponent implements OnInit {
   }
 
   getUserSearchResults(searchQuery: string) {
+    this.sessions = [];
+    this.users = [];
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        this.users = resBody[0];
-        console.log(resBody[1]);
+        var users = resBody[0];
+        for (var i = 0; i < users.length; i++) {
+          var currUser = new Userprofile();
+          currUser.firstName = users[i].firstName;
+          currUser.lastName = users[i].lastName;
+          currUser.riftTag = users[i].riftTag;
+          currUser.id = users[i].id;
+          this.getUserProfilePicture(currUser.riftTag, currUser);
+          this.users.push(currUser);
+        }
         for (var i = 0; i < resBody[1].length; i++) {
           var currDateMS = resBody[1][i].sessionTime;
           var date = new Date(currDateMS);
@@ -62,6 +73,21 @@ export class RiftsessionsComponent implements OnInit {
         }
       }
     );
+  }
+
+  getUserProfilePicture(riftTag: string, user: Userprofile): string {
+    console.log("Getting user's profile picture");
+    this.userProfileService.getProfilePicture(riftTag).subscribe(
+      resBody => {
+        if (resBody.image == "") {
+          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
+        } else {
+          user.profilePic = resBody.image;
+        }
+      }
+    );
+    return;
+    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
 
   getUserSessionRequests(riftTag: string) {

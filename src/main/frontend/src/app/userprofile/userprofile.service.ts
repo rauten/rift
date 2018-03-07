@@ -4,8 +4,6 @@ import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
 
-
-
 @Injectable()
 export class UserprofileService {
   private createUserURL = "/api/user/createUser";
@@ -26,6 +24,14 @@ export class UserprofileService {
         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  // getUser(riftTag: string): Observable<Userprofile> {
+  //   // console.log("running getUser: " + riftTag);
+  //   let url = "/api/user/" + riftTag + "/profilePage";
+  //   return Observable.interval(2000)
+  //     .switchMap(() => this.http.get(url))
+  //     .map((res:Response) => res.json());
+  // }
+
   getUserId(riftTag: string): Observable<Userprofile> {
     // console.log("running getUserId");
     return this.http.get("/api/user/" + riftTag + "/id")
@@ -37,8 +43,19 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  getUserBroadcastNotifications(riftTag: string): Observable<Userprofile> {
+    return this.http.get("/api/notification/" + riftTag + "/broadcastNotifications")
+      .map(
+        (response: Response) => {
+          console.log(response.json());
+          return response.json();
+        }
+      )
+      .catch((error: any) => Observable.throw(error.json().error || "Server Error"))
+  }
+
   createUser(data): void {
-    // console.log("running createUser");
+    console.log("running createUser");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.createUserURL, data, options)

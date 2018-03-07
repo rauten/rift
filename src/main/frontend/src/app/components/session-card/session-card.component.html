@@ -4,10 +4,9 @@
       <span class="day">{{session.sessionTime | date:'dd'}}</span>
       <span class="month">{{session.sessionTime | date:'MMM'}}</span>
     </time>
-    <img alt="{{session.game}}" src="{{sessionIcon}}" />
+    <img src="{{sessionIcon}}" />
     <div class="info">
       <h2 class="title">{{session.title}}</h2>
-      <!--<p class="desc">{{session.firstName}} {{session.lastName}}</p>-->
       <p class="desc">@{{session.riftTag}}</p>
       <div *ngIf="!type">
       <app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>

@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./feed-card.component.scss']
 })
 export class FeedCardComponent implements OnInit {
-  @Input() notification
+  @Input() notification;
 
   constructor() { }
 

@@ -64,6 +64,7 @@ export class UpdateSessionComponent implements OnInit {
     this.updateSessionService.updateUserSession(data);
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();
+    window.location.reload();
   }
 
   timeToMilliseconds(time: string) {

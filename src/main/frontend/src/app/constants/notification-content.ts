@@ -3,4 +3,4 @@ export const NOTIFICATION_CONTENT = [
   "has rejected your request to join session: ",
   "started following you",
   "has requested to join your session: "
-]
+];

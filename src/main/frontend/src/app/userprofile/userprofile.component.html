@@ -12,7 +12,6 @@
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
-            <!--<h3>Rifter Rating: {{currentUser.rifterRating}}</h3>-->
             <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [riftTag]="profile.nickname" class="userbtn">
@@ -60,7 +59,10 @@
                   <img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">
                 </a>
                 <div class="media-body">
-                  <p class="activity-title"><a href="#">{{currentUser.riftTag}}</a> {{activity.notificationContent}} </p>
+                  <p class="activity-title">
+                    <a href="#">{{currentUser.riftTag}}</a>
+                    {{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>
+                  </p>
                   <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
                 </div>
                 <div class="btn-group pull-right activity-actions">
@@ -68,12 +70,6 @@
                     <i class="fa fa-th"></i>
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
-                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a href="#">I don't want to see this</a></li>
-                    <li><a href="#">Unfollow Antonius</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Get Notification</a></li>
-                  </ul>
                 </div>
               </div>
             </mat-tab>
@@ -89,13 +85,11 @@
               <div class="media user-follower" *ngFor="let follower of currentUser.followers">
                 <img src="{{follower.profilePic}}" alt="User Avatar" class="media-object pull-left">
                 <div class="media-body">
-                  <a [routerLink]="['../../user', follower.riftTag]" (click)="window.location.reload()">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
+                  <a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
                     <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
                   <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
                                      [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
                   </app-follow-button>
-
-
                 </div>
               </div>
             </mat-tab>
@@ -118,49 +112,21 @@
                   <div class="rating-block">
                     <h4>Average Rifter Rating</h4>
                     <h2 class="bold padding-bottom-7"> {{currentUser.rifterRating}} <small>/ 5</small></h2>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
+                    <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="rating-block">
                     <h4>Average Riftee Rating</h4>
                     <h2 class="bold padding-bottom-7"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                    </button>
+                    <app-rating [rating]="currentUser.rifteeRating" [readonly]="true"></app-rating>
                   </div>
                 </div>
 
               </div>
               <div class="row">
                 <div class="col-sm-7" *ngFor="let rating of currentUser.ratings">
-                    <app-user-review [rating]="rating"></app-user-review>
+                    <app-user-review [rating]="rating" ></app-user-review>
                 </div>
               </div>
             </mat-tab>

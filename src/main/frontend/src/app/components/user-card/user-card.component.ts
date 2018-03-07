@@ -36,11 +36,6 @@ export class UserCardComponent implements OnInit {
   getCurrentLoggedInUser():any {
     this.userProfileService.getUser(this.profile.nickname).subscribe(
       resBody => {
-        this.loggedInUser.firstName = resBody.firstName;
-        this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = resBody.riftTag;
-        this.loggedInUser.gender = resBody.gender;
-        this.loggedInUser.bio = resBody.bio;
         this.loggedInUser.id = resBody.id;
         for (var i = 0; i < resBody.followings.length; i++) {
           var currFollowing = new Userprofile();
