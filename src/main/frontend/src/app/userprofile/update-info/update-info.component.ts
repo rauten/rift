@@ -61,7 +61,8 @@ export class UpdateInfoComponent implements OnInit {
       "lastName" : this.updateInfoData.lastName,
       "riftTag" : this.updateInfoData.riftTag,
       "id" : this.loggedInUser.id,
-      "bio" : this.updateInfoData.bio
+      "bio" : this.updateInfoData.bio,
+      "email": this.updateInfoData.email
     };
     let auth0data = {
       'firstName': this.updateInfoData.firstName,
