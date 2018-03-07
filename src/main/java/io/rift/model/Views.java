@@ -21,6 +21,9 @@ public class Views {
     /****************** Notification Attributes **********************/
     /*****************************************************************/
 
+    public interface NotificationInfo extends NotificationId, NotificationUserId, NotificationType, NotificationContent,
+            NotificationSessionId, NotificationCreatedTime, NotificationCreatorId {}
+
     public interface NotificationId {}
 
     public interface NotificationUserId {}
@@ -165,7 +168,7 @@ public class Views {
 
     public interface UsertableInfo extends UsertableId, UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName, UsertableRiftTag,
             UsertableGender, UsertableTwitchAccount, UsertableYoutubeAccount, UsertableRifterRating, UsertableRifteeRating,
-            UsertableIsPrivate, UsertableIsSuspended, UsertableProfilePicturePath, UsertableBio {}
+            UsertableIsPrivate, UsertableIsSuspended, UsertableProfilePicturePath, UsertableBio, UsertableEmail {}
 
     public interface UsertableRestrictedInfo extends UsertableId, UsertableFirstName, UsertableLastName, UsertableRiftTag,
             UsertableProfilePicturePath {}
@@ -201,6 +204,8 @@ public class Views {
     public interface UsertableProfilePicturePath {}
 
     public interface UsertableBio {}
+
+    public interface UsertableEmail {}
 
     public interface UsertableNotificationList {}
 
@@ -251,14 +256,12 @@ public class Views {
     /****************** GetProfilePage View ***********************/
     /**************************************************************/
 
-    public interface ProfilePageView extends UsertableId, UsertableAuth0Id, UsertableBraintreeId, UsertableFirstName, UsertableLastName,
-            UsertableRiftTag, UsertableGender,  UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
+    public interface ProfilePageView extends UsertableInfo, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableNotificationList, UsertableBroadcastNotificationList,
-            UsertableRifterRating, UsertableRifteeRating, UsertableBio, UsertableRifterSessions, FollowingFollowingUsertable,
-            FollowingFollowerUsertable, NotificationId, NotificationUserId, NotificationType, NotificationContent,
-            NotificationRifterSession, NotificationSessionId, NotificationCreatedTime, NotificationCreatorId, NotificationCreatorUsertable,
+            UsertableRifterSessions, FollowingFollowingUsertable,
+            FollowingFollowerUsertable, NotificationInfo, NotificationRifterSession, NotificationCreatorUsertable,
             RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId, RifterSessionConsole,
-            RifterSessionSlotsRemaining, RifterSessionGame, RifterSessionUsertable, GameId, GameGame {}
+            RifterSessionSlotsRemaining, RifterSessionGame, RifterSessionUsertable, GameAttributes {}
 
     public interface CreateGame extends RifterSessionHostId, RifterSessionNumSlots, RifterSessionConsole,
             RifterSessionSessionDuration, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId,

@@ -73,8 +73,10 @@
     </getUserActivity>
 
     <getUserNotifications>
-        SELECT *
-        FROM notification
+        SELECT n.*, r.title
+        FROM notification n
+        JOIN riftergame r
+        ON n.session_id = r.id
         WHERE user_id = ?
     </getUserNotifications>
 
@@ -575,7 +577,7 @@
             SELECT g.riftee_id, 1, r.title, r.id, current_timestamp, g.host_id
             FROM riftergame r JOIN gamerequest g
             ON g.session_id = r.id
-            WHERE session_id = NEW.id;
+            WHERE session_id = NEW.id AND g.accepted != 0;
             RETURN NEW;
 
         END;
@@ -677,7 +679,7 @@
             SELECT g.riftee_id, 2, r.title, null, current_timestamp, g.host_id
             FROM riftergame r JOIN gamerequest g
             ON g.session_id = r.id
-            WHERE session_id = OLD.id;
+            WHERE session_id = OLD.id AND g.accepted != 0;
 
             DELETE FROM notification
             WHERE session_id = OLD.id;

@@ -29,6 +29,8 @@ public class NotificationService {
     private final String getUserById = "getUserById";
     private final String getRifterGameById = "getRifterGameById";
 
+    public final Integer POPULATESIZE = 7;
+
     public List<Notification> populateNotifications(ResultSet resultSet, int startPoint, String info) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {

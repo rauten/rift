@@ -62,9 +62,12 @@ public class UsertableService {
     private SessionRequestService sessionRequestService;
 
     @Autowired
+    private GameService gameService;
+
+    @Autowired
     private ConnectionService connectionService;
 
-    public final int POPULATESIZE = 15;
+    public final int POPULATESIZE = 16;
 
 
     /****************************** GET *******************************/
@@ -199,12 +202,13 @@ public class UsertableService {
         usertable.setBio(resultSet.getString(startPoint + 12));
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         usertable.setBraintreeId(resultSet.getString(startPoint + 14));
+        usertable.setEmail(resultSet.getString(startPoint + 15));
         if (info.equals("activity")) {
-            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, 14, ""));
+            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, POPULATESIZE, ""));
         } else if (info.equals("levenshtein")) {
-            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + 15));
-            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + 16));
-            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + 17));
+            usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + POPULATESIZE));
+            usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + POPULATESIZE + 1));
+            usertable.setFullNameLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 2));
         }
         return usertable;
     }
@@ -447,19 +451,19 @@ public class UsertableService {
                 notification = notificationService.populateNotification(resultSet, 1, "");
                 Usertable usertable = new Usertable();
                 usertable.setId(notification.getCreatorId());
-                usertable.setFirstName(resultSet.getString(8));
-                usertable.setLastName(resultSet.getString(9));
-                usertable.setIsPrivate(resultSet.getBoolean(10));
-                usertable.setIsSuspended(resultSet.getBoolean(11));
-                usertable.setProfilePicturePath(resultSet.getString(12));
-                usertable.setRiftTag(resultSet.getString(13));
-                usertable.setRifteeRating(resultSet.getDouble(14));
-                usertable.setRifterRating(resultSet.getDouble(15));
-                usertable.setGender(resultSet.getBoolean(16));
+                usertable.setFirstName(resultSet.getString(notificationService.POPULATESIZE + 1));
+                usertable.setLastName(resultSet.getString(notificationService.POPULATESIZE + 2));
+                usertable.setIsPrivate(resultSet.getBoolean(notificationService.POPULATESIZE + 3));
+                usertable.setIsSuspended(resultSet.getBoolean(notificationService.POPULATESIZE + 4));
+                usertable.setProfilePicturePath(resultSet.getString(notificationService.POPULATESIZE + 5));
+                usertable.setRiftTag(resultSet.getString(notificationService.POPULATESIZE + 6));
+                usertable.setRifteeRating(resultSet.getDouble(notificationService.POPULATESIZE + 7));
+                usertable.setRifterRating(resultSet.getDouble(notificationService.POPULATESIZE + 8));
+                usertable.setGender(resultSet.getBoolean(notificationService.POPULATESIZE + 9));
                 notification.setCreatorUsertable(usertable);
                 try {
                     RifterSession rifterSession = new RifterSession();
-                    rifterSession = rifterSessionService.populateRifterSession(resultSet, 17, "host");
+                    rifterSession = rifterSessionService.populateRifterSession(resultSet, notificationService.POPULATESIZE + 10, "host");
                     notification.setRifterSession(rifterSession);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -475,11 +479,14 @@ public class UsertableService {
             while (resultSet.next()) {
                 Notification notification = notificationService.populateNotification(resultSet, 1, "");
                 RifterSession rifterSession = new RifterSession();
-                rifterSession = rifterSessionService.populateRifterSession(resultSet, 8, "");
+                rifterSession = rifterSessionService.populateRifterSession(resultSet, notificationService.POPULATESIZE + 1, "");
                 notification.setRifterSession(rifterSession);
+                Game game = new Game();
+                game.setId(resultSet.getInt(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + 1));
+                game.setGame(resultSet.getString(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + 2));
                 Usertable usertable = new Usertable();
-                usertable.setRiftTag(resultSet.getString(8 + rifterSessionService.POPULATESIZE));
-                usertable.setRifterRating(resultSet.getDouble(9 + rifterSessionService.POPULATESIZE));
+                usertable.setRiftTag(resultSet.getString(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + gameService.POPULATESIZE + 1));
+                usertable.setRifterRating(resultSet.getDouble(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + gameService.POPULATESIZE + 2));
                 notification.setCreatorUsertable(usertable);
                 notifications.add(notification);
             }
@@ -492,8 +499,8 @@ public class UsertableService {
             while (resultSet.next()) {
                 Notification notification = notificationService.populateNotification(resultSet, 1, "");
                 Usertable usertable = new Usertable();
-                usertable.setRiftTag(resultSet.getString(8));
-                usertable.setRifterRating(resultSet.getDouble(9));
+                usertable.setRiftTag(resultSet.getString(notificationService.POPULATESIZE + 1));
+                usertable.setRifterRating(resultSet.getDouble(notificationService.POPULATESIZE + 2));
                 notification.setCreatorUsertable(usertable);
                 notifications.add(notification);
             }
