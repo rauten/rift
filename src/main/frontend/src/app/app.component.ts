@@ -30,6 +30,7 @@ export class AppComponent {
               "braintreeId": braintreeId,
               "email": data.email
             };
+            console.log(riftData);
             userprofileService.createUser(riftData);
           }
         );
