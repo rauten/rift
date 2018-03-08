@@ -27,8 +27,10 @@ export class AppComponent {
               "lastName": data.lastName,
               "riftTag": data.riftTag,
               "auth0Token": data.auth0Token,
-              "braintreeId": braintreeId
+              "braintreeId": braintreeId,
+              "email": data.email
             };
+            console.log(riftData);
             userprofileService.createUser(riftData);
           }
         );

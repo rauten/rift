@@ -55,6 +55,7 @@ export class UserprofileComponent implements OnInit {
 
   }
 
+
   getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
     this.userProfileService.getUser(riftTag).subscribe(
@@ -82,6 +83,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.riftTag = resBody.riftTag;
           this.currentUser.gender = resBody.gender;
           this.currentUser.bio = resBody.bio;
+          this.currentUser.email = resBody.email;
           this.currentUser.id = resBody.id;
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;

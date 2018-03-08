@@ -4,8 +4,12 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 public class Usertable {
 
     @JsonView(Views.UsertableId.class)

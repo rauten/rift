@@ -5,4 +5,6 @@ import {Userprofile} from "../models/userprofile";
 export class Globals {
   role: string = 'test';
   loggedInUser: Userprofile = new Userprofile();
+  unseenNotifications: number = 0;
+  previousNumNotifications: number = 0;
 }

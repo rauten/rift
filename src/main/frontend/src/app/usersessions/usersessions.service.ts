@@ -113,5 +113,4 @@ export class UsersessionsService {
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
-
 }

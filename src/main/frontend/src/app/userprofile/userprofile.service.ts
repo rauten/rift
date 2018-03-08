@@ -24,14 +24,6 @@ export class UserprofileService {
         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  // getUser(riftTag: string): Observable<Userprofile> {
-  //   // console.log("running getUser: " + riftTag);
-  //   let url = "/api/user/" + riftTag + "/profilePage";
-  //   return Observable.interval(2000)
-  //     .switchMap(() => this.http.get(url))
-  //     .map((res:Response) => res.json());
-  // }
-
   getUserId(riftTag: string): Observable<Userprofile> {
     // console.log("running getUserId");
     return this.http.get("/api/user/" + riftTag + "/id")
@@ -43,11 +35,31 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  getUserNotifications(riftTag: string): Observable<Userprofile> {
+    return this.http.get("/api/notification/" + riftTag + "/notifications")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error: any) => Observable.throw(error.json().error || "Server Error"))
+  }
+
+  //**
+  //This one is the polling that will check every 2 seconds for backend changes
+  //**
+  // getUserNotifications(riftTag: string): Observable<Userprofile> {
+  //   console.log("Getting user's notifications");
+  //   let url = "/api/notification/" + riftTag + "/notifications";
+  //   return Observable.interval(2000)
+  //     .switchMap(() => this.http.get(url))
+  //     .map((res:Response) => res.json());
+  // }
+
   getUserBroadcastNotifications(riftTag: string): Observable<Userprofile> {
     return this.http.get("/api/notification/" + riftTag + "/broadcastNotifications")
       .map(
         (response: Response) => {
-          console.log(response.json());
           return response.json();
         }
       )
@@ -128,4 +140,10 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  sendConfirmationEmail(email) {
+    return this.http.put("/api/email/", email)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
 }

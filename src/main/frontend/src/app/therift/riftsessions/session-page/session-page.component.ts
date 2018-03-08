@@ -54,7 +54,6 @@ export class SessionPageComponent implements OnInit {
   getSessionById() {
     this.sessionPageService.getSessionById(this.id).subscribe(
       resBody => {
-        console.log(resBody);
         this.response = resBody;
         this.session.id = this.response.id;
         this.session.riftTag = this.response.usertable.riftTag;
@@ -115,7 +114,6 @@ export class SessionPageComponent implements OnInit {
     if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
       this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
     } else {
-      console.log("test: " + JSON.parse(localStorage.getItem("loggedInUserID")));
       this.userProfileService.getUserId(riftTag).subscribe(
         resBody => {
           this.loggedInUserId = resBody.id;

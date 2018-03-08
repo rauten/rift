@@ -26,7 +26,6 @@ export class FeedComponent implements OnInit {
     this.currentUser.feed = [];
     this.userProfileService.getUserBroadcastNotifications(riftTag).subscribe(
       resBody => {
-        console.log(resBody);
         for (var i = 0; i < resBody.length; i++) {
           var currFeed = resBody[i];
           var currNotification = new Activity();

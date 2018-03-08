@@ -177,11 +177,23 @@
             <version>3.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/postgresql/pljava-public -->
         <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>pljava-public</artifactId>
-            <version>1.0.0b4</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>5.0.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>1.4.3.RELEASE</version>
+        </dependency>
+
+        <!-- Java Mail API -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.3</version>
         </dependency>
 
 

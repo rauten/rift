@@ -15,8 +15,7 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.notification);
-    if(this.notification.notificationType == "gameRequest") {
+    if(this.notification.notificationType-2 != 0) {
       this.getSessionStatus(this.notification.creatorId, this.notification.sessionId);
     }
     if(this.notification.creatorProfilePic == "") {

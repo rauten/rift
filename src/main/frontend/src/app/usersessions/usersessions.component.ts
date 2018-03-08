@@ -10,6 +10,7 @@ import {CreateSessionComponent} from "./create-session/create-session.component"
 import {GAMES} from "../constants/games";
 import {CONSOLES} from "../constants/consoles";
 import {CalendarComponent} from "ap-angular2-fullcalendar";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-usersessions',
@@ -23,18 +24,23 @@ export class UsersessionsComponent implements OnInit {
   consoles: any;
   profile: any;
   @ViewChild(CalendarComponent) myCalendar: CalendarComponent;
-  calendarOptions: Object = {
-    height: '600px',
-    fixedWeekCount : false,
-    editable: true,
-    eventLimit: true, // allow "more" link when too many events
-    events: [
-    ]
-  };
+  calendarOptions: any;
 
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog, private router: Router) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
+    this.router = router;
+
+    this.calendarOptions = {
+      height: '600px',
+      fixedWeekCount : false,
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [],
+      eventClick: function(event) {
+        router.navigate(["../session", event.sessionId]);
+      }
+    };
   }
 
   ngOnInit() {
@@ -123,17 +129,20 @@ export class UsersessionsComponent implements OnInit {
   }
 
   renderCalendar() {
+    this.myCalendar.fullCalendar("removeEvents");
     for (var i = 0; i < this.currentUser.sessions.length; i++) {
       var currSession = this.currentUser.sessions[i];
       if (currSession.type) {
         var newSession = {
           title: currSession.title,
+          sessionId: currSession.id,
           start: new Date(currSession.sessionTime).toISOString(),
           color: '#293e49'
         };
       } else {
         var newSession = {
           title: currSession.title,
+          sessionId: currSession.id,
           start: new Date(currSession.sessionTime).toISOString(),
           color: 'rgb(197, 44, 102)'
         };

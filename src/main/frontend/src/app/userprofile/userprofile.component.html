@@ -11,11 +11,17 @@
             </div>
             <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
             <h3>@{{currentUser.riftTag}}</h3>
+            <h3>{{currentUser.email}}</h3>
             <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
             <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
               [riftTag]="profile.nickname" class="userbtn">
               </app-follow-button>
+            </div>
+            <div>
+              <button (click)="sendConfirmationEmail()">
+                haha
+              </button>
             </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>
