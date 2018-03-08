@@ -140,4 +140,10 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  sendConfirmationEmail(email) {
+    return this.http.put("/api/email/", email)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe();
+  }
 }

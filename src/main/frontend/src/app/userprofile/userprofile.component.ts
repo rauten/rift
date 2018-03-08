@@ -55,6 +55,7 @@ export class UserprofileComponent implements OnInit {
 
   }
 
+
   getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
     this.userProfileService.getUser(riftTag).subscribe(

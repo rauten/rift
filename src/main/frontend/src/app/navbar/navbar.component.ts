@@ -43,14 +43,15 @@ export class NavbarComponent implements OnInit {
           this.globals.unseenNotifications = resBody.length-this.globals.unseenNotifications;
           this.numUnseen = this.globals.unseenNotifications;
           this.globals.previousNumNotifications = resBody.length;
-          console.log("num unseen: " + this.numUnseen);
         }
         this.currentUser.notifications = [];
         if(resBody.length > 0) {
-          for (var i = 0; i < resBody.length; i++) {
+          for (var i = resBody.length-1; i > -1; i--) {
             var notification = new Notification();
             notification.createdTime = resBody[i].createdTime;
             notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
+            notification.creatorEmail = resBody[i].creatorUsertable.email;
+            notification.creatorId = resBody[i].creatorUsertable.id;
             this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
             notification.notificationType = resBody[i].notificationType;
             notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];

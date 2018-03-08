@@ -18,6 +18,11 @@
               [riftTag]="profile.nickname" class="userbtn">
               </app-follow-button>
             </div>
+            <div>
+              <button (click)="sendConfirmationEmail()">
+                haha
+              </button>
+            </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>
 
