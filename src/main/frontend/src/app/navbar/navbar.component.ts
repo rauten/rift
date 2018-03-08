@@ -35,15 +35,15 @@ export class NavbarComponent implements OnInit {
     console.log("global unseen: " + this.globals.unseenNotifications);
   }
 
+  test() {
+    console.log('hello');
+  }
+
   getUserNotifications(riftTag: string) {
     console.log("Getting user notifications");
     this.userProfileService.getUserNotifications(riftTag).subscribe(
       resBody => {
-        if(resBody.length > this.globals.previousNumNotifications) {
-          this.globals.unseenNotifications = resBody.length-this.globals.unseenNotifications;
-          this.numUnseen = this.globals.unseenNotifications;
-          this.globals.previousNumNotifications = resBody.length;
-        }
+        console.log(resBody);
         this.currentUser.notifications = [];
         if(resBody.length > 0) {
           for (var i = resBody.length-1; i > -1; i--) {

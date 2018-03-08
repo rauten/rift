@@ -78,6 +78,7 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -96,7 +97,10 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getCurrentLoggedInUser(this.profile.nickname);
-        }
+        },
+      error => {
+          console.log(error.message);
+      }
     );
   }
 
