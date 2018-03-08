@@ -21,7 +21,7 @@ public class FollowingController {
     private UsertableService usertableService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/follow={id}")
-    public boolean followUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException {
+    public boolean followUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException, InterruptedException {
         Object[] res = followingService.isFollowing(riftTag, id);
         if (!(boolean)res[0]) {
             return followingService.follow((int)res[1], id);

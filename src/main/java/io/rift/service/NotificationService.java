@@ -31,6 +31,12 @@ public class NotificationService {
 
     public final Integer POPULATESIZE = 7;
 
+    volatile boolean isSubscribed = false;
+
+    public void setSubscribed(boolean isSubscribed) {
+        this.isSubscribed = isSubscribed;
+    }
+
     public List<Notification> populateNotifications(ResultSet resultSet, int startPoint, String info) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
         while (resultSet.next()) {

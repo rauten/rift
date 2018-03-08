@@ -177,6 +177,14 @@
             <version>3.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/postgresql/pljava-public -->
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>pljava-public</artifactId>
+            <version>1.0.0b4</version>
+        </dependency>
+
+
     </dependencies>
 
 

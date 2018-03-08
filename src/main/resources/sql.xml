@@ -73,10 +73,8 @@
     </getUserActivity>
 
     <getUserNotifications>
-        SELECT n.*, r.title
-        FROM notification n
-        JOIN riftergame r
-        ON n.session_id = r.id
+        SELECT *
+        FROM notification
         WHERE user_id = ?
     </getUserNotifications>
 
@@ -182,14 +180,16 @@
         JOIN riftergame r ON n.session_id = r.id
         JOIN game g ON g.id = r.game_id
         JOIN usertable u ON n.creator_id = u.id
-        WHERE notification_type = 2 OR notification_type = 1 AND user_id = ? AND notification_content is not null;
+        JOIN gamerequest ga ON  ga.host_id = u.id
+        WHERE notification_type = 1 AND ga.riftee_id = ? AND n.user_id is null AND ga.accepted != 0;
     </getSessionUpdateBroadcastsByUserId>
 
     <getSessionDeletionBroadcastsByUserId>
         SELECT n.*, u.rift_tag, u.rifter_rating
         FROM notification n
         JOIN usertable u ON n.creator_id = u.id
-        WHERE notification_type = 2 AND user_id = ? AND notification_content is not null;
+        JOIN gamerequest ga ON ga.host_id = u.id
+        WHERE notification_type = 2 AND ga.riftee_id = ? AND notification_content is not null AND n.user_id is null AND ga.accepted != 0;
     </getSessionDeletionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
@@ -574,15 +574,13 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            SELECT g.riftee_id, 1, r.title, r.id, current_timestamp, g.host_id
-            FROM riftergame r JOIN gamerequest g
-            ON g.session_id = r.id
-            WHERE session_id = NEW.id AND g.accepted != 0;
+            SELECT null, 1, null, r.id, current_timestamp, r.host_id
+            FROM riftergame r
+            WHERE r.id = NEW.id;
             RETURN NEW;
-
         END;
         $BODY$
-        LANGUAGE plpgsql;
+        LANGUAGE plpgsql
     -->
 
     <!--
@@ -591,16 +589,19 @@
         $BODY$
         DECLARE temp integer;
         BEGIN
-            IF NEW.accepted = 0 AND OLD.accepted = 1 THEN
+            IF NEW.accepted = 0 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, '1', null,
+                VALUES(NEW.riftee_id, 1, null,
                 OLD.session_id, current_timestamp, NEW.host_id);
             ELSIF NEW.accepted = 2 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, '0', null,
+                VALUES(NEW.riftee_id, 0, null,
                 NEW.session_id, current_timestamp, NEW.host_id);
+                INSERT INTO notification
+                (user_id, notification_type, notification_content, session_id, created_time, creator_id)
+                VALUES(null, 3, null, NEW.session_id, current_timestamp, NEW.riftee_id);
             END IF;
             RETURN NEW;
         END;
@@ -676,10 +677,9 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            SELECT g.riftee_id, 2, r.title, null, current_timestamp, g.host_id
-            FROM riftergame r JOIN gamerequest g
-            ON g.session_id = r.id
-            WHERE session_id = OLD.id AND g.accepted != 0;
+            SELECT null, 2, r.title, null, current_timestamp, r.host_id
+            FROM riftergame r
+            WHERE r.id = OLD.id;
 
             DELETE FROM notification
             WHERE session_id = OLD.id;
@@ -696,6 +696,27 @@
         EXECUTE PROCEDURE create_session_deletion_notification();
 
      -->
+
+    <!--
+
+    SELECT id, user_id, notification_type, notification_content, session_id, created_time, creator_id, title
+    FROM  (
+        SELECT *, row_number() over(partition by id order by title) as row
+        FROM (
+            SELECT n.*, r.title
+            FROM notification n
+            JOIN riftergame r
+            ON n.session_id = r.id
+            WHERE user_id = 77
+            UNION ALL
+            SELECT n.*, null
+            FROM notification n
+            WHERE user_id = 77) AS a
+        ) as b
+    WHERE row = 1
+
+    -->
+
 
 
 </Queries>

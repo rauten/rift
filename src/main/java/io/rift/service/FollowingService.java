@@ -1,13 +1,18 @@
 package io.rift.service;
 
 
+import io.rift.config.PollingConfig;
+import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Service
 public class FollowingService {
@@ -17,6 +22,9 @@ public class FollowingService {
 
     @Autowired
     private UsertableService usertableService;
+
+    @Autowired
+    public PollingConfig pollingConfig;
 
     private final String isFollowing = "isFollowing";
     private final String follow = "follow";
@@ -50,12 +58,26 @@ public class FollowingService {
         return res;
     }
 
-    public boolean follow(int followerId, int followingId) throws SQLException {
+    public boolean follow(int followerId, int followingId) throws SQLException, InterruptedException {
         Object[] args = new Object[3];
         args[0] = followerId;
         args[1] = followingId;
         args[2] = true;
-        return riftRepository.doInsert(follow, args);
+        boolean bool = riftRepository.doInsert(follow, args);
+        if (bool) {
+            Timestamp timestamp = new Timestamp(1);
+            timestamp.setTime(timestamp.getNanos());
+            Notification notification = new Notification();
+            notification.setId(null);
+            notification.setUserId(followingId);
+            notification.setNotificationType(2);
+            notification.setNotificationContent(null);
+            notification.setSessionId(null);
+            notification.setCreatedTime(timestamp);
+            notification.setCreatorId(followerId);
+            pollingConfig.theQueue().put(notification);
+        }
+        return bool;
     }
 
     public boolean unfollow(int followerId, int followingId) throws SQLException {

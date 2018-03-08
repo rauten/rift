@@ -32,6 +32,7 @@ public class ConnectionService {
             System.out.println("**********\nConnecting to database");
 
             connection = swaggerConfig.dataSource().getConnection();
+
         } catch (SQLException e) {
             System.out.println("SQLException io.swagger.DAOs.AndrewDAO.java line 32:\n " + e.getMessage());
         }
