@@ -16,10 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Service
 public class PostgresListenService {
 
-    PGConnection connection;
-
     @Autowired
-    private ConnectionService connectionService;
+    private PGConnectionService pgConnectionService;
 
     @Autowired
     private PollingConfig pollingConfig;
@@ -73,10 +71,10 @@ public class PostgresListenService {
             System.out.println("Connection made");
 
             // add the callback listener created earlier to the connection
-            connectionService.pgConnection.addNotificationListener(listener);
+            pgConnectionService.pgConnection.addNotificationListener(listener);
 
             // Tell Postgres to send NOTIFY q_event to our connection and listener
-            Statement statement = connectionService.pgConnection.createStatement();
+            Statement statement = pgConnectionService.pgConnection.createStatement();
             String queryBuilder = "LISTEN q_event" + id;
             statement.execute(queryBuilder);
             statement.close();

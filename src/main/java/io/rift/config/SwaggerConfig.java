@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -21,27 +22,10 @@ import java.util.Properties;
 public class SwaggerConfig {
 
     @Bean
+    @Primary
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
-    }
-
-    @Bean
-    public PGDataSource pgDataSource() {
-
-        String DBHost = "rds-rift.ca8aw0350uex.us-east-1.rds.amazonaws.com";
-        String DBName = "Rift_Backend";
-        String DBUserName = "riley_rift";
-        String DBPassword = "RMARiftAWS2016!";
-
-        PGDataSource dataSource = new PGDataSource();
-        dataSource.setHost(DBHost);
-        dataSource.setPort(5432);
-        dataSource.setDatabase(DBName);
-        dataSource.setUser(DBUserName);
-        dataSource.setPassword(DBPassword);
-
-        return dataSource;
     }
 
     @Bean
