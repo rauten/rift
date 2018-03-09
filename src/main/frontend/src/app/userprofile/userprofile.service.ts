@@ -24,6 +24,16 @@ export class UserprofileService {
         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  getUserRiftTag(id: number): Observable<Userprofile> {
+    return this.http.get("/api/user/" + id +"/riftTag")
+      .map(
+      (response: Response) => {
+        return response.json();
+      }
+    )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   getUserId(riftTag: string): Observable<Userprofile> {
     // console.log("running getUserId");
     return this.http.get("/api/user/" + riftTag + "/id")

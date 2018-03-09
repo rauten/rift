@@ -42,7 +42,7 @@ public class PostgresListenService {
                 System.out.println("Caught trigger");
 
                 try {
-                    put("ProcessId: " + processId + " Channel: " + channelName + " Payload: " + payload);
+                    put(payload);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
