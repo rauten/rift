@@ -13,17 +13,17 @@ export class NotificationsService {
   constructor(private http: Http) {
   }
 
-  pollNotifications() {
-    this.startUrl = "/api/matchupdate/begin";
+  pollNotifications(riftId) {
+    this.startUrl = "/api/matchupdate/begin/";
     this.pollUrl = "/api/matchupdate/deferred";
-    this.start(this.startUrl, this.pollUrl);
+    this.start(this.startUrl, this.pollUrl, riftId);
   }
 
-  start(start, poll) {
+  start(start, poll, riftId) {
     console.log("Starting poll");
     this.startUrl = start;
     this.pollUrl = poll;
-    this.http.get(this.startUrl).subscribe(
+    this.http.get(this.startUrl + riftId).subscribe(
       success => {
         console.log("Game on...");
         setInterval(this.getUpdate(),500);

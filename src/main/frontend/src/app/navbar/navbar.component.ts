@@ -15,9 +15,12 @@ import {NotificationsService} from "../userprofile/notifications.service";
 })
 export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
+  loggedInUserId: number;
+  profile: any;
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService) {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
   getCurrentUser() {
@@ -27,8 +30,16 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     // if(JSON.parse(localStorage.getItem('profile'))) {
     //   this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
-    //   this.notificationService.pollNotifications();
+      this.pollNotifications(this.profile.nickname);
     // }
+  }
+
+  pollNotifications(riftTag) {
+    this.userProfileService.getUserId(riftTag).subscribe(
+      resBody => {
+        this.notificationService.pollNotifications(resBody.id)
+      }
+    )
   }
 
   getUserNotifications(riftTag: string) {
