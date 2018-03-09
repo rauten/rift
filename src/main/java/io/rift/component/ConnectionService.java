@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.component;
 
 
 import io.rift.config.SwaggerConfig;

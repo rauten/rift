@@ -2,19 +2,12 @@ package io.rift.service;
 
 
 import io.rift.model.UserRating;
-import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
-import io.rift.repository.UserRatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.IntrospectionException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 

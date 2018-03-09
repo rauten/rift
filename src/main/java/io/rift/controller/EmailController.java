@@ -1,14 +1,8 @@
 package io.rift.controller;
 
-import io.rift.config.EmailConfig;
 import io.rift.model.Email;
-import io.rift.model.Usertable;
-import io.rift.service.EmailService;
+import io.rift.feature.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:4200")

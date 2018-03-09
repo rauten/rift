@@ -3,7 +3,7 @@ package io.rift.controller;
 import com.braintreegateway.CreditCard;
 import com.braintreegateway.Customer;
 import com.braintreegateway.Request;
-import io.rift.service.BraintreeService;
+import io.rift.feature.BraintreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

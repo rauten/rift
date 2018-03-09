@@ -2,7 +2,7 @@ package io.rift.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Views;
-import io.rift.service.SearchService;
+import io.rift.component.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

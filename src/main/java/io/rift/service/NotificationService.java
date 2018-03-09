@@ -1,7 +1,6 @@
 package io.rift.service;
 
 import io.rift.model.Notification;
-import io.rift.repository.NotificationRepository;
 import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +12,6 @@ import java.util.List;
 
 @Service
 public class NotificationService {
-
-    @Autowired
-    private NotificationRepository notificationRepository;
 
     @Autowired
     private RifterSessionService rifterSessionService;

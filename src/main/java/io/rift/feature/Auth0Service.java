@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.feature;
 
 import com.auth0.net.CustomRequest;
 import com.auth0.net.Request;

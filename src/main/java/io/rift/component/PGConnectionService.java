@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.component;
 
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.jdbc.PGDataSource;

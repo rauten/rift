@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.feature;
 
 import com.braintreegateway.*;
 import com.braintreegateway.Customer;

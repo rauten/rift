@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.feature;
 
 import io.rift.config.EmailConfig;
 import io.rift.model.Email;

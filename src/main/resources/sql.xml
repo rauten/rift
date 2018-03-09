@@ -7,6 +7,10 @@
         SELECT id FROM usertable WHERE rift_tag = ?;
     </getRiftIdByRiftTag>
 
+    <getRiftTagByRiftId>
+        SELECT rift_tag FROM usertable WHERE id = ?;
+    </getRiftTagByRiftId>
+
     <getUserById>
         SELECT * FROM usertable WHERE id = ?;
     </getUserById>
@@ -489,6 +493,30 @@
         DELETE FROM gamerequest
         WHERE riftee_id = ? AND session_id = ?
     </deleteSessionRequest>
+
+    <fileComplaint>
+        INSERT INTO usercomplaint
+        (rift_id, submitter_id, complaint)
+        VALUES(?, ?, ?);
+    </fileComplaint>
+
+    <getUserComplaintsByUserId>
+        SELECT *
+        FROM usercomplaint
+        WHERE rift_id = ?;
+    </getUserComplaintsByUserId>
+
+    <getNumberOfComplaintsByUserId>
+        SELECT COUNT(*)
+        FROM usercomplaint
+        WHERE rift_id = ?;
+    </getNumberOfComplaintsByUserId>
+
+    <getUserComplaintsBySubmitterId>
+        SELECT *
+        FROM usercomplaint
+        WHERE submitter_id = ?;
+    </getUserComplaintsBySubmitterId>
 
 
     <!--

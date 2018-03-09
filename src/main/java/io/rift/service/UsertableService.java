@@ -4,46 +4,36 @@ package io.rift.service;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.google.common.base.CaseFormat;
+import io.rift.component.ConnectionService;
 import io.rift.model.*;
 import io.rift.repository.RiftRepository;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import org.apache.bcel.classfile.Field;
 
-import javax.imageio.ImageIO;
-import javax.mail.Session;
-import javax.sql.rowset.CachedRowSet;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
-
-import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
 
 
 @Service
@@ -75,6 +65,7 @@ public class UsertableService {
     private final String getUserById = "getUserById";
     private final String getUserByRiftTag = "getUserByRiftTag";
     private final String getRiftIdByRiftTag = "getRiftIdByRiftTag";
+    private final String getRiftTagByRiftId = "getRiftTagByRiftId";
 
     private final String getNumberGamesPlayedByUserId = "getNumberGamesPlayedByUserId";
     private final String getNumberFollowing = "getNumberFollowingById";
@@ -148,6 +139,16 @@ public class UsertableService {
         ResultSet resultSet = riftRepository.doQuery(getRiftIdByRiftTag, args);
         if (resultSet.next()) {
             return resultSet.getInt(1);
+        }
+        return null;
+    }
+
+    public String getRiftTagByRiftId(Integer riftId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftId;
+        ResultSet resultSet = riftRepository.doQuery(getRiftTagByRiftId, args);
+        if (resultSet.next()) {
+            return resultSet.getString(1);
         }
         return null;
     }

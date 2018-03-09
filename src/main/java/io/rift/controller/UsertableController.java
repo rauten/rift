@@ -42,6 +42,13 @@ public class UsertableController {
         return tagMap;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/riftTag")
+    public Map<String, String> getIdByRiftTag(@PathVariable Integer id) throws SQLException {
+        Map<String, String> idMap = new HashMap<>();
+        idMap.put("riftTag", usertableService.getRiftTagByRiftId(id));
+        return idMap;
+    }
+
     /**
      * The result of a Usertable NATURAL JOIN Notification query
      * @param id The user id we want to get information for
