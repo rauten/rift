@@ -6,6 +6,7 @@ import {UserprofileService} from "../userprofile/userprofile.service";
 import {Notification} from "../models/notification";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {Globals} from "../global/globals";
+import {NotificationsService} from "../userprofile/notifications.service";
 
 @Component({
   selector: 'app-navbar',
@@ -14,10 +15,9 @@ import {Globals} from "../global/globals";
 })
 export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
-  numUnseen: number;
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
-  private globals: Globals) {
+  private notificationService: NotificationsService) {
   }
 
   getCurrentUser() {
@@ -25,18 +25,10 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem('profile'))) {
-      this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
-    }
-  }
-
-  clearUnseen() {
-    this.globals.unseenNotifications = 0;
-    console.log("global unseen: " + this.globals.unseenNotifications);
-  }
-
-  test() {
-    console.log('hello');
+    // if(JSON.parse(localStorage.getItem('profile'))) {
+    //   this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
+      this.notificationService.pollNotifications();
+    // }
   }
 
   getUserNotifications(riftTag: string) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 @Controller
+@RequestMapping("/api")
 public class DeferredNotificationController {
 
     @Autowired

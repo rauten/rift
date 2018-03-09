@@ -19,7 +19,7 @@
         <li>
           <a [routerLink]="['user', getCurrentUser().nickname]" *ngIf="auth.isAuthenticated()">Profile</a>
         </li>
-        <li class="dropdown" *ngIf="auth.isAuthenticated()" (click)="test()">
+        <li class="dropdown" *ngIf="auth.isAuthenticated()">
           <div class="btn-group" dropdown>
             <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
               <span class="glyphicon glyphicon-bell"></span>

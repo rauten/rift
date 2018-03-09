@@ -88,6 +88,7 @@ import { NgxBraintreeModule } from 'ngx-braintree';
 import { FeedComponent } from './feed/feed.component';
 import { FeedCardComponent } from './components/feed-card/feed-card.component';
 import {PaymentService} from "./userprofile/payment.service";
+import {NotificationsService} from "./userprofile/notifications.service";
 
 
 
@@ -171,7 +172,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService, UpdateSessionService, CreateSessionService, PaymentService,
+    UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
