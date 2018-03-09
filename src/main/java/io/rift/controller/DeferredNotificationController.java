@@ -14,6 +14,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.concurrent.BlockingQueue;
 
 @Controller
+@RequestMapping("/api")
 public class DeferredNotificationController {
 
     @Autowired

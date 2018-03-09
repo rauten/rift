@@ -21,7 +21,6 @@ export class UserRatingComponent implements OnInit {
   ratedUserRiftTag: string;
   account_type_str: string;
   account_type: boolean;
-
   constructor(private userRatingService: UserRatingService, private userProfileService: UserprofileService,
   private route: ActivatedRoute, @Inject(MAT_DIALOG_DATA) public data) {
     this.ratedUserRiftTag = data.ratedUserRiftTag;

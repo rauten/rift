@@ -18,6 +18,7 @@ import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
+import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -78,6 +79,7 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
+          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -96,7 +98,10 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getCurrentLoggedInUser(this.profile.nickname);
-        }
+        },
+      error => {
+          console.log(error.message);
+      }
     );
   }
 
@@ -289,7 +294,12 @@ export class UserprofileComponent implements OnInit {
         }
       }
     )
+  }
 
-
+  fileAComplaint() {
+    this.dialog.open(FileAComplaintComponent, {
+      height: '450px',
+      width: '600px',
+    })
   }
 }

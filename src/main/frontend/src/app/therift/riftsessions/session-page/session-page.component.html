@@ -53,8 +53,14 @@
                 </tr>
               </thead>
               <tr *ngFor="let riftee of session.riftees">
-                <td class="profilepicturehere">profile picture</td>
-                <td>{{riftee.firstName}} {{riftee.lastName}}</td>
+                <td class="profilepicturehere">
+                  <img src="{{riftee.profilePic}}" class="profilePic">
+                </td>
+                <td>
+                  <a [routerLink]="['../../user/', riftee.riftTag]">
+                  {{riftee.firstName}} {{riftee.lastName}}
+                  </a>
+                </td>
                 <td>{{riftee.riftTag}}</td>
                 <td class="text-center">
                   <app-rating [rating]="riftee.rifteeRating" [readonly]="true"></app-rating>
