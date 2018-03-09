@@ -23,10 +23,16 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("gordonlimusic@gmail.com");
         message.setTo(email.getTo());
-        message.setSubject(email.getSubject());
+        message.setSubject(getEmailSubject(email));
         message.setText(email.getMessage());
         mailSender.send(message);
         return true;
 
+    }
+
+    String getEmailSubject(Email email) {
+        String subject =
+                "Hello you are scheduled to play with " + email.getRiftTag();
+        return subject;
     }
 }

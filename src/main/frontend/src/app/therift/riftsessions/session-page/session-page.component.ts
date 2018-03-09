@@ -94,6 +94,7 @@ export class SessionPageComponent implements OnInit {
       riftee.lastName = player.lastName;
       riftee.riftTag = player.riftTag;
       riftee.rifteeRating = player.rifteeRating;
+      this.getUserProfilePicture(riftee.riftTag, riftee);
       this.session.riftees.push(riftee);
     }
   }
@@ -120,6 +121,19 @@ export class SessionPageComponent implements OnInit {
         }
       )
     }
+  }
+
+  getUserProfilePicture(riftTag: string, user: Userprofile) {
+    console.log("Getting user's profile picture");
+    this.userProfileService.getProfilePicture(riftTag).subscribe(
+      resBody => {
+        if (resBody.image == "") {
+          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
+        } else {
+          user.profilePic = resBody.image;
+        }
+      }
+    );
   }
 
   openDialog() {

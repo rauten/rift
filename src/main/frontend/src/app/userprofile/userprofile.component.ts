@@ -18,6 +18,7 @@ import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
+import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -293,7 +294,12 @@ export class UserprofileComponent implements OnInit {
         }
       }
     )
+  }
 
-
+  fileAComplaint() {
+    this.dialog.open(FileAComplaintComponent, {
+      height: '450px',
+      width: '600px',
+    })
   }
 }

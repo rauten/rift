@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     // if(JSON.parse(localStorage.getItem('profile'))) {
     //   this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
-      this.notificationService.pollNotifications();
+    //   this.notificationService.pollNotifications();
     // }
   }
 

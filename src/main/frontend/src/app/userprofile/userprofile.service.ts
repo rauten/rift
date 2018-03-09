@@ -77,7 +77,7 @@ export class UserprofileService {
   }
 
   followUser(riftTag: string, id: number) {
-    // console.log("running followUser");
+    console.log("Followed " + riftTag);
     return this.http.get("/api/user/" + riftTag + "/follow=" + id)
       .map(
         (response: Response) => {
@@ -88,7 +88,7 @@ export class UserprofileService {
   }
 
   unfollowUser(riftTag: string, id: number) {
-    // console.log("running unfollowUser");
+    console.log("Unfollowed " + riftTag);
     return this.http.get("/api/user/" + riftTag + "/unfollow=" + id)
       .map(
         (response: Response) => {

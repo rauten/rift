@@ -18,17 +18,15 @@
               [riftTag]="profile.nickname" class="userbtn">
               </app-follow-button>
             </div>
-            <div>
-              <button (click)="sendConfirmationEmail()">
-                haha
-              </button>
-            </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="openDialog()" type="button" class="btn-primary">Update your Info</button>
-
             </div>
             <div id="rate_user_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>
+            </div>
+            <br>
+            <div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
+              <button (click)="fileAComplaint()" type="button" class="btn-primary">File A Complaint</button>
             </div>
             <alert type="danger" *ngIf="ratingStatus == 0">
               Haven't played with {{currentUser.riftTag}} in past 30 days
