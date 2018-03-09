@@ -3,6 +3,9 @@ import { Userprofile } from "../models/userprofile";
 import {Http, RequestOptions, Response, Headers} from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
+import {Notification} from "../models/notification";
+import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+
 
 @Injectable()
 export class NotificationsService {
@@ -13,20 +16,20 @@ export class NotificationsService {
   constructor(private http: Http) {
   }
 
-  pollNotifications(riftId) {
+  pollNotifications(riftId, notifications) {
     this.startUrl = "/api/matchupdate/begin/";
     this.pollUrl = "/api/matchupdate/deferred";
-    this.start(this.startUrl, this.pollUrl, riftId);
+    this.start(this.startUrl, this.pollUrl, riftId, notifications);
   }
 
-  start(start, poll, riftId) {
+  start(start, poll, riftId, notifications) {
     console.log("Starting poll");
     this.startUrl = start;
     this.pollUrl = poll;
     this.http.get(this.startUrl + riftId).subscribe(
       success => {
         console.log("Game on...");
-        setInterval(this.getUpdate(),500);
+        setInterval(this.getUpdate(notifications),500);
       },
       error => {
         console.log("error");
@@ -34,33 +37,32 @@ export class NotificationsService {
     )
   }
 
-  getUpdate() {
+  getUpdate(notifications) {
     console.log("Okay let's go...");
     this.http.get(this.pollUrl).subscribe(
       success => {
-        console.log(success);
         console.log("Received a new notification");
-        let update = getUpdate(success);
-        console.log(update);
+        console.log(JSON.parse(success["_body"]).data);
+        let data = JSON.parse(success["_body"]).data;
+        console.log(data.notification_type);
+        let notification = getNotification(data);
+        notifications.unshift(notification);
+        this.getUpdate(notifications);
       },
       error => {
         console.log("error, trying again");
-        this.getUpdate();
+        this.getUpdate(notifications);
       }
     );
 
-    // .map(
-      //   (response: Response) => {
-      //     console.log("Received a new notification");
-      //     let update = getUpdate(response);
-      //     console.log(update);
-      //   }
-      // )
-      // .catch((error: any) => Observable.throw(error.json().error || "Server Error"))
-
-    function getUpdate(notification) {
-      console.log(notification);
-      return notification;
+    function getNotification(notification) {
+      let currNotification = new Notification();
+      currNotification.notificationContent = NOTIFICATION_CONTENT[notification.notification_type];
+      currNotification.creatorId = notification.creator_id;
+      currNotification.userId = notification.user_id;
+      currNotification.createdTime = notification.created_time;
+      currNotification.notificationType = notification.notification_type;
+      return currNotification;
     }
   }
 }

@@ -18,6 +18,8 @@ export class NavbarComponent implements OnInit {
   loggedInUserId: number;
   profile: any;
 
+  test: String[] = [];
+
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
@@ -37,7 +39,7 @@ export class NavbarComponent implements OnInit {
   pollNotifications(riftTag) {
     this.userProfileService.getUserId(riftTag).subscribe(
       resBody => {
-        this.notificationService.pollNotifications(resBody.id)
+        this.notificationService.pollNotifications(resBody.id, this.currentUser.notifications);
       }
     )
   }
