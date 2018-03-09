@@ -1,11 +1,9 @@
 package io.rift.service;
 
+import io.rift.component.ShutdownService;
 import io.rift.config.Hook;
 import io.rift.config.PollingConfig;
-import io.rift.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 

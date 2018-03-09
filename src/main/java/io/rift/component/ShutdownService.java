@@ -1,4 +1,4 @@
-package io.rift.service;
+package io.rift.component;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.rift.config.Hook;

@@ -1,13 +1,9 @@
 package io.rift.repository;
 
-import io.rift.model.Usertable;
-import io.rift.service.ConnectionService;
+import io.rift.component.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.rowset.CachedRowSet;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

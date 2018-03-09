@@ -1,6 +1,7 @@
-package io.rift.service;
+package io.rift.component;
 
 import io.rift.repository.RiftRepository;
+import io.rift.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
