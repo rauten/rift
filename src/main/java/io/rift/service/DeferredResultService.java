@@ -58,7 +58,11 @@ public class DeferredResultService implements Runnable {
         while (hook.keepRunning()) {
             try {
                 DeferredResult<String> result = resultQueue.take();
+                System.out.println("Size of queue before: " + pollingConfig.theQueue().size());
                 String notification = pollingConfig.theQueue().take();
+                System.out.println("Size of queue after: " + pollingConfig.theQueue().size());
+
+
 
                 result.setResult(notification);
                 //hook.shutdown();
@@ -72,7 +76,8 @@ public class DeferredResultService implements Runnable {
 
     public void getUpdate(DeferredResult<String> result) {
         resultQueue.add(result);
-        System.out.println("Size of queue:" + pollingConfig.theQueue().size());
+        System.out.println("Size of queue at API call: " + pollingConfig.theQueue().size());
+
     }
 
 }
