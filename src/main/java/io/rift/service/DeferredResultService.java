@@ -21,7 +21,7 @@ public class DeferredResultService implements Runnable {
 
     private Thread thread;
 
-    private final BlockingQueue<DeferredResult<Notification>> resultQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<DeferredResult<String>> resultQueue = new LinkedBlockingQueue<>();
 
     @Autowired
     private NotificationService notificationService;
@@ -34,6 +34,7 @@ public class DeferredResultService implements Runnable {
 
     public void subscribe() {
         System.out.println("Starting server");
+        System.out.println("Subscribe: " + this.pollingConfig);
         startThread();
         notificationService.isSubscribed = true;
         System.out.println(notificationService.isSubscribed);
@@ -58,8 +59,8 @@ public class DeferredResultService implements Runnable {
     public void run() {
         while (hook.keepRunning()) {
             try {
-                DeferredResult<Notification> result = resultQueue.take();
-                Notification notification = pollingConfig.theQueue().take();
+                DeferredResult<String> result = resultQueue.take();
+                String notification = pollingConfig.theQueue().take();
 
                 result.setResult(notification);
                 //hook.shutdown();
@@ -71,8 +72,9 @@ public class DeferredResultService implements Runnable {
         System.out.println("DeferredResultService - Thread ending");
     }
 
-    public void getUpdate(DeferredResult<Notification> result) {
+    public void getUpdate(DeferredResult<String> result) {
         resultQueue.add(result);
+        System.out.println("Size of queue:" + pollingConfig.theQueue().size());
     }
 
 }

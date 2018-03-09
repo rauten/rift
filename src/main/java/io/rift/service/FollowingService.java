@@ -58,25 +58,12 @@ public class FollowingService {
         return res;
     }
 
-    public boolean follow(int followerId, int followingId) throws SQLException, InterruptedException {
+    public boolean follow(int followerId, int followingId) throws SQLException {
         Object[] args = new Object[3];
         args[0] = followerId;
         args[1] = followingId;
         args[2] = true;
         boolean bool = riftRepository.doInsert(follow, args);
-        if (bool) {
-            Timestamp timestamp = new Timestamp(1);
-            timestamp.setTime(timestamp.getNanos());
-            Notification notification = new Notification();
-            notification.setId(null);
-            notification.setUserId(followingId);
-            notification.setNotificationType(2);
-            notification.setNotificationContent(null);
-            notification.setSessionId(null);
-            notification.setCreatedTime(timestamp);
-            notification.setCreatorId(followerId);
-            pollingConfig.theQueue().put(notification);
-        }
         return bool;
     }
 

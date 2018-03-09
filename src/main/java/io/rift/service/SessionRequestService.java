@@ -2,6 +2,8 @@ package io.rift.service;
 
 
 import com.google.common.base.CaseFormat;
+import io.rift.config.PollingConfig;
+import io.rift.model.Notification;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
@@ -33,6 +35,9 @@ public class SessionRequestService {
     private RifterSessionService rifterSessionService;
 
     @Autowired UsertableService usertableService;
+
+    @Autowired
+    public PollingConfig pollingConfig;
 
     @Autowired
     private RiftRepository riftRepository;
@@ -118,10 +123,11 @@ public class SessionRequestService {
 
     public Boolean createSessionRequest(SessionRequest sessionRequest) throws SQLException {
 
+        boolean success = false;
         if (!riftRepository.doQuery(getGameRequestBySessionAndRifteeId, new Object[] {sessionRequest.getRifteeId(),
                 sessionRequest.getSessionId()}).next()) {
 
-            return riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
+            success = riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
                     sessionRequest.getSessionId(), sessionRequest.getAccepted(), sessionRequest.getHostId()});
         }
         return false;
@@ -138,6 +144,7 @@ public class SessionRequestService {
         Field[] fields = javaClass.getFields();
         List<Object> args = new ArrayList<>();
         boolean didAdd = false;
+        boolean success = false;
         for (int i = 0; i < POPULATESIZE; i++) {
             String[] properties = fields[i].toString().split(" ");
             String attribute = properties[2];
@@ -172,7 +179,7 @@ public class SessionRequestService {
             query.append(updateSessionRequestEnd);
             args.add(rifteeId);
             args.add(sessionId);
-            return riftRepository.doUpdate(query, args);
+            success = riftRepository.doUpdate(query, args);
         }
         return true;
     }

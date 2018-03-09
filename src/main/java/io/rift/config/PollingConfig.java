@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PollingConfig {
 
     @Bean
-    public BlockingQueue<Notification> theQueue() {
+    public BlockingQueue<String> theQueue() {
         return new LinkedBlockingQueue<>();
     }
 

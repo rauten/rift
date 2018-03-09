@@ -630,7 +630,6 @@ public class UsertableService {
             String byteStr = "data:image/png;base64," + new String(base64.encode(bytes), "UTF-8");
             return byteStr;
         } catch (Exception e) {
-            e.printStackTrace();
             return "";
         }
     }
