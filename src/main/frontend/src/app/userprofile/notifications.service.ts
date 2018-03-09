@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
 import {Notification} from "../models/notification";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+import {UserprofileService} from "./userprofile.service";
 
 
 @Injectable()
