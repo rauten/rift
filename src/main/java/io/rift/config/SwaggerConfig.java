@@ -1,6 +1,8 @@
 package io.rift.config;
 
 
+import com.impossibl.postgres.api.jdbc.PGConnection;
+import com.impossibl.postgres.jdbc.PGDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,24 @@ public class SwaggerConfig {
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public PGDataSource pgDataSource() {
+
+        String DBHost = "rds-rift.ca8aw0350uex.us-east-1.rds.amazonaws.com";
+        String DBName = "Rift_Backend";
+        String DBUserName = "riley_rift";
+        String DBPassword = "RMARiftAWS2016!";
+
+        PGDataSource dataSource = new PGDataSource();
+        dataSource.setHost(DBHost);
+        dataSource.setPort(5432);
+        dataSource.setDatabase(DBName);
+        dataSource.setUser(DBUserName);
+        dataSource.setPassword(DBPassword);
+
+        return dataSource;
     }
 
     @Bean

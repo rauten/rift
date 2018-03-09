@@ -1,6 +1,8 @@
 package io.rift.service;
 
 
+import com.impossibl.postgres.api.jdbc.PGConnection;
+import com.impossibl.postgres.jdbc.PGDataSource;
 import io.rift.config.SwaggerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class ConnectionService {
     @Autowired
     private SwaggerConfig swaggerConfig;
     public Connection connection;
+    public PGConnection pgConnection;
     private final String filename = "BOOT-INF/classes/sql.xml";
     public HashMap<String, PreparedStatement> queryDict;
 
@@ -32,6 +35,9 @@ public class ConnectionService {
             System.out.println("**********\nConnecting to database");
 
             connection = swaggerConfig.dataSource().getConnection();
+            PGConnection connection;
+            PGDataSource pgDataSource = swaggerConfig.pgDataSource();
+            connection = (PGConnection) pgDataSource.getConnection();
 
         } catch (SQLException e) {
             System.out.println("SQLException io.swagger.DAOs.AndrewDAO.java line 32:\n " + e.getMessage());

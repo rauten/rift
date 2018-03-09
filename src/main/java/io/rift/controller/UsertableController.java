@@ -238,7 +238,7 @@ public class UsertableController {
             usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
             usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
             usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
-            usertable.setNotificationList(usertableService.getUserNotifications(id));
+           // usertable.setNotificationList(usertableService.getUserNotifications(id));
             usertable.setBroadcastNotificationList(usertableService.getBroadcastNotifications(id, "Followers"));
             usertable.setCreatorActivityList(usertableService.getUserActivity(id, "session"));
             usertable.setNumberFollowing(usertableService.getNumberFollowing(id));

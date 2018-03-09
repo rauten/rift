@@ -2,12 +2,16 @@ package io.rift.controller;
 
 import io.rift.model.Notification;
 import io.rift.service.DeferredResultService;
+import io.rift.service.PostgresListenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.concurrent.BlockingQueue;
 
 @Controller
 @RequestMapping("/api")
@@ -16,17 +20,21 @@ public class DeferredNotificationController {
     @Autowired
     private DeferredResultService resultService;
 
-    @RequestMapping(value = "/matchupdate/begin", method = RequestMethod.GET)
+    @Autowired
+    private PostgresListenService postgresListenService;
+
+    @RequestMapping(value = "/matchupdate/begin/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String start() {
+    public String start(@PathVariable Integer id) {
         resultService.subscribe();
+        postgresListenService.init(id);
         return "OK";
     }
 
     @RequestMapping("/matchupdate/deferred")
     @ResponseBody
-    public DeferredResult<Notification> getUpdate() {
-        final DeferredResult<Notification> result = new DeferredResult<Notification>();
+    public DeferredResult<String> getUpdate() {
+        final DeferredResult<String> result = new DeferredResult<String>();
         resultService.getUpdate(result);
         return result;
     }
