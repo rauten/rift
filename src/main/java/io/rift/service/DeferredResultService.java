@@ -61,7 +61,7 @@ public class DeferredResultService implements Runnable {
                 String notification = pollingConfig.theQueue().take();
 
                 result.setResult(notification);
-                //hook.shutdown();
+                hook.shutdown();
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

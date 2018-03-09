@@ -27,10 +27,15 @@ export class NotificationsService {
     console.log("Starting poll");
     this.startUrl = start;
     this.pollUrl = poll;
+    this.allow = true;
     this.http.get(this.startUrl + riftId).subscribe(
       success => {
         console.log("Game on...");
-        setInterval(this.getUpdate(notifications),500);
+        if(this.allow) {
+          console.log("in if statemnet");
+          this.allow = false;
+          setInterval(this.getUpdate(notifications),2000);
+        }
       },
       error => {
         console.log("error");
@@ -45,7 +50,6 @@ export class NotificationsService {
         console.log("Received a new notification");
         console.log(JSON.parse(success["_body"]).data);
         let data = JSON.parse(success["_body"]).data;
-        console.log(data.notification_type);
         let notification = getNotification(data);
         notifications.unshift(notification);
         this.getUpdate(notifications);
