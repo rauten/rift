@@ -43,7 +43,7 @@ public class UsertableController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/riftTag")
-    public Map<String, String> getIdByRiftTag(@PathVariable Integer id) throws SQLException {
+    public Map<String, String> getRiftTagByRiftId(@PathVariable Integer id) throws SQLException {
         Map<String, String> idMap = new HashMap<>();
         idMap.put("riftTag", usertableService.getRiftTagByRiftId(id));
         return idMap;
