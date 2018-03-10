@@ -65,7 +65,7 @@ public class DeferredResultService implements Runnable {
 
 
                 result.setResult(notification);
-                hook.shutdown();
+                //hook.shutdown();
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
