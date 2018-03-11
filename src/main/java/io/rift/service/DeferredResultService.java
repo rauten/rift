@@ -46,6 +46,7 @@ public class DeferredResultService implements Runnable {
                 if (start) {
                     start = false;
                     thread = new Thread(this, "Notification");
+                    shutdownService.shutdown();
                     hook = shutdownService.createHook(thread);
                     thread.start();
                 }
@@ -61,9 +62,10 @@ public class DeferredResultService implements Runnable {
                 System.out.println("Size of queue before: " + pollingConfig.theQueue().size());
                 String notification = pollingConfig.theQueue().take();
                 System.out.println("Size of queue after: " + pollingConfig.theQueue().size());
+                System.out.println("Size of hook list: " + shutdownService.getHooks());
 
-
-
+                System.out.println("Id of notification returning: " + notification);
+                System.out.println();
                 result.setResult(notification);
                 //hook.shutdown();
 

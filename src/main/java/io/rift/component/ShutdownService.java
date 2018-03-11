@@ -17,11 +17,13 @@ public class ShutdownService {
         createShutdownHook();
     }
 
+
     @VisibleForTesting
     protected void createShutdownHook() {
         ShutdownDaemonHook shutdownHook = new ShutdownDaemonHook();
         Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
+
 
     protected class ShutdownDaemonHook extends Thread {
 
@@ -40,6 +42,16 @@ public class ShutdownService {
         //hooks.clear();
         hooks.add(retVal);
         return retVal;
+    }
+
+    public void shutdown() {
+        for (Hook hook : hooks) {
+            hook.shutdown();
+        }
+    }
+
+    public Integer getHooks() {
+        return this.hooks.size();
     }
 
 }

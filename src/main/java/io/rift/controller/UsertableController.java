@@ -258,6 +258,11 @@ public class UsertableController {
         return usertable;
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/logout/{id}")
+    public void logout(@PathVariable Integer id) {
+        usertableService.logout(id);
+    }
+
 
     /**
      * Valid input:

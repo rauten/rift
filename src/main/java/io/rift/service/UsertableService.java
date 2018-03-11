@@ -103,6 +103,7 @@ public class UsertableService {
     private final String getSessionCostBySessionId = "getSessionCostBySessionId";
     private final String getBraintreeIdFromUserId = "getBraintreeIdFromUserId";
 
+    private final String getListeningChannels = "getListeningChannels";
     /****************************** POST *******************************/
     /*******************************************************************/
     private final String createUser = "createUser";
@@ -426,6 +427,15 @@ public class UsertableService {
     }
 
 
+    public void logout(Integer id) {
+        riftRepository.doUnlisten(id);
+    }
+
+    public ResultSet getListeningChannels() {
+        Object[] args = new Object[0];
+        return riftRepository.doQuery(getListeningChannels, args);
+    }
+
     /**
      *
      * Gets broadcast notifications: relevant notifications from people you follow that aren't necessarily directed
@@ -634,6 +644,5 @@ public class UsertableService {
             return "";
         }
     }
-
 
 }

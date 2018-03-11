@@ -72,8 +72,16 @@ public class PostgresListenService {
 
             // Tell Postgres to send NOTIFY q_event to our connection and listener
             Statement statement = pgConnectionService.pgConnection.createStatement();
+            /*
+            System.out.println("Id of listening: " + id);
+            String queryBuilder = "UNLISTEN q_event" + id;
+            statement.execute(queryBuilder);
+            */
             String queryBuilder = "LISTEN q_event" + id;
             statement.execute(queryBuilder);
+
+
+
             statement.close();
         }
         catch (SQLException e) {
