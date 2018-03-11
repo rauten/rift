@@ -17,24 +17,48 @@ export class NotificationsService {
   constructor(private http: Http) {
   }
 
-  pollNotifications(riftId, notifications) {
+  pollNotifications(riftId, notifications, login) {
     this.startUrl = "/api/matchupdate/begin/";
     this.pollUrl = "/api/matchupdate/deferred";
-    this.start(this.startUrl, this.pollUrl, riftId, notifications);
+    this.start(this.startUrl, this.pollUrl, riftId, notifications, login);
   }
 
-  start(start, poll, riftId, notifications) {
-    console.log("Starting poll");
+  start(start, poll, riftId, notifications, login) {
+    if (login) {
+      console.log("Starting poll");
+    } else {
+      console.log("Already logged in, not starting");
+    }
     this.startUrl = start;
     this.pollUrl = poll;
     this.allow = true;
-    this.http.get(this.startUrl + riftId).subscribe(
+    this.http.get(this.startUrl + riftId + "/" + login).subscribe(
       success => {
         console.log("Game on...");
         if(this.allow) {
           console.log("in if statemnet");
           this.allow = false;
-          setInterval(this.getUpdate(notifications),2000);
+          setInterval(this.getUpdate(notifications),6000);
+        }
+      },
+      error => {
+        console.log("error");
+      }
+    )
+  }
+
+  test() {
+    console.log("this is a test");
+  }
+
+  startAfterLoggedIn(notifications) {
+    this.http.get("/api/startdefer").subscribe(
+      success => {
+        console.log("Game on...");
+        if(this.allow) {
+          console.log("in if statemnet");
+          this.allow = false;
+          setInterval(this.getUpdate(notifications),6000);
         }
       },
       error => {
@@ -52,11 +76,11 @@ export class NotificationsService {
         let data = JSON.parse(success["_body"]).data;
         let notification = getNotification(data);
         notifications.unshift(notification);
-        this.getUpdate(notifications);
+        setInterval(this.getUpdate(notifications), 6000);
       },
       error => {
         console.log("error, trying again");
-        this.getUpdate(notifications);
+        setInterval(this.getUpdate(notifications), 500);
       }
     );
 

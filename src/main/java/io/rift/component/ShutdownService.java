@@ -37,7 +37,7 @@ public class ShutdownService {
     public Hook createHook(Thread thread) {
         thread.setDaemon(true);
         Hook retVal = new Hook(thread);
-        //hooks.clear();
+        hooks.clear();
         hooks.add(retVal);
         return retVal;
     }

@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import Auth0Lock from 'auth0-lock';
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Userprofile} from "../models/userprofile";
+import {NotificationsService} from "../userprofile/notifications.service";
+import {Http} from "@angular/http";
+import {Globals} from "../global/globals";
 
 @Injectable()
 export class AuthService {
@@ -39,13 +42,15 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, public http: Http, public globals: Globals) {
 
   }
 
   public login(): void {
     this.lock.show();
   }
+
+
 
   // Call this method in app.component.ts
   // if using path-based routing
@@ -55,7 +60,6 @@ export class AuthService {
         this.setSession(authResult, function () {
           var profileJson = localStorage.getItem('profile');
           var profileJsonParse = JSON.parse(profileJson);
-          console.log(profileJsonParse.email);
           if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
@@ -68,6 +72,7 @@ export class AuthService {
           } else {
             callback("", false);
           }
+
         });
         this.router.navigate(['/']);
       }
@@ -103,6 +108,7 @@ export class AuthService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     localStorage.removeItem('loggedInUserID');
+    this.globals.began = false;
     // Go back to the home route
     this.router.navigate(['/']);
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {SearchBarService} from "../components/search-bar/search-bar.service";
 import {Userprofile} from "../models/userprofile";
@@ -17,12 +17,15 @@ export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
   loggedInUserId: number;
   profile: any;
+  testbegan: any;
+  @Input() notificationsList;
 
   test: String[] = [];
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
-  private notificationService: NotificationsService) {
+  private notificationService: NotificationsService, private globals: Globals) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    this.testbegan = localStorage.getItem("beganPolling");
   }
 
   getCurrentUser() {
@@ -30,16 +33,17 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if(JSON.parse(localStorage.getItem('profile'))) {
+    if(JSON.parse(localStorage.getItem('profile'))) {
     //   this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
-      this.pollNotifications(this.profile.nickname);
-    // }
+    //     this.pollNotifications(this.profile.nickname);
+    }
   }
 
   pollNotifications(riftTag) {
+    console.log(localStorage.getItem("beganPolling"));
     this.userProfileService.getUserId(riftTag).subscribe(
       resBody => {
-        this.notificationService.pollNotifications(resBody.id, this.currentUser.notifications);
+        // this.notificationService.pollNotifications(this.currentUser.notifications);
       }
     )
   }

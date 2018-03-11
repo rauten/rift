@@ -20,12 +20,20 @@ public class DeferredNotificationController {
     @Autowired
     private PostgresListenService postgresListenService;
 
-    @RequestMapping(value = "/matchupdate/begin/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/matchupdate/begin/{id}/{login}", method = RequestMethod.GET)
     @ResponseBody
-    public String start(@PathVariable Integer id) {
+    public String start(@PathVariable Integer id, @PathVariable boolean login) {
         resultService.subscribe();
-        postgresListenService.init(id);
+        if (login) {
+            postgresListenService.init(id);
+        }
         return "OK";
+    }
+
+    @RequestMapping(value = "/startdefer", method = RequestMethod.GET)
+    @ResponseBody
+    public String startOnRefresh() {
+        return "Ok!";
     }
 
     @RequestMapping("/matchupdate/deferred")
