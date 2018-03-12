@@ -1,5 +1,6 @@
 package io.rift.component;
 
+import io.rift.config.PollingConfig;
 import io.rift.service.DeferredResultService;
 import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +27,18 @@ public class DeferredNotificationController {
     @Autowired
     private UsertableService usertableService;
 
+    @Autowired
+    private PollingConfig pollingConfig;
+
     @RequestMapping(value = "/matchupdate/begin/{id}/{login}", method = RequestMethod.GET)
     @ResponseBody
     public String start(@PathVariable Integer id, @PathVariable boolean login) {
         resultService.subscribe();
-        postgresListenService.init(id);
-        /*
+        //postgresListenService.init(id);
         if (login) {
             postgresListenService.init(id);
         }
-        */
+
         return "OK";
     }
 
@@ -43,9 +46,16 @@ public class DeferredNotificationController {
     @RequestMapping("/matchupdate/deferred")
     @ResponseBody
     public DeferredResult<String> getUpdate() {
+        System.out.println("Size of queue at start of deferred: " + pollingConfig.theQueue().size());
         final DeferredResult<String> result = new DeferredResult<String>();
         resultService.getUpdate(result);
         return result;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/logout/{id}")
+    public void logout(@PathVariable Integer id) {
+        usertableService.logout(id);
+    }
+
 
 }
