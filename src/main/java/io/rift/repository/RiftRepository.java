@@ -85,9 +85,9 @@ public class RiftRepository {
         try {
             Statement statement = pgConnectionService.pgConnection.createStatement();
             String str = "UNLISTEN q_event" + id;
-            boolean truth = statement.execute(str);
+            statement.execute(str);
             statement.close();
-            return truth;
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

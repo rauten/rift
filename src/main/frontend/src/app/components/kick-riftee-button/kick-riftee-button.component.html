@@ -1,0 +1,14 @@
+<h3>
+  <button type="button" class="btn btn-sm btn-primary" (click)="changeStatus(template)">
+    <i class="fa fa-checkmark-round"></i> <span>Kick User</span>
+  </button>
+
+  <ng-template #template style="margin-top:20%">
+    <div class="modal-body text-center">
+      <p>Are you sure you want to kick this user?</p>
+      <button type="button" class="btn btn-default" (click)="kickRiftee()" >Yes</button>
+      <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+    </div>
+  </ng-template>
+</h3>
+

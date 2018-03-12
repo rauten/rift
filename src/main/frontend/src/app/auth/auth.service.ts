@@ -108,7 +108,7 @@ export class AuthService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     localStorage.removeItem('loggedInUserID');
-    this.globals.began = false;
+
     // Go back to the home route
     this.router.navigate(['/']);
   }

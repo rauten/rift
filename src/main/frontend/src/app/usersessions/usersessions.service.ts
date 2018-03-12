@@ -11,7 +11,7 @@ import {Userprofile} from "../models/userprofile";
 export class UsersessionsService {
   private createUserSessionURL = "/api/rifterSession/createGame";
   private joinUserSessionURL = "/api/sessionRequest/create";
-  private acceptSessionRequestURL = "/api/sessionRequest/update";
+  private updateSessionRequestURL = "/api/sessionRequest/update";
   private getSessionRequestsURL = "/api/sessionRequest/";
 
   constructor(private http: Http) {
@@ -20,28 +20,6 @@ export class UsersessionsService {
   getUserRifterAndRifteeSessions(riftTag: string): Observable<Userprofile> {
     console.log("running getUserRifterAndRifteeSessions");
     return this.http.get("/api/rifterSession/" + riftTag + "/rifterAndRifteeSessions")
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-  getUserRifterSessions(riftTag: string): Observable<Userprofile> {
-    console.log("running getUserRifterSessions");
-    return this.http.get("/api/user/" + riftTag + "/rifterSessions")
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-  getUserRifteeSessions(riftTag: string): Observable<Userprofile> {
-    console.log("running getUserRifteeSessions");
-    return this.http.get("/api/rifterSession/" + riftTag + "/sessionsParticipating")
       .map(
         (response: Response) => {
           return response.json();
@@ -82,7 +60,7 @@ export class UsersessionsService {
     console.log("running updateSessionRequest");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put(this.acceptSessionRequestURL, data, options)
+    this.http.put(this.updateSessionRequestURL, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe(
@@ -112,5 +90,10 @@ export class UsersessionsService {
         }
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
+  kickRifteeFromSession() {
+    console.log("Kicking riftee from session");
+
   }
 }

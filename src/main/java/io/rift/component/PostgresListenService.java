@@ -81,8 +81,6 @@ public class PostgresListenService {
             String queryBuilder = "LISTEN q_event" + id;
             statement.execute(queryBuilder);
 
-
-
             statement.close();
         }
         catch (SQLException e) {

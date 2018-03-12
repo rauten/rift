@@ -428,7 +428,8 @@ public class UsertableService {
 
 
     public void logout(Integer id) {
-        riftRepository.doUnlisten(id);
+        boolean truth = riftRepository.doUnlisten(id);
+        System.out.println("Stopped polling: " + truth);
     }
 
     public ResultSet getListeningChannels() {

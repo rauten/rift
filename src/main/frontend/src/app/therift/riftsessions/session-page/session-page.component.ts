@@ -94,6 +94,7 @@ export class SessionPageComponent implements OnInit {
       riftee.lastName = player.lastName;
       riftee.riftTag = player.riftTag;
       riftee.rifteeRating = player.rifteeRating;
+      riftee.id = player.id;
       this.getUserProfilePicture(riftee.riftTag, riftee);
       this.session.riftees.push(riftee);
     }
@@ -149,6 +150,10 @@ export class SessionPageComponent implements OnInit {
 
   changeStatus(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }
+
+  remove(item) {
+    this.session.riftees.splice(this.session.riftees.indexOf(item),1);
   }
 
   cancelSessionRequest() {
