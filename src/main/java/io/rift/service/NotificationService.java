@@ -26,6 +26,7 @@ public class NotificationService {
     private final String getRifterGameById = "getRifterGameById";
 
     private final String getNumberNotificationsUnseen = "getNumberNotificationsUnseen";
+    private final String clearUnseenNotifications = "clearUnseenNotifications";
 
     public final Integer POPULATESIZE = 7;
 
@@ -90,6 +91,13 @@ public class NotificationService {
             return resultSet.getInt(1);
         }
         return null;
+    }
+
+    public boolean clearUnseenNotifications(Integer riftId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftId;
+        boolean success = riftRepository.doInsert(clearUnseenNotifications, args);
+        return success;
     }
 
 }

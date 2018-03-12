@@ -91,6 +91,7 @@ export class NotificationsService {
       currNotification.userId = notification.user_id;
       currNotification.createdTime = notification.created_time;
       currNotification.notificationType = notification.notification_type;
+      currNotification.seen = notification.seen;
       return currNotification;
     }
   }

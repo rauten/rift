@@ -218,6 +218,12 @@
         WHERE user_id = ?
     </getNumberNotificationsUnseen>
 
+    <clearUnseenNotifications>
+        UPDATE notification
+        SET seen = true
+        WHERE user_id = ?;
+    </clearUnseenNotifications>
+
     <getBraintreeIdFromUserId>
         SELECT braintree_id
         FROM usertable
