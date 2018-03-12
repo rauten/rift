@@ -7,6 +7,20 @@
         <div class="row">
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
+              <label class="control-label">What type of Complaint</label>
+              <mat-form-field>
+                <mat-select placeholder="Select a Complaint" [(value)]="complaintType">
+                  <mat-option *ngFor="let type of complaintTypes" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col-xs-12 col-sm-6'>
+            <div class="form-group">
               <label class="control-label" for="complaint">Leave a complaint</label>
               <input class="form-control input-md" #complaint="ngModel" [(ngModel)]="complaintContent" required id="complaint" name="complaint" type="text" placeholder="Leave a complaint">
             </div>
@@ -16,7 +30,7 @@
     </div>
   </div>
   <div>
-    <button [disabled]="!fileAComplaintForm.valid"  class="btn-primary" type="button">Update</button>
+    <button [disabled]="!fileAComplaintForm.valid"  (click)=save() class="btn-primary" type="button">Update</button>
     <button routerLink="../" class="btn-primary" type="button">Cancel</button>
   </div>
 </form>

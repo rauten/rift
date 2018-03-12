@@ -268,9 +268,9 @@ export class UserprofileComponent implements OnInit {
   }
 
   openRatingDialog() {
-    var raterId = this.loggedInUser.id;
+    let raterId = this.loggedInUser.id;
     console.log(raterId);
-    var rateeId = this.currentUser.id;
+    let rateeId = this.currentUser.id;
     console.log(rateeId);
     this.userRatingService.isAllowedToRate(raterId, rateeId).subscribe(
       resBody => {
@@ -299,6 +299,10 @@ export class UserprofileComponent implements OnInit {
     this.dialog.open(FileAComplaintComponent, {
       height: '450px',
       width: '600px',
+      data: {
+        submitterId: this.loggedInUser.id,
+        riftId: this.currentUser.id
+      }
     })
   }
 }
