@@ -48,7 +48,7 @@ export class UserRatingComponent implements OnInit {
       "reviewTitle" : this.userRatingData.reviewTitle
     };
     console.log(data);
-    // this.userRatingService.createUserRating(data);
+    this.userRatingService.createUserRating(data);
   }
 
   // getUserId(riftTag: string) {
