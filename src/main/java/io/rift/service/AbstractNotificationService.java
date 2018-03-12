@@ -37,6 +37,7 @@ public abstract class AbstractNotificationService {
             notification.setSessionId(resultSet.getInt(startPoint + 4));
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
+            notification.setSeen(resultSet.getBoolean(startPoint + 7));
             notifications.add(notification);
             if (notification.getCreatorId() != null) {
                 Object[] args = new Object[1];

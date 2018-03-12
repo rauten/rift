@@ -22,7 +22,7 @@ public class Views {
     /*****************************************************************/
 
     public interface NotificationInfo extends NotificationId, NotificationUserId, NotificationType, NotificationContent,
-            NotificationSessionId, NotificationCreatedTime, NotificationCreatorId {}
+            NotificationSessionId, NotificationCreatedTime, NotificationCreatorId, NotificationSeen {}
 
     public interface NotificationId {}
 
@@ -37,6 +37,8 @@ public class Views {
     public interface NotificationCreatedTime {}
 
     public interface NotificationCreatorId {}
+
+    public interface NotificationSeen {}
 
     public interface NotificationCreatorUsertable {}
 

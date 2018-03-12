@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -33,6 +35,14 @@ public class NotificationController {
     public List<Notification> getBroadcastNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
         return usertableService.getBroadcastNotifications(riftId, "Followers");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/notifications/{riftTag}/unseenNotifications")
+    public Map<String, Integer> getNumberNotificationsUnseen(@PathVariable String riftTag) throws SQLException {
+        Map<String, Integer> unseenMap = new HashMap<>();
+        Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
+        unseenMap.put("unseen", notificationService.getNumberNotificationsUnseen(riftId));
+        return unseenMap;
     }
 
     /*
