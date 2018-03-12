@@ -57,13 +57,19 @@ public class DeferredResultService implements Runnable {
     public void run() {
         while (hook.keepRunning()) {
             try {
+                System.out.println("Size of deferred queue: " + resultQueue.size());
                 DeferredResult<String> result = resultQueue.take();
                 System.out.println("Size of queue before: " + pollingConfig.theQueue().size());
                 String notification = pollingConfig.theQueue().take();
                 System.out.println("Size of queue after: " + pollingConfig.theQueue().size());
+                System.out.println("Size of hook list: " + shutdownService.getHooks());
 
-
-
+                System.out.println("Id of notification returning: " + notification);
+                System.out.println();
+                System.out.println("Result: " + result.getResult());
+                while (result.getResult() != null) {
+                    result = resultQueue.take();
+                }
                 result.setResult(notification);
                 //hook.shutdown();
 

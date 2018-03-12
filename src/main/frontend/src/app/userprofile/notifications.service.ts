@@ -95,8 +95,18 @@ export class NotificationsService {
     }
   }
 
-  endPolling(riftId) {
-    this.h
+  stopPolling(riftId) {
+    // let xhr = new XMLHttpRequest();
+    // xhr.open("GET","/api/stop/" + riftId);
+    // xhr.send()
+    this.http.get("/api/stop/" + riftId).subscribe(
+      success => {
+        console.log("Stopped polling");
+      },
+      error => {
+        console.log("Error when stopping polling")
+      }
+    )
   }
 }
 

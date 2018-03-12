@@ -99,6 +99,11 @@
         ORDER BY session_time
     </getUserAndRifterSessions>
 
+    <getListeningChannels>
+        SELECT *
+        FROM pg_listening_channels()
+    </getListeningChannels>
+
     <getGameRequestsAndGameInfoByUserId>
         SELECT *
         FROM gamerequest g JOIN riftergame r
@@ -775,9 +780,9 @@
                 'action', TG_OP,
                 'data', data);
 
-            IF (TG_OP = 'DELETE') THEN
+            IF (TG_OP = 'DELETE' AND OLD.user_id is not null) THEN
                 PERFORM pg_notify('q_event' || OLD.user_id, notification::text);
-            ELSE
+            ELSIF (NEW.user_id is not null) THEN
                 PERFORM pg_notify('q_event' || NEW.user_id, notification::text);
             END IF;
             RETURN NULL;

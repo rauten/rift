@@ -25,6 +25,7 @@ public class PostgresListenService {
     public void put(String string) throws InterruptedException {
         System.out.println("In put");
         pollingConfig.theQueue().put(string);
+        System.out.println("Size of queue after put: " + pollingConfig.theQueue().size());
     }
 
     public void init(Integer id) {
@@ -72,8 +73,14 @@ public class PostgresListenService {
 
             // Tell Postgres to send NOTIFY q_event to our connection and listener
             Statement statement = pgConnectionService.pgConnection.createStatement();
+            /*
+            System.out.println("Id of listening: " + id);
+            String queryBuilder = "UNLISTEN q_event" + id;
+            statement.execute(queryBuilder);
+            */
             String queryBuilder = "LISTEN q_event" + id;
             statement.execute(queryBuilder);
+
             statement.close();
         }
         catch (SQLException e) {

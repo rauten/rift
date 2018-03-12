@@ -36,6 +36,7 @@ public class Notification {
     @JsonView(Views.NotificationCreatorUsertable.class)
     private Usertable creatorUsertable;
 
+
     @JsonView(Views.NotificationReceiverUsertable.class)
     private Usertable receiverUsertable;
 
