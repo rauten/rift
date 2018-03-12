@@ -7,4 +7,5 @@ export class Globals {
   loggedInUser: Userprofile = new Userprofile();
   unseenNotifications: number = 0;
   previousNumNotifications: number = 0;
+  began: boolean = false;
 }

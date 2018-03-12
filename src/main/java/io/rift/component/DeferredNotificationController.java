@@ -26,31 +26,19 @@ public class DeferredNotificationController {
     @Autowired
     private UsertableService usertableService;
 
-    @RequestMapping(value = "/matchupdate/begin/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/matchupdate/begin/{id}/{login}", method = RequestMethod.GET)
     @ResponseBody
-    public String start(@PathVariable Integer id) {
+    public String start(@PathVariable Integer id, @PathVariable boolean login) {
         resultService.subscribe();
-        usertableService.logout(id);
-        ResultSet res = usertableService.getListeningChannels();
-        try {
-            if (res.next()) {
-                Object ob = res.getString(1);
-                System.out.println("Res string: " + ob);
-            } else {
-                System.out.println("Nothing in res");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         postgresListenService.init(id);
+        /*
+        if (login) {
+            postgresListenService.init(id);
+        }
+        */
         return "OK";
     }
 
-    @RequestMapping(value = "/suckadick", method = RequestMethod.GET)
-    @ResponseBody
-    public String startOnRefresh() {
-        return "Ok!";
-    }
 
     @RequestMapping("/matchupdate/deferred")
     @ResponseBody

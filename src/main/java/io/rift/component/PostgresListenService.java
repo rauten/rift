@@ -25,6 +25,7 @@ public class PostgresListenService {
     public void put(String string) throws InterruptedException {
         System.out.println("In put");
         pollingConfig.theQueue().put(string);
+        System.out.println("Size of queue after put: " + pollingConfig.theQueue().size());
     }
 
     public void init(Integer id) {

@@ -5,7 +5,7 @@
         <span class="sr-only">Toggle navigation</span>
         Menu <i class="fa fa-bars"></i>
       </button>
-      <a class="navbar-brand" routerLink="home">Rift</a>
+      <a class="navbar-brand" routerLink="home">Rift {{globals.began}}</a>
       <app-search-bar></app-search-bar>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -25,9 +25,12 @@
               <span class="glyphicon glyphicon-bell"></span>
             </button>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
-              <li class="media" *ngFor="let notification of currentUser.notifications">
+              <li class="media" *ngFor="let notification of notificationsList">
                 <app-notification [notification]="notification"></app-notification>
               </li>
+              <!--<li class="media" *ngFor="let test of notificationsList">-->
+                <!--<p style="color: black">{{test}}</p>-->
+              <!--</li>-->
             </ul>
           </div>
         </li>
