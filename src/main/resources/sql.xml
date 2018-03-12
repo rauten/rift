@@ -212,6 +212,12 @@
         WHERE us.id = ? AND n.notification_type = 0;
     </getBroadcastNotificationsForFollower>
 
+    <getNumberNotificationsUnseen>
+        SELECT COUNT(*)
+        FROM notification
+        WHERE user_id = ?
+    </getNumberNotificationsUnseen>
+
     <getBraintreeIdFromUserId>
         SELECT braintree_id
         FROM usertable

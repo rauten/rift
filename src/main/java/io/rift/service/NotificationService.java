@@ -25,6 +25,8 @@ public class NotificationService {
     private final String getUserById = "getUserById";
     private final String getRifterGameById = "getRifterGameById";
 
+    private final String getNumberNotificationsUnseen = "getNumberNotificationsUnseen";
+
     public final Integer POPULATESIZE = 7;
 
     volatile boolean isSubscribed = false;
@@ -80,10 +82,14 @@ public class NotificationService {
         return notification;
     }
 
-    /*
-    public Notification getNotificationById(Integer id) {
-        return notificationRepository.getNotificationById(id);
+    public Integer getNumberNotificationsUnseen(Integer riftId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftId;
+        ResultSet resultSet = riftRepository.doQuery(getNumberNotificationsUnseen, args);
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return null;
     }
-    */
 
 }
