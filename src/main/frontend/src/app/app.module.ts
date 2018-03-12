@@ -91,6 +91,7 @@ import {PaymentService} from "./userprofile/payment.service";
 import {NotificationsService} from "./userprofile/notifications.service";
 import { FileAComplaintComponent } from './userprofile/file-a-complaint/file-a-complaint.component';
 import {FileAComplaintService} from "./userprofile/file-a-complaint/data/file-a-complaint-service";
+import { KickRifteeButtonComponent } from './components/kick-riftee-button/kick-riftee-button.component';
 
 
 
@@ -138,7 +139,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FileUploadComponent,
     FeedComponent,
     FeedCardComponent,
-    FileAComplaintComponent
+    FileAComplaintComponent,
+    KickRifteeButtonComponent
   ],
   imports: [
     BrowserModule,

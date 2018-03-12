@@ -65,6 +65,10 @@
                 <td class="text-center">
                   <app-rating [rating]="riftee.rifteeRating" [readonly]="true"></app-rating>
                 </td>
+                <td *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">
+                  <app-kick-riftee-button [hostId]="loggedInUserId" [rifteeId]="riftee.id" [sessionId]="id"
+                  [riftee]="riftee" (deleteRiftee)="remove($event)"></app-kick-riftee-button>
+                </td>
               </tr>
             </table>
           </div>

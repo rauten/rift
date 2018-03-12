@@ -494,6 +494,13 @@
         WHERE riftee_id = ? AND session_id = ?
     </deleteSessionRequest>
 
+    <kickUserSessionRequest>
+        UPDATE gamerequest
+        SET accepted = 0
+        WHERE riftee_id = ? AND session_id = ?
+    </kickUserSessionRequest>
+
+
     <fileComplaint>
         INSERT INTO usercomplaint
         (rift_id, submitter_id, complaint)

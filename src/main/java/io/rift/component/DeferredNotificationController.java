@@ -2,6 +2,7 @@ package io.rift.component;
 
 import io.rift.service.DeferredResultService;
 import io.rift.component.PostgresListenService;
+import io.rift.service.UsertableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,9 @@ public class DeferredNotificationController {
 
     @Autowired
     private PostgresListenService postgresListenService;
+
+    @Autowired
+    private UsertableService usertableService;
 
     @RequestMapping(value = "/matchupdate/begin/{id}/{login}", method = RequestMethod.GET)
     @ResponseBody
@@ -44,4 +48,7 @@ public class DeferredNotificationController {
         return result;
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stop/{id}")
+    public void stop(@PathVariable Integer id) {usertableService.logout(id);}
 }

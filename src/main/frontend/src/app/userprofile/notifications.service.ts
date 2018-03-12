@@ -94,6 +94,10 @@ export class NotificationsService {
       return currNotification;
     }
   }
+
+  endPolling(riftId) {
+    this.h
+  }
 }
 
 

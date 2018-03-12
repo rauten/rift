@@ -223,6 +223,7 @@ public class SessionRequestService {
         return -2;
     }
 
+
     public List<SessionRequest> getSessionRequestByRiftTag(String riftTag) throws SQLException {
         Object[] args = new Object[1];
         args[0] = riftTag;
