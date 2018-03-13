@@ -1,7 +1,8 @@
-package io.rift.service;
+package io.rift.service.notifications;
 
 import io.rift.model.Notification;
 import io.rift.repository.RiftRepository;
+import io.rift.service.AbstractNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

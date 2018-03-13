@@ -27,6 +27,7 @@ public class UserComplaintService {
         userComplaint.setRiftId(resultSet.getInt(startPoint));
         userComplaint.setSubmitterId(resultSet.getInt(startPoint + 1));
         userComplaint.setComplaint(resultSet.getString(startPoint + 2));
+        userComplaint.setComplaintType(UserComplaint.ComplaintType.fromValue(resultSet.getString(startPoint + 3)));
         return userComplaint;
     }
 
@@ -37,16 +38,18 @@ public class UserComplaintService {
             userComplaint.setRiftId(resultSet.getInt(startPoint));
             userComplaint.setSubmitterId(resultSet.getInt(startPoint + 1));
             userComplaint.setComplaint(resultSet.getString(startPoint + 2));
+            userComplaint.setComplaintType(UserComplaint.ComplaintType.fromValue(resultSet.getString(startPoint + 3)));
             userComplaints.add(userComplaint);
         }
         return userComplaints;
     }
 
-    public boolean fileComplaint(String complaint, Integer submitterId, Integer riftId) {
+    public boolean fileComplaint(String complaint, Integer submitterId, Integer riftId, String complaintType) {
         Object[] args = new Object[3];
         args[0] = riftId;
         args[1] = submitterId;
         args[2] = complaint;
+        args[3] = complaintType;
         return riftRepository.doInsert(fileComplaint, args);
     }
 

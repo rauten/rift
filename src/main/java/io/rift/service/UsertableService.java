@@ -13,6 +13,7 @@ import com.google.common.base.CaseFormat;
 import io.rift.component.ConnectionService;
 import io.rift.model.*;
 import io.rift.repository.RiftRepository;
+import io.rift.service.notifications.ActivityNotificationService;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.codec.binary.Base64;
@@ -252,123 +253,6 @@ public class UsertableService {
         }
         resultSet.close();
         return null;
-    }
-
-
-    public List<Following> getFollowingsById(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getFollowersById, args);
-        List<Following> followings = new ArrayList<>();
-        while (resultSet.next()) {
-            Following following = new Following();
-            following.setFollowerId(id);
-            following.setFollowingId(resultSet.getInt(2));
-            following.setAccepted(resultSet.getBoolean(3));
-            followings.add(following);
-        }
-        resultSet.close();
-        return followings;
-    }
-
-    public List<Following> getFollowersById(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getFollowingsById, args);
-        List<Following> followers = new ArrayList<>();
-        while (resultSet.next()) {
-            Following following = new Following();
-            following.setFollowerId(resultSet.getInt(1));
-            following.setFollowingId(id);
-            following.setAccepted(resultSet.getBoolean(3));
-            followers.add(following);
-        }
-        resultSet.close();
-        return followers;
-    }
-
-    public List<Following> getFollowingsAndInfoById(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getFollowingsAndInfoById, args);
-        List<Following> followings = new ArrayList<>();
-        while (resultSet.next()) {
-            Following following = new Following();
-            following.setFollowerId(id);
-            following.setFollowingId(resultSet.getInt(2));
-            following.setAccepted(resultSet.getBoolean(3));
-            following.setFollowingUsertable(populateUsertable(resultSet, 4, ""));
-            followings.add(following);
-        }
-        //resultSet.close();
-        return followings;
-    }
-
-    public List<Following> getFollowersAndInfoById(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getFollowersAndInfoById, args);
-        List<Following> followings = new ArrayList<>();
-        while (resultSet.next()) {
-            Following following = new Following();
-            following.setFollowerId(id);
-            following.setFollowingId(resultSet.getInt(2));
-            following.setAccepted(resultSet.getBoolean(3));
-            following.setFollowerUsertable(populateUsertable(resultSet, 4, ""));
-            followings.add(following);
-        }
-        resultSet.close();
-        return followings;
-    }
-
-    public List<SessionRequest> getGameRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<Short> value) throws SQLException {
-        ResultSet resultSet;
-        boolean bool;
-        if (info.equals("sessionInfo")) {
-            if (!filter.isPresent()) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
-            } else if (filter.get().equals("accepted")) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, value.get()});
-            } else {
-                return null;
-            }
-            List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"sessionInfo"});
-            resultSet.close();
-            return sessionRequests;
-        } else if (info.equals("hostInfo")) {
-            if (!filter.isPresent()) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
-            } else if (filter.get().equals("accepted")) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, value.get()});
-            } else {
-                return null;
-            }
-            List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo"});
-            resultSet.close();
-            return sessionRequests;
-        } else if (info.equals("hostInfo&sessionInfo")) {
-            if (!filter.isPresent()) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
-            } else if (filter.get().equals("accepted")) {
-                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, value.get()});
-            } else {
-                return null;
-            }
-            List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {"hostInfo", "sessionInfo"});
-            resultSet.close();
-            return sessionRequests;
-        } else {
-            if (!filter.isPresent()) {
-                resultSet = riftRepository.doQuery(getRequestsByUser, new Object[] {id});
-            } else if (filter.get().equals("accepted")) {
-                resultSet = riftRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, value.get()});
-            } else {
-                return null;
-            }
-            List<SessionRequest> sessionRequests = sessionRequestService.populateGameRequestsWithInfo(resultSet, new String[] {});
-            resultSet.close();
-            return sessionRequests;
-        }
     }
 
 
