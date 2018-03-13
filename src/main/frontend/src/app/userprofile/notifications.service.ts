@@ -111,6 +111,17 @@ export class NotificationsService {
       }
     )
   }
+
+  // clearUnseen(riftId) {
+  //   this.http.get("/api/notifications/" + riftId + "/clearUnseen").subscribe(
+  //     success => {
+  //       console.log("Stopped polling");
+  //     },
+  //     error => {
+  //       console.log("Error when stopping polling")
+  //     }
+  //   )
+  // }
 }
 
 
