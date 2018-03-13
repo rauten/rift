@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
   profile: any;
   testbegan: any;
   @Input() notificationsList;
+  @Input() unseenCount;
 
   test: String[] = [];
 
@@ -30,6 +31,12 @@ export class NavbarComponent implements OnInit {
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('profile'));
+  }
+
+  clearUnseen() {
+    console.log("hello");
+    this.unseenCount = 0;
+    // this.notificationService.clearUnseen(this.profile.nickname);
   }
 
   ngOnInit() {

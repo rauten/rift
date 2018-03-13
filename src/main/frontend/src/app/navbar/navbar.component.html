@@ -1,12 +1,12 @@
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header page-scroll">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" (click)="clearUnseen()">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         Menu <i class="fa fa-bars"></i>
       </button>
       <a class="navbar-brand" routerLink="home">Rift {{globals.began}}</a>
-      <a class="navbar-brand">{{globals.unseenNotifications}}</a>
+      <a class="navbar-brand">{{unseenCount}}</a>
       <app-search-bar></app-search-bar>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -22,16 +22,13 @@
         </li>
         <li class="dropdown" *ngIf="auth.isAuthenticated()">
           <div class="btn-group" dropdown>
-            <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+            <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" (click)="clearUnseen();">
               <span class="glyphicon glyphicon-bell"></span>
             </button>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
               <li class="media" *ngFor="let notification of notificationsList">
                 <app-notification [notification]="notification"></app-notification>
               </li>
-              <!--<li class="media" *ngFor="let test of notificationsList">-->
-                <!--<p style="color: black">{{test}}</p>-->
-              <!--</li>-->
             </ul>
           </div>
         </li>
