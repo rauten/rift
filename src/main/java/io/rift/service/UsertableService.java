@@ -46,7 +46,7 @@ public class UsertableService {
     private RifterSessionService rifterSessionService;
 
     @Autowired
-    private NotificationService notificationService;
+    private ActivityNotificationService activityNotificationService;
 
     @Autowired
     private SessionRequestService sessionRequestService;
@@ -206,7 +206,7 @@ public class UsertableService {
         usertable.setBraintreeId(resultSet.getString(startPoint + 14));
         usertable.setEmail(resultSet.getString(startPoint + 15));
         if (info.equals("activity")) {
-            usertable.setCreatorActivityList(notificationService.populateNotifications(resultSet, POPULATESIZE, ""));
+            usertable.setCreatorActivityList(activityNotificationService.populateNotifications(resultSet, POPULATESIZE, ""));
         } else if (info.equals("levenshtein")) {
             usertable.setRiftTagLevenshtein(resultSet.getInt(startPoint + POPULATESIZE));
             usertable.setFirstNameLevenshtein(resultSet.getInt(startPoint + POPULATESIZE + 1));
@@ -372,30 +372,6 @@ public class UsertableService {
     }
 
 
-
-    public List<Notification> getUserActivity(Integer id, String info) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet;
-        if (info.equals("session")) {
-            resultSet = riftRepository.doQuery(getUserActiviyAndUserSession, args);
-        } else {
-            resultSet = riftRepository.doQuery(getUserActivity, args);
-        }
-        List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, info);
-        resultSet.close();
-        return notifications;
-    }
-
-    public List<Notification> getUserNotifications(Integer id) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet = riftRepository.doQuery(getUserNotifications, args);
-        List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, "");
-        resultSet.close();
-        return notifications;
-    }
-
     public List<RifterSession> getUserAndRifterSession(Integer id) throws SQLException {
         Object[] args = new Object[1];
         args[0] = id;
@@ -435,91 +411,6 @@ public class UsertableService {
     public ResultSet getListeningChannels() {
         Object[] args = new Object[0];
         return riftRepository.doQuery(getListeningChannels, args);
-    }
-
-    /**
-     *
-     * Gets broadcast notifications: relevant notifications from people you follow that aren't necessarily directed
-     * specifically at you, thus they have been broadcasted.
-     * i.e. a Rifter posts a new game. The activity notification will not be directed at any one individual, but will
-     * be broadcast to all his followers.
-     * @param id
-     * @return
-     */
-    public List<Notification> getBroadcastNotifications(Integer id, String type) throws SQLException {
-
-        Object[] args = new Object[1];
-        args[0] = id;
-        ResultSet resultSet;
-        if (type.equals("Followers")) {
-            resultSet = riftRepository.doQuery(getBroadcastNotificationsForFollower, args);
-        } else {
-            resultSet = riftRepository.doQuery(getBroadcastNotifications, args);
-        }
-        List<Notification> notifications = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                Notification notification = new Notification();
-                notification = notificationService.populateNotification(resultSet, 1, "");
-                Usertable usertable = new Usertable();
-                usertable.setId(notification.getCreatorId());
-                usertable.setFirstName(resultSet.getString(notificationService.POPULATESIZE + 1));
-                usertable.setLastName(resultSet.getString(notificationService.POPULATESIZE + 2));
-                usertable.setIsPrivate(resultSet.getBoolean(notificationService.POPULATESIZE + 3));
-                usertable.setIsSuspended(resultSet.getBoolean(notificationService.POPULATESIZE + 4));
-                usertable.setProfilePicturePath(resultSet.getString(notificationService.POPULATESIZE + 5));
-                usertable.setRiftTag(resultSet.getString(notificationService.POPULATESIZE + 6));
-                usertable.setRifteeRating(resultSet.getDouble(notificationService.POPULATESIZE + 7));
-                usertable.setRifterRating(resultSet.getDouble(notificationService.POPULATESIZE + 8));
-                usertable.setGender(resultSet.getBoolean(notificationService.POPULATESIZE + 9));
-                notification.setCreatorUsertable(usertable);
-                try {
-                    RifterSession rifterSession = new RifterSession();
-                    rifterSession = rifterSessionService.populateRifterSession(resultSet, notificationService.POPULATESIZE + 10, "host");
-                    notification.setRifterSession(rifterSession);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                notifications.add(notification);
-            }
-            resultSet.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        resultSet = riftRepository.doQuery(getSessionUpdateBroadcastsByUserId, args);
-        try {
-            while (resultSet.next()) {
-                Notification notification = notificationService.populateNotification(resultSet, 1, "");
-                RifterSession rifterSession = new RifterSession();
-                rifterSession = rifterSessionService.populateRifterSession(resultSet, notificationService.POPULATESIZE + 1, "");
-                notification.setRifterSession(rifterSession);
-                Game game = new Game();
-                game.setId(resultSet.getInt(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + 1));
-                game.setGame(resultSet.getString(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + 2));
-                Usertable usertable = new Usertable();
-                usertable.setRiftTag(resultSet.getString(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + gameService.POPULATESIZE + 1));
-                usertable.setRifterRating(resultSet.getDouble(rifterSessionService.POPULATESIZE + notificationService.POPULATESIZE + gameService.POPULATESIZE + 2));
-                notification.setCreatorUsertable(usertable);
-                notifications.add(notification);
-            }
-            resultSet.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        resultSet = riftRepository.doQuery(getSessionDeletionBroadcastsByUserId, args);
-        try {
-            while (resultSet.next()) {
-                Notification notification = notificationService.populateNotification(resultSet, 1, "");
-                Usertable usertable = new Usertable();
-                usertable.setRiftTag(resultSet.getString(notificationService.POPULATESIZE + 1));
-                usertable.setRifterRating(resultSet.getDouble(notificationService.POPULATESIZE + 2));
-                notification.setCreatorUsertable(usertable);
-                notifications.add(notification);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return notifications;
     }
 
     public Boolean createUser(Usertable usertable) {

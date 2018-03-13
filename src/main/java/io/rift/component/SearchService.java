@@ -23,9 +23,6 @@ public class SearchService {
     private RifterSessionService rifterSessionService;
 
     @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
     private SessionRequestService sessionRequestService;
 
     @Autowired

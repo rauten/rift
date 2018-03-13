@@ -18,11 +18,8 @@ public class ActivityNotificationService extends AbstractNotificationService {
     @Autowired
     private RiftRepository riftRepository;
 
-    @Autowired
-    private NotificationService notificationService;
-
     @Override
-    List<Notification> getNotifications(Integer riftId, String info) throws SQLException {
+    public List<Notification> getNotifications(Integer riftId, String info) throws SQLException {
         Object[] args = new Object[1];
         args[0] = riftId;
         ResultSet resultSet;
@@ -31,7 +28,8 @@ public class ActivityNotificationService extends AbstractNotificationService {
         } else {
             resultSet = riftRepository.doQuery(getUserActivity, args);
         }
-        List<Notification> notifications = notificationService.populateNotifications(resultSet, 1, info);
+
+        List<Notification> notifications = super.populateNotifications(resultSet, 1, info);
         resultSet.close();
         return notifications;
     }
