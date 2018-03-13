@@ -33,6 +33,7 @@ public class Notification {
     @JsonView(Views.NotificationCreatorId.class)
     private Integer creatorId;
 
+    @JsonView(Views.NotificationSeen.class)
     private boolean seen;
 
     @JsonView(Views.NotificationCreatorUsertable.class)
