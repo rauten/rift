@@ -2,6 +2,7 @@ package io.rift.service;
 
 
 import io.rift.config.PollingConfig;
+import io.rift.model.Following;
 import io.rift.model.Notification;
 import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Service
@@ -29,6 +32,10 @@ public class FollowingService {
     private final String isFollowing = "isFollowing";
     private final String follow = "follow";
     private final String removeFollowing = "removeFollowing";
+    private final String getFollowersById = "getFollowersById";
+    private final String getFollowingsById = "getFollowingsById";
+    private final String getFollowingsAndInfoById = "getFollowingsAndInfoById";
+    private final String getFollowersAndInfoById = "getFollowersAndInfoById";
 
     /**
      *
@@ -72,6 +79,72 @@ public class FollowingService {
         args[0] = followerId;
         args[1] = followingId;
         return riftRepository.doDelete(removeFollowing, args);
+    }
+
+    public List<Following> getFollowingsById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getFollowersById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            followings.add(following);
+        }
+        resultSet.close();
+        return followings;
+    }
+
+    public List<Following> getFollowersById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getFollowingsById, args);
+        List<Following> followers = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(resultSet.getInt(1));
+            following.setFollowingId(id);
+            following.setAccepted(resultSet.getBoolean(3));
+            followers.add(following);
+        }
+        resultSet.close();
+        return followers;
+    }
+
+    public List<Following> getFollowingsAndInfoById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getFollowingsAndInfoById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            following.setFollowingUsertable(usertableService.populateUsertable(resultSet, 4, ""));
+            followings.add(following);
+        }
+        //resultSet.close();
+        return followings;
+    }
+
+    public List<Following> getFollowersAndInfoById(Integer id) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = id;
+        ResultSet resultSet = riftRepository.doQuery(getFollowersAndInfoById, args);
+        List<Following> followings = new ArrayList<>();
+        while (resultSet.next()) {
+            Following following = new Following();
+            following.setFollowerId(id);
+            following.setFollowingId(resultSet.getInt(2));
+            following.setAccepted(resultSet.getBoolean(3));
+            following.setFollowerUsertable(usertableService.populateUsertable(resultSet, 4, ""));
+            followings.add(following);
+        }
+        resultSet.close();
+        return followings;
     }
 
     /*

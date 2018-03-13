@@ -22,10 +22,7 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SessionRequestService {
@@ -35,6 +32,9 @@ public class SessionRequestService {
     private RifterSessionService rifterSessionService;
 
     @Autowired UsertableService usertableService;
+
+    @Autowired
+    private SessionRequestService sessionRequestService;
 
     @Autowired
     public PollingConfig pollingConfig;
@@ -50,6 +50,16 @@ public class SessionRequestService {
     private final String getRequestStatus = "getRequestStatus";
     private final String deleteSessionRequest = "deleteSessionRequest";
 
+    private final String getGameRequestsAndGameInfoByUserId = "getGameRequestsAndGameInfoByUserId";
+    private final String getGameRequestsAndGameInfoByUserIdAndAccepted = "getGameRequestsAndGameInfoByUserIdAndAccepted";
+    private final String getGameRequestsAndHostInfoByUserId = "getGameRequestsAndHostInfoByUserId";
+    private final String getGameRequestsAndHostInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoByUserIdAndAccepted";
+    private final String getGameRequestsAndGameInfoAndHostInfoByUserId = "getGameRequestsAndGameInfoAndHostInfoByUserId";
+    private final String getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted = "getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted";
+    private final String getGetGameRequestBySessionAndRifteeId = "getGetGameRequestBySessionAndRifteeId";
+    private final String getRequestsByUser = "getRequestsByUser";
+    private final String getGameRequestsByUserIdAndAccepted = "getGameRequestsByUserIdAndAccepted";
+
     private final String updateSessionRequestStart = "UPDATE gameRequest SET (";
     private final String updateSessionRequestPath = "/io/rift/model/SessionRequest.class";
     private final String sessionRequestClass = "SessionRequest.class";
@@ -60,7 +70,9 @@ public class SessionRequestService {
     private final String intStr = "Integer";
     private final String doubleStr = "Double";
 
-    public SessionRequest populateGameRequest(ResultSet resultSet, int startPoint) throws SQLException {
+
+
+    public SessionRequest populateSessionRequest(ResultSet resultSet, int startPoint) throws SQLException {
         SessionRequest sessionRequest = new SessionRequest();
         sessionRequest.setRifteeId(resultSet.getInt(startPoint));
         sessionRequest.setSessionId(resultSet.getInt(startPoint + 1));
@@ -69,7 +81,7 @@ public class SessionRequestService {
         return sessionRequest;
     }
 
-    public List<SessionRequest> populateGameRequests(ResultSet resultSet) throws SQLException {
+    public List<SessionRequest> populateSessionRequests(ResultSet resultSet) throws SQLException {
         List<SessionRequest> rifteeSessions = new ArrayList<>();
         while (resultSet.next()) {
             SessionRequest sessionRequest = new SessionRequest();
@@ -82,21 +94,7 @@ public class SessionRequestService {
         return rifteeSessions;
     }
 
-    public int getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
-        Object[] args = new Object[2];
-        args[0] = sessionId;
-        args[1] = rifteeId;
-        ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
-        if (resultSet.next()) {
-            int res = resultSet.getInt(1);
-            resultSet.close();
-            return res;
-        }
-        resultSet.close();
-        return -1;
-    }
-
-    public List<SessionRequest> populateGameRequestsWithInfo(ResultSet resultSet, String[] info) throws SQLException {
+    public List<SessionRequest> populateSessionRequestsWithInfo(ResultSet resultSet, String[] info) throws SQLException {
         List<SessionRequest> rifteeSessions = new ArrayList<>();
         while (resultSet.next()) {
             SessionRequest sessionRequest = new SessionRequest();
@@ -119,6 +117,85 @@ public class SessionRequestService {
             rifteeSessions.add(sessionRequest);
         }
         return rifteeSessions;
+    }
+
+    public int getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
+        Object[] args = new Object[2];
+        args[0] = sessionId;
+        args[1] = rifteeId;
+        ResultSet resultSet = riftRepository.doQuery(getRequestStatus, args);
+        if (resultSet.next()) {
+            int res = resultSet.getInt(1);
+            resultSet.close();
+            return res;
+        }
+        resultSet.close();
+        return -1;
+    }
+
+    public List<SessionRequest> getSessionRequestByRiftTag(String riftTag) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = riftTag;
+        ResultSet resultSet = riftRepository.doQuery(getSessionRequestByRiftTag, args);
+        List<SessionRequest> sessionRequests = new ArrayList<>(resultSet.getFetchSize());
+        while(resultSet.next()) {
+            SessionRequest sessionRequest = populateSessionRequest(resultSet, 1);
+            sessionRequests.add(sessionRequest);
+        }
+        resultSet.close();
+        return sessionRequests;
+    }
+
+
+
+    public List<SessionRequest> getSessionRequestsAndInfoByUserId(Integer id, String info, Optional<String> filter, Optional<Short> value) throws SQLException {
+        ResultSet resultSet;
+        boolean bool;
+        if (info.equals("sessionInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoByUserIdAndAccepted, new Object[] {id, value.get()});
+            } else {
+                return null;
+            }
+            List<SessionRequest> sessionRequests = sessionRequestService.populateSessionRequestsWithInfo(resultSet, new String[] {"sessionInfo"});
+            resultSet.close();
+            return sessionRequests;
+        } else if (info.equals("hostInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoByUserIdAndAccepted, new Object[] {id, value.get()});
+            } else {
+                return null;
+            }
+            List<SessionRequest> sessionRequests = sessionRequestService.populateSessionRequestsWithInfo(resultSet, new String[] {"hostInfo"});
+            resultSet.close();
+            return sessionRequests;
+        } else if (info.equals("hostInfo&sessionInfo")) {
+            if (!filter.isPresent()) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndGameInfoAndHostInfoByUserId, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                resultSet = riftRepository.doQuery(getGameRequestsAndHostInfoAndSessionInfoByUserIdAndAccepted, new Object[] {id, value.get()});
+            } else {
+                return null;
+            }
+            List<SessionRequest> sessionRequests = sessionRequestService.populateSessionRequestsWithInfo(resultSet, new String[] {"hostInfo", "sessionInfo"});
+            resultSet.close();
+            return sessionRequests;
+        } else {
+            if (!filter.isPresent()) {
+                resultSet = riftRepository.doQuery(getRequestsByUser, new Object[] {id});
+            } else if (filter.get().equals("accepted")) {
+                resultSet = riftRepository.doQuery(getGameRequestsByUserIdAndAccepted, new Object[] {id, value.get()});
+            } else {
+                return null;
+            }
+            List<SessionRequest> sessionRequests = sessionRequestService.populateSessionRequestsWithInfo(resultSet, new String[] {});
+            resultSet.close();
+            return sessionRequests;
+        }
     }
 
     public Boolean createSessionRequest(SessionRequest sessionRequest) throws SQLException {
@@ -222,21 +299,4 @@ public class SessionRequestService {
         // No session request found
         return -2;
     }
-
-
-    public List<SessionRequest> getSessionRequestByRiftTag(String riftTag) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = riftTag;
-        ResultSet resultSet = riftRepository.doQuery(getSessionRequestByRiftTag, args);
-        List<SessionRequest> sessionRequests = new ArrayList<>(resultSet.getFetchSize());
-        while(resultSet.next()) {
-            SessionRequest sessionRequest = populateGameRequest(resultSet, 1);
-            sessionRequests.add(sessionRequest);
-        }
-        resultSet.close();
-        return sessionRequests;
-    }
-
-
-
 }

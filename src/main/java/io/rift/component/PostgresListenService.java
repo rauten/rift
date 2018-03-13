@@ -4,11 +4,9 @@ import com.impossibl.postgres.api.jdbc.PGNotificationListener;
 import com.impossibl.postgres.jdbc.PGDataSource;
 import io.rift.component.PGConnectionService;
 import io.rift.config.PollingConfig;
-import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -20,11 +18,6 @@ public class PostgresListenService {
 
     @Autowired
     private PollingConfig pollingConfig;
-
-    @Autowired
-    private RiftRepository riftRepository;
-
-    private final String getListeningChannels = "getListeningChannels";
 
 
     boolean stuff = true;
@@ -81,17 +74,7 @@ public class PostgresListenService {
             // Tell Postgres to send NOTIFY q_event to our connection and listener
             Statement statement = pgConnectionService.pgConnection.createStatement();
 
-            System.out.println("Id of listening: " + id);
-            String queryBuilder = "UNLISTEN q_event" + id;
-            statement.execute(queryBuilder);
-            Object[] args = new Object[0];
-            ResultSet resultSet = riftRepository.doQuery(getListeningChannels, args);
-            while (resultSet.next()) {
-                statement.execute(queryBuilder);
-                resultSet = riftRepository.doQuery(getListeningChannels, args);
-            }
-
-            queryBuilder = "LISTEN q_event" + id;
+            String queryBuilder = "LISTEN q_event" + id;
             statement.execute(queryBuilder);
 
             statement.close();

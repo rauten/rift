@@ -1,17 +1,14 @@
 package io.rift.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Notification;
-import io.rift.model.Views;
 import io.rift.service.*;
-import org.bouncycastle.cert.ocsp.Req;
+import io.rift.service.notifications.BroadcastNotificationService;
+import io.rift.service.notifications.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController

@@ -1,9 +1,7 @@
 package io.rift.component;
 
-import io.rift.component.ShutdownService;
 import io.rift.config.Hook;
 import io.rift.config.PollingConfig;
-import io.rift.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -78,6 +76,10 @@ public class DeferredResultService implements Runnable {
         resultQueue.add(result);
         System.out.println("Size of queue at API call: " + pollingConfig.theQueue().size());
 
+    }
+
+    public void shutdown() {
+        hook.shutdown();
     }
 
 }

@@ -51,6 +51,9 @@ public class DeferredNotificationController {
     @RequestMapping(method = RequestMethod.GET, value = "/stop/{id}")
     public boolean stop(@PathVariable Integer id) {
         System.out.println("Running stop");
-        return usertableService.logout(id);
+        boolean success = usertableService.logout(id);
+        resultService.shutdown();
+        return true;
     }
+
 }

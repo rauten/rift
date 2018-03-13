@@ -1,28 +1,25 @@
 package io.rift.controller;
 
 
-import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.rift.model.Notification;
+import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
 import io.rift.model.Views;
-import io.rift.repository.RiftRepository;
 import io.rift.service.*;
+import io.rift.service.notifications.ActivityNotificationService;
+import io.rift.service.notifications.BroadcastNotificationService;
+import io.rift.service.notifications.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spring.web.json.Json;
 
-import java.awt.*;
 import java.beans.IntrospectionException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
-import org.apache.commons.codec.binary.Base64;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -31,6 +28,12 @@ public class UsertableController {
 
     @Autowired
     private UsertableService usertableService;
+
+    @Autowired
+    private FollowingService followingService;
+
+    @Autowired
+    private SessionRequestService sessionRequestService;
 
     @Autowired
     private ActivityNotificationService activityNotificationService;
@@ -108,7 +111,7 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
-        usertable.setFollowings(usertableService.getFollowingsById(id));
+        usertable.setFollowings(followingService.getFollowingsById(id));
         return usertable;
     }
 
@@ -124,7 +127,7 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
-        usertable.setFollowers(usertableService.getFollowersById(id));
+        usertable.setFollowers(followingService.getFollowersById(id));
         return usertable;
     }
 
@@ -134,8 +137,8 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
-        usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
-        usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
+        usertable.setFollowers(followingService.getFollowersAndInfoById(id));
+        usertable.setFollowings(followingService.getFollowingsAndInfoById(id));
         return usertable;
     }
 
@@ -151,8 +154,8 @@ public class UsertableController {
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
         usertable.setNumberFollowers(usertableService.getNumberFollowing(id));
-        usertable.setFollowers(usertableService.getFollowersById(id));
-        usertable.setFollowings(usertableService.getFollowingsById(id));
+        usertable.setFollowers(followingService.getFollowersById(id));
+        usertable.setFollowings(followingService.getFollowingsById(id));
         return usertable;
     }
 
@@ -209,9 +212,9 @@ public class UsertableController {
     public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable String riftTag, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         if (info.isPresent()) {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(usertable.getId(), info.get(), Optional.empty(), Optional.empty()));
+            usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(usertable.getId(), info.get(), Optional.empty(), Optional.empty()));
         } else {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(usertable.getId(), "", Optional.empty(), Optional.empty()));
+            usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(usertable.getId(), "", Optional.empty(), Optional.empty()));
         }
         return usertable;
     }
@@ -230,9 +233,9 @@ public class UsertableController {
     public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable Short value, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         if (info.isPresent()) {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, info.get(), Optional.of(filter), Optional.of(value)));
+            usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(id, info.get(), Optional.of(filter), Optional.of(value)));
         } else {
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "", Optional.of(filter), Optional.of(value)));
+            usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(id, "", Optional.of(filter), Optional.of(value)));
         }
         return usertable;
     }
@@ -248,9 +251,9 @@ public class UsertableController {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         try {
             int id = usertable.getId();
-            usertable.setRifteeSessions(usertableService.getGameRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
-            usertable.setFollowers(usertableService.getFollowersAndInfoById(id));
-            usertable.setFollowings(usertableService.getFollowingsAndInfoById(id));
+            usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
+            usertable.setFollowers(followingService.getFollowersAndInfoById(id));
+            usertable.setFollowings(followingService.getFollowingsAndInfoById(id));
             usertable.setBroadcastNotificationList(broadcastNotificationService.getNotifications(id, "Followers"));
             usertable.setCreatorActivityList(activityNotificationService.getNotifications(id, "session"));
             usertable.setNumberFollowing(usertableService.getNumberFollowing(id));

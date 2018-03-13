@@ -1,10 +1,13 @@
-package io.rift.service;
+package io.rift.service.notifications;
 
 import io.rift.model.Game;
 import io.rift.model.Notification;
 import io.rift.model.RifterSession;
 import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
+import io.rift.service.AbstractNotificationService;
+import io.rift.service.GameService;
+import io.rift.service.RifterSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
