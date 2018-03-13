@@ -78,4 +78,8 @@ public class DeferredResultService implements Runnable {
 
     }
 
+    public void shutdown() {
+        hook.shutdown();
+    }
+
 }

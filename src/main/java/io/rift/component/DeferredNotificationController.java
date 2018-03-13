@@ -53,4 +53,9 @@ public class DeferredNotificationController {
         System.out.println("Running stop");
         usertableService.logout(id);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stopDefer")
+    public void shutdown() {
+        resultService.shutdown();
+    }
 }
