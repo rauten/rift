@@ -11,6 +11,7 @@ export class Notification {
   creatorProfilePic: string;
   sessionTitle: string;
   creatorEmail: string;
+  seen: boolean;
 
   constructor(){}
 }
