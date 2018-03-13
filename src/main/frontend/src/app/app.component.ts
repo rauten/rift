@@ -102,6 +102,12 @@ export class AppComponent {
               notification.notificationType = resBody[i].notificationType;
               notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
               notification.sessionId = resBody[i].sessionId;
+              notification.seen = resBody[i].seen;
+              console.log("1: ", notification.seen);
+              if (!notification.seen) {
+                globals.unseenNotifications += 1;
+              }
+              console.log(globals.unseenNotifications);
               if(notification.sessionId > 0) {
                 notification.sessionTitle = resBody[i].rifterSession.title;
               }
@@ -134,6 +140,13 @@ export class AppComponent {
             notification.notificationType = resBody[i].notificationType;
             notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
             notification.sessionId = resBody[i].sessionId;
+            console.log(resBody[i]);
+            notification.seen = resBody[i].seen;
+            console.log("2: ", notification.seen);
+            if (!notification.seen) {
+              this.globals.unseenNotifications += 1;
+            }
+            console.log(this.globals.unseenNotifications)
             if(notification.sessionId > 0) {
               notification.sessionTitle = resBody[i].rifterSession.title;
             }

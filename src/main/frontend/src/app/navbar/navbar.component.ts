@@ -65,6 +65,7 @@ export class NavbarComponent implements OnInit {
             notification.notificationType = resBody[i].notificationType;
             notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
             notification.sessionId = resBody[i].sessionId;
+            notification.seen = resBody[i].seen;
             if(notification.sessionId > 0) {
               notification.sessionTitle = resBody[i].rifterSession.title;
             }

@@ -28,7 +28,9 @@ public class NotificationController {
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/notifications")
     public List<Notification> getNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
-        return usertableService.getUserNotifications(riftId);
+        List<Notification> notifications = usertableService.getUserNotifications(riftId);
+        notificationService.clearUnseenNotifications(riftId);
+        return notifications;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/broadcastNotifications")
@@ -44,6 +46,7 @@ public class NotificationController {
         unseenMap.put("unseen", notificationService.getNumberNotificationsUnseen(riftId));
         return unseenMap;
     }
+
 
     /*
     @JsonView(Views.Public.class)
