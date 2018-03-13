@@ -28,7 +28,7 @@ public class NotificationService {
     private final String getNumberNotificationsUnseen = "getNumberNotificationsUnseen";
     private final String clearUnseenNotifications = "clearUnseenNotifications";
 
-    public final Integer POPULATESIZE = 7;
+    public final Integer POPULATESIZE = 8;
 
     volatile boolean isSubscribed = false;
 
@@ -47,6 +47,7 @@ public class NotificationService {
             notification.setSessionId(resultSet.getInt(startPoint + 4));
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
+            notification.setSeen(resultSet.getBoolean(startPoint + 7));
             notifications.add(notification);
             if (notification.getCreatorId() != null) {
                 Object[] args = new Object[1];
@@ -77,8 +78,9 @@ public class NotificationService {
         notification.setSessionId(resultSet.getInt(startPoint + 4));
         notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
         notification.setCreatorId(resultSet.getInt(startPoint + 6));
+        notification.setSeen(resultSet.getBoolean(startPoint + 7));
         if (info.equals("session") && notification.getNotificationType() != 2) {
-            notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + 7, ""));
+            notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + POPULATESIZE, ""));
         }
         return notification;
     }
