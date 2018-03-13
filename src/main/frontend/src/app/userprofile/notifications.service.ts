@@ -92,6 +92,8 @@ export class NotificationsService {
       currNotification.createdTime = notification.created_time;
       currNotification.notificationType = notification.notification_type;
       currNotification.seen = notification.seen;
+      this.globals.unseenNotifications += 1;
+      console.log("Incrementing unseen");
       return currNotification;
     }
   }
