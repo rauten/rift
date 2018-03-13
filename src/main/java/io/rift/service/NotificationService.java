@@ -85,16 +85,6 @@ public class NotificationService {
         return notification;
     }
 
-    public Integer getNumberNotificationsUnseen(Integer riftId) throws SQLException {
-        Object[] args = new Object[1];
-        args[0] = riftId;
-        ResultSet resultSet = riftRepository.doQuery(getNumberNotificationsUnseen, args);
-        if (resultSet.next()) {
-            return resultSet.getInt(1);
-        }
-        return null;
-    }
-
     public boolean clearUnseenNotifications(Integer riftId) throws SQLException {
         Object[] args = new Object[1];
         args[0] = riftId;

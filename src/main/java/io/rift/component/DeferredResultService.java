@@ -1,8 +1,9 @@
-package io.rift.service;
+package io.rift.component;
 
 import io.rift.component.ShutdownService;
 import io.rift.config.Hook;
 import io.rift.config.PollingConfig;
+import io.rift.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -22,9 +23,6 @@ public class DeferredResultService implements Runnable {
     private final BlockingQueue<DeferredResult<String>> resultQueue = new LinkedBlockingQueue<>();
 
     @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
     private ShutdownService shutdownService;
 
     @Autowired
@@ -34,10 +32,6 @@ public class DeferredResultService implements Runnable {
         System.out.println("Starting server");
         System.out.println("Subscribe: " + this.pollingConfig);
         startThread();
-        notificationService.isSubscribed = true;
-        System.out.println(notificationService.isSubscribed);
-        notificationService.setSubscribed(true);
-        System.out.println(notificationService.isSubscribed);
     }
 
     private void startThread() {

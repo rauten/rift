@@ -10,9 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public abstract class AbstractNotificationService {
-
 
     @Autowired
     private RifterSessionService rifterSessionService;
@@ -25,6 +23,8 @@ public abstract class AbstractNotificationService {
 
     private final String getUserById = "getUserById";
     private final String getRifterGameById = "getRifterGameById";
+
+    public final Integer POPULATESIZE = 8;
 
     public List<Notification> populateNotifications(ResultSet resultSet, int startPoint, String info) throws SQLException {
         List<Notification> notifications = new ArrayList<>();
@@ -59,7 +59,23 @@ public abstract class AbstractNotificationService {
         return notifications;
     }
 
-    abstract List<Notification> getNotifications(Integer riftId, String info) throws SQLException;
+    public Notification populateNotification(ResultSet resultSet, int startPoint, String info) throws SQLException {
+        Notification notification = new Notification();
+        notification.setId(resultSet.getInt(startPoint));
+        notification.setUserId(resultSet.getInt(startPoint + 1));
+        notification.setNotificationType(resultSet.getInt(startPoint + 2));
+        notification.setNotificationContent(resultSet.getString(startPoint + 3));
+        notification.setSessionId(resultSet.getInt(startPoint + 4));
+        notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
+        notification.setCreatorId(resultSet.getInt(startPoint + 6));
+        notification.setSeen(resultSet.getBoolean(startPoint + 7));
+        if (info.equals("session") && notification.getNotificationType() != 2) {
+            notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + POPULATESIZE, ""));
+        }
+        return notification;
+    }
+
+    public abstract List<Notification> getNotifications(Integer riftId, String info) throws SQLException;
 
     //abstract boolean createNotification(Notification notification) throws SQLException;
 
