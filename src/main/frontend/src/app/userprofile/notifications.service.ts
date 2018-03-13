@@ -6,6 +6,7 @@ import "rxjs/Rx";
 import {Notification} from "../models/notification";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {UserprofileService} from "./userprofile.service";
+import {Globals} from "../global/globals";
 
 
 @Injectable()
@@ -14,7 +15,7 @@ export class NotificationsService {
   pollUrl: string;
   allow = true;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private globals: Globals) {
   }
 
   pollNotifications(riftId, notifications, login) {
@@ -47,26 +48,6 @@ export class NotificationsService {
     )
   }
 
-  test() {
-    console.log("this is a test");
-  }
-
-  startAfterLoggedIn(notifications) {
-    this.http.get("/api/startdefer").subscribe(
-      success => {
-        console.log("Game on...");
-        if(this.allow) {
-          console.log("in if statemnet");
-          this.allow = false;
-          setInterval(this.getUpdate(notifications),6000);
-        }
-      },
-      error => {
-        console.log("error");
-      }
-    )
-  }
-
   getUpdate(notifications) {
     console.log("Okay let's go...");
     this.http.get(this.pollUrl).subscribe(
@@ -76,6 +57,7 @@ export class NotificationsService {
         let data = JSON.parse(success["_body"]).data;
         let notification = getNotification(data);
         notifications.unshift(notification);
+        this.globals.unseenNotifications += 1;
         setInterval(this.getUpdate(notifications), 6000);
       },
       error => {
@@ -92,8 +74,6 @@ export class NotificationsService {
       currNotification.createdTime = notification.created_time;
       currNotification.notificationType = notification.notification_type;
       currNotification.seen = notification.seen;
-      this.globals.unseenNotifications += 1;
-      console.log("Incrementing unseen");
       return currNotification;
     }
   }
@@ -112,16 +92,16 @@ export class NotificationsService {
     )
   }
 
-  // clearUnseen(riftId) {
-  //   this.http.get("/api/notifications/" + riftId + "/clearUnseen").subscribe(
-  //     success => {
-  //       console.log("Stopped polling");
-  //     },
-  //     error => {
-  //       console.log("Error when stopping polling")
-  //     }
-  //   )
-  // }
+  clearUnseen(riftId) {
+    this.http.get("/api/notifications/" + riftId + "/clearUnseen").subscribe(
+      success => {
+        console.log("Clearing unseen");
+      },
+      error => {
+        console.log("Error when stopping polling")
+      }
+    )
+  }
 }
 
 

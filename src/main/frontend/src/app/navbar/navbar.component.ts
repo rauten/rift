@@ -19,14 +19,12 @@ export class NavbarComponent implements OnInit {
   profile: any;
   testbegan: any;
   @Input() notificationsList;
-  @Input() unseenCount;
 
   test: String[] = [];
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService, private globals: Globals) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    this.testbegan = localStorage.getItem("beganPolling");
   }
 
   getCurrentUser() {
@@ -34,9 +32,8 @@ export class NavbarComponent implements OnInit {
   }
 
   clearUnseen() {
-    console.log("hello");
-    this.unseenCount = 0;
-    // this.notificationService.clearUnseen(this.profile.nickname);
+    this.globals.unseenNotifications = 0;
+    this.notificationService.clearUnseen(this.profile.nickname);
   }
 
   ngOnInit() {

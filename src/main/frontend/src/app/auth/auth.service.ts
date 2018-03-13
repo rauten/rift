@@ -42,7 +42,8 @@ export class AuthService {
       }]
   });
 
-  constructor(public router: Router, public http: Http, public globals: Globals) {
+  constructor(public router: Router, public http: Http, public globals: Globals, private userProfileService: UserprofileService,
+              private notificationService: NotificationsService) {
 
   }
 
@@ -58,8 +59,8 @@ export class AuthService {
     this.lock.on('authenticated', (authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult, function () {
-          var profileJson = localStorage.getItem('profile');
-          var profileJsonParse = JSON.parse(profileJson);
+          let profileJson = localStorage.getItem('profile');
+          let profileJsonParse = JSON.parse(profileJson);
           if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
@@ -102,12 +103,20 @@ export class AuthService {
 
 
   public logout(): void {
+    let profile = JSON.parse(localStorage.getItem("profile"));
+
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     localStorage.removeItem('loggedInUserID');
+
+    this.userProfileService.getUser(profile.nickname).subscribe(
+      resBody => {
+        let id = resBody.id;
+        this.notificationService.stopPolling(id);
+      });
 
     // Go back to the home route
     this.router.navigate(['/']);

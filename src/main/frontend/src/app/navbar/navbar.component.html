@@ -5,8 +5,6 @@
         <span class="sr-only">Toggle navigation</span>
         Menu <i class="fa fa-bars"></i>
       </button>
-      <a class="navbar-brand" routerLink="home">Rift {{globals.began}}</a>
-      <a class="navbar-brand">{{unseenCount}}</a>
       <app-search-bar></app-search-bar>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -24,6 +22,8 @@
           <div class="btn-group" dropdown>
             <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" (click)="clearUnseen();">
               <span class="glyphicon glyphicon-bell"></span>
+              <span class="badge badge-notify" *ngIf="globals.unseenNotifications > 0">{{globals.unseenNotifications}}</span>
+
             </button>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
               <li class="media" *ngFor="let notification of notificationsList">

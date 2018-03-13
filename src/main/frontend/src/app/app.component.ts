@@ -18,7 +18,6 @@ export class AppComponent {
   notifications: String[] =["hello", "there", "ha"];
   notificationList: Notification[] = [];
   profile: any;
-  unseenNotificationCount = 0;
 
   ngOnInit() {
     this.profile = JSON.parse(localStorage.getItem("profile"));
@@ -26,7 +25,7 @@ export class AppComponent {
       this.userprofileService.getUser(this.profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
-          // this.notificationsService.pollNotifications(id, this.notificationList, false);
+          this.notificationsService.pollNotifications(id, this.notificationList, false);
         });
       this.getUserNotifications(this.profile.nickname);
     }
@@ -37,7 +36,7 @@ export class AppComponent {
     this.userprofileService.getUser(this.profile.nickname).subscribe(
       resBody => {
         let id = resBody.id;
-        this.notificationsService.stopPolling(id);
+        // this.notificationsService.stopPolling(id);
       });
   }
 
@@ -51,7 +50,7 @@ export class AppComponent {
       userprofileService.getUser(profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
-          // pollNotifications(id);
+          pollNotifications(id);
           getUserNotifications(profile.nickname);
         });
 
@@ -83,8 +82,7 @@ export class AppComponent {
     });
 
     function pollNotifications(id) {
-      console.log("inside pollnotifications");
-      console.log(notifications);
+      console.log("Polling notifications");
       notificationsService.pollNotifications(id, notifications, true)
     }
 
@@ -104,11 +102,9 @@ export class AppComponent {
               notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
               notification.sessionId = resBody[i].sessionId;
               notification.seen = resBody[i].seen;
-              console.log("1: ", notification.seen);
               if (!notification.seen) {
-                this.unseenNotificationCount += 1;
+                globals.unseenNotifications += 1;
               }
-              console.log(this.unseenNotificationCount);
               if(notification.sessionId > 0) {
                 notification.sessionTitle = resBody[i].rifterSession.title;
               }
@@ -143,7 +139,7 @@ export class AppComponent {
             notification.sessionId = resBody[i].sessionId;
             notification.seen = resBody[i].seen;
             if (!notification.seen) {
-              this.unseenNotificationCount += 1;
+              this.globals.unseenNotifications += 1;
             }
             if(notification.sessionId > 0) {
               notification.sessionTitle = resBody[i].rifterSession.title;
