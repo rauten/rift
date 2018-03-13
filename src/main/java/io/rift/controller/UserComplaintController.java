@@ -18,8 +18,8 @@ public class UserComplaintController {
     private UserComplaintService userComplaintService;
 
     @RequestMapping(value = "/userComplaint/{submitterId}/{riftId}")
-    public boolean fileComplaint(@RequestBody String complaint, @PathVariable Integer submitterId, @PathVariable Integer riftId) {
-        return userComplaintService.fileComplaint(complaint, submitterId, riftId);
+    public boolean fileComplaint(@RequestBody String complaint, @RequestBody String type, @PathVariable Integer submitterId, @PathVariable Integer riftId) {
+        return userComplaintService.fileComplaint(complaint, submitterId, riftId, type);
     }
 
     @RequestMapping(value = "/userComplaint/{riftId}/")
