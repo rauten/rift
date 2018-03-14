@@ -28,6 +28,9 @@
             <div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="fileAComplaint()" type="button" class="btn-primary">File A Complaint</button>
             </div>
+            <div>
+              <button (click)="verifyWithTwitch()" type="button" class="btn-primary">Verify With Twitch</button>
+            </div>
             <alert type="danger" *ngIf="ratingStatus == 0">
               Haven't played with {{currentUser.riftTag}} in past 30 days
             </alert>

@@ -8,4 +8,5 @@ export class Globals {
   unseenNotifications: number = 0;
   previousNumNotifications: number = 0;
   began: boolean = false;
+  stopPolling: boolean = false;
 }

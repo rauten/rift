@@ -19,6 +19,7 @@ import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
+import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
 
 @Component({
   selector: 'app-userprofile',
@@ -40,7 +41,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog) {
+  public dialog: MatDialog, private lolService: LeagueOfLegendsService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -51,9 +52,18 @@ export class UserprofileComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
       this.isDataAvailable = true;
+      this.getLeagueInfo("ZeroSweg");
       this.getUserProfileInformation(params['rifttag']);
     });
 
+  }
+
+  getLeagueInfo(summonerTag) {
+    this.lolService.getSummonerInfo(summonerTag).subscribe(
+      resBody => {
+        console.log(resBody);
+      }
+    )
   }
 
 
@@ -305,5 +315,18 @@ export class UserprofileComponent implements OnInit {
         riftId: this.currentUser.id
       }
     })
+  }
+
+  verifyWithTwitch() {
+    this.userProfileService.getTwitchInfo().subscribe(
+      resBody => {
+        console.log(resBody.content);
+      }
+    )
+    // window.location.href = 'https://id.twitch.tv/oauth2/authorize' +
+    //   '    ?client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
+    //   '    &redirect_uri=http://localhost:4200' +
+    //   '    &response_type=code' +
+    //   '    &scope=openid';
   }
 }
