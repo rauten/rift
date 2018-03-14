@@ -2,6 +2,7 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.rift.feature.TwitchService;
 import io.rift.model.Notification;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
@@ -12,7 +13,12 @@ import io.rift.service.notifications.BroadcastNotificationService;
 import io.rift.service.notifications.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +49,9 @@ public class UsertableController {
 
     @Autowired
     private UserNotificationService userNotificationService;
+
+    @Autowired
+    private TwitchService twitchService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/id")
     public Map<String, Integer> getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
