@@ -17,9 +17,9 @@ public class TwitchController {
     @Autowired
     private TwitchService twitchService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/verifyTwitch")
-    public Map<String, String> getTwitchInfo() throws SQLException, IOException {
-        String content = twitchService.getTwitchInfo();
+    @RequestMapping(method = RequestMethod.GET, value = "/verifyTwitch/{code}")
+    public Map<String, String> getTwitchCode(@PathVariable String code) throws SQLException, IOException {
+        String content = twitchService.getTwitchCode(code);
         Map<String, String> result = new HashMap<>();
         result.put("content", content);
         return result;

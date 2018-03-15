@@ -156,14 +156,4 @@ export class UserprofileService {
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe();
   }
-
-  getTwitchInfo() {
-    return this.http.get("/api/verifyTwitch")
-      .map(
-        (response: Response) => {
-          return response.json();
-        }
-      )
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
 }

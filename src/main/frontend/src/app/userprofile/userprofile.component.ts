@@ -52,7 +52,7 @@ export class UserprofileComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
       this.isDataAvailable = true;
-      this.getLeagueInfo("ZeroSweg");
+      // this.getLeagueInfo("ZeroSweg");
       this.getUserProfileInformation(params['rifttag']);
     });
 
@@ -318,15 +318,16 @@ export class UserprofileComponent implements OnInit {
   }
 
   verifyWithTwitch() {
-    this.userProfileService.getTwitchInfo().subscribe(
-      resBody => {
-        console.log(resBody.content);
-      }
-    )
-    // window.location.href = 'https://id.twitch.tv/oauth2/authorize' +
-    //   '    ?client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
-    //   '    &redirect_uri=http://localhost:4200' +
-    //   '    &response_type=code' +
-    //   '    &scope=openid';
+    window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
+      '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
+      '&redirect_uri=http://localhost:4200' +
+      '&scope=openid';
+    console.log(document.location.hash);
+    // this.userProfileService.getTwitchInfo().subscribe(
+    //   resBody => {
+    //     console.log(resBody.content);
+    //   }
+    // )
+
   }
 }
