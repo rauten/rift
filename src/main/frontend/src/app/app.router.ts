@@ -27,6 +27,8 @@ export const router: Routes = [
   },
   { path: 'home', component: TheriftComponent,
   },
+  {path: 'youtube', component: TheriftComponent},
+  {path: 'twitch', component: TheriftComponent},
   { path: 'therift/:searchQuery', component: RiftsessionsComponent},
   { path: 'session/:sessionId', component: SessionPageComponent,
     children: [

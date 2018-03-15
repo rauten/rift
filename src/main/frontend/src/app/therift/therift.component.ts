@@ -15,21 +15,23 @@ export class TheriftComponent implements OnInit {
   profile: any;
   loggedInUserId: any;
 
-  constructor(public auth: AuthService, private route: Router, private activatedRoute: ActivatedRoute,
+  constructor(public auth: AuthService, private router: Router, private activatedRoute: ActivatedRoute,
               private twitchService: TwitchService, private updateInfoService: UpdateInfoService,
               private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
-    this.userProfileService.getUserId(this.profile.nickname).subscribe(
-      resBody => {
-        this.loggedInUserId = resBody.id;
-      }
-    )
+    if(this.profile){
+      this.userProfileService.getUserId(this.profile.nickname).subscribe(
+        resBody => {
+          this.loggedInUserId = resBody.id;
+        }
+      )
+    }
   }
 
   ngOnInit() {
     this.sub = this.activatedRoute.queryParams.subscribe(params => {
-      if(params['code']) {
-        console.log('queryParams', params['code']);
+      let authType = this.activatedRoute.snapshot.url[0].path
+      if(authType == "twitch") {
         this.twitchService.getTwitchInfo(params['code']).subscribe(
           resBody => {
             console.log(JSON.parse(resBody.content).id_token);
@@ -48,6 +50,9 @@ export class TheriftComponent implements OnInit {
             );
           }
         );
+      } else if(authType == "youtube") {
+        console.log("in youtube!");
+        console.log(params['code']);
       }
     });
   }
