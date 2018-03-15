@@ -41,6 +41,9 @@
         <div *ngIf="!data.currentUser.twitchAccount">
           <button (click)="verifyWithTwitch()" type="button" class="btn-primary">Verify With Twitch</button>
         </div>
+        <div *ngIf="!data.currentUser.youtubeAccount">
+          <button (click)="verifyWithYouTube()" type="button" class="btn-primary">Verify With YouTube</button>
+        </div>
         <div class="form-group">
           <ngx-braintree
             [clientTokenURL]="'/api/braintree/clientToken'"
