@@ -52,31 +52,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <executions>
-
-                    <execution>
-                        <id>install-external-non-maven1-jar</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <repositoryLayout>default</repositoryLayout>
-                            <groupId>jar1.group</groupId>
-                            <artifactId>non-maven1</artifactId>
-                            <version>${version.non-maven1}</version>
-                            <file>${project.basedir}/libs/twitch-api-wrapper-0.3-jar-with-dependencies.jar</file>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 
@@ -233,6 +208,24 @@
             <groupId>com.mb3364</groupId>
             <artifactId>non-maven-proj</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>1.0.1.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>5.45</version>
         </dependency>
 
     </dependencies>
