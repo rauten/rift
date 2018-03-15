@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TwitchService} from "../userprofile/twitch.service";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {UpdateInfoService} from "../userprofile/update-info/data/update-info.service";
+import {YoutubeService} from "../userprofile/youtube.service";
 
 @Component({
   selector: 'app-therift',
@@ -16,7 +17,8 @@ export class TheriftComponent implements OnInit {
   loggedInUserId: any;
 
   constructor(public auth: AuthService, private router: Router, private activatedRoute: ActivatedRoute,
-              private twitchService: TwitchService, private updateInfoService: UpdateInfoService,
+              private twitchService: TwitchService, private youtubeService: YoutubeService,
+              private updateInfoService: UpdateInfoService,
               private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
     if(this.profile){
@@ -38,7 +40,6 @@ export class TheriftComponent implements OnInit {
             let jwt = JSON.parse(resBody.content).id_token;
             this.twitchService.getTwitchUsername(jwt + ".").subscribe(
               resBody => {
-                console.log(resBody.username);
                 let data = {
                   "id": this.loggedInUserId,
                   "twitchAccount": resBody.username,
@@ -52,7 +53,20 @@ export class TheriftComponent implements OnInit {
         );
       } else if(authType == "youtube") {
         console.log("in youtube!");
-        console.log(params['code']);
+        let code = params['code'];
+        code = code.replace("/", "%2F");
+        console.log(code);
+        this.youtubeService.getYouTubeUsername(code).subscribe(
+          resBody => {
+            let data = {
+              "id": this.loggedInUserId,
+              "youtubeAccount": resBody.username,
+              "riftTag": ""
+            };
+            console.log(data);
+            this.updateInfoService.updateUser(data);
+          }
+        )
       }
     });
   }

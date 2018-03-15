@@ -95,6 +95,7 @@ import { KickRifteeButtonComponent } from './components/kick-riftee-button/kick-
 import { LeagueOfLegendsComponent } from './game-api/league-of-legends/league-of-legends.component';
 import {LeagueOfLegendsService} from "./game-api/league-of-legends/league-of-legends.service";
 import {TwitchService} from './userprofile/twitch.service';
+import {YoutubeService} from "./userprofile/youtube.service";
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -181,7 +182,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
-    LeagueOfLegendsService, TwitchService,
+    LeagueOfLegendsService, YoutubeService, TwitchService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},

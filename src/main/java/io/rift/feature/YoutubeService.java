@@ -17,19 +17,18 @@ public class YoutubeService {
 
     public String getYoutubeAccessCode(String code) throws IOException {
         code = code.replace("%2F", "/");
-        String youtubeURL = "http://www.googleapis.com/oauth2/v4/token?" +
+        String youtubeURL = "https://www.googleapis.com/oauth2/v4/token?" +
                 "code=" + code +
                 "&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com" +
                 "&client_secret=B3iQddU6zYBRsEPiCSZX6J9V" +
-                "&redirect_uri=http://localhost:4200" +
+                "&redirect_uri=http://localhost:4200/youtube" +
                 "&grant_type=authorization_code";
 
         URL url = new URL(youtubeURL);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        con.setFixedLengthStreamingMode(0);
-        con.setDoOutput(true);
+        con.setRequestProperty("Content-Length", "1");
         con.setConnectTimeout(5000);
         con.setReadTimeout(5000);
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
