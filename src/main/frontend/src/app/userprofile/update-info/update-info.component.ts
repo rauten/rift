@@ -78,8 +78,14 @@ export class UpdateInfoComponent implements OnInit {
     if(this.coverPhoto) {
       this.uploadCoverPhoto();
     }
-
     window.location.reload();
+  }
+
+  verifyWithTwitch() {
+    window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
+      '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
+      '&redirect_uri=http://localhost:4200' +
+      '&scope=openid';
   }
 
   cancel(): void {

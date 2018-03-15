@@ -25,6 +25,7 @@ export class NotificationsService {
   }
 
   start(start, poll, riftId, notifications, login) {
+    this.globals.stopPolling = false;
     if (login) {
       console.log("Starting poll");
     } else {
@@ -52,17 +53,22 @@ export class NotificationsService {
     console.log("Okay let's go...");
     this.http.get(this.pollUrl).subscribe(
       success => {
+        console.log("Stop polling: " + this.globals.stopPolling);
         console.log("Received a new notification");
         console.log(JSON.parse(success["_body"]).data);
         let data = JSON.parse(success["_body"]).data;
         let notification = getNotification(data);
         notifications.unshift(notification);
         this.globals.unseenNotifications += 1;
-        setInterval(this.getUpdate(notifications), 6000);
+        if(!this.globals.stopPolling) {
+          setInterval(this.getUpdate(notifications), 6000);
+        }
       },
       error => {
         console.log("error, trying again");
-        setInterval(this.getUpdate(notifications), 500);
+        if(!this.globals.stopPolling) {
+          setInterval(this.getUpdate(notifications), 6000);
+        }
       }
     );
 
@@ -79,9 +85,7 @@ export class NotificationsService {
   }
 
   stopPolling(riftId) {
-    // let xhr = new XMLHttpRequest();
-    // xhr.open("GET","/api/stop/" + riftId);
-    // xhr.send()
+    this.globals.stopPolling = true;
     this.http.get("/api/stop/" + riftId).subscribe(
       success => {
         console.log("Stopped polling");

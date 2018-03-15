@@ -33,57 +33,11 @@ export class NavbarComponent implements OnInit {
 
   clearUnseen() {
     this.globals.unseenNotifications = 0;
-    this.notificationService.clearUnseen(this.profile.nickname);
+    let profile = JSON.parse(localStorage.getItem('profile'));
+    this.notificationService.clearUnseen(profile.nickname);
   }
 
   ngOnInit() {
-    if(JSON.parse(localStorage.getItem('profile'))) {
-    //   this.getUserNotifications(JSON.parse(localStorage.getItem('profile')).nickname);
-    //     this.pollNotifications(this.profile.nickname);
-    }
-  }
-
-  pollNotifications(riftTag) {
-    console.log(localStorage.getItem("beganPolling"));
-    this.userProfileService.getUserId(riftTag).subscribe(
-      resBody => {
-        // this.notificationService.pollNotifications(this.currentUser.notifications);
-      }
-    )
-  }
-
-  getUserNotifications(riftTag: string) {
-    console.log("Getting user notifications");
-    this.userProfileService.getUserNotifications(riftTag).subscribe(
-      resBody => {
-        console.log(resBody);
-        this.currentUser.notifications = [];
-        if(resBody.length > 0) {
-          for (var i = resBody.length-1; i > -1; i--) {
-            var notification = new Notification();
-            notification.createdTime = resBody[i].createdTime;
-            notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
-            notification.creatorEmail = resBody[i].creatorUsertable.email;
-            notification.creatorId = resBody[i].creatorUsertable.id;
-            this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
-            notification.notificationType = resBody[i].notificationType;
-            notification.notificationContent = NOTIFICATION_CONTENT[notification.notificationType];
-            notification.sessionId = resBody[i].sessionId;
-            notification.seen = resBody[i].seen;
-            if(notification.sessionId > 0) {
-              notification.sessionTitle = resBody[i].rifterSession.title;
-            }
-            this.currentUser.notifications.push(notification);
-          }
-        } else {
-          var notification = new Notification();
-          notification.notificationContent = "No notifications";
-          notification.creatorProfilePic = "";
-          notification.createdTime = -1;
-          this.currentUser.notifications.push(notification);
-        }
-      }
-    )
   }
 
   getNotificationProfilePicture(riftTag: string, notification: Notification): string {
