@@ -1,12 +1,5 @@
 package io.rift.feature;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.impl.JWTParser;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.mb3364.twitch.api.Twitch;
-import com.mb3364.twitch.api.auth.Scopes;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.oauth2.sdk.auth.Secret;
 import com.nimbusds.oauth2.sdk.id.ClientID;
@@ -41,7 +34,6 @@ public class TwitchService {
 
     public String authenticateUser(String jsonWeb) throws MalformedURLException, ParseException {
 
-        jsonWeb = jsonWeb + ".";
 
         Issuer issuer = new Issuer("https://id.twitch.tv/oauth2");
         ClientID clientID = new ClientID(clientId);

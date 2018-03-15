@@ -16,7 +16,7 @@ public class TwitchController {
     private TwitchService twitchService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/decode/{jwt}")
-    public boolean decodeJWT(@PathVariable String jwt) throws MalformedURLException, ParseException {
+    public String decodeJWT(@PathVariable String jwt) throws MalformedURLException, ParseException {
         return twitchService.authenticateUser(jwt);
     }
 

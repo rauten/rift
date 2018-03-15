@@ -205,12 +205,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.mb3364</groupId>
-            <artifactId>non-maven-proj</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
             <version>1.0.1.RELEASE</version>
