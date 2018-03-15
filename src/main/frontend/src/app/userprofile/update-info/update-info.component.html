@@ -38,6 +38,9 @@
           <app-file-upload name="coverPhoto"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="coverPhoto"></app-file-upload>
           <img src={{coverPhoto}} alt="" class="profilePicPreview"/>
         </div>
+        <div *ngIf="!data.currentUser.twitchAccount">
+          <button (click)="verifyWithTwitch()" type="button" class="btn-primary">Verify With Twitch</button>
+        </div>
         <div class="form-group">
           <ngx-braintree
             [clientTokenURL]="'/api/braintree/clientToken'"

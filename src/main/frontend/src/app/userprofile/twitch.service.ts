@@ -16,4 +16,14 @@ export class TwitchService {
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
+
+  getTwitchUsername(jwt) {
+    return this.http.get("/api/decode/" + jwt)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
 }

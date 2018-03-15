@@ -21,6 +21,10 @@ public class Hook {
         return keepRunning;
     }
 
+    public void setKeepRunning(boolean keepRunning) {
+        this.keepRunning = keepRunning;
+    }
+
     /**
      * Tell the client daemon thread to shutdown and wait for it to close gracefully.
      */

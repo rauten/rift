@@ -2,15 +2,21 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.rift.feature.TwitchService;
 import io.rift.model.RifterSession;
 import io.rift.model.Views;
 import io.rift.service.RifterSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,6 +28,8 @@ public class RifterSessionController {
     @Autowired
     private RifterSessionService rifterSessionService;
 
+    @Autowired
+    private TwitchService twitchService;
 
     /**
      *

@@ -18,7 +18,7 @@ export class UpdateInfoService {
   }
 
   getUserData(): Userprofile {
-    var user: Userprofile = new Userprofile();
+    let user: Userprofile = new Userprofile();
     user.riftTag = this.updateInfoData.riftTag;
     user.firstName = this.updateInfoData.firstName;
     user.lastName = this.updateInfoData.lastName;
@@ -61,8 +61,6 @@ export class UpdateInfoService {
     header.append("Email", auth0data["email"]);
     header.append("Username", auth0data["userName"]);
     header.append("Auth0Id", auth0Id);
-    console.log("Hello");
-    console.log(auth0data);
     // this.getUserInfoAuth0(auth0Id);
     this.http.patch(this.updateUserAuth0, auth0data, {headers: header})
       .map(res => res.json())

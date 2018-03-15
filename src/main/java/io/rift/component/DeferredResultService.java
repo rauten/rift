@@ -79,7 +79,7 @@ public class DeferredResultService implements Runnable {
     }
 
     public void shutdown() {
-        hook.shutdown();
+        hook.setKeepRunning(false);
     }
 
 }

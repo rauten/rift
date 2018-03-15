@@ -100,6 +100,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
+          this.currentUser.twitchAccount = resBody.twitchAccount;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
@@ -272,7 +273,8 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        "updateBraintreeUserURL": this.updateBraintreeUserURL
+        "updateBraintreeUserURL": this.updateBraintreeUserURL,
+        "currentUser": this.currentUser
       }
     });
 
@@ -315,19 +317,5 @@ export class UserprofileComponent implements OnInit {
         riftId: this.currentUser.id
       }
     })
-  }
-
-  verifyWithTwitch() {
-    window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
-      '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
-      '&redirect_uri=http://localhost:4200' +
-      '&scope=openid';
-    console.log(document.location.hash);
-    // this.userProfileService.getTwitchInfo().subscribe(
-    //   resBody => {
-    //     console.log(resBody.content);
-    //   }
-    // )
-
   }
 }

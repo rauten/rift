@@ -1,12 +1,13 @@
 package io.rift.controller;
 
-import io.rift.service.RiotService;
-import io.rift.service.TwitchService;
+import io.rift.feature.TwitchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,13 @@ public class TwitchController {
         String content = twitchService.getTwitchCode(code);
         Map<String, String> result = new HashMap<>();
         result.put("content", content);
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/decode/{jwt}")
+    public Map<String, String> decodeJWT(@PathVariable String jwt) throws MalformedURLException, ParseException {
+        Map<String, String> result = new HashMap<>();
+        result.put("username", twitchService.authenticateUser(jwt));
         return result;
     }
 }
