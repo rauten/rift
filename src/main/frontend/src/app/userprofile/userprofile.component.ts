@@ -101,6 +101,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
           this.currentUser.twitchAccount = resBody.twitchAccount;
+          this.currentUser.youtubeAccount = resBody.youtubeAccount;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);

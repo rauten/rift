@@ -32,7 +32,7 @@ export class TheriftComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.activatedRoute.queryParams.subscribe(params => {
-      let authType = this.activatedRoute.snapshot.url[0].path
+      let authType = this.activatedRoute.snapshot.url[0].path;
       if(authType == "twitch") {
         this.twitchService.getTwitchInfo(params['code']).subscribe(
           resBody => {
@@ -54,7 +54,7 @@ export class TheriftComponent implements OnInit {
       } else if(authType == "youtube") {
         console.log("in youtube!");
         let code = params['code'];
-        code = code.replace("/", "%2F");
+        code = code.replace("/", "%252F");
         console.log(code);
         this.youtubeService.getYouTubeUsername(code).subscribe(
           resBody => {

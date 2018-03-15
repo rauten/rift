@@ -21,7 +21,7 @@ public class YoutubeController {
     public Map<String, String> getYoutubeCode(@PathVariable String code) throws IOException {
         String content = youtubeService.getYoutubeAccessCode(code);
         Map<String, String> result = new HashMap<>();
-        result.put("content", content);
+        result.put("username", content);
         return result;
     }
 
