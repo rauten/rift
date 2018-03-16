@@ -23,6 +23,9 @@ public class GameAccount {
     @JsonView(Views.GameAccountIgn.class)
     private String ign;
 
+    @JsonView(Views.GameAccountVerified.class)
+    private boolean verified;
+
     @JsonView(Views.GameAccountUsertable.class)
     private Usertable usertable;
 

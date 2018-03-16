@@ -25,7 +25,7 @@ public class GameAccountService {
     @Autowired
     private UsertableService usertableService;
 
-    public final Integer POPULATESIZE = 4;
+    public final Integer POPULATESIZE = 5;
 
     private final String getGameAccountById = "getGameAccountById";
     private final String getGameAccountAndGameById = "getGameAccountAndGameById";
@@ -46,6 +46,7 @@ public class GameAccountService {
         gameAccount.setGameId(resultSet.getInt(startPoint + 1));
         gameAccount.setIgn(resultSet.getString(startPoint + 2));
         gameAccount.setId(resultSet.getInt(startPoint + 3));
+        gameAccount.setVerified(resultSet.getBoolean(startPoint + 4));
         if (info.equals("game")) {
             gameAccount.setGame(gameService.populateGame(resultSet, POPULATESIZE + 1, ""));
         }
@@ -60,6 +61,7 @@ public class GameAccountService {
             gameAccount.setGameId(resultSet.getInt(startPoint + 1));
             gameAccount.setIgn(resultSet.getString(startPoint + 2));
             gameAccount.setId(resultSet.getInt(startPoint + 3));
+            gameAccount.setVerified(resultSet.getBoolean(startPoint + 4));
             if (info.equals("game")) {
                 gameAccount.setGame(gameService.populateGame(resultSet, POPULATESIZE + 1, ""));
             }
@@ -158,9 +160,9 @@ public class GameAccountService {
 
     public boolean updateGameAccountById(GameAccount gameAccount) {
         List<Object> objects = new ArrayList<>();
-        objects.add(gameAccount.getId());
         objects.add(gameAccount.getIgn());
-        return riftRepository.doUpdate(new StringBuilder("updateGameAccount"), objects);
+        objects.add(gameAccount.getId());
+        return riftRepository.doUpdate(new StringBuilder("UPDATE gameaccount SET ign = ? WHERE id = ?"), objects);
     }
 
 }

@@ -620,7 +620,7 @@
     <updateGameAccount>
         UPDATE gameaccount
         SET ign = ?
-        WHERE id = ?
+        WHERE id = ?;
     </updateGameAccount>
 
 
