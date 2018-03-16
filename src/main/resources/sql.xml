@@ -543,6 +543,88 @@
     </getUserComplaintsBySubmitterId>
 
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - - - - - - - - - - GAME ACCOUNT SQL COMMANDS - - - - - - - - - - - - - -->
+
+    <getGameAccountById>
+        SELECT *
+        FROM gameaccount
+        WHERE id = ?;
+    </getGameAccountById>
+
+    <getGameAccountAndGameById>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = ga.id
+        WHERE g.id = ?;
+    </getGameAccountAndGameById>
+
+    <getGameAccountsByUsertableId>
+        SELECT *
+        FROM gameaccount
+        WHERE usertable_id = ?;
+    </getGameAccountsByUsertableId>
+
+    <getGameAccountAndGameByUsertableId>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = ga.id
+        WHERE usertable_id = ?;
+    </getGameAccountAndGameByUsertableId>
+
+    <getGameAccountByAttributes>
+        SELECT *
+        FROM gameaccount
+        WHERE usertable_id = ? AND game_id = ? AND ign = ?;
+    </getGameAccountByAttributes>
+
+    <getGameAccountAndGameByAttributes>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = ga.id
+        WHERE usertable_id = ? AND game_id = ? AND ign = ?;
+    </getGameAccountAndGameByAttributes>
+
+    <getGameAccountByGameId>
+        SELECT *
+        FROM gameaccount
+        WHERE game_id = ?;
+    </getGameAccountByGameId>
+
+    <getGameAccountAndGameByGameId>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = ga.id
+        WHERE game_id = ?;
+    </getGameAccountAndGameByGameId>
+
+    <getGameAccountByIgn>
+        SELECT *
+        FROM gameaccount
+        WHERE ign = ?;
+    </getGameAccountByIgn>
+
+    <getGameAccountAndGameByIgn>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = ga.id
+        WHERE ign = ?;
+    </getGameAccountAndGameByIgn>
+
+    <createGameAccount>
+        INSERT INTO gameaccount
+        (usertable_id, game_id, ign)
+        VALUES(?, ?, ?);
+    </createGameAccount>
+
+    <updateGameAccount>
+        UPDATE gameaccount
+        SET ign = ?
+        WHERE id = ?
+    </updateGameAccount>
+
+
+
     <!--
         CREATE OR REPLACE FUNCTION create_game_request_notification()
             RETURNS trigger AS
