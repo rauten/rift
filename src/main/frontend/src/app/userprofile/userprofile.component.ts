@@ -20,6 +20,8 @@ import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
+import {GameAccount} from "../models/game-account";
+import {GameAccountService} from "./game-account/game-account.service";
 
 @Component({
   selector: 'app-userprofile',
@@ -41,7 +43,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private lolService: LeagueOfLegendsService) {
+  public dialog: MatDialog, private gameAccountService: GameAccountService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -57,15 +59,6 @@ export class UserprofileComponent implements OnInit {
     });
 
   }
-
-  getLeagueInfo(summonerTag) {
-    this.lolService.getSummonerInfo(summonerTag).subscribe(
-      resBody => {
-        console.log(resBody);
-      }
-    )
-  }
-
 
   getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
@@ -109,6 +102,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getCurrentLoggedInUser(this.profile.nickname);
+          this.getUserGameAccounts(this.currentUser.id);
         },
       error => {
           console.log(error.message);
@@ -255,6 +249,22 @@ export class UserprofileComponent implements OnInit {
     );
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
+
+  getUserGameAccounts(id) {
+    this.gameAccountService.getUserGameAccounts(id).subscribe(
+      resBody => {
+        console.log(resBody);
+        for(let i = 0; i < resBody.length; i++) {
+          let currAccount = resBody[i];
+          let account: GameAccount = new GameAccount();
+          account.gameName = currAccount.game.game;
+          account.gameId = currAccount.gameId;
+          account.ign = currAccount.ign;
+          account.id = currAccount.id;
+          this.currentUser.gameAccounts.push(account);
+        }
+      }
+    )};
 
   isFollowing(riftTag: string) {
     for (let i = 0; i < this.loggedInUser.followings.length; i++) {

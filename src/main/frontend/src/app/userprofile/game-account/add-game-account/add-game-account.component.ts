@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {GAMES} from "../../../constants/games";
 import {UserprofileService} from "../../userprofile.service";
 import {MAT_DIALOG_DATA} from "@angular/material";
+import {GameAccountService} from "../game-account.service";
 
 @Component({
   selector: 'app-add-game-account',
@@ -15,7 +16,7 @@ export class AddGameAccountComponent implements OnInit {
   ign: any;
   profile: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, private gameAccountService: GameAccountService) {
     this.games = GAMES;
     this.profile = JSON.parse(localStorage.getItem("profile"));
   }
@@ -23,12 +24,17 @@ export class AddGameAccountComponent implements OnInit {
   ngOnInit() {
   }
 
+  addGameAccount(data) {
+    this.gameAccountService.addGameAccount(data);
+  }
+
   save() {
     let data = {
-      gameId: this.gameId,
-      username: this.ign,
-      id: this.data.loggedInUserId
+      "gameId": this.gameId,
+      "ign": this.ign,
+      "usertableId": this.data.loggedInUserId
     };
     console.log(data);
+    this.addGameAccount(data);
   }
 }

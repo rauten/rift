@@ -3,6 +3,7 @@ import {Session} from "./session";
 import {UserRating} from "./userrating";
 import {Notification} from "./notification";
 import {SessionRequest} from "./session-request";
+import {GameAccount} from "./game-account";
 
 export class Userprofile {
   id: number;
@@ -28,6 +29,7 @@ export class Userprofile {
   sessionRequests: any;
   profilePic: string;
   braintreeId: string;
+  gameAccounts: GameAccount[] = [];
 
   customerId: string;
   followerUsertable: any;

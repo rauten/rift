@@ -136,6 +136,11 @@
                 </div>
               </div>
             </mat-tab>
+            <mat-tab label="game accounts">
+              <div class="media" *ngFor="let account of currentUser.gameAccounts">
+                 {{account.ign}}
+              </div>
+            </mat-tab>
           </mat-tab-group>
         </div>
       </div>
