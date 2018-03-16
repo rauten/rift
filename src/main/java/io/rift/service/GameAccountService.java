@@ -158,9 +158,9 @@ public class GameAccountService {
 
     public boolean updateGameAccountById(GameAccount gameAccount) {
         List<Object> objects = new ArrayList<>();
-        objects.add(gameAccount.getId());
         objects.add(gameAccount.getIgn());
-        return riftRepository.doUpdate(new StringBuilder("updateGameAccount"), objects);
+        objects.add(gameAccount.getId());
+        return riftRepository.doUpdate(new StringBuilder("UPDATE gameaccount SET ign = ? WHERE id = ?"), objects);
     }
 
 }
