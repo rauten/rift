@@ -260,7 +260,7 @@ public class Views {
 
     public interface GameAccountAttributes extends GameAccountId, GameAccountUsertableId, GameAccountGameId, GameAccountIgn {}
 
-    public interface GameAccount extends GameAccountAttributes, GameAccountUsertable, GameAccountGame {}
+    public interface GameAccount extends GameAccountAttributes, GameAccountUsertable, GameAccountGame, GameAccountVerified {}
 
     public interface GameAccountId {}
 
@@ -269,6 +269,8 @@ public class Views {
     public interface GameAccountGameId {}
 
     public interface GameAccountIgn {}
+
+    public interface GameAccountVerified {}
 
     public interface GameAccountUsertable {}
 
