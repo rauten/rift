@@ -4,6 +4,7 @@ export class GameAccount {
   ign: string;
   riftId: number;
   id: number;
+  gameIcon: string;
 
   length: number;
   game: any;

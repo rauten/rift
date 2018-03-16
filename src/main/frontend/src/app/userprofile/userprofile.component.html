@@ -137,8 +137,16 @@
               </div>
             </mat-tab>
             <mat-tab label="game accounts">
-              <div class="media" *ngFor="let account of currentUser.gameAccounts">
-                 {{account.ign}}
+              <div class="media user-following" *ngFor="let account of currentUser.gameAccounts">
+                <img src="{{account.gameIcon}}" alt="User Avatar" class="media-object pull-left">
+                <div class="media-body">
+                  {{account.gameName}}
+                    <br><span class="text-muted username">@{{account.ign}}</span>
+                  <button type="button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag" class="btn btn-sm btn-primary"
+                          (click)="editGameAccount(account)">
+                    <span>Edit Game Account</span>
+                  </button>
+                </div>
               </div>
             </mat-tab>
           </mat-tab-group>

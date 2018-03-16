@@ -36,5 +36,6 @@ export class AddGameAccountComponent implements OnInit {
     };
     console.log(data);
     this.addGameAccount(data);
+    window.location.reload();
   }
 }

@@ -4,7 +4,6 @@ import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from "@angular/material";
 import {AddGameAccountComponent} from "../game-account/add-game-account/add-game-account.component";
-import {ViewGameAccountsComponent} from "../game-account/view-game-accounts/view-game-accounts.component";
 
 @Component({
   selector: 'app-update-info',
@@ -103,16 +102,6 @@ export class UpdateInfoComponent implements OnInit {
 
   addGameAccount() {
     this.dialog.open(AddGameAccountComponent, {
-      height: '450px',
-      width: '600px',
-      data: {
-        "loggedInUserId": this.loggedInUser.id
-      }
-    });
-  }
-
-  viewGameAccounts() {
-    this.dialog.open(ViewGameAccountsComponent, {
       height: '450px',
       width: '600px',
       data: {

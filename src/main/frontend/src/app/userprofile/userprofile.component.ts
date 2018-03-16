@@ -22,6 +22,8 @@ import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.compo
 import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
 import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
+import {SESSION_ICONS} from "../constants/session-icon-variables";
+import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -261,6 +263,7 @@ export class UserprofileComponent implements OnInit {
           account.gameId = currAccount.gameId;
           account.ign = currAccount.ign;
           account.id = currAccount.id;
+          account.gameIcon = SESSION_ICONS[account.gameId];
           this.currentUser.gameAccounts.push(account);
         }
       }
@@ -288,6 +291,16 @@ export class UserprofileComponent implements OnInit {
       }
     });
 
+  }
+
+  editGameAccount(account) {
+    this.dialog.open(EditGameAccountComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "account": account,
+      }
+    });
   }
 
   openRatingDialog() {
