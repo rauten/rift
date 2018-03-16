@@ -1,0 +1,115 @@
+package io.rift.controller;
+
+import io.rift.model.GameAccount;
+import io.rift.service.GameAccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLException;
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/api")
+public class GameAccountController {
+
+    @Autowired
+    private GameAccountService gameAccountService;
+
+
+    /**
+     *
+     * @param id
+     * @param info
+     * @return - A GameAccount object with a specified serial id (must know id number)
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/{id}/info={info}")
+    public GameAccount getGameAccountById(@PathVariable Integer id, @PathVariable String info) throws SQLException {
+        return gameAccountService.getGameAccountById(id, info);
+    }
+
+    /**
+     *
+     * @param usertableId
+     * @param gameId
+     * @param ign
+     * @param info
+     * @return - A GameAccount object with a specified usertableId, gameId, and ign
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/gameId/{gameId}/ign/{ign}/info={info}")
+    public GameAccount getGameAccountByAttributes(@PathVariable Integer usertableId, @PathVariable Integer gameId,
+                                                  @PathVariable String ign, @PathVariable String info) throws SQLException {
+        return gameAccountService.getGameAccountByAttributes(usertableId, gameId, ign, info);
+    }
+
+    /**
+     * Use this endpoint to get all gameaccounts for a given rifter
+     * @param usertableId
+     * @param info
+     * @return - Returns list of GameAccount objects that have a specified usertableId
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}info={info}")
+    public List<GameAccount> getGameAccountByUsertableId(@PathVariable Integer usertableId, @PathVariable String info) throws SQLException {
+        return gameAccountService.getGameAccountsByUsertableId(usertableId, info);
+    }
+
+
+    /**
+     *
+     * @param gameId
+     * @param info
+     * @return - Returns list of GameAccount objects that have a specified gameId
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/gameId/{gameId}/info={info}")
+    public List<GameAccount> getGameAccountByGameId(@PathVariable Integer gameId, @PathVariable String info) throws SQLException {
+        return gameAccountService.getGameAccountsByGameId(gameId, info);
+    }
+
+    /**
+     *
+     * @param ign
+     * @param info
+     * @return - Returns list of GameAccount objects that have a specified ign
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/ign/{ign}info={info}")
+    public List<GameAccount> getGameAccountByIgn(@PathVariable String ign, @PathVariable String info) throws SQLException {
+        return gameAccountService.getGameAccountsByIgn(ign, info);
+    }
+
+    /**
+     * Example valid field
+     *
+     * {
+     *     "usertable_id" : 78,
+     *     "game_id" : 2,
+     *     "ign" : "scarra"
+     * }
+     * @param gameAccount - Must include usertable_id, game_id, and ign fields
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/gameaccount/create")
+    public boolean createGameAccount(@RequestBody GameAccount gameAccount) {
+        return gameAccountService.createGameAccount(gameAccount);
+    }
+
+    /**
+     * Example valid field
+     *
+     * {
+     *     "id" : 45,
+     *     "ign" : "rauten3"
+     * }
+     *
+     * @param gameAccount - Must have id and ign fields. Everything else can be set to null
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/gameaccount/update")
+    public boolean updateGameAccountById(@RequestBody GameAccount gameAccount) {
+        return gameAccountService.updateGameAccountById(gameAccount);
+    }
+}

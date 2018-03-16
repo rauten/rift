@@ -108,31 +108,6 @@ public class YoutubeService {
         JSONObject jsonSnippet = (JSONObject) snippet;
         Object title = jsonSnippet.get("title");
         return title.toString();
-        /*
-        try {
-            Object[] objects = (Object[]) obj;
-            try {
-                Map<String, Map<String, String>> objectMapMap = (Map) objects[0];
-                Map<String, String> snippet = objectMapMap.get("snippet");
-                return snippet.get("title").toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                JSONObject jsonObject1 = new JSONObject(objects.toString());
-                Object object = jsonObject1.get("snippet");
-                JSONObject jsonObject2 = new JSONObject(object.toString());
-                String object2 = (String)jsonObject2.get("title");
-                return object2;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        */
     }
 
 

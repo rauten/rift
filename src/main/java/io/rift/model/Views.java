@@ -255,6 +255,26 @@ public class Views {
 
     public interface GameGame {}
 
+    /****************** GameAccount Attributes ***********************/
+    /****************************************************************/
+
+    public interface GameAccountAttributes extends GameAccountId, GameAccountUsertableId, GameAccountGameId, GameAccountIgn {}
+
+    public interface GameAccount extends GameAccountAttributes, GameAccountUsertable, GameAccountGame {}
+
+    public interface GameAccountId {}
+
+    public interface GameAccountUsertableId {}
+
+    public interface GameAccountGameId {}
+
+    public interface GameAccountIgn {}
+
+    public interface GameAccountUsertable {}
+
+    public interface GameAccountGame {}
+
+
     /****************** GetProfilePage View ***********************/
     /**************************************************************/
 
