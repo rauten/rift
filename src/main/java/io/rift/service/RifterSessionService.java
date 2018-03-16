@@ -36,7 +36,7 @@ public class RifterSessionService {
     @Autowired
     private GameService gameService;
 
-    public final int POPULATESIZE = 16;
+    public final int POPULATESIZE = 17;
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterSessionById = "getRifterSessionById";
@@ -166,37 +166,38 @@ public class RifterSessionService {
         rifterSession.setSlotsRemaining(resultSet.getInt(startPoint + 13));
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         rifterSession.setDescription(resultSet.getString(startPoint + 15));
+        rifterSession.setGameAccountId(resultSet.getInt(startPoint + 16));
         try {
             rifterSession.setGame(gameService.populateGame(resultSet, startPoint + POPULATESIZE, ""));
+            startPoint += gameService.POPULATESIZE;
         } catch (PSQLException e) {
             e.printStackTrace();
         }
-        startPoint += gameService.POPULATESIZE;
         if (info.equals("levenshteinSearch")) {
-            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + 16));
-            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + 17));
-            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + 18));
-            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + 19, ""));
+            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 1));
+            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 2));
+            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 3));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + POPULATESIZE + 4, ""));
         } else if (info.equals("request")) {
             SessionRequest sessionRequest = new SessionRequest();
-            sessionRequest.setAccepted(resultSet.getShort(startPoint + 16));
+            sessionRequest.setAccepted(resultSet.getShort(startPoint + POPULATESIZE));
             List<SessionRequest> sessionRequests = new ArrayList<>();
             sessionRequests.add(sessionRequest);
             rifterSession.setSessionRequests(sessionRequests);
         } else if (info.equals("requestInfo&Host")) {
-            if (resultSet.getObject(startPoint + 16) != null) {
+            if (resultSet.getObject(startPoint + POPULATESIZE) != null) {
                 SessionRequest sessionRequest = new SessionRequest();
-                sessionRequest.setAccepted(resultSet.getShort(startPoint + 16));
+                sessionRequest.setAccepted(resultSet.getShort(startPoint + POPULATESIZE));
                 List<SessionRequest> sessionRequests = new ArrayList<>();
                 sessionRequests.add(sessionRequest);
                 rifterSession.setSessionRequests(sessionRequests);
-                Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + 17, "");
+                Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + POPULATESIZE + 1, "");
                 rifterSession.setUsertable(usertable);
             }
         } else if (info.equals("host")) {
             Usertable usertable = new Usertable();
-            usertable.setRiftTag(resultSet.getString(startPoint + 16));
-            usertable.setRifterRating(resultSet.getDouble(startPoint + 17));
+            usertable.setRiftTag(resultSet.getString(startPoint + POPULATESIZE));
+            usertable.setRifterRating(resultSet.getDouble(startPoint + POPULATESIZE + 1));
             rifterSession.setUsertable(usertable);
         }
         return rifterSession;
@@ -213,7 +214,7 @@ public class RifterSessionService {
         boolean success2 = false;
         boolean success = riftRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
-                        rifterSession.getSessionTime(), rifterSession.getGameId(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime()});
+                        rifterSession.getSessionTime(), rifterSession.getGameId(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime(), rifterSession.getGameAccountId()});
 
         if (success) {
             String notificationContent = rifterSession.getHostId() + " has created a new session slot for " + rifterSession.getGameId() + " on " + rifterSession.getConsole() + "!";
