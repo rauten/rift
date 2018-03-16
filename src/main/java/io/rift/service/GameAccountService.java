@@ -38,6 +38,9 @@ public class GameAccountService {
     private final String getGameAccountByIgn = "getGameAccountByIgn";
     private final String getGameAccountAndGameByIgn = "getGameAccountAndGameByIgn";
 
+    private final String getGameAccountAndGameByUsertableIdAndGameId = "getGameAccountAndGameByUsertableIdAndGameId";
+    private final String getGameAccountByUsertableIdAndGameId = "getGameAccountByUsertableIdAndGameId";
+
     private final String createGameAccount = "createGameAccount";
 
     public GameAccount populateGameAccount(ResultSet resultSet, Integer startPoint, String info) throws SQLException {
@@ -111,6 +114,26 @@ public class GameAccountService {
             gameAccount = populateGameAccount(resultSet, 1, info);
             resultSet.close();
             return gameAccount;
+        }
+        resultSet.close();
+        return null;
+    }
+
+    public List<GameAccount> getGameAccountsByUsertableIdAndGameId(Integer usertableId, Integer gameId, String info) throws SQLException {
+        Object[] args = new Object[2];
+        args[0] = usertableId;
+        args[1] = gameId;
+        ResultSet resultSet;
+        if (info.equals("game")) {
+            resultSet = riftRepository.doQuery(getGameAccountAndGameByUsertableIdAndGameId, args);
+        } else {
+            resultSet = riftRepository.doQuery(getGameAccountByUsertableIdAndGameId, args);
+        }
+        List<GameAccount> gameAccounts = new ArrayList<>();
+        if (resultSet.next()) {
+            gameAccounts = populateGameAccounts(resultSet, 1, info);
+            resultSet.close();
+            return gameAccounts;
         }
         resultSet.close();
         return null;

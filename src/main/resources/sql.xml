@@ -611,6 +611,19 @@
         WHERE ign = ?;
     </getGameAccountAndGameByIgn>
 
+    <getGameAccountAndGameByUsertableIdAndGameId>
+        SELECT *
+        FROM gameaccount g JOIN game ga
+        ON g.game_id = g.id
+        WHERE usertable_id = ? AND game_id = ?;
+    </getGameAccountAndGameByUsertableIdAndGameId>
+
+    <getGameAccountByUsertableIdAndGameId>
+        SELECT *
+        FROM gameaccount
+        WHERE usertable_id = ? AND game_id = ?;
+    </getGameAccountByUsertableIdAndGameId>
+
     <createGameAccount>
         INSERT INTO gameaccount
         (usertable_id, game_id, ign)

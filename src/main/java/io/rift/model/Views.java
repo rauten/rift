@@ -52,7 +52,7 @@ public class Views {
 
     public interface RifterSesionInfo extends RifterSessionCardInfo, RifterSessionNumSlots, RifterSessionExpirationTime,
             RifterSessionMethodOfContact, RifterSessionSessionType, RifterSessionHits, RifterSessionCreatedTime,
-            RifterSessionDescription {}
+            RifterSessionDescription, RifterSessionGameAccountId {}
 
     public interface RifterSessionCardInfo extends RifterSessionId, RifterSessionHostId, RifterSessionSlotsRemaining, RifterSessionCost,
             RifterSessionSessionTime, RifterSessionConsole, RifterSessionGameId, RifterSessionTitle, RifterSessionSessionDuration {}
@@ -89,6 +89,8 @@ public class Views {
 
     public interface RifterSessionDescription {}
 
+    public interface RifterSessionGameAccountId {}
+
     public interface RifterSessionSessionRequests {}
 
     public interface RifterSessionUsertable {}
@@ -104,6 +106,8 @@ public class Views {
     public interface RifterSessionGameFirstWordLevenshtein {}
 
     public interface RifterSessionRiftTagLevenshtein {}
+
+    public interface RifterSessionGameAccount {}
 
 
     /****************** SessionRequest Attributes **********************/

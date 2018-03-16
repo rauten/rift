@@ -44,6 +44,27 @@ public class GameAccountController {
         return gameAccountService.getGameAccountByAttributes(usertableId, gameId, ign, info);
     }
 
+
+    /**
+     *
+     * Sample Endpoints: GET /api/gameaccount/usertableId/78/gameId/1/info=game
+     *                   GET /api/gameaccount/usertableId/80/gameId/2/info=
+     * 
+     *
+     * @param usertableId
+     * @param gameId
+     * @param info
+     * @return - Gets a list of GameAccounts that have a specified usertableId and gameId
+     * @throws SQLException
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/gameId/{gameId}/info={info}")
+    public List<GameAccount> getGameAccountsByUsertableIdAndGameId(@PathVariable Integer usertableId, @PathVariable Integer gameId,
+                                                                   @PathVariable String info) throws SQLException {
+
+        return gameAccountService.getGameAccountsByUsertableIdAndGameId(usertableId, gameId, info);
+
+    }
+
     /**
      * Use this endpoint to get all gameaccounts for a given rifter
      * @param usertableId

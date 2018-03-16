@@ -58,6 +58,9 @@ public class RifterSession {
     @JsonView(Views.RifterSessionDescription.class)
     private String description;
 
+    @JsonView(Views.RifterSessionGameAccountId.class)
+    private Integer gameAccountId;
+
     @JsonView(Views.RifterSessionSessionRequests.class)
     private List<SessionRequest> sessionRequests;
 
@@ -81,6 +84,9 @@ public class RifterSession {
 
     @JsonView(Views.RifterSessionRiftTagLevenshtein.class)
     private Double riftTagLevenshtein;
+
+    @JsonView(Views.RifterSessionGameAccount.class)
+    private GameAccount gameAccount;
 
     public RifterSession() {}
 
