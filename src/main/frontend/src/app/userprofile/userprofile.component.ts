@@ -73,8 +73,8 @@ export class UserprofileComponent implements OnInit {
       resBody => {
         console.log("in logged in user resbody");
         this.loggedInUser.id = resBody.id;
-        for (var i = 0; i < resBody.followings.length; i++) {
-          var currFollowing = new Userprofile();
+        for (let i = 0; i < resBody.followings.length; i++) {
+          let currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
@@ -89,7 +89,6 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -121,8 +120,8 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting user's followers and followings");
     this.currentUser.followings = [];
     this.currentUser.followers = [];
-    for (var i = 0; i < followers.length; i++) {
-      var currFollower = new Userprofile();
+    for (let i = 0; i < followers.length; i++) {
+      let currFollower = new Userprofile();
       currFollower.firstName = followers[i].followerUsertable.firstName;
       currFollower.lastName = followers[i].followerUsertable.lastName;
       currFollower.riftTag = followers[i].followerUsertable.riftTag;
@@ -130,8 +129,8 @@ export class UserprofileComponent implements OnInit {
       this.getUserProfilePicture(currFollower.riftTag, currFollower);
       this.currentUser.followers.push(currFollower);
     }
-    for (var i = 0; i < followings.length; i++) {
-      var currFollowing = new Userprofile();
+    for (let i = 0; i < followings.length; i++) {
+      let currFollowing = new Userprofile();
       currFollowing.firstName = followings[i].followingUsertable.firstName;
       currFollowing.lastName = followings[i].followingUsertable.lastName;
       currFollowing.riftTag = followings[i].followingUsertable.riftTag;
@@ -147,13 +146,13 @@ export class UserprofileComponent implements OnInit {
     this.userRatingService.getUserRating(id).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var userRating = new UserRating();
+        for (let i = 0; i < resBody.length; i++) {
+          let userRating = new UserRating();
           userRating.review = resBody[i].review;
           userRating.createdTime = resBody[i].createdTime;
           userRating.rating = resBody[i].rating;
           userRating.account_type = resBody[i].accountType;
-          var reviewer = new Userprofile();
+          let reviewer = new Userprofile();
           reviewer.firstName = resBody[i].reviewerUsertable.firstName;
           reviewer.lastName = resBody[i].reviewerUsertable.lastName;
           reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
@@ -168,8 +167,8 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting user's activities");
     this.currentUser.activities = [];
     this.currentUser.creatorActivityList = creatorActivityList;
-    for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
-      var currActivity = new Activity();
+    for (let i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+      let currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
       currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)];
       currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
@@ -258,8 +257,8 @@ export class UserprofileComponent implements OnInit {
   }
 
   isFollowing(riftTag: string) {
-    for (var i = 0; i < this.loggedInUser.followings.length; i++) {
-      var currFollowing = this.loggedInUser.followings[i].riftTag;
+    for (let i = 0; i < this.loggedInUser.followings.length; i++) {
+      let currFollowing = this.loggedInUser.followings[i].riftTag;
       if (currFollowing == riftTag) {
         this.following = true;
         return true;
@@ -268,7 +267,7 @@ export class UserprofileComponent implements OnInit {
     this.following = false;
   }
 
-  openDialog() {
+  updateInfoModal() {
     //noinspection TypeScriptUnresolvedFunction
     this.dialog.open(UpdateInfoComponent, {
       height: '450px',

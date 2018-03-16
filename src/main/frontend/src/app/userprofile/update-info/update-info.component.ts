@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import {Userprofile} from "../../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
-import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material";
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from "@angular/material";
+import {AddGameAccountComponent} from "../game-account/add-game-account/add-game-account.component";
+import {ViewGameAccountsComponent} from "../game-account/view-game-accounts/view-game-accounts.component";
 
 @Component({
   selector: 'app-update-info',
@@ -20,7 +22,8 @@ export class UpdateInfoComponent implements OnInit {
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
-              private dialogRef: MatDialogRef<UpdateInfoComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+              private dialogRef: MatDialogRef<UpdateInfoComponent>, @Inject(MAT_DIALOG_DATA) public data,
+              public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
@@ -96,6 +99,26 @@ export class UpdateInfoComponent implements OnInit {
       '&include_granted_scopes=true' +
       '&redirect_uri=http://localhost:4200/youtube' +
       '&response_type=code&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com';
+  }
+
+  addGameAccount() {
+    this.dialog.open(AddGameAccountComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "loggedInUserId": this.loggedInUser.id
+      }
+    });
+  }
+
+  viewGameAccounts() {
+    this.dialog.open(ViewGameAccountsComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "loggedInUserId": this.loggedInUser.id
+      }
+    });
   }
 
   cancel(): void {

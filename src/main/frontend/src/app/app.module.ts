@@ -96,7 +96,10 @@ import { LeagueOfLegendsComponent } from './game-api/league-of-legends/league-of
 import {LeagueOfLegendsService} from "./game-api/league-of-legends/league-of-legends.service";
 import {TwitchService} from './userprofile/twitch.service';
 import {YoutubeService} from "./userprofile/youtube.service";
-
+import { AddGameAccountComponent } from './userprofile/game-account/add-game-account/add-game-account.component';
+import { ViewGameAccountsComponent } from './userprofile/game-account/view-game-accounts/view-game-accounts.component';
+import { EditGameAccountComponent } from './userprofile/game-account/edit-game-account/edit-game-account.component';
+import {GameAccountService} from "./userprofile/game-account/game-account.service";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -144,7 +147,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FeedCardComponent,
     FileAComplaintComponent,
     KickRifteeButtonComponent,
-    LeagueOfLegendsComponent
+    LeagueOfLegendsComponent,
+    AddGameAccountComponent,
+    ViewGameAccountsComponent,
+    EditGameAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -179,10 +185,11 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FileUploadComponent
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
-  UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent],
+  UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
+  ViewGameAccountsComponent, EditGameAccountComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
-    LeagueOfLegendsService, YoutubeService, TwitchService,
+    LeagueOfLegendsService, YoutubeService, TwitchService, GameAccountService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},

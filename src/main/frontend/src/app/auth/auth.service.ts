@@ -39,7 +39,7 @@ export class AuthService {
       {
         name: "lastName",
         placeholder: "Enter your last name"
-      }]
+      }],
   });
 
   constructor(public router: Router, public http: Http, public globals: Globals, private userProfileService: UserprofileService,
