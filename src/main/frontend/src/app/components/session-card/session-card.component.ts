@@ -65,11 +65,11 @@ export class SessionCardComponent implements OnInit {
       "hostId": this.session.hostId,
       "sessionId": this.session.id,
       "accepted": 1,
-      "accountId": this.accountId
+      "rifteeGameAccount": this.accountId
     };
     console.log(data);
-    // this.userSessionsService.joinUserSession(data);
-    // alert("Sent request");
+    this.userSessionsService.joinUserSession(data);
+    alert("Sent request");
   }
 
   getUserGameAccountsByGameId(gameId, riftId) {

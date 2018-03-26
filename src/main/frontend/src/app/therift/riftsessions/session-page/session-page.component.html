@@ -32,13 +32,6 @@
                   <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
                 </div>
               </ng-template>
-              <ng-template #template2 style="margin-top:20%">
-                <div class="modal-body text-center">
-                  <p>Are you sure you want to cancel your request?</p>
-                  <button type="button" class="btn btn-default" (click)="cancelSessionRequest()" >Yes</button>
-                  <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
-                </div>
-              </ng-template>
             </div>
             <div class="col-md-4 text-left">
               <h5>Price  <span class="itemPrice">${{session.sessionCost}}.00 / slot</span></h5>

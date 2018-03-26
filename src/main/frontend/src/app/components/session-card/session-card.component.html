@@ -15,7 +15,7 @@
     </div>
     <div class="otherstuff">
       <div class="statusButtons" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
-        <button class="btn-primary" *ngIf="!request" (click)="joinUserSession()">Join</button>
+        <button class="btn-primary" *ngIf="!request" (click)="changeStatus(template)">Join</button>
         <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
         <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
         <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
@@ -24,19 +24,14 @@
         <img alt="{{session.console}}" class="consoleIcon" src="{{consoleIcon}}" />
       </div>
     </div>
-    <button class="btn btn-primary" (click)="changeStatus(template)">Join</button>
     <ng-template #template style="margin-top:20%">
       <div class="modal-body text-center">
         <p>What game account do you want to use?</p>
-        <div class="btn-group" dropdown>
-          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
-            Button dropdown <span class="caret"></span>
-          </button>
-          <ul *dropdownMenu class="dropdown-menu" role="menu" [(ngModel)]="accountId">
-            <li role="menuitem" *ngFor="let account of gameAccounts">
-              {{account.ign}}
-            </li>
-          </ul>
+        <div class="form-group">
+          <label for="account">Select an Account</label>
+          <select class="form-control" id="account" [(ngModel)]="accountId">
+            <option *ngFor="let account of gameAccounts" [value]="account.id">{{account.ign}}</option>
+          </select>
         </div><br>
         <button type="button" class="btn btn-default" (click)="joinUserSession()" >Yes</button>
         <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
