@@ -25,7 +25,7 @@ export class GameAccountService {
   }
 
   getUserGameAccounts(id): Observable<GameAccount> {
-    console.log("Getting user's game accounts");
+    // console.log("Getting user's game accounts");
     return this.http.get("/api/gameaccount/usertableId/" + id + "/info")
       .map(
         (response: Response) => {
@@ -50,7 +50,7 @@ export class GameAccountService {
   }
 
   getUserGameAccountsByGameID(gameId, riftId): Observable<GameAccount> {
-    console.log("Getting user's game accounts by game Id");
+    // console.log("Getting user's game accounts by game Id");
     return this.http.get("/api/gameaccount/usertableId/" + riftId +  "/gameId/" + gameId + "/info")
       .map(
         (response: Response) => {
