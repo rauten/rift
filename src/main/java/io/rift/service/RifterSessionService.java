@@ -1,6 +1,7 @@
 package io.rift.service;
 
 import com.google.common.base.CaseFormat;
+import io.rift.model.GameAccount;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
 import io.rift.model.Usertable;
@@ -36,6 +37,9 @@ public class RifterSessionService {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private GameAccountService gameAccountService;
+
     public final int POPULATESIZE = 17;
 
     private final String getRifterGameById = "getRifterGameById";
@@ -60,7 +64,7 @@ public class RifterSessionService {
     private final String doubleStr = "Double";
 
 
-    private final String sessionCreatedType = "New Game";
+    private final Integer sessionCreatedType = 1;
 
 
     public RifterSession getRifterSessionBySessionId(Integer id) throws SQLException {
@@ -193,6 +197,10 @@ public class RifterSessionService {
                 rifterSession.setSessionRequests(sessionRequests);
                 Usertable usertable = usertableService.populateUsertable(resultSet, startPoint + POPULATESIZE + 1, "");
                 rifterSession.setUsertable(usertable);
+                GameAccount gameAccount = new GameAccount();
+                gameAccount.setIgn(resultSet.getString(startPoint + POPULATESIZE + usertableService.POPULATESIZE + 1));
+                gameAccount.setVerified(resultSet.getBoolean(startPoint + POPULATESIZE + usertableService.POPULATESIZE + 2));
+                rifterSession.setGameAccount(gameAccount);
             }
         } else if (info.equals("host")) {
             Usertable usertable = new Usertable();

@@ -23,8 +23,9 @@ public class BraintreeController {
      *
      * @return A client token which can be used on the frontend to send transaction requests
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/braintree/clientToken")
+    @RequestMapping(method = RequestMethod.GET, value = "/braintree/getclienttoken")
     public Map<String, String> getClientToken() {
+        System.out.println("Herro");
         return braintreeService.getClientToken();
     }
 

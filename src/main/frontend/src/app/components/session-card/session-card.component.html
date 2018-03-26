@@ -27,8 +27,18 @@
     <button class="btn btn-primary" (click)="changeStatus(template)">Join</button>
     <ng-template #template style="margin-top:20%">
       <div class="modal-body text-center">
-        <p>Are you sure you want to cancel your request?</p>
-        <button type="button" class="btn btn-default" (click)="cancelSessionRequest()" >Yes</button>
+        <p>What game account do you want to use?</p>
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+            Button dropdown <span class="caret"></span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu" [(ngModel)]="accountId">
+            <li role="menuitem" *ngFor="let account of gameAccounts">
+              {{account.ign}}
+            </li>
+          </ul>
+        </div><br>
+        <button type="button" class="btn btn-default" (click)="joinUserSession()" >Yes</button>
         <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
       </div>
     </ng-template>

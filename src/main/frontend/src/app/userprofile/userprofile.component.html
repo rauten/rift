@@ -81,10 +81,11 @@
             </mat-tab>
             <mat-tab label="sessions">
               <div class="media" *ngFor="let session of currentUser.rifterSessions">
-                <app-session-card [routerLink]="['../../session', session.id]"
+                <app-session-card
                                   [session]="session" [isLoggedIn]="isLoggedIn"
                                   [type]="session.type"
                 ></app-session-card>
+                <!--[routerLink]="['../../session', session.id]"-->
               </div>
             </mat-tab>
             <mat-tab label="followers">

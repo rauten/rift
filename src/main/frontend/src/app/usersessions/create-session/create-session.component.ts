@@ -6,6 +6,7 @@ import {CreateSessionService} from "./data/create-session.service";
 import {Session} from "../../models/session";
 import {CONSOLES} from "../../constants/consoles";
 import {GAMES} from "../../constants/games";
+import {LANGUAGES} from "../../constants/languages";
 import {UsersessionsService} from "../usersessions.service";
 import {Globals} from "../../global/globals";
 import {UserprofileService} from "../../userprofile/userprofile.service";
@@ -25,6 +26,7 @@ export class CreateSessionComponent implements OnInit {
   sub: any;
   @Input() createSessionData;
   games: any;
+  languages: any;
   consoles: any;
   gameId: any;
   platform: any;
@@ -41,6 +43,7 @@ export class CreateSessionComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.games = GAMES;
     this.consoles = CONSOLES;
+    this.languages = LANGUAGES;
     this.profile = JSON.parse(localStorage.getItem('profile'));
 
   }

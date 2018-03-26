@@ -314,7 +314,7 @@ public class Views {
     public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
 
     public interface RifteeSessions extends RifterSessionCardInfo, RifterSessionSessionRequests, RifterSessionUsertable,
-            SessionRequestAccepted, UsertableCardInfo, GameAttributes, RifterSessionGame {}
+            SessionRequestAccepted, UsertableCardInfo, GameAttributes, RifterSessionGame, GameAccountAttributes {}
 
     public interface UserReviews extends UserRatingAttributes, UserRatingReviewerUsertable, UsertableRestrictedInfo {}
 

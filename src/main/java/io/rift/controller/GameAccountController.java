@@ -133,4 +133,9 @@ public class GameAccountController {
     public boolean updateGameAccountById(@RequestBody GameAccount gameAccount) {
         return gameAccountService.updateGameAccountById(gameAccount);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/gameaccount/delete")
+    public boolean deleteGameAccount(@RequestBody GameAccount gameAccount) {
+        return gameAccountService.deleteAccountById(gameAccount.getId());
+    }
 }

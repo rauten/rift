@@ -177,7 +177,7 @@
     </getGameRequestsByUserIdAndAccepted>
 
     <getBroadcastNotificationsById>
-        SELECT n.id, user_id, notification_type, notification_content, session_id, created_time, creator_id,  us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating, us.gender, r.*
+        SELECT n.* us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating, us.gender, r.*
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
         WHERE us.id = ? AND n.notification_type = 0;
@@ -202,7 +202,7 @@
     </getSessionDeletionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
-        SELECT n.id, user_id, notification_type, notification_content, session_id, n.created_time, creator_id,  u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, r.*, g.*, usr.rift_tag, usr.rifter_rating
+        SELECT n.*, u.first_name, u.last_name, u.is_private, u.is_suspended, u.profile_picture_path, u.rift_tag, u.riftee_rating, u.rifter_rating, u.gender, r.*, g.*, usr.rift_tag, usr.rifter_rating
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
         JOIN usertable u ON f.following_id = u.id
@@ -291,7 +291,7 @@
     </getSessionPlayersBySessionId>
 
     <getRifteeSessionsAndHostInfoByRiftTag>
-        SELECT r.*, ga.*, g.accepted, u.*
+        SELECT r.*, ga.*, g.accepted, u.*, gac.ign, gac.verified
         FROM usertable us JOIN gamerequest g
         ON us.id = g.riftee_id
         JOIN riftergame r
@@ -300,12 +300,14 @@
         on r.game_id = ga.id
         JOIN usertable u
         ON r.host_id = u.id
+        JOIN gameaccount gac
+        ON r.game_account_id = gac.id
         WHERE us.rift_tag = ?
         ORDER BY session_time;
     </getRifteeSessionsAndHostInfoByRiftTag>
 
     <getRifterAndRifteeSessionsByRiftTag>
-        SELECT r.*, ga.*, g.accepted, u.*
+        SELECT r.*, ga.*, g.accepted, u.*, gac.ign, gac.verified
         FROM usertable us JOIN gamerequest g
         ON us.id = g.riftee_id
         JOIN riftergame r
@@ -314,14 +316,18 @@
         on r.game_id = ga.id
         JOIN usertable u
         ON r.host_id = u.id
+        JOIN gameaccount gac
+        ON r.game_account_id = gac.id
         WHERE us.rift_tag = ?
         UNION
-        SELECT riftergame.*, game.*, null, usertable.*
+        SELECT riftergame.*, game.*, null, usertable.*, gacc.ign, gacc.verified
         FROM riftergame
         JOIN game
         ON game_id = game.id
         JOIN usertable
         ON host_id = usertable.id
+        JOIN gameaccount gacc
+        ON game_account_id = gacc.id
         WHERE rift_tag = ?
         ORDER BY session_time;
     </getRifterAndRifteeSessionsByRiftTag>
@@ -636,6 +642,11 @@
         WHERE id = ?;
     </updateGameAccount>
 
+    <deleteAccountById>
+        DELETE FROM gameaccount
+        WHERE id = ?;
+    </deleteAccountById>
+
 
 
     <!--
@@ -645,7 +656,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.host_id, '3', null,
+            VALUES(NEW.host_id, 3, null,
             NEW.session_id, current_timestamp, NEW.riftee_id);
             RETURN NEW;
         END;
@@ -661,7 +672,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, 'sessionDeletion',
+            VALUES(null, 3,
                 (SELECT rift_tag
                 FROM usertable u
                 WHERE u.id = OLD.host_id
@@ -688,7 +699,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.following_id, '2', null,
+            VALUES(NEW.following_id, 2, null,
             null, current_timestamp, NEW.follower_id);
             RETURN NEW;
         END;
@@ -808,7 +819,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, '0', null, NEW.id, current_timestamp, NEW.host_id);
+            VALUES(null, 0, null, NEW.id, current_timestamp, NEW.host_id);
             RETURN NEW;
         END;
         $BODY$
@@ -902,6 +913,85 @@
         ON notification
         FOR EACH ROW
         EXECUTE PROCEDURE queue_event()
+
+        -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION add_placeholder_game_account()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            INSERT INTO gameaccount
+            (usertable_id, game_id, ign, verified)
+            VALUES(NEW.id, -1, "NULL", false);
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql
+
+        CREATE TRIGGER add_placeholder_game_account
+        AFTER INSERT
+        ON usertable
+        FOR EACH ROW
+        EXECUTE PROCEDURE add_placeholder_game_account()
+
+    -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION set_past_sessions_game_account_id()
+            RETURNS trigger AS
+        $BODY$
+        BEGIN
+            UPDATE riftergame
+            SET game_account_id = (SELECT id FROM gameaccount WHERE usertable_id = OLD.usertable_id AND game_id = -1),
+                game_id = -1
+            WHERE current_timestamp > session_time;
+        END;
+        $BODY$
+        LANGUAGE plpgsql
+
+        CREATE TRIGGER set_past_sessions_game_account_id
+        BEFORE DELETE
+        ON gameaccount
+        FOR EACH ROW
+        EXECUTE PROCEDURE set_past_sessions_game_account_id();
+
+    -->
+
+    <!--
+
+        CREATE OR REPLACE FUNCTION check_verified()
+            RETURNS trigger AS
+        $BODY$
+        DECLARE
+        verified boolean := (SELECT g.verified as verified FROM riftergame r JOIN gameaccount g ON r.game_account_id = g.id AND r.host_id = g.usertable_id AND r.game_id = g.game_id WHERE g.id = NEW.game_account_id LIMIT 1);
+        BEGIN
+            IF (verified is false) THEN
+                    DECLARE
+                    num_played int := (SELECT COUNT(*) as num_played FROM riftergame WHERE (current_timestamp - (session_time + session_duration)) > interval '1 day' AND host_id = NEW.host_id AND game_account_id = NEW.game_account_id);
+                    BEGIN
+                        IF (num_played >= 10) THEN
+
+                            UPDATE gameaccount
+                            SET verified = true
+                            WHERE id = NEW.game_account_id
+                            AND usertable_id = NEW.host_id;
+
+                        end if;
+                    end;
+            END IF;
+            RETURN NEW;
+        END;
+        $BODY$
+        LANGUAGE plpgsql
+
+        CREATE TRIGGER check_verified
+        BEFORE INSERT
+        ON riftergame
+        FOR EACH ROW
+        EXECUTE PROCEDURE check_verified();
 
     -->
 
