@@ -42,7 +42,7 @@ public class SessionRequestService {
     @Autowired
     private RiftRepository riftRepository;
 
-    private final Integer POPULATESIZE = 4;
+    private final Integer POPULATESIZE = 5;
 
     private final String getGameRequestBySessionAndRifteeId = "getGameRequestBySessionAndRifteeId";
     private final String createSessionRequest = "createSessionRequest";
@@ -78,6 +78,7 @@ public class SessionRequestService {
         sessionRequest.setSessionId(resultSet.getInt(startPoint + 1));
         sessionRequest.setHostId(resultSet.getInt(startPoint + 2));
         sessionRequest.setAccepted(resultSet.getShort(startPoint + 3));
+        sessionRequest.setRifteeGameAccount(resultSet.getInt(startPoint + 4));
         return sessionRequest;
     }
 
@@ -89,6 +90,7 @@ public class SessionRequestService {
             sessionRequest.setSessionId(resultSet.getInt(2));
             sessionRequest.setHostId(resultSet.getInt(3));
             sessionRequest.setAccepted(resultSet.getShort(4));
+            sessionRequest.setRifteeGameAccount(resultSet.getInt(5));
             rifteeSessions.add(sessionRequest);
         }
         return rifteeSessions;
@@ -102,7 +104,8 @@ public class SessionRequestService {
             sessionRequest.setSessionId(resultSet.getInt(2));
             sessionRequest.setHostId(resultSet.getInt(3));
             sessionRequest.setAccepted(resultSet.getShort(4));
-            int startPoint = 5;
+            sessionRequest.setRifteeGameAccount(resultSet.getInt(5));
+            int startPoint = POPULATESIZE + 1;
             for (String str : info) {
                 if (str.equals("hostInfo")) {
                     Usertable usertable = usertableService.populateUsertable(resultSet, startPoint, "");
@@ -205,7 +208,7 @@ public class SessionRequestService {
                 sessionRequest.getSessionId()}).next()) {
 
             success = riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
-                    sessionRequest.getSessionId(), sessionRequest.getAccepted(), sessionRequest.getHostId()});
+                    sessionRequest.getSessionId(), sessionRequest.getAccepted(), sessionRequest.getHostId(), sessionRequest.getRifteeGameAccount()});
         }
         return false;
     }
