@@ -47,7 +47,7 @@ public class TwitchService {
                 "&client_secret=m0npb9vm8ax0p1xg8wqo936rgkg93q" +
                 "&code=" + code +
                 "&grant_type=authorization_code" +
-                "&redirect_uri=http://localhost:4200";
+                "&redirect_uri=http://localhost:4200/twitch";
         URL url = new URL(twitchURL);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");

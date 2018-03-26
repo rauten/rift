@@ -1,31 +1,17 @@
 package io.rift.feature;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.youtube.YouTube;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.omg.CORBA.NameValuePair;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class YoutubeService {
@@ -33,8 +19,6 @@ public class YoutubeService {
     private final String clientId = "196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com";
     private final String clientSecret = "B3iQddU6zYBRsEPiCSZX6J9V";
     private final String redirectURI = "http://localhost:4200";
-
-    public YouTube youTube;
 
     public String getYoutubeAccessCode(String code) throws IOException {
 

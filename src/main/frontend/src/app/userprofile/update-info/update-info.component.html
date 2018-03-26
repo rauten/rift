@@ -40,7 +40,14 @@
         </div>
         <div *ngIf="!data.currentUser.twitchAccount">
           <button (click)="verifyWithTwitch()" type="button" class="btn-primary">Verify With Twitch</button>
-        </div>
+        </div><br>
+        <div *ngIf="!data.currentUser.youtubeAccount">
+          <button (click)="verifyWithYouTube()" type="button" class="btn-primary">Verify With YouTube</button>
+        </div><br>
+        <div>
+          <button (click)="addGameAccount()" type="button" class="btn-primary">Add a Game Account</button>
+        </div><br>
+
         <div class="form-group">
           <ngx-braintree
             [clientTokenURL]="'/api/braintree/getclienttoken'"

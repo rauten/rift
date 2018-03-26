@@ -72,7 +72,7 @@ public class GameAccountController {
      * @return - Returns list of GameAccount objects that have a specified usertableId
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}info={info}")
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/info={info}")
     public List<GameAccount> getGameAccountByUsertableId(@PathVariable Integer usertableId, @PathVariable String info) throws SQLException {
         return gameAccountService.getGameAccountsByUsertableId(usertableId, info);
     }
@@ -106,8 +106,8 @@ public class GameAccountController {
      * Example valid field
      *
      * {
-     *     "usertable_id" : 78,
-     *     "game_id" : 2,
+     *     "usertableId" : 78,
+     *     "gameId" : 2,
      *     "ign" : "scarra"
      * }
      * @param gameAccount - Must include usertable_id, game_id, and ign fields

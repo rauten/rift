@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import {Userprofile} from "../../models/userprofile";
 import {UpdateInfoService} from "./data/update-info.service";
 import {UserprofileService} from "../userprofile.service";
-import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material";
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from "@angular/material";
+import {AddGameAccountComponent} from "../game-account/add-game-account/add-game-account.component";
 
 @Component({
   selector: 'app-update-info',
@@ -20,7 +21,8 @@ export class UpdateInfoComponent implements OnInit {
 
   //noinspection JSAnnotator
   constructor(private updateInfoService: UpdateInfoService, private userProfileService: UserprofileService,
-              private dialogRef: MatDialogRef<UpdateInfoComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+              private dialogRef: MatDialogRef<UpdateInfoComponent>, @Inject(MAT_DIALOG_DATA) public data,
+              public dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
@@ -84,8 +86,28 @@ export class UpdateInfoComponent implements OnInit {
   verifyWithTwitch() {
     window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
       '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
-      '&redirect_uri=http://localhost:4200' +
+      '&redirect_uri=http://localhost:4200/twitch' +
       '&scope=openid';
+  }
+
+
+  verifyWithYouTube() {
+    window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+      'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly' +
+      '&access_type=offline' +
+      '&include_granted_scopes=true' +
+      '&redirect_uri=http://localhost:4200/youtube' +
+      '&response_type=code&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com';
+  }
+
+  addGameAccount() {
+    this.dialog.open(AddGameAccountComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "loggedInUserId": this.loggedInUser.id
+      }
+    });
   }
 
   cancel(): void {

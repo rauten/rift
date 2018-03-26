@@ -17,9 +17,16 @@
               <label class="control-label" for="sessiongame">What game will you be playing?</label>
               <!--<input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">-->
               <mat-form-field>
-                <mat-select placeholder="Select a Game" [(value)]="gameId">
+                <mat-select placeholder="Select a Game" [(value)]="gameId" (selectionChange)="getUserGameAccountsByGameId(gameId, loggedInUserId)">
                   <mat-option *ngFor="let game of games" [value]="game.id">
                     {{ game.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select placeholder="Select an Account" [(value)]="accountId">
+                  <mat-option *ngFor="let account of gameAccounts" [value]="account.id">
+                    {{ account.ign }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

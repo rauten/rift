@@ -20,6 +20,10 @@ import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
+import {GameAccount} from "../models/game-account";
+import {GameAccountService} from "./game-account/game-account.service";
+import {SESSION_ICONS} from "../constants/session-icon-variables";
+import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -41,7 +45,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private lolService: LeagueOfLegendsService) {
+  public dialog: MatDialog, private gameAccountService: GameAccountService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -58,23 +62,14 @@ export class UserprofileComponent implements OnInit {
 
   }
 
-  getLeagueInfo(summonerTag) {
-    this.lolService.getSummonerInfo(summonerTag).subscribe(
-      resBody => {
-        console.log(resBody);
-      }
-    )
-  }
-
-
   getCurrentLoggedInUser(riftTag):any {
     console.log("Getting currently logged in user");
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
         console.log("in logged in user resbody");
         this.loggedInUser.id = resBody.id;
-        for (var i = 0; i < resBody.followings.length; i++) {
-          var currFollowing = new Userprofile();
+        for (let i = 0; i < resBody.followings.length; i++) {
+          let currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
           currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
@@ -89,7 +84,6 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
-          console.log(resBody);
           this.currentUser.firstName = resBody.firstName;
           this.currentUser.lastName = resBody.lastName;
           this.currentUser.riftTag = resBody.riftTag;
@@ -101,6 +95,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
           this.currentUser.twitchAccount = resBody.twitchAccount;
+          this.currentUser.youtubeAccount = resBody.youtubeAccount;
           this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
@@ -109,6 +104,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserActivities(resBody.creatorActivityList);
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getCurrentLoggedInUser(this.profile.nickname);
+          this.getUserGameAccounts(this.currentUser.id);
         },
       error => {
           console.log(error.message);
@@ -120,8 +116,8 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting user's followers and followings");
     this.currentUser.followings = [];
     this.currentUser.followers = [];
-    for (var i = 0; i < followers.length; i++) {
-      var currFollower = new Userprofile();
+    for (let i = 0; i < followers.length; i++) {
+      let currFollower = new Userprofile();
       currFollower.firstName = followers[i].followerUsertable.firstName;
       currFollower.lastName = followers[i].followerUsertable.lastName;
       currFollower.riftTag = followers[i].followerUsertable.riftTag;
@@ -129,8 +125,8 @@ export class UserprofileComponent implements OnInit {
       this.getUserProfilePicture(currFollower.riftTag, currFollower);
       this.currentUser.followers.push(currFollower);
     }
-    for (var i = 0; i < followings.length; i++) {
-      var currFollowing = new Userprofile();
+    for (let i = 0; i < followings.length; i++) {
+      let currFollowing = new Userprofile();
       currFollowing.firstName = followings[i].followingUsertable.firstName;
       currFollowing.lastName = followings[i].followingUsertable.lastName;
       currFollowing.riftTag = followings[i].followingUsertable.riftTag;
@@ -146,13 +142,13 @@ export class UserprofileComponent implements OnInit {
     this.userRatingService.getUserRating(id).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var userRating = new UserRating();
+        for (let i = 0; i < resBody.length; i++) {
+          let userRating = new UserRating();
           userRating.review = resBody[i].review;
           userRating.createdTime = resBody[i].createdTime;
           userRating.rating = resBody[i].rating;
           userRating.account_type = resBody[i].accountType;
-          var reviewer = new Userprofile();
+          let reviewer = new Userprofile();
           reviewer.firstName = resBody[i].reviewerUsertable.firstName;
           reviewer.lastName = resBody[i].reviewerUsertable.lastName;
           reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
@@ -167,8 +163,8 @@ export class UserprofileComponent implements OnInit {
     console.log("Getting user's activities");
     this.currentUser.activities = [];
     this.currentUser.creatorActivityList = creatorActivityList;
-    for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
-      var currActivity = new Activity();
+    for (let i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+      let currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
       currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)];
       currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
@@ -256,9 +252,26 @@ export class UserprofileComponent implements OnInit {
     // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
   }
 
+  getUserGameAccounts(id) {
+    this.gameAccountService.getUserGameAccounts(id).subscribe(
+      resBody => {
+        console.log(resBody);
+        for(let i = 0; i < resBody.length; i++) {
+          let currAccount = resBody[i];
+          let account: GameAccount = new GameAccount();
+          account.gameName = currAccount.game.game;
+          account.gameId = currAccount.gameId;
+          account.ign = currAccount.ign;
+          account.id = currAccount.id;
+          account.gameIcon = SESSION_ICONS[account.gameId];
+          this.currentUser.gameAccounts.push(account);
+        }
+      }
+    )};
+
   isFollowing(riftTag: string) {
-    for (var i = 0; i < this.loggedInUser.followings.length; i++) {
-      var currFollowing = this.loggedInUser.followings[i].riftTag;
+    for (let i = 0; i < this.loggedInUser.followings.length; i++) {
+      let currFollowing = this.loggedInUser.followings[i].riftTag;
       if (currFollowing == riftTag) {
         this.following = true;
         return true;
@@ -267,7 +280,7 @@ export class UserprofileComponent implements OnInit {
     this.following = false;
   }
 
-  openDialog() {
+  updateInfoModal() {
     //noinspection TypeScriptUnresolvedFunction
     this.dialog.open(UpdateInfoComponent, {
       height: '450px',
@@ -278,6 +291,16 @@ export class UserprofileComponent implements OnInit {
       }
     });
 
+  }
+
+  editGameAccount(account) {
+    this.dialog.open(EditGameAccountComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "account": account,
+      }
+    });
   }
 
   openRatingDialog() {
