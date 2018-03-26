@@ -26,6 +26,7 @@ export class CreateSessionComponent implements OnInit {
   languages: any;
   consoles: any;
   gameId: any;
+  language: any;
   platform: any;
   loggedInUserId: number;
   profile: any;
@@ -72,7 +73,8 @@ export class CreateSessionComponent implements OnInit {
       "numSlots": this.createSessionData.numSlots,
       "sessionCost": this.createSessionData.sessionCost,
       "sessionTime": timeMS,
-      "sessionDuration": "1:00:00"
+      "sessionDuration": "1:00:00",
+      "language" : this.language
     };
     console.log(data);
     this.userSessionService.createUserSession(data);
