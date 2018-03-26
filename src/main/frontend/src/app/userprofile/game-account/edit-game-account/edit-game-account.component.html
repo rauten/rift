@@ -11,24 +11,13 @@
         <div class="row">
           <div class='col-xs-12 col-sm-6'>
             <div class="form-group">
-              <label class="control-label">What game</label>
-              <mat-form-field>
-                <mat-select placeholder="Select a Game" [(value)]="gameId">
-                  <mat-option *ngFor="let game of games" [value]="game.id">
-                    {{ game.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class='col-xs-12 col-sm-6'>
-            <div class="form-group">
               <label class="control-label" for="ign">What is your ign?</label>
               <input class="form-control input-md" #complaint="ngModel" [(ngModel)]="ign" required id="ign" name="ign" type="text" placeholder="In game name">
             </div>
           </div>
+        </div>
+        <div class="row">
+          <button class="btn-primary" type="button">Delete Account</button>
         </div>
       </div>
     </div>

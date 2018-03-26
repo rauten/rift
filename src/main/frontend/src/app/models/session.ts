@@ -19,6 +19,7 @@ export class Session {
   type: boolean;
   riftees: Userprofile[] = [];
   description: string;
+  accountId: any;
 
   slotsRemaining: number;
   usertable: any;

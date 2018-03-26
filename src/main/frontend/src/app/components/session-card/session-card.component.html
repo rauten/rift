@@ -24,6 +24,14 @@
         <img alt="{{session.console}}" class="consoleIcon" src="{{consoleIcon}}" />
       </div>
     </div>
+    <button class="btn btn-primary" (click)="changeStatus(template)">Join</button>
+    <ng-template #template style="margin-top:20%">
+      <div class="modal-body text-center">
+        <p>Are you sure you want to cancel your request?</p>
+        <button type="button" class="btn btn-default" (click)="cancelSessionRequest()" >Yes</button>
+        <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+      </div>
+    </ng-template>
 
   </div>
 </div>

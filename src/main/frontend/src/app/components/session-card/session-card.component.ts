@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, TemplateRef} from '@angular/core';
 import {SESSION_ICONS} from "../../constants/session-icon-variables";
 import {Session} from "../../models/session";
 import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {UserprofileService} from "../../userprofile/userprofile.service";
 import {SessionRequest} from "../../models/session-request";
 import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
+import {BsModalRef, BsModalService} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-session-card',
@@ -14,6 +15,8 @@ import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
 export class SessionCardComponent implements OnInit {
   sessionIcon: string;
   consoleIcon: string;
+  modalRef: BsModalRef;
+
 
   @Input() session: Session;
   @Input() request: SessionRequest;
@@ -22,7 +25,8 @@ export class SessionCardComponent implements OnInit {
   profile: any;
   loggedInUserId: number;
 
-  constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
+  constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
+              private modalService: BsModalService) {
   }
 
   getLoggedInUserId(riftTag: string) {
@@ -43,6 +47,10 @@ export class SessionCardComponent implements OnInit {
     }
     this.sessionIcon=SESSION_ICONS[this.session.gameId];
     this.consoleIcon=CONSOLE_ICONS[this.session.console];
+  }
+
+  changeStatus(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 
   joinUserSession() {

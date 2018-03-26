@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {GAMES} from "../../../constants/games";
 import {MAT_DIALOG_DATA} from "@angular/material";
+import {GameAccountService} from "../game-account.service";
 
 @Component({
   selector: 'app-edit-game-account',
@@ -14,7 +15,7 @@ export class EditGameAccountComponent implements OnInit {
   ign: any;
   profile: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, private gameAccountService: GameAccountService) {
     this.games = GAMES;
     this.profile = JSON.parse(localStorage.getItem("profile"));
   }
@@ -22,11 +23,17 @@ export class EditGameAccountComponent implements OnInit {
   ngOnInit() {
   }
 
+  editGameAccount(data) {
+    this.gameAccountService.updateGameAccount(data);
+  }
+
   save() {
     let data = {
-      gameId: this.gameId,
-      username: this.ign,
+      "id": this.data.account.id,
+      "ign": this.ign
     };
     console.log(data);
+    this.editGameAccount(data);
+    window.location.reload();
   }
 }

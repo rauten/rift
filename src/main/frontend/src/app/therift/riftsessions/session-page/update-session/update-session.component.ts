@@ -6,6 +6,10 @@ import {ActivatedRoute} from "@angular/router";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {GAMES} from "../../../../constants/games";
 import {CONSOLES} from "../../../../constants/consoles";
+import {GameAccount} from "../../../../models/game-account";
+import {SESSION_ICONS} from "../../../../constants/session-icon-variables";
+import {GameAccountService} from "../../../../userprofile/game-account/game-account.service";
+import {UserprofileService} from "../../../../userprofile/userprofile.service";
 
 @Component({
   selector: 'app-update-session',
@@ -22,12 +26,20 @@ export class UpdateSessionComponent implements OnInit {
   consoles: any;
   gameId: any;
   platform: any;
+  gameAccounts: GameAccount[] = [];
+  accountId: any;
+  loggedInUserId: any;
+  profile: any;
 
   //noinspection JSAnnotator
   constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
-  @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateSessionComponent>) {
+  @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateSessionComponent>,
+  private gameAccountService: GameAccountService, private userProfileService: UserprofileService) {
     this.games = GAMES;
     this.consoles = CONSOLES;
+    this.profile = JSON.parse(localStorage.getItem("profile"));
+    this.getLoggedInUserId(this.profile.nickname);
+
   }
 
   ngOnInit() {
@@ -58,13 +70,26 @@ export class UpdateSessionComponent implements OnInit {
       "numSlots": this.updateSessionData.numSlots,
       "sessionCost": this.updateSessionData.sessionCost,
       "sessionTime": timeMS,
-      "sessionDuration": "1:00:00"
+      "sessionDuration": "1:00:00",
+      "gameAccountId": this.accountId
     };
     console.log(data);
     this.updateSessionService.updateUserSession(data);
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();
     window.location.reload();
+  }
+
+  getLoggedInUserId(riftTag: string) {
+    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
+      this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
+    } else {
+      this.userProfileService.getUserId(riftTag).subscribe(
+        resBody => {
+          this.loggedInUserId = resBody.id;
+        }
+      )
+    }
   }
 
   timeToMilliseconds(time: string) {
@@ -82,5 +107,23 @@ export class UpdateSessionComponent implements OnInit {
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();
+  }
+
+  getUserGameAccountsByGameId(gameId, riftId) {
+    this.gameAccountService.getUserGameAccountsByGameID(gameId, riftId).subscribe(
+      resBody => {
+        console.log(resBody);
+        for(let i = 0; i < resBody.length; i++) {
+          let currAccount = resBody[i];
+          let account: GameAccount = new GameAccount();
+          account.gameName = currAccount.game.game;
+          account.gameId = currAccount.gameId;
+          account.ign = currAccount.ign;
+          account.id = currAccount.id;
+          account.gameIcon = SESSION_ICONS[account.gameId];
+          this.gameAccounts.push(account);
+        }
+      }
+    )
   }
 }

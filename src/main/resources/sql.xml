@@ -339,8 +339,8 @@
 
     <createGame>
         INSERT INTO riftergame
-        (host_id, num_slots, session_cost, title, session_duration, session_time, game_id, console, slots_remaining, created_time)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        (host_id, num_slots, session_cost, title, session_duration, session_time, game_id, console, slots_remaining, created_time, game_account_id)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
 
     <createNotification>
@@ -614,7 +614,7 @@
     <getGameAccountAndGameByUsertableIdAndGameId>
         SELECT *
         FROM gameaccount g JOIN game ga
-        ON g.game_id = g.id
+        ON g.game_id = ga.id
         WHERE usertable_id = ? AND game_id = ?;
     </getGameAccountAndGameByUsertableIdAndGameId>
 
