@@ -121,6 +121,8 @@ public class Views {
 
     public interface SessionRequestHostId {}
 
+    public interface SessionRequestRifteeGameAccount {}
+
     public interface SessionRequestRifterSession {}
 
     public interface SessionRequestRifteeUsertable {}
@@ -311,10 +313,10 @@ public class Views {
             UserRatingCreatedTime, UserRatingReviewerUsertable, UserRatingReviewTitle, UsertableId, UsertableFirstName, UsertableLastName,
             UsertableRiftTag, UsertableProfilePicturePath {}
 
-    public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted {}
+    public interface SessionRequestsByRiftTag extends SessionRequestRifteeId, SessionRequestHostId, SessionRequestSessionId, SessionRequestAccepted, SessionRequestRifteeGameAccount {}
 
     public interface RifteeSessions extends RifterSessionCardInfo, RifterSessionSessionRequests, RifterSessionUsertable,
-            SessionRequestAccepted, UsertableCardInfo, GameAttributes, RifterSessionGame, GameAccountAttributes {}
+            SessionRequestAccepted, SessionRequestRifteeGameAccount, UsertableCardInfo, GameAttributes, RifterSessionGame, GameAccountAttributes {}
 
     public interface UserReviews extends UserRatingAttributes, UserRatingReviewerUsertable, UsertableRestrictedInfo {}
 

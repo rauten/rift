@@ -500,8 +500,8 @@
 
     <createSessionRequest>
         INSERT INTO gamerequest
-        (riftee_id, session_id, accepted, host_id)
-        VALUES(?, ?, ?, ?);
+        (riftee_id, session_id, accepted, host_id, riftee_game_account)
+        VALUES(?, ?, ?, ?, ?);
     </createSessionRequest>
 
     <getSessionRequestByRiftTag>
