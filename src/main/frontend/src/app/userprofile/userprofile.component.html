@@ -27,7 +27,7 @@
               <button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>
             </div>
             <br>
-            <div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
+            <div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <button (click)="fileAComplaint()" type="button" class="btn-primary">File A Complaint</button>
             </div>
             <alert type="danger" *ngIf="ratingStatus == 0">
@@ -83,7 +83,7 @@
               <div class="media" *ngFor="let session of currentUser.rifterSessions">
                 <app-session-card
                                   [session]="session" [isLoggedIn]="isLoggedIn"
-                                  [type]="session.type"
+                                  [type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"
                 ></app-session-card>
                 <!--[routerLink]="['../../session', session.id]"-->
               </div>

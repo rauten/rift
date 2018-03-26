@@ -40,7 +40,7 @@ public class RifterSessionService {
     @Autowired
     private GameAccountService gameAccountService;
 
-    public final int POPULATESIZE = 17;
+    public final int POPULATESIZE = 18;
 
     private final String getRifterGameById = "getRifterGameById";
     private final String getRifterSessionById = "getRifterSessionById";
@@ -171,6 +171,7 @@ public class RifterSessionService {
         rifterSession.setCreatedTime(resultSet.getTimestamp(startPoint + 14));
         rifterSession.setDescription(resultSet.getString(startPoint + 15));
         rifterSession.setGameAccountId(resultSet.getInt(startPoint + 16));
+        rifterSession.setLanguage(resultSet.getString(startPoint + 17));
         try {
             rifterSession.setGame(gameService.populateGame(resultSet, startPoint + POPULATESIZE, ""));
             startPoint += gameService.POPULATESIZE;
@@ -221,7 +222,7 @@ public class RifterSessionService {
     public boolean createGame(RifterSession rifterSession) throws SQLException {
         boolean success = riftRepository.doInsert(createGame,
                 new Object[] {rifterSession.getHostId(), rifterSession.getNumSlots(), rifterSession.getSessionCost(), rifterSession.getTitle(), rifterSession.getSessionDuration(),
-                        rifterSession.getSessionTime(), rifterSession.getGameId(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime(), rifterSession.getGameAccountId()});
+                        rifterSession.getSessionTime(), rifterSession.getGameId(), rifterSession.getConsole(), rifterSession.getNumSlots(), rifterSession.getCreatedTime(), rifterSession.getGameAccountId(), rifterSession.getLanguage()});
 
 //        if (success) {
 //            String notificationContent = rifterSession.getHostId() + " has created a new session slot for " + rifterSession.getGameId() + " on " + rifterSession.getConsole() + "!";

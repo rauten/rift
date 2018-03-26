@@ -45,7 +45,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private gameAccountService: GameAccountService) {
+  public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -78,6 +78,7 @@ export class UserprofileComponent implements OnInit {
         console.log("-----------------");
       }
     );
+    this.getUserSessionRequests(riftTag);
   }
 
   getUserProfileInformation(riftTag: string) {
@@ -204,24 +205,23 @@ export class UserprofileComponent implements OnInit {
     }
   }
 
-  // getUserSessionRequests(riftTag: string) {
-  //   console.log("Getting user's session requests");
-  //   this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
-  //   this.userSessionsService.getSessionRequests(riftTag).subscribe(
-  //     resBody => {
-  //       //noinspection TypeScriptUnresolvedVariable
-  //       for (var i = 0; i < resBody.length; i++) {
-  //         var request = new SessionRequest();
-  //         request.accepted = resBody[i].accepted;
-  //         request.hostId = resBody[i].hostId;
-  //         request.rifteeId = resBody[i].rifteeId;
-  //         request.sessionId = resBody[i].sessionId;
-  //         this.loggedInUser.sessionRequests.set(request.sessionId, request);
-  //       }
-  //       // console.log(this.currentUser.sessionRequests);
-  //     }
-  //   )
-  // }
+  getUserSessionRequests(riftTag: string) {
+    console.log("Getting user's session requests");
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
+    this.userSessionsService.getSessionRequests(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (let i = 0; i < resBody.length; i++) {
+          let request = new SessionRequest();
+          request.accepted = resBody[i].accepted;
+          request.hostId = resBody[i].hostId;
+          request.rifteeId = resBody[i].rifteeId;
+          request.sessionId = resBody[i].sessionId;
+          this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
+  }
 
   getUserProfilePicture(riftTag: string, user: Userprofile): string {
     console.log("Getting user's profile picture");
@@ -255,7 +255,6 @@ export class UserprofileComponent implements OnInit {
   getUserGameAccounts(id) {
     this.gameAccountService.getUserGameAccounts(id).subscribe(
       resBody => {
-        console.log(resBody);
         for(let i = 0; i < resBody.length; i++) {
           let currAccount = resBody[i];
           let account: GameAccount = new GameAccount();

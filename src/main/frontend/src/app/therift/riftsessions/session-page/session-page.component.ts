@@ -87,9 +87,9 @@ export class SessionPageComponent implements OnInit {
 
   getSessionRiftees(players: any) {
     this.session.riftees = [];
-    for (var i = 0; i < players.length; i++) {
-      var riftee = new Userprofile();
-      var player = players[i];
+    for (let i = 0; i < players.length; i++) {
+      let riftee = new Userprofile();
+      let player = players[i];
       riftee.firstName = player.firstName;
       riftee.lastName = player.lastName;
       riftee.riftTag = player.riftTag;
