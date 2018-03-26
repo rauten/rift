@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,8 +30,10 @@ public class ActivityNotificationService extends AbstractNotificationService {
         } else {
             resultSet = riftRepository.doQuery(getUserActivity, args);
         }
-
-        List<Notification> notifications = super.populateNotifications(resultSet, 1, info);
+        List<Notification> notifications = new ArrayList<>();
+        if (resultSet.next()) {
+            notifications = super.populateNotifications(resultSet, 1, info);
+        }
         resultSet.close();
         return notifications;
     }

@@ -79,7 +79,11 @@ public class DeferredResultService implements Runnable {
     }
 
     public void shutdown() {
-        hook.setKeepRunning(false);
+        try {
+            hook.setKeepRunning(false);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
 }

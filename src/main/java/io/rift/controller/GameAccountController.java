@@ -68,13 +68,12 @@ public class GameAccountController {
     /**
      * Use this endpoint to get all gameaccounts for a given rifter
      * @param usertableId
-     * @param info
      * @return - Returns list of GameAccount objects that have a specified usertableId
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/info={info}")
-    public List<GameAccount> getGameAccountByUsertableId(@PathVariable Integer usertableId, @PathVariable String info) throws SQLException {
-        return gameAccountService.getGameAccountsByUsertableId(usertableId, info);
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/info")
+    public List<GameAccount> getGameAccountByUsertableId(@PathVariable Integer usertableId) throws SQLException {
+        return gameAccountService.getGameAccountsByUsertableId(usertableId, "game");
     }
 
 
