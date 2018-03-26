@@ -31,6 +31,7 @@ public class BraintreeService {
         String token = gateway.clientToken().generate();
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
+        System.out.println(token.length());
         return tokenMap;
     }
 
@@ -85,6 +86,8 @@ public class BraintreeService {
                     .verifyCard(true)
                     .done();
 
+        String token = request.getToken();
+
         Result<? extends PaymentMethod> result = gateway.paymentMethod().create(request);
 
         if (result.isSuccess()) {
@@ -111,6 +114,7 @@ public class BraintreeService {
      */
     public Map<String, String> createCustomer(String firstName, String lastName) {
 
+        System.out.println("Sup brah 3");
         CustomerRequest request = new CustomerRequest()
                 .firstName(firstName)
                 .lastName(lastName);
@@ -138,6 +142,7 @@ public class BraintreeService {
      * @return - A string denoting whether the update was a success or failure.
      */
     public String updateCustomer(Map<String, String> paymentMetadata, String customerId) {
+        System.out.println("Sup brah");
         CustomerRequest request = new CustomerRequest()
                 .paymentMethodNonce((String)paymentMetadata.get("nonce"));
 
@@ -160,7 +165,7 @@ public class BraintreeService {
      * @return
      */
     public String updateCustomerInfo(Map<String, String> customerInfo, String customerId) {
-
+        System.out.println("Sup brah 2");
         CustomerRequest request = new CustomerRequest();
         if (customerInfo.containsKey("firstName")) {
             request.firstName((String)customerInfo.get("firstName"));
@@ -203,7 +208,5 @@ public class BraintreeService {
         Customer customer = gateway.customer().find(customerId);
         return customer.getCreditCards();
     }
-
-
 
 }

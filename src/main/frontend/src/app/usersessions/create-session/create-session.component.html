@@ -80,6 +80,18 @@
                 <input matInput type="number" placeholder="Select a duration" #sessionduration="ngModel"  id="sessionduration" name="sessionduration" [(ngModel)]="currentSessionDateTime.sessionDuration">
               </div>
             </div>
+            <div class='col-xs-12 col-sm-6'>
+              <div class="form-group">
+                <label class="control-label" for="sessionlanguage">Select a Language</label>
+                <mat-form-field>
+                  <mat-select placeholder="Select a Language" [(value)]="language">
+                    <mat-option *ngFor="let language of languages" [value]="language.language">
+                      {{ language.language }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
           </div>
         </div>
       </div>

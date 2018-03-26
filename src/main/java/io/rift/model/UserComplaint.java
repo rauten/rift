@@ -33,6 +33,7 @@ public class UserComplaint {
         NO_SHOW("No Show"),
         POOR_PERFORMANCE("Poor Performance"),
         TOXIC_BEHAVIOR("Toxic Behavior"),
+        LANGUAGE_NOT_SPOKEN("Language Not Spoken"),
         HARD_TO_CONTACT("Hard to Contact");
 
         private String value;

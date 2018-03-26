@@ -43,6 +43,10 @@ public class GameAccountService {
 
     private final String createGameAccount = "createGameAccount";
 
+    private final String deleteAccountById = "deleteAccountById";
+
+    private final String foreignKeyError = "ERROR: update or delete on table \"gameaccount\" violates foreign key constraint \"riftergame_usertable_id_game_account_id_game_id_fkey\"";
+
     public GameAccount populateGameAccount(ResultSet resultSet, Integer startPoint, String info) throws SQLException {
         GameAccount gameAccount = new GameAccount();
         gameAccount.setUsertableId(resultSet.getInt(startPoint));
@@ -186,6 +190,20 @@ public class GameAccountService {
         objects.add(gameAccount.getIgn());
         objects.add(gameAccount.getId());
         return riftRepository.doUpdate(new StringBuilder("UPDATE gameaccount SET ign = ? WHERE id = ?"), objects);
+    }
+
+    public boolean deleteAccountById(Integer id) {
+        Object[] args = new Object[] {id};
+        return riftRepository.doDelete(deleteAccountById, args);
+        /*
+        if (result.startsWith(foreignKeyError)) {
+            return "sessionsExist";
+        }
+        if (result.equals("success")) {
+            return "success";
+        }
+        return result;
+        */
     }
 
 }

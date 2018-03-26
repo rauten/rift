@@ -19,7 +19,7 @@ export class TheriftComponent implements OnInit {
               private twitchService: TwitchService, private updateInfoService: UpdateInfoService,
               private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
-    this.userProfileService.getUserId(this.profile.nickname).subscribe(
+    this.userProfileService.getUserId('rauten3').subscribe(
       resBody => {
         this.loggedInUserId = resBody.id;
       }
@@ -42,7 +42,7 @@ export class TheriftComponent implements OnInit {
                   "twitchAccount": resBody.username,
                   "riftTag": ""
                 };
-                console.log(data);
+                console.log(data + "herror");
                 this.updateInfoService.updateUser(data);
               }
             );
