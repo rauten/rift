@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class YoutubeController {

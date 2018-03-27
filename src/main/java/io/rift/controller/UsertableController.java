@@ -27,7 +27,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class UsertableController {
