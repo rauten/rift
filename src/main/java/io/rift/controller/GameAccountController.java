@@ -57,11 +57,10 @@ public class GameAccountController {
      * @return - Gets a list of GameAccounts that have a specified usertableId and gameId
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/gameId/{gameId}/info={info}")
-    public List<GameAccount> getGameAccountsByUsertableIdAndGameId(@PathVariable Integer usertableId, @PathVariable Integer gameId,
-                                                                   @PathVariable String info) throws SQLException {
+    @RequestMapping(method = RequestMethod.GET, value = "/gameaccount/usertableId/{usertableId}/gameId/{gameId}")
+    public List<GameAccount> getGameAccountsByUsertableIdAndGameId(@PathVariable Integer usertableId, @PathVariable Integer gameId) throws SQLException {
 
-        return gameAccountService.getGameAccountsByUsertableIdAndGameId(usertableId, gameId, info);
+        return gameAccountService.getGameAccountsByUsertableIdAndGameId(usertableId, gameId, "game");
 
     }
 

@@ -62,17 +62,21 @@ public class GameAccountService {
 
     public List<GameAccount> populateGameAccounts(ResultSet resultSet, Integer startPoint, String info) throws SQLException {
         List<GameAccount> gameAccounts = new ArrayList<>();
-        while (resultSet.next()) {
-            GameAccount gameAccount = new GameAccount();
-            gameAccount.setUsertableId(resultSet.getInt(startPoint));
-            gameAccount.setGameId(resultSet.getInt(startPoint + 1));
-            gameAccount.setIgn(resultSet.getString(startPoint + 2));
-            gameAccount.setId(resultSet.getInt(startPoint + 3));
-            gameAccount.setVerified(resultSet.getBoolean(startPoint + 4));
-            if (info.equals("game")) {
-                gameAccount.setGame(gameService.populateGame(resultSet, POPULATESIZE + 1, ""));
+        try {
+            while (resultSet.next()) {
+                GameAccount gameAccount = new GameAccount();
+                gameAccount.setUsertableId(resultSet.getInt(startPoint));
+                gameAccount.setGameId(resultSet.getInt(startPoint + 1));
+                gameAccount.setIgn(resultSet.getString(startPoint + 2));
+                gameAccount.setId(resultSet.getInt(startPoint + 3));
+                gameAccount.setVerified(resultSet.getBoolean(startPoint + 4));
+                if (info.equals("game")) {
+                    gameAccount.setGame(gameService.populateGame(resultSet, POPULATESIZE + 1, ""));
+                }
+                gameAccounts.add(gameAccount);
             }
-            gameAccounts.add(gameAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return gameAccounts;
     }
@@ -133,11 +137,12 @@ public class GameAccountService {
         } else {
             resultSet = riftRepository.doQuery(getGameAccountByUsertableIdAndGameId, args);
         }
-        List<GameAccount> gameAccounts = new ArrayList<>();
-        if (resultSet.next()) {
-            gameAccounts = populateGameAccounts(resultSet, 1, info);
+        try {
+            List<GameAccount> gameAccounts = populateGameAccounts(resultSet, 1, info);
             resultSet.close();
             return gameAccounts;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         resultSet.close();
         return null;

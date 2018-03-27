@@ -51,7 +51,7 @@ export class GameAccountService {
 
   getUserGameAccountsByGameID(gameId, riftId): Observable<GameAccount> {
     console.log("Getting user's game accounts by game Id");
-    return this.http.get("/api/gameaccount/usertableId/" + riftId +  "/gameId/" + gameId + "/info")
+    return this.http.get("/api/gameaccount/usertableId/" + riftId +  "/gameId/" + gameId)
       .map(
         (response: Response) => {
           return response.json();
