@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://fast-depths-16506.herokuapp.com/",
+    "target": "https://localhost:443",
     "secure": false
   }
 }
