@@ -1,7 +1,6 @@
 {
   "/api": {
-    "target": "https://go-rift.herokuapp.com/",
-//    "target": "http://localhost:5000",
+    "target": "http://localhost:5000",
     "secure": false
   }
 }

@@ -20,6 +20,7 @@ exports.config = {
     print: function() {}
   },
   onPrepare() {
+    // noinspection JSAnnotator
     require('ts-node').register({
       project: 'e2e/tsconfig.e2e.json'
     });
