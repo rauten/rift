@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class Auth0Controller {
 
     @Autowired
@@ -28,7 +28,7 @@ public class Auth0Controller {
     private final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    @RequestMapping(method = RequestMethod.PATCH, value = "/user/updateAuth")
+    @RequestMapping(method = RequestMethod.PATCH, value = "/api/user/updateAuth")
     public Boolean updateAuth(@RequestHeader(name = "Authorization") String accessToken, @RequestHeader(name = "FirstName") String firstName,
                                @RequestHeader(name = "LastName") String lastName,
                                @RequestHeader(name = "Email") String email,

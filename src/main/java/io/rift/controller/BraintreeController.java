@@ -13,7 +13,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class BraintreeController {
 
     @Autowired
@@ -23,13 +23,13 @@ public class BraintreeController {
      *
      * @return A client token which can be used on the frontend to send transaction requests
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/braintree/getclienttoken")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/braintree/getclienttoken")
     public Map<String, String> getClientToken() {
         System.out.println("Herro");
         return braintreeService.getClientToken();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/braintree/clientNonce")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/braintree/clientNonce")
     public String getClientNonce(@RequestParam Request request) {
         return braintreeService.getClientNonce(request);
     }
@@ -41,7 +41,7 @@ public class BraintreeController {
      *
      * @return - A string denoting whether the transaction was successful
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/transaction/{clientId}/{amount}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/braintree/transaction/{clientId}/{amount}")
     public String doTransaction(@PathVariable String clientId, @PathVariable String amount) {
         BigDecimal bigDecimalAmount =  new BigDecimal(amount);
         return braintreeService.doTransaction(bigDecimalAmount, clientId);
@@ -62,7 +62,7 @@ public class BraintreeController {
      *                     lastName - The last name of the user
      * @return - In the case of success, returns the customerId
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/createCustomer")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/braintree/createCustomer")
     public Map<String, String> createCustomer(@RequestBody Map<String, String> customerInfo) {
         return braintreeService.createCustomer(customerInfo.get("firstName"),
                 customerInfo.get("lastName"));
@@ -82,12 +82,12 @@ public class BraintreeController {
      *
      * @return - A string denoting the success/failure of the update
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/braintree/updateCustomer/{customerId}")
+    @RequestMapping(method = RequestMethod.POST, value = "/api/braintree/updateCustomer/{customerId}")
     public String updateCustomer(@RequestBody Map<String, String> customerInfo, @PathVariable String customerId) {
         return braintreeService.updateCustomer(customerInfo, customerId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/updateCustomerInfo")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/braintree/updateCustomerInfo")
     public String updateCustomerInfo(@RequestBody Map<String, String> customerInfo) {
         return braintreeService.updateCustomerInfo(customerInfo, (String)customerInfo.get("customerId"));
     }
@@ -97,7 +97,7 @@ public class BraintreeController {
      * @param customerId - The customer id as a string
      * @return - A customer object (includes all the information about the customer you could possibly want)
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/customer/{customerId}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/braintree/customer/{customerId}")
     public Customer getCustomer(@PathVariable String customerId) {
         return braintreeService.getCustomerFromId(customerId);
     }
@@ -107,7 +107,7 @@ public class BraintreeController {
      * @param customerId - The customer id as a string
      * @return - A list of the customer's credit cards
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/braintree/customercards/{customerId}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/braintree/customercards/{customerId}")
     public List<CreditCard> getCustomerCreditCards(@PathVariable String customerId) {
         return braintreeService.getCustomerCreditCardsFromId(customerId);
     }

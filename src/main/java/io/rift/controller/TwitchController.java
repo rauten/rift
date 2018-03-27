@@ -13,12 +13,12 @@ import java.util.Map;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class TwitchController {
     @Autowired
     private TwitchService twitchService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/verifyTwitch/{code}")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/verifyTwitch/{code}")
     public Map<String, String> getTwitchCode(@PathVariable String code) throws SQLException, IOException {
         String content = twitchService.getTwitchCode(code);
         Map<String, String> result = new HashMap<>();
@@ -26,7 +26,7 @@ public class TwitchController {
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/decode/{jwt}")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/decode/{jwt}")
     public Map<String, String> decodeJWT(@PathVariable String jwt) throws MalformedURLException, ParseException {
         Map<String, String> result = new HashMap<>();
         result.put("username", twitchService.authenticateUser(jwt));

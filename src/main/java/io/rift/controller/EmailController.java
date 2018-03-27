@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/email")
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/email")
     public boolean sendMail(@RequestBody Email email) {
         emailService.sendEmailConfirmation(email);
         System.out.println("sent email");

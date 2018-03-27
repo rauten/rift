@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class FollowingController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class FollowingController {
     @Autowired
     private UsertableService usertableService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/follow={id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftTag}/follow={id}")
     public boolean followUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException, InterruptedException {
         Object[] res = followingService.isFollowing(riftTag, id);
         if (!(boolean)res[0]) {
@@ -29,7 +29,7 @@ public class FollowingController {
         return false;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/unfollow={id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftTag}/unfollow={id}")
     public boolean unfollowUserById(@PathVariable String riftTag, @PathVariable Integer id) throws SQLException {
         Object[] res = followingService.isFollowing(riftTag, id);
         if ((boolean)res[0]) {
