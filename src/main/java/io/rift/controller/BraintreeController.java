@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://fast-depths-16506.herokuapp.com/")
 @RestController
 @RequestMapping("/api")
 public class BraintreeController {

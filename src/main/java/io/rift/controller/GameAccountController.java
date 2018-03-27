@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://fast-depths-16506.herokuapp.com/")
 @RestController
 @RequestMapping("/api")
 public class GameAccountController {
