@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RifterSessionService {
@@ -47,12 +48,15 @@ public class RifterSessionService {
     private final String getRifterGameAndHostByGameId = "getRifterGameAndHostByGameId";
     private final String getSessionPlayersBySessionId = "getSessionPlayersBySessionId";
     private final String deleteSession = "deleteSession";
+    private final String deleteAccountById = "deleteAccountById";
     private final String createGame = "createGame";
     private final String createNotification = "createNotification";
+    private final String updateSessionGameAccountId = "updateSessionGameAccountId";
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
     private final String getRifteeSessionsAndHostInfoByRiftTag = "getRifteeSessionsAndHostInfoByRiftTag";
     private final String getRifterAndRifteeSessionsByRiftTag = "getRifterAndRifteeSessionsByRiftTag";
     private final String getRifterSessionsByGameAccount = "getRifterSessionsByGameAccount";
+    private final String getSessionRequestsByGameAccount = "getSessionRequestsByGameAccount";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -161,6 +165,13 @@ public class RifterSessionService {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             rifterSessions.add(rifterSession);
         }
+        resultSet.close();
+        resultSet = riftRepository.doQuery(getSessionRequestsByGameAccount, args);
+        while (resultSet.next()) {
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
+            rifterSessions.add(rifterSession);
+        }
+        resultSet.close();
         return rifterSessions;
     }
 
@@ -230,6 +241,26 @@ public class RifterSessionService {
         args[0] = sessionId;
         boolean success = riftRepository.doDelete(deleteSession, args);
         return success;
+    }
+
+    public boolean deleteAndUpdateGameAccount(Integer gameAccount, Map<Integer, Integer> newGameAccounts) {
+        List<Object> args = new ArrayList<>(2);
+        for (Integer sessionId : newGameAccounts.keySet()) {
+            int gameAccountId = newGameAccounts.get(sessionId);
+            args.add(0, gameAccountId);
+            args.add(1, sessionId);
+            StringBuilder query = new StringBuilder("UPDATE riftergame SET game_account_id = ? WHERE id = ?");
+            riftRepository.doUpdate(query, args);
+            query = new StringBuilder("UPDATE gamerequest SET riftee_game_account = ? WHERE session_id = ?");
+            riftRepository.doUpdate(query, args);
+        }
+        Object[] args2 = new Object[1];
+        args2[0] = gameAccount;
+        String result = riftRepository.doDeleteWithMessage(deleteAccountById, args2);
+        if (result.equals("Success")) {
+            return true;
+        }
+        return false;
     }
 
     public boolean createGame(RifterSession rifterSession) throws SQLException {

@@ -338,6 +338,13 @@
         WHERE game_account_id = ? AND current_timestamp &lt; session_time;
     </getRifterSessionsByGameAccount>
 
+    <getSessionRequestsByGameAccount>
+        SELECT r.*
+        FROM riftergame r JOIN gamerequest g
+        ON r.id = g.session_id AND r.host_id = g.host_id
+        WHERE riftee_game_account = ? AND current_timestamp &lt; r.session_time;
+    </getSessionRequestsByGameAccount>
+
     <getRequestStatus>
         SELECT accepted
         FROM gamerequest
@@ -354,6 +361,18 @@
         (host_id, num_slots, session_cost, title, session_duration, session_time, game_id, console, slots_remaining, created_time, game_account_id, language)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     </createGame>
+
+    <updateSessionGameAccountId>
+        UPDATE riftergame
+        SET game_accounnt_id = ?
+        WHERE id = ?;
+    </updateSessionGameAccountId>
+
+    <updateRequestGameAccountId>
+        UPDATE gamerequest
+        SET riftee_game_account = ?
+        WHERE session_id = ?;
+    </updateRequestGameAccountId>
 
     <createNotification>
         INSERT INTO notification
@@ -953,7 +972,15 @@
             UPDATE riftergame
             SET game_account_id = (SELECT id FROM gameaccount WHERE usertable_id = OLD.usertable_id AND game_id = -1),
                 game_id = -1
-            WHERE current_timestamp > session_time;
+            WHERE current_timestamp > session_time AND host_id = OLD.usertable_id AND game_account_id = OLD.id;
+            UPDATE gamerequest
+            SET riftee_game_account = (SELECT id FROM gameaccount WHERE usertable_id = OLD.usertable_id AND game_id = -1)
+            WHERE current_timestamp >
+                (SELECT r.session_time
+                FROM gamerequest g JOIN riftergame r
+                ON g.session_id = r.id AND g.host_id = r.host_id
+                WHERE g.riftee_game_account = OLD.id)
+            AND riftee_id = OLD.usertable_id AND riftee_game_account = OLD.id;
         END;
         $BODY$
         LANGUAGE plpgsql

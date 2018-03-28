@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -74,6 +75,11 @@ public class RifterSessionController {
     @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{gameAccountId}/gameAccountId")
     public List<RifterSession> getRifterSessionsByGameAccount(@PathVariable Integer gameAccountId) throws SQLException {
         return rifterSessionService.getRifterSessionsByGameAccount(gameAccountId);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/{gameAccountId}/deleteAndUpdate")
+    public boolean deleteAndUpdateGameAccount(@PathVariable Integer gameAccountId, @RequestBody Map<Integer, Integer> newGameAccounts) {
+        return rifterSessionService.deleteAndUpdateGameAccount(gameAccountId, newGameAccounts);
     }
 
 
