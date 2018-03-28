@@ -5,7 +5,7 @@ import io.rift.feature.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "https://fast-depths-16506.herokuapp.com/")
+@CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class EmailController {

@@ -45,7 +45,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private gameAccountService: GameAccountService) {
+  public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -63,10 +63,10 @@ export class UserprofileComponent implements OnInit {
   }
 
   getCurrentLoggedInUser(riftTag):any {
-    console.log("Getting currently logged in user");
+    // console.log("Getting currently logged in user");
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
-        console.log("in logged in user resbody");
+        // console.log("in logged in user resbody");
         this.loggedInUser.id = resBody.id;
         for (let i = 0; i < resBody.followings.length; i++) {
           let currFollowing = new Userprofile();
@@ -75,9 +75,10 @@ export class UserprofileComponent implements OnInit {
           currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
           this.loggedInUser.followings.push(currFollowing);
         }
-        console.log("-----------------");
+        // console.log("-----------------");
       }
     );
+    this.getUserSessionRequests(riftTag);
   }
 
   getUserProfileInformation(riftTag: string) {
@@ -113,7 +114,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserFollowersAndFollowing(followers, followings) {
-    console.log("Getting user's followers and followings");
+    // console.log("Getting user's followers and followings");
     this.currentUser.followings = [];
     this.currentUser.followers = [];
     for (let i = 0; i < followers.length; i++) {
@@ -137,7 +138,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserRatings(id: number) {
-    console.log("Getting user's ratings");
+    // console.log("Getting user's ratings");
     this.currentUser.ratings = [];
     this.userRatingService.getUserRating(id).subscribe(
       resBody => {
@@ -160,7 +161,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserActivities(creatorActivityList) {
-    console.log("Getting user's activities");
+    // console.log("Getting user's activities");
     this.currentUser.activities = [];
     this.currentUser.creatorActivityList = creatorActivityList;
     for (let i = 0; i < this.currentUser.creatorActivityList.length; i++) {
@@ -175,12 +176,12 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserRifterSessions(rifterSessions, user) {
-    console.log("Getting user's rifter sessions");
+    // console.log("Getting user's rifter sessions");
     this.currentUser.rifterSessions = [];
-    for (var i = 0; i < rifterSessions.length; i++) {
-      var currDateMS = rifterSessions[i].sessionTime;
-      var date = new Date(currDateMS);
-      var currSession = new Session();
+    for (let i = 0; i < rifterSessions.length; i++) {
+      let currDateMS = rifterSessions[i].sessionTime;
+      let date = new Date(currDateMS);
+      let currSession = new Session();
       currSession.firstName = user.firstName;
       currSession.lastName = user.lastName;
       currSession.riftTag = user.riftTag;
@@ -204,27 +205,26 @@ export class UserprofileComponent implements OnInit {
     }
   }
 
-  // getUserSessionRequests(riftTag: string) {
-  //   console.log("Getting user's session requests");
-  //   this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
-  //   this.userSessionsService.getSessionRequests(riftTag).subscribe(
-  //     resBody => {
-  //       //noinspection TypeScriptUnresolvedVariable
-  //       for (var i = 0; i < resBody.length; i++) {
-  //         var request = new SessionRequest();
-  //         request.accepted = resBody[i].accepted;
-  //         request.hostId = resBody[i].hostId;
-  //         request.rifteeId = resBody[i].rifteeId;
-  //         request.sessionId = resBody[i].sessionId;
-  //         this.loggedInUser.sessionRequests.set(request.sessionId, request);
-  //       }
-  //       // console.log(this.currentUser.sessionRequests);
-  //     }
-  //   )
-  // }
+  getUserSessionRequests(riftTag: string) {
+    // console.log("Getting user's session requests");
+    this.loggedInUser.sessionRequests = new Map<number, SessionRequest>()
+    this.userSessionsService.getSessionRequests(riftTag).subscribe(
+      resBody => {
+        //noinspection TypeScriptUnresolvedVariable
+        for (let i = 0; i < resBody.length; i++) {
+          let request = new SessionRequest();
+          request.accepted = resBody[i].accepted;
+          request.hostId = resBody[i].hostId;
+          request.rifteeId = resBody[i].rifteeId;
+          request.sessionId = resBody[i].sessionId;
+          this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
+  }
 
   getUserProfilePicture(riftTag: string, user: Userprofile): string {
-    console.log("Getting user's profile picture");
+    // console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {
@@ -239,7 +239,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserCoverPhoto(riftTag: string) {
-    console.log("Getting user's cover photo");
+    // console.log("Getting user's cover photo");
     this.userProfileService.getCoverPhoto(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {
@@ -255,7 +255,6 @@ export class UserprofileComponent implements OnInit {
   getUserGameAccounts(id) {
     this.gameAccountService.getUserGameAccounts(id).subscribe(
       resBody => {
-        console.log(resBody);
         for(let i = 0; i < resBody.length; i++) {
           let currAccount = resBody[i];
           let account: GameAccount = new GameAccount();

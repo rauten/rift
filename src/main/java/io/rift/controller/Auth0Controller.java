@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@CrossOrigin(origins = "https://fast-depths-16506.herokuapp.com/")
+@CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class Auth0Controller {

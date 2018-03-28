@@ -12,7 +12,7 @@ exports.config = {
     'browserName': 'chrome'
   },
   directConnect: true,
-  baseUrl: 'https://fast-depths-16506.herokuapp.com/',
+  baseUrl: 'https://go-rift.herokuapp.com/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
@@ -20,6 +20,7 @@ exports.config = {
     print: function() {}
   },
   onPrepare() {
+    // noinspection JSAnnotator
     require('ts-node').register({
       project: 'e2e/tsconfig.e2e.json'
     });

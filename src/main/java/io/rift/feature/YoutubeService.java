@@ -18,7 +18,11 @@ public class YoutubeService {
 
     private final String clientId = "196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com";
     private final String clientSecret = "B3iQddU6zYBRsEPiCSZX6J9V";
+<<<<<<< HEAD
     private final String redirectURI = "https://fast-depths-16506.herokuapp.com/";
+=======
+    private final String redirectURI = "https://go-rift.herokuapp.com";
+>>>>>>> b9ebc143c3614910f7cabd745cec84a0a34b744c
 
     public String getYoutubeAccessCode(String code) throws IOException {
 
@@ -26,7 +30,7 @@ public class YoutubeService {
                 "code=" + code +
                 "&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com" +
                 "&client_secret=B3iQddU6zYBRsEPiCSZX6J9V" +
-                "&redirect_uri=http://localhost:4200/youtube" +
+                "&redirect_uri=https://go-rift.herokuapp.com/youtube" +
                 "&grant_type=authorization_code";
 
 

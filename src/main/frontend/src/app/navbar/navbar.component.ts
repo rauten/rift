@@ -17,10 +17,8 @@ export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
   loggedInUserId: number;
   profile: any;
-  testbegan: any;
   @Input() notificationsList;
 
-  test: String[] = [];
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService, private globals: Globals) {

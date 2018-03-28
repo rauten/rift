@@ -23,7 +23,6 @@ export class CreateSessionComponent implements OnInit {
   title = "Create this session";
   currentSession: Session = new Session();
   currentSessionDateTime: SessionDateTime = new SessionDateTime();
-  sub: any;
   @Input() createSessionData;
   games: any;
   languages: any;
@@ -69,7 +68,7 @@ export class CreateSessionComponent implements OnInit {
 
   save() {
   this.createSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-  let timeMS = this.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
+  let timeMS = CreateSessionComponent.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
     let data = {
       "hostId": this.loggedInUserId,
       "title": this.createSessionData.title,
@@ -85,7 +84,7 @@ export class CreateSessionComponent implements OnInit {
     };
     console.log(data);
     this.userSessionService.createUserSession(data);
-    // window.location.reload();
+    window.location.reload();
   }
 
   cancel(): void {
@@ -93,7 +92,7 @@ export class CreateSessionComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  timeToMilliseconds(time: string) {
+  static timeToMilliseconds(time: string) {
     let list = time.split(":");
     let hour = (+list[0]);
     let minute = (+list[1]);

@@ -20,7 +20,7 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 
-@CrossOrigin(origins = "https://fast-depths-16506.herokuapp.com/")
+@CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class RifterSessionController {
