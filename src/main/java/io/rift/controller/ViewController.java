@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ViewController {
 
     @RequestMapping(
-            { "/home", "/user/{rifttag:\\w+}", "/user/{rifttag:\\w+}/update"
+            { "/home", "/user/{rifttag:\\w+}", "/user/{rifttag:\\w+}/update",
                     "/location", "/about", "/tests","/tests/new",
                     "/tests/**","/questions","/answers" })
     public String index() {
