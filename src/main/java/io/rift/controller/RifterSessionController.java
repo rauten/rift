@@ -71,6 +71,11 @@ public class RifterSessionController {
         return rifterSessionService.deleteSession(sessionId);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/rifterSession/{gameAccountId}/gameAccountId")
+    public List<RifterSession> getRifterSessionsByGameAccount(@PathVariable Integer gameAccountId) throws SQLException {
+        return rifterSessionService.getRifterSessionsByGameAccount(gameAccountId);
+    }
+
 
 
 

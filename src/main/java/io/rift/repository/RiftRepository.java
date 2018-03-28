@@ -67,6 +67,21 @@ public class RiftRepository {
         }
     }
 
+    public String doDeleteWithMessage(String queryName, Object[] args) {
+        HashMap<String, PreparedStatement> queryDict = connectionService.queryDict;
+        try {
+            PreparedStatement preparedStatement = queryDict.get(queryName);
+            for (int i = 1; i <= args.length; i++) {
+                preparedStatement.setObject(i, args[i - 1]);
+            }
+            preparedStatement.execute();
+            return "Success";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
     public boolean doUpdate(StringBuilder queryName, List<Object> args) {
         try {
             PreparedStatement preparedStatement = connectionService.connection.prepareStatement(queryName.toString());

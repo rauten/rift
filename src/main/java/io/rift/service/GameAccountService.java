@@ -199,7 +199,15 @@ public class GameAccountService {
 
     public boolean deleteAccountById(Integer id) {
         Object[] args = new Object[] {id};
-        return riftRepository.doDelete(deleteAccountById, args);
+        String message = riftRepository.doDeleteWithMessage(deleteAccountById, args);
+        if (message.equals("Success")) {
+            return true;
+        } else if (message.startsWith("ERROR: update or delete on table \"gameaccount\" violates foreign key constraint \"riftergame_usertable_id_game_account_id_game_id_fkey\"")) {
+            return false;
+        }
+        System.out.println("Message: " + message);
+        return false;
+
         /*
         if (result.startsWith(foreignKeyError)) {
             return "sessionsExist";

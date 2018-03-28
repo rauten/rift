@@ -52,6 +52,7 @@ public class RifterSessionService {
     private final String getRifterSessionByHostIdAndSessionTime = "getRifterSessionByHostIdAndSessionTime";
     private final String getRifteeSessionsAndHostInfoByRiftTag = "getRifteeSessionsAndHostInfoByRiftTag";
     private final String getRifterAndRifteeSessionsByRiftTag = "getRifterAndRifteeSessionsByRiftTag";
+    private final String getRifterSessionsByGameAccount = "getRifterSessionsByGameAccount";
 
     private final String updateRifterSessionStart = "UPDATE riftergame SET(";
     private final String updateRifterSessionPath = "/io/rift/model/RifterSession.class";
@@ -146,6 +147,18 @@ public class RifterSessionService {
         List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
         while (resultSet.next()) {
             RifterSession rifterSession = populateRifterSession(resultSet, 1, "requestInfo&Host");
+            rifterSessions.add(rifterSession);
+        }
+        return rifterSessions;
+    }
+
+    public List<RifterSession> getRifterSessionsByGameAccount(Integer gameAccountId) throws SQLException {
+        Object[] args = new Object[1];
+        args[0] = gameAccountId;
+        ResultSet resultSet = riftRepository.doQuery(getRifterSessionsByGameAccount, args);
+        List<RifterSession> rifterSessions = new ArrayList<>(resultSet.getFetchSize());
+        while (resultSet.next()) {
+            RifterSession rifterSession = populateRifterSession(resultSet, 1, "");
             rifterSessions.add(rifterSession);
         }
         return rifterSessions;
