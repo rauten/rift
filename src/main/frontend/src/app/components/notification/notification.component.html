@@ -3,7 +3,7 @@
     <img src="{{notification.creatorProfilePic}}" class="media-object avatar">
   </a>
   <div class="media-body">
-    <p class="activity-title"><b>{{creatorRiftTag}}</b>
+    <p class="activity-title" [routerLink]="['../../user', creatorRiftTag]"><b>{{creatorRiftTag}}</b>
       {{notification.notificationContent}}
       <a [routerLink]="['../session', notification.sessionId]">{{notification.sessionTitle}}</a>
     </p>

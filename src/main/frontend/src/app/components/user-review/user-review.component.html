@@ -1,5 +1,5 @@
 <div class="col-sm-3">
-  <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
+  <img src="{{rating.reviewerUsertable.profilePic}}" class="img-rounded profilePic">
   <div class="review-block-name">
     <a [routerLink] = "['../', rating.reviewerUsertable.riftTag]">
       {{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>
@@ -11,22 +11,7 @@
 <div class="col-sm-9">
   <div class="review-block-rate">
     {{accountType}}<br>
-    <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    </button>
-    <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-      <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-    </button>
-    {{rating.rating}}
+    <app-rating [rating]="rating.rating" [readonly]="true"></app-rating>
   </div>
   <div class="review-block-title">{{rating.reviewTitle}}</div>
   <div class="review-block-description">{{rating.review}}</div>

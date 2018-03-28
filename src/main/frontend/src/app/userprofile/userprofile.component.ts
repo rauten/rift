@@ -24,6 +24,7 @@ import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
 import {SESSION_ICONS} from "../constants/session-icon-variables";
 import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
+import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 
 @Component({
   selector: 'app-userprofile',
@@ -60,6 +61,7 @@ export class UserprofileComponent implements OnInit {
       this.getUserProfileInformation(params['rifttag']);
     });
 
+    console.log(NOTIFICATION_CONTENT.get("FOL"));
   }
 
   getCurrentLoggedInUser(riftTag):any {
@@ -153,6 +155,7 @@ export class UserprofileComponent implements OnInit {
           reviewer.firstName = resBody[i].reviewerUsertable.firstName;
           reviewer.lastName = resBody[i].reviewerUsertable.lastName;
           reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
+          this.getUserProfilePicture(reviewer.riftTag, reviewer);
           userRating.reviewerUsertable = reviewer;
           this.currentUser.ratings.push(userRating);
         }
@@ -167,7 +170,7 @@ export class UserprofileComponent implements OnInit {
     for (let i = 0; i < this.currentUser.creatorActivityList.length; i++) {
       let currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-      currActivity.notificationContent = ACTIVITY_CONTENT[parseInt(currActivity.notificationType)];
+      currActivity.notificationContent = NOTIFICATION_CONTENT.get(currActivity.notificationType);
       currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
       currActivity.sessionId = this.currentUser.creatorActivityList[i].sessionId;
       currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
