@@ -9,6 +9,7 @@ import {UserRating} from "../../models/userrating";
 })
 export class UserReviewComponent implements OnInit {
   @Input() rating: UserRating;
+  @Input() userProfilePic: string;
   accountType: string = "";
   constructor() { }
 

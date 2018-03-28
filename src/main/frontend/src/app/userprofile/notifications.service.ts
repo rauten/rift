@@ -74,7 +74,7 @@ export class NotificationsService {
 
     function getNotification(notification) {
       let currNotification = new Notification();
-      currNotification.notificationContent = NOTIFICATION_CONTENT[notification.notification_type];
+      currNotification.notificationContent = NOTIFICATION_CONTENT.get(notification.notification_type);
       currNotification.creatorId = notification.creator_id;
       currNotification.userId = notification.user_id;
       currNotification.createdTime = notification.created_time;

@@ -4,6 +4,7 @@ import {UserprofileService} from "../userprofile/userprofile.service";
 import {Activity} from "../models/activity";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {Session} from "../models/session";
+import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 
 @Component({
   selector: 'app-feed',
@@ -30,7 +31,7 @@ export class FeedComponent implements OnInit {
           var currFeed = resBody[i];
           var currNotification = new Activity();
           currNotification.notificationType = currFeed.notificationType;
-          currNotification.notificationContent = ACTIVITY_CONTENT[currNotification.notificationType];
+          currNotification.notificationContent = NOTIFICATION_CONTENT.get(currNotification.notificationType);
           currNotification.createdTime = currFeed.createdTime;
           currNotification.riftTag = currFeed.creatorUsertable.riftTag;
           currNotification.firstName = currFeed.creatorUsertable.firstName;
