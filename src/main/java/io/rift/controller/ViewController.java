@@ -8,8 +8,10 @@ public class ViewController {
 
     @RequestMapping(
             { "/home", "/user/{rifttag:\\w+}", "/user/{rifttag:\\w+}/update",
-                    "/location", "/about", "/tests","/tests/new",
-                    "/tests/**","/questions","/answers" })
+                    "/user/{rifttag:\\w+}/rate",
+            "/sessions", "/sessions/create", "/youtube", "/twitch",
+            "/therift/{searchQuery=\\w+}", "/session/{sessionId:\\w+}", "/session/{sessionId:\\w+}/update",
+    "/feed"})
     public String index() {
         return "forward:/index.html";
     }
