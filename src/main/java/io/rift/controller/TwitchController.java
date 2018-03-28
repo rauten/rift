@@ -11,7 +11,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "https://go-rift.herokuapp.com")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class TwitchController {

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ViewController {
 
+    /*
     @RequestMapping(
             { "/home", "/user/{rifttag:\\w+}", "/user/{rifttag:\\w+}/update",
                     "/user/{rifttag:\\w+}/rate",
@@ -15,5 +16,6 @@ public class ViewController {
     public String index() {
         return "forward:/index.html";
     }
+    */
 }
 

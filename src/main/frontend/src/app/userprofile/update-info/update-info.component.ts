@@ -86,7 +86,7 @@ export class UpdateInfoComponent implements OnInit {
   verifyWithTwitch() {
     window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
       '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
-      '&redirect_uri=https://go-rift.herokuapp.com/twitch' +
+      '&redirect_uri=http://localhost:4200/twitch' +
       '&scope=openid';
   }
 
@@ -96,7 +96,7 @@ export class UpdateInfoComponent implements OnInit {
       'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly' +
       '&access_type=offline' +
       '&include_granted_scopes=true' +
-      '&redirect_uri=https://go-rift.herokuapp.com/youtube' +
+      '&redirect_uri=https://localhost:4200/youtube' +
       '&response_type=code&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com';
   }
 
