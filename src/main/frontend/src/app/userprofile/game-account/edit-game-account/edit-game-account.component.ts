@@ -8,6 +8,7 @@ import {Observable} from "rxjs/Rx";
 import {UpdateSessionService} from "../../../therift/riftsessions/session-page/update-session/data/update-session.service";
 import {SESSION_ICONS} from "../../../constants/session-icon-variables";
 import {GameAccount} from "../../../models/game-account";
+import {UsersessionsService} from "../../../usersessions/usersessions.service";
 
 @Component({
   selector: 'app-edit-game-account',
@@ -22,17 +23,33 @@ export class EditGameAccountComponent implements OnInit {
   profile: any;
   modalRef: BsModalRef;
 
+  sessionsToUpdate = new Map<number, number>();
   sessionIds: number[] = [];
   accountId: number;
   gameAccounts: GameAccount[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, private gameAccountService: GameAccountService,
-              private modalService: BsModalService, private http: Http, private updateSessionService: UpdateSessionService) {
+              private modalService: BsModalService, private http: Http, private updateSessionService: UpdateSessionService,
+              private userSessionService: UsersessionsService) {
     this.games = GAMES;
     this.profile = JSON.parse(localStorage.getItem("profile"));
   }
 
   ngOnInit() {
+    this.getUserSessionsByGameAccountId(this.data.account.id);
+  }
+
+  confirmDelete(changeAccounts: any) {
+    let status: boolean;
+    this.gameAccountService.deleteGameAccount(this.data.account.id).subscribe(
+      resBody => {
+        status = resBody.status;
+        if (!status) {
+          this.changeStatus(changeAccounts);
+        }
+      }
+    )
+
   }
 
   editGameAccount(data) {
@@ -40,15 +57,19 @@ export class EditGameAccountComponent implements OnInit {
   }
 
   editSessionsGameAccount() {
+    console.log('in edit session');
+    console.log(this.sessionIds);
     for(let i = 0; i < this.sessionIds.length; i++) {
       let currSessionId = this.sessionIds[i];
       let data = {
         "id": currSessionId,
-        "gameAccountId": this.data.accountId
+        "gameAccountId": +this.accountId
       };
+      this.sessionsToUpdate.set(currSessionId, +this.accountId);
       console.log(data);
       // this.updateSessionService.updateUserSession(data);
     }
+    console.log(this.sessionsToUpdate);
   }
 
   changeStatus(template: TemplateRef<any>) {
@@ -64,6 +85,18 @@ export class EditGameAccountComponent implements OnInit {
     console.log(data);
     this.editGameAccount(data);
     window.location.reload();
+  }
+
+  getUserSessionsByGameAccountId(gameId) {
+    this.sessionsToUpdate = new Map<number, number>();
+    this.userSessionService.getUserSessionsByGameAccountId(gameId).subscribe(
+      resBody => {
+        console.log(resBody);
+        for(let i = 0; i < resBody.length; i ++) {
+          this.sessionIds.push(resBody[i].id);
+        }
+      }
+    );
   }
 
   getUserGameAccountsByGameId(gameId, riftId) {

@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="row">
-          <button class="btn-primary" type="button" (click)="changeStatus(template)">Delete Account</button>
+          <button class="btn-primary" type="button" (click)="changeStatus(deleteConfirm)">Delete Account</button>
         </div>
         <ng-template #template style="margin-top:20%">
           <div class="modal-body text-center">
@@ -29,6 +29,14 @@
               </select>
             </div><br>
             <button type="button" class="btn btn-default" (click)="editSessionsGameAccount()" >Confirm</button>
+            <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >Cancel</button>
+          </div>
+        </ng-template>
+
+        <ng-template #deleteConfirm style="margin-top:20%">
+          <div class="modal-body text-center">
+            <p>Are you sure you want to delete?</p>
+            <button type="button" class="btn btn-default" (click)="confirmDelete(template)" >Confirm</button>
             <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >Cancel</button>
           </div>
         </ng-template>
