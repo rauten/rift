@@ -66,6 +66,7 @@ public class SearchService {
             userSearchResults.add(usertableService.populateUsertable(resultSet, 1, "levenshtein"));
         }
         searchResults.add(userSearchResults);
+        resultSet.close();
 
         // Add RifterSession results
         resultSet = riftRepository.doQuery(searchRifterSession, rifterGameArgs);
