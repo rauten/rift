@@ -332,6 +332,12 @@
         ORDER BY session_time;
     </getRifterAndRifteeSessionsByRiftTag>
 
+    <getRifterSessionsByGameAccount>
+        SELECT *
+        FROM riftergame
+        WHERE game_account_id = ? AND current_timestamp &lt; session_time;
+    </getRifterSessionsByGameAccount>
+
     <getRequestStatus>
         SELECT accepted
         FROM gamerequest
