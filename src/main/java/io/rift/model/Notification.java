@@ -51,15 +51,15 @@ public class Notification {
 
     public enum NotificationType {
 
-        FOL("fol"), // Follow - Directed
-        SRQ("srq"), // Session Request - Directed
-        SRA("sra"), // Session Request Accepted - Directed
-        SRR("srr"), // Session Request Rejected - Directed
-        SPO("spo"), // Session Posted - Broadcast
-        SUP("sup"), // Session Updated - Broadcast
-        SDE("sde"), // Session Deleted - Broadcast
-        SST("sst"),  // Stream Starting - Broadcast
-        SJO("sjo"); // Session Joined - Broadcast
+        FOL("FOL"), // Follow - Directed
+        SRQ("SRQ"), // Session Request - Directed
+        SRA("SRA"), // Session Request Accepted - Directed
+        SRR("SRR"), // Session Request Rejected - Directed
+        SPO("SPO"), // Session Posted - Broadcast
+        SUP("SUP"), // Session Updated - Broadcast
+        SDE("SDE"), // Session Deleted - Broadcast
+        SST("SST"),  // Stream Starting - Broadcast
+        SJO("SJO"); // Session Joined - Broadcast
 
         private String value;
 
