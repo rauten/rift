@@ -127,15 +127,14 @@ export class AppComponent {
     this.userprofileService.getUserNotifications(riftTag).subscribe(
       resBody => {
         if(resBody.length > 0) {
-          for (var i = resBody.length-1; i > -1; i--) {
-            var notification = new Notification();
+          for (let i = resBody.length-1; i > -1; i--) {
+            let notification = new Notification();
             notification.createdTime = resBody[i].createdTime;
             notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
             notification.creatorEmail = resBody[i].creatorUsertable.email;
             notification.creatorId = resBody[i].creatorUsertable.id;
             // this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
             notification.notificationType = resBody[i].notificationType;
-            console.log(notification.notificationType);
             notification.notificationContent = NOTIFICATION_CONTENT.get(notification.notificationType);
             notification.sessionId = resBody[i].sessionId;
             notification.seen = resBody[i].seen;
@@ -148,7 +147,7 @@ export class AppComponent {
             this.notificationList.push(notification);
           }
         } else {
-          var notification = new Notification();
+          let notification = new Notification();
           notification.notificationContent = "No notifications";
           notification.creatorProfilePic = "";
           notification.createdTime = -1;

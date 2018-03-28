@@ -17,8 +17,21 @@
           </div>
         </div>
         <div class="row">
-          <button class="btn-primary" type="button">Delete Account</button>
+          <button class="btn-primary" type="button" (click)="changeStatus(template)">Delete Account</button>
         </div>
+        <ng-template #template style="margin-top:20%">
+          <div class="modal-body text-center">
+            <p>The following sessions have your account linked to it.<br>Please change the account associated before proceeding</p>
+            <div class="form-group">
+              <label for="account">Select an Account</label>
+              <select class="form-control" id="account" [(ngModel)]="accountId" [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let account of gameAccounts" [value]="account.id">{{account.ign}}</option>
+              </select>
+            </div><br>
+            <button type="button" class="btn btn-default" (click)="editSessionsGameAccount()" >Confirm</button>
+            <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >Cancel</button>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
