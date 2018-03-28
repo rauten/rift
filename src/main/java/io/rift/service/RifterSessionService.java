@@ -244,15 +244,20 @@ public class RifterSessionService {
     }
 
     public boolean deleteAndUpdateGameAccount(Integer gameAccount, Map<Integer, Integer> newGameAccounts) {
-        List<Object> args = new ArrayList<>(2);
+        List<Object> args = new ArrayList<>(3);
+        List<Object> args3 = new ArrayList<>(3);
         for (Integer sessionId : newGameAccounts.keySet()) {
             int gameAccountId = newGameAccounts.get(sessionId);
             args.add(0, gameAccountId);
             args.add(1, sessionId);
-            StringBuilder query = new StringBuilder("UPDATE riftergame SET game_account_id = ? WHERE id = ?");
+            args.add(2, gameAccountId);
+            StringBuilder query = new StringBuilder("UPDATE riftergame SET game_account_id = ? WHERE id = ? AND host_id = (SELECT usertable_id FROM gameaccount WHERE id = ?)");
             riftRepository.doUpdate(query, args);
-            query = new StringBuilder("UPDATE gamerequest SET riftee_game_account = ? WHERE session_id = ?");
-            riftRepository.doUpdate(query, args);
+            args3.add(0, gameAccountId);
+            args3.add(1, gameAccount);
+            args3.add(2, sessionId);
+            query = new StringBuilder("UPDATE gamerequest SET riftee_game_account = ? WHERE riftee_game_account = ? AND session_id = ?");
+            riftRepository.doUpdate(query, args3);
         }
         Object[] args2 = new Object[1];
         args2[0] = gameAccount;

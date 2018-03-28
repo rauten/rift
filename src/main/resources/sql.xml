@@ -981,6 +981,7 @@
                 ON g.session_id = r.id AND g.host_id = r.host_id
                 WHERE g.riftee_game_account = OLD.id)
             AND riftee_id = OLD.usertable_id AND riftee_game_account = OLD.id;
+            RETURN OLD;
         END;
         $BODY$
         LANGUAGE plpgsql
