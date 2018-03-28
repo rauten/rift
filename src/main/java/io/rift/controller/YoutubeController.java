@@ -11,13 +11,13 @@ import java.util.Map;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-//@RequestMapping("/api")
+@RequestMapping("/api")
 public class YoutubeController {
 
     @Autowired
     private YoutubeService youtubeService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/verifyYoutube/{code}")
+    @RequestMapping(method = RequestMethod.GET, value = "/verifyYoutube/{code}")
     public Map<String, String> getYoutubeCode(@PathVariable String code) throws IOException {
         String content = youtubeService.getYoutubeAccessCode(code);
         Map<String, String> result = new HashMap<>();

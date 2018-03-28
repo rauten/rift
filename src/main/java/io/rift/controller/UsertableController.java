@@ -29,7 +29,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "https://go-rift.herokuapp.com")
 @RestController
-//@RequestMapping("/api")
+@RequestMapping("/api")
 public class UsertableController {
 
     @Autowired
@@ -53,14 +53,14 @@ public class UsertableController {
     @Autowired
     private TwitchService twitchService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftTag}/id")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/id")
     public Map<String, Integer> getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
         Map<String, Integer> tagMap = new HashMap<>();
         tagMap.put("id", usertableService.getRiftIdByRiftTag(riftTag));
         return tagMap;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/riftTag")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/riftTag")
     public Map<String, String> getRiftTagByRiftId(@PathVariable Integer id) throws SQLException {
         Map<String, String> idMap = new HashMap<>();
         idMap.put("riftTag", usertableService.getRiftTagByRiftId(id));
@@ -72,7 +72,7 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object with notifications
      */
-    @RequestMapping(method=RequestMethod.GET, value="/api/user/direct_notifications/{id}")
+    @RequestMapping(method=RequestMethod.GET, value="/user/direct_notifications/{id}")
     public Usertable getUserAndDirectNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -87,7 +87,7 @@ public class UsertableController {
      * @param id The user id we want to get activity information for
      * @return A User object with activities
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/activity/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/activity/{id}")
     public Usertable getUserAndActivity(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -103,7 +103,7 @@ public class UsertableController {
      * @param id The user id we want to get information for
      * @return A User object
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
     public Usertable getUser(@PathVariable Integer id) throws SQLException {
         return usertableService.getUserById(id);
     }
@@ -114,7 +114,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's followings
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/followings")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followings")
     public Usertable getUserAndFollowings(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -130,7 +130,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Followers objects
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/followers")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followers")
     public Usertable getUserAndFollowers(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -140,7 +140,7 @@ public class UsertableController {
         return usertable;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/followingsandfollowers/userInfo")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers/userInfo")
     public Usertable getUserAndFollowingsAndFollowersAndInfo(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -157,7 +157,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Following/Follower objects
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/followingsandfollowers")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/followingsandfollowers")
     public Usertable getUserAndFollowersAndFollowings(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -174,7 +174,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Broadcast Notification objects
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/broadcast_notifications")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/broadcast_notifications")
     public Usertable getUserAndBroadcastNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -190,7 +190,7 @@ public class UsertableController {
      * @return - Usertable object with info and user's Notification objects
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{id}/notifications")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/notifications")
     public Usertable getUserAndNotifications(@PathVariable Integer id) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         usertable.setGamesPlayed(usertableService.getNumberGamesPlayedByUserId(id));
@@ -209,7 +209,7 @@ public class UsertableController {
      */
 
     @JsonView(Views.UserRifterSessions.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftTag}/rifterSessions")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/rifterSessions")
     public Usertable getUserAndRifterSessions(@PathVariable String riftTag) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         usertable.setRifterSessions(usertableService.getUserAndRifterSession(usertable.getId()));
@@ -217,7 +217,7 @@ public class UsertableController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/api/user/{riftTag}/rifteeSessions/{info}", "/user/{riftTag}/rifteeSessions"})
+    @RequestMapping(method = RequestMethod.GET, value = {"/user/{riftTag}/rifteeSessions/{info}", "/user/{riftTag}/rifteeSessions"})
     public Usertable getUserAndRifteeSessionsAndInfo(@PathVariable String riftTag, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         if (info.isPresent()) {
@@ -238,7 +238,7 @@ public class UsertableController {
      * @return - Usertable with SessionRequests/Session info
      * @throws SQLException
      */
-    @RequestMapping(method = RequestMethod.GET, value = {"/api/user/{id}/rifteeSessions/filterBy:{filter}={value}/{info}", "/user/{id}/rifteeSessions/filterBy:{filter}={value}"})
+    @RequestMapping(method = RequestMethod.GET, value = {"/user/{id}/rifteeSessions/filterBy:{filter}={value}/{info}", "/user/{id}/rifteeSessions/filterBy:{filter}={value}"})
     public Usertable getUserAndRifteeSessions(@PathVariable Integer id, @PathVariable String filter, @PathVariable Short value, @PathVariable Optional<String> info) throws SQLException {
         Usertable usertable = usertableService.getUserById(id);
         if (info.isPresent()) {
@@ -249,13 +249,13 @@ public class UsertableController {
         return usertable;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftId}/session/{sessionId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftId}/session/{sessionId}")
     public Map<String, Object> getTransactionDataFromUserAndSessionId(@PathVariable String riftId, @PathVariable String sessionId) throws SQLException {
         return usertableService.getTransactionDataFromUserAndSessionId(riftId, sessionId);
     }
 
     @JsonView(Views.ProfilePageView.class)
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/{riftTag}/profilePage")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
     public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
         try {
@@ -291,12 +291,12 @@ public class UsertableController {
      * @throws SQLException
      */
     @JsonView(Views.CreateUser.class)
-    @RequestMapping(method = RequestMethod.PUT, value = "/api/user/createUser")
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
     public Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
         return usertableService.createUser(usertable);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/api/user/updateUser")
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/updateUser")
     public Boolean updateUpdate(@RequestBody Usertable usertable) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
         String riftTag = usertable.getRiftTag();
         if (!riftTag.equals("")) {
@@ -308,12 +308,12 @@ public class UsertableController {
         return usertableService.updateUser(usertable);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/api/user/putPicture/{keyBase}/{bucket}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}/{bucket}")
     public boolean putProfilePicture(@PathVariable String keyBase, @RequestBody String image, @PathVariable String bucket) throws URISyntaxException {
         return usertableService.putPicture(keyBase, image, bucket);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/user/getPicture/{keyBase}/{bucket}")
+    @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}/{bucket}")
     public @ResponseBody Map<String, String> getProfilePicture(@PathVariable String keyBase, @PathVariable String bucket) throws IOException {
         Map<String, String> imageMap = new HashMap<>();
         String str = usertableService.getPicture(keyBase, bucket);
