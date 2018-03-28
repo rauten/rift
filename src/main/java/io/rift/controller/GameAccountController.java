@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -53,7 +55,6 @@ public class GameAccountController {
      *
      * @param usertableId
      * @param gameId
-     * @param info
      * @return - Gets a list of GameAccounts that have a specified usertableId and gameId
      * @throws SQLException
      */
@@ -132,8 +133,10 @@ public class GameAccountController {
         return gameAccountService.updateGameAccountById(gameAccount);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/gameaccount/delete")
-    public boolean deleteGameAccount(@RequestBody GameAccount gameAccount) {
-        return gameAccountService.deleteAccountById(gameAccount.getId());
+    @RequestMapping(method = RequestMethod.DELETE, value = "/gameaccount/delete/{gameAccountId}")
+    public Map<String, Boolean> deleteGameAccount(@PathVariable Integer gameAccountId) {
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("status", gameAccountService.deleteAccountById(gameAccountId));
+        return result;
     }
 }

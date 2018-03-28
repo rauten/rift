@@ -29,7 +29,6 @@ export class FeedComponent implements OnInit {
       resBody => {
         for (let i = 0; i < resBody.length; i++) {
           let currFeed = resBody[i];
-          console.log(currFeed);
           let currNotification = new Activity();
           currNotification.notificationType = currFeed.notificationType;
           currNotification.notificationContent = NOTIFICATION_CONTENT.get(currNotification.notificationType);

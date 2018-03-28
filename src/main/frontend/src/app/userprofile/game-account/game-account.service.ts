@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Headers, Http, RequestOptions, Response} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {GameAccount} from "../../models/game-account";
+import {Session} from "../../models/session";
 
 @Injectable()
 export class GameAccountService {
@@ -24,8 +25,18 @@ export class GameAccountService {
       );
   }
 
+  deleteGameAccountAndUpdateSession(gameAccountId) {
+    return this.http.get("/api/gameaccount/usertableId/" + gameAccountId + "/info")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   getUserGameAccounts(id): Observable<GameAccount> {
-    // console.log("Getting user's game accounts");
+    console.log("Getting user's game accounts");
     return this.http.get("/api/gameaccount/usertableId/" + id + "/info")
       .map(
         (response: Response) => {
@@ -69,7 +80,6 @@ export class GameAccountService {
         return res.json();
       })
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
-      .subscribe();
   }
 }
 

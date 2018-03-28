@@ -60,9 +60,7 @@ export class UserprofileComponent implements OnInit {
       // this.getLeagueInfo("ZeroSweg");
       this.getUserProfileInformation(params['rifttag']);
     });
-
-    console.log(NOTIFICATION_CONTENT.get("FOL"));
-  }
+    }
 
   getCurrentLoggedInUser(riftTag):any {
     // console.log("Getting currently logged in user");
@@ -301,6 +299,7 @@ export class UserprofileComponent implements OnInit {
       width: '600px',
       data: {
         "account": account,
+        "riftId": this.currentUser.id
       }
     });
   }

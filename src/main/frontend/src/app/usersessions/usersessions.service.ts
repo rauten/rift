@@ -28,6 +28,17 @@ export class UsersessionsService {
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
+  getUserSessionsByGameAccountId(id): Observable<Userprofile> {
+    console.log("Getting user's game accounts");
+    return this.http.get("/api/rifterSession/" + id + "/gameAccountId")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
+
   createUserSession(data) : void {
     console.log("running createUserSession");
     let headers = new Headers({ 'Content-Type': 'application/json' });
