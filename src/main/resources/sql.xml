@@ -180,7 +180,7 @@
         SELECT n.* us.first_name, us.last_name, us.is_private, us.is_suspended, us.profile_picture_path, us.rift_tag, us.riftee_rating, us.rifter_rating, us.gender, r.*
         FROM usertable us JOIN following f ON us.id = f.follower_id
         JOIN notification n ON f.following_id = n.creator_id
-        WHERE us.id = ? AND n.notification_type = 0;
+        WHERE us.id = ? AND n.notification_type = 'SPO';
     </getBroadcastNotificationsById>
 
     <getSessionUpdateBroadcastsByUserId>
@@ -190,7 +190,7 @@
         JOIN game g ON g.id = r.game_id
         JOIN usertable u ON n.creator_id = u.id
         JOIN gamerequest ga ON  ga.host_id = u.id
-        WHERE notification_type = 1 AND ga.riftee_id = ? AND n.user_id is null AND ga.accepted != 0;
+        WHERE notification_type = 'SUP' AND ga.riftee_id = ? AND n.user_id is null AND ga.accepted != 0;
     </getSessionUpdateBroadcastsByUserId>
 
     <getSessionDeletionBroadcastsByUserId>
@@ -198,7 +198,7 @@
         FROM notification n
         JOIN usertable u ON n.creator_id = u.id
         JOIN gamerequest ga ON ga.host_id = u.id
-        WHERE notification_type = 2 AND ga.riftee_id = ? AND notification_content is not null AND n.user_id is null AND ga.accepted != 0;
+        WHERE notification_type = 'SDE' AND ga.riftee_id = ? AND notification_content is not null AND n.user_id is null AND ga.accepted != 0;
     </getSessionDeletionBroadcastsByUserId>
 
     <getBroadcastNotificationsForFollower>
@@ -209,7 +209,7 @@
         JOIN riftergame r ON n.session_id = r.id
         JOIN game g ON g.id = r.game_id
         JOIN usertable usr ON r.host_id = usr.id
-        WHERE us.id = ? AND n.notification_type = 0;
+        WHERE us.id = ? AND n.notification_type = 'SPO';
     </getBroadcastNotificationsForFollower>
 
     <getNumberNotificationsUnseen>
@@ -656,7 +656,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.host_id, 3, null,
+            VALUES(NEW.host_id, 'SRQ', null,
             NEW.session_id, current_timestamp, NEW.riftee_id);
             RETURN NEW;
         END;
@@ -699,7 +699,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(NEW.following_id, 2, null,
+            VALUES(NEW.following_id, 'FOL', null,
             null, current_timestamp, NEW.follower_id);
             RETURN NEW;
         END;
@@ -732,7 +732,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            SELECT null, 1, null, r.id, current_timestamp, r.host_id
+            SELECT null, 'SUP', null, r.id, current_timestamp, r.host_id
             FROM riftergame r
             WHERE r.id = NEW.id;
             RETURN NEW;
@@ -750,16 +750,16 @@
             IF NEW.accepted = 0 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, 1, null,
+                VALUES(NEW.riftee_id, 'SRR', null,
                 OLD.session_id, current_timestamp, NEW.host_id);
             ELSIF NEW.accepted = 2 AND OLD.accepted = 1 THEN
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(NEW.riftee_id, 0, null,
+                VALUES(NEW.riftee_id, 'SRA', null,
                 NEW.session_id, current_timestamp, NEW.host_id);
                 INSERT INTO notification
                 (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-                VALUES(null, 3, null, NEW.session_id, current_timestamp, NEW.riftee_id);
+                VALUES(null, 'SJO', null, NEW.session_id, current_timestamp, NEW.riftee_id);
             END IF;
             RETURN NEW;
         END;
@@ -819,7 +819,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            VALUES(null, 0, null, NEW.id, current_timestamp, NEW.host_id);
+            VALUES(null, 'SPO', null, NEW.id, current_timestamp, NEW.host_id);
             RETURN NEW;
         END;
         $BODY$
@@ -835,7 +835,7 @@
         BEGIN
             INSERT INTO notification
             (user_id, notification_type, notification_content, session_id, created_time, creator_id)
-            SELECT null, 2, r.title, null, current_timestamp, r.host_id
+            SELECT null, 'SDE', r.title, null, current_timestamp, r.host_id
             FROM riftergame r
             WHERE r.id = OLD.id;
 

@@ -179,10 +179,10 @@ public class RifterSessionService {
             e.printStackTrace();
         }
         if (info.equals("levenshteinSearch")) {
-            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 1));
-            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 2));
-            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 3));
-            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + POPULATESIZE + 4, ""));
+            rifterSession.setGameLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE));
+            rifterSession.setGameFirstWordLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 1));
+            rifterSession.setRiftTagLevenshtein(resultSet.getDouble(startPoint + POPULATESIZE + 2));
+            rifterSession.setUsertable(usertableService.populateUsertable(resultSet, startPoint + POPULATESIZE + 3, ""));
         } else if (info.equals("request")) {
             SessionRequest sessionRequest = new SessionRequest();
             sessionRequest.setAccepted(resultSet.getShort(startPoint + POPULATESIZE));

@@ -27,9 +27,10 @@ export class FeedComponent implements OnInit {
     this.currentUser.feed = [];
     this.userProfileService.getUserBroadcastNotifications(riftTag).subscribe(
       resBody => {
-        for (var i = 0; i < resBody.length; i++) {
-          var currFeed = resBody[i];
-          var currNotification = new Activity();
+        for (let i = 0; i < resBody.length; i++) {
+          let currFeed = resBody[i];
+          console.log(currFeed);
+          let currNotification = new Activity();
           currNotification.notificationType = currFeed.notificationType;
           currNotification.notificationContent = NOTIFICATION_CONTENT.get(currNotification.notificationType);
           currNotification.createdTime = currFeed.createdTime;
@@ -38,8 +39,8 @@ export class FeedComponent implements OnInit {
           currNotification.lastName = currFeed.creatorUsertable.lastName;
           this.getActivityProfilePicture(currNotification.riftTag, currNotification);
 
-          var session = new Session();
-          var currSession = currFeed.rifterSession;
+          let session = new Session();
+          let currSession = currFeed.rifterSession;
           session.id = currSession.id;
           session.gameId = currSession.gameId;
           session.console = currSession.console;

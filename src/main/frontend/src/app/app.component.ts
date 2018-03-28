@@ -135,6 +135,7 @@ export class AppComponent {
             notification.creatorId = resBody[i].creatorUsertable.id;
             // this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
             notification.notificationType = resBody[i].notificationType;
+            console.log(notification.notificationType);
             notification.notificationContent = NOTIFICATION_CONTENT.get(notification.notificationType);
             notification.sessionId = resBody[i].sessionId;
             notification.seen = resBody[i].seen;

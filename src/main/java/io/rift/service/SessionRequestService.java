@@ -209,6 +209,9 @@ public class SessionRequestService {
 
             success = riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
                     sessionRequest.getSessionId(), sessionRequest.getAccepted(), sessionRequest.getHostId(), sessionRequest.getRifteeGameAccount()});
+
+            return success;
+
         }
         return false;
     }

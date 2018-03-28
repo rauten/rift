@@ -19,7 +19,7 @@ public class Notification {
     private Integer userId;
 
     @JsonView(Views.NotificationType.class)
-    private Integer notificationType;
+    private NotificationType notificationType;
 
     @JsonView(Views.NotificationContent.class)
     private String notificationContent;
@@ -58,7 +58,8 @@ public class Notification {
         SPO("spo"), // Session Posted - Broadcast
         SUP("sup"), // Session Updated - Broadcast
         SDE("sde"), // Session Deleted - Broadcast
-        SST("sst");  // Stream Starting - Broadcast
+        SST("sst"),  // Stream Starting - Broadcast
+        SJO("sjo"); // Session Joined - Broadcast
 
         private String value;
 

@@ -1,6 +1,7 @@
 package io.rift.service;
 
 import io.rift.model.Notification;
+import io.rift.model.UserComplaint;
 import io.rift.repository.RiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public abstract class AbstractNotificationService {
             Notification notification = new Notification();
             notification.setId(resultSet.getInt(startPoint));
             notification.setUserId(resultSet.getInt(startPoint + 1));
-            notification.setNotificationType(resultSet.getInt(startPoint + 2));
+            notification.setNotificationType(Notification.NotificationType.fromValue(resultSet.getString(startPoint + 2)));
             notification.setNotificationContent(resultSet.getString(startPoint + 3));
             notification.setSessionId(resultSet.getInt(startPoint + 4));
             notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
@@ -63,13 +64,13 @@ public abstract class AbstractNotificationService {
         Notification notification = new Notification();
         notification.setId(resultSet.getInt(startPoint));
         notification.setUserId(resultSet.getInt(startPoint + 1));
-        notification.setNotificationType(resultSet.getInt(startPoint + 2));
+        notification.setNotificationType(Notification.NotificationType.fromValue(resultSet.getString(startPoint + 2)));
         notification.setNotificationContent(resultSet.getString(startPoint + 3));
         notification.setSessionId(resultSet.getInt(startPoint + 4));
         notification.setCreatedTime(resultSet.getTimestamp(startPoint + 5));
         notification.setCreatorId(resultSet.getInt(startPoint + 6));
         notification.setSeen(resultSet.getBoolean(startPoint + 7));
-        if (info.equals("session") && notification.getNotificationType() != 2) {
+        if (info.equals("session") && !(notification.getNotificationType().toString().equals("SDE") && notification.getUserId() == null)) {
             notification.setRifterSession(rifterSessionService.populateRifterSession(resultSet, startPoint + POPULATESIZE, ""));
         }
         return notification;
