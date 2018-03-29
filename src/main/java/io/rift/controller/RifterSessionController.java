@@ -76,7 +76,9 @@ public class RifterSessionController {
     public List<RifterSession> getRifterSessionsByGameAccount(@PathVariable Integer gameAccountId) throws SQLException {
         return rifterSessionService.getRifterSessionsByGameAccount(gameAccountId);
     }
+    
 
+    //New method
     @RequestMapping(method = RequestMethod.PUT, value = "/rifterSession/{gameAccountId}/deleteAndUpdate")
     public boolean deleteAndUpdateGameAccount(@PathVariable Integer gameAccountId, @RequestBody Map<Integer, Integer> newGameAccounts) {
         return rifterSessionService.deleteAndUpdateGameAccount(gameAccountId, newGameAccounts);
