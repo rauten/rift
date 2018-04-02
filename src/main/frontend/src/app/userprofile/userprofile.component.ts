@@ -57,7 +57,6 @@ export class UserprofileComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
       this.isDataAvailable = true;
-      // this.getLeagueInfo("ZeroSweg");
       this.getUserProfileInformation(params['rifttag']);
     });
     }

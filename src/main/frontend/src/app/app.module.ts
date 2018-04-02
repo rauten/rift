@@ -92,8 +92,6 @@ import {NotificationsService} from "./userprofile/notifications.service";
 import { FileAComplaintComponent } from './userprofile/file-a-complaint/file-a-complaint.component';
 import {FileAComplaintService} from "./userprofile/file-a-complaint/data/file-a-complaint-service";
 import { KickRifteeButtonComponent } from './components/kick-riftee-button/kick-riftee-button.component';
-import { LeagueOfLegendsComponent } from './game-api/league-of-legends/league-of-legends.component';
-import {LeagueOfLegendsService} from "./game-api/league-of-legends/league-of-legends.service";
 import {TwitchService} from './userprofile/twitch.service';
 import {YoutubeService} from "./userprofile/youtube.service";
 import { AddGameAccountComponent } from './userprofile/game-account/add-game-account/add-game-account.component';
@@ -146,7 +144,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FeedCardComponent,
     FileAComplaintComponent,
     KickRifteeButtonComponent,
-    LeagueOfLegendsComponent,
     AddGameAccountComponent,
     EditGameAccountComponent,
   ],
@@ -187,7 +184,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   EditGameAccountComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
-    LeagueOfLegendsService, YoutubeService, TwitchService, GameAccountService,
+    YoutubeService, TwitchService, GameAccountService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
