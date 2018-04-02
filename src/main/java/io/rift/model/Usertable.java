@@ -61,6 +61,10 @@ public class Usertable {
     @JsonView(Views.UsertableEmail.class)
     private String email;
 
+    private String defaultSourceId;
+
+    private String defaultAccountId;
+
     @JsonView(Views.UsertableNotificationList.class)
     private List<Notification> notificationList;
 
