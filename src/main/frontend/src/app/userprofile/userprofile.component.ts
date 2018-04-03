@@ -25,7 +25,8 @@ import {SESSION_ICONS} from "../constants/session-icon-variables";
 import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {StripePaymentComponent} from "./stripe-payment/stripe-payment.component";
-import {AddBankAccountComponent} from "./stripe-payment/add-bank-account/add-bank-account.component";
+import {AddBankAccountComponent} from "./stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component";
+import {LegalBankAccountInfoComponent} from "./stripe-payment/legal-bank-account-info/legal-bank-account-info.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -305,12 +306,11 @@ export class UserprofileComponent implements OnInit {
   }
 
   updateBankAccountModal() {
-    this.dialog.open(AddBankAccountComponent, {
+    this.dialog.open(LegalBankAccountInfoComponent, {
       height: '450px',
       width: '600px',
       data: {
-        "updateBraintreeUserURL": this.updateBraintreeUserURL,
-        "currentUser": this.currentUser
+        "riftId": this.loggedInUser.id
       }
     });
   }
