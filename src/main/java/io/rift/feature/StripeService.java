@@ -3,21 +3,22 @@ package io.rift.feature;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
 import com.stripe.model.*;
+import com.stripe.net.RequestOptions;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class StripeService {
 
-    private final String apiKey = "pk_test_e0Tro5riHEYLey82sM4MlAcp";
+    private final String apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
 
 
     public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
                                        String state, String day, String month, String year, String firstName, String lastName) {
-
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
 
 
         Map<String, Object> params = new HashMap<>();
@@ -47,7 +48,7 @@ public class StripeService {
         params.put("legal_entity", legalInfo);
 
         try {
-            Account response = Account.create(params);
+            Account response = Account.create(params, RequestOptions.builder().setApiKey(apiKey).build());
             return response.getId();
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -55,13 +56,12 @@ public class StripeService {
         }
     }
 
-    public boolean setPaymentMethodForRifter(String rifterId, String token) {
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
+    public boolean setPaymentMethodForRifter(String rifterStripeId, String token) {
         try {
-            Account account = Account.retrieve(rifterId, null);
+            Account account = Account.retrieve(rifterStripeId, null);
             Map<String, Object> params = new HashMap<>();
             params.put("external_account", token);
-            account.getExternalAccounts().create(params);
+            account.getExternalAccounts().create(params, RequestOptions.builder().setApiKey(apiKey).build());
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return false;
@@ -70,9 +70,10 @@ public class StripeService {
     }
 
     public String createRifteeAccount() {
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
+        Map<String, Object> params = new HashMap<>();
         try {
-            Customer customer = Customer.create(null);
+            RequestOptions requestOptions = RequestOptions.builder().setApiKey(apiKey).build();
+            Customer customer = Customer.create(params, requestOptions);
             return customer.getId();
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -81,12 +82,11 @@ public class StripeService {
     }
 
     public boolean createRifteePayment(String rifteeId, String tokenId) {
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
         try {
-            Customer customer = Customer.retrieve(rifteeId);
+            Customer customer = Customer.retrieve(rifteeId, RequestOptions.builder().setApiKey(apiKey).build());
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("source", tokenId);
-            customer.getSources().create(params);
+            customer.getSources().create(params, RequestOptions.builder().setApiKey(apiKey).build());
             return true;
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -95,15 +95,14 @@ public class StripeService {
     }
 
     public List<Card> getRifteeCards(String rifteeId) {
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
         List<Card> cards = new ArrayList<>();
         try {
-            Customer customer = Customer.retrieve(rifteeId);
+            Customer customer = Customer.retrieve(rifteeId, RequestOptions.builder().setApiKey(apiKey).build());
             ExternalAccountCollection externalAccountCollection = customer.getSources();
             List<ExternalAccount> externalAccounts = externalAccountCollection.getData();
             for (ExternalAccount externalAccount : externalAccounts) {
                 String id = externalAccount.getId();
-                Card card = (Card) customer.getSources().retrieve(id);
+                Card card = (Card) customer.getSources().retrieve(id, RequestOptions.builder().setApiKey(apiKey).build());
                 cards.add(card);
             }
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
@@ -114,7 +113,6 @@ public class StripeService {
     }
 
     public boolean createCharge(Double amount, String currency, String sourceId, String rifterPaymentId) {
-        Stripe.apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
         try {
 
             /*
@@ -145,7 +143,7 @@ public class StripeService {
             destinationParams.put("amount", transferAmount);
             destinationParams.put("account", rifterPaymentId);
             params.put("destination", destinationParams);
-            Charge.create(params);
+            Charge.create(params, RequestOptions.builder().setApiKey(apiKey).build());
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return false;

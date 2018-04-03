@@ -58,7 +58,7 @@ public class UsertableService {
     @Autowired
     private ConnectionService connectionService;
 
-    public final int POPULATESIZE = 16;
+    public final int POPULATESIZE = 18;
 
 
     /****************************** GET *******************************/
@@ -206,6 +206,8 @@ public class UsertableService {
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         usertable.setBraintreeId(resultSet.getString(startPoint + 14));
         usertable.setEmail(resultSet.getString(startPoint + 15));
+        usertable.setDefaultAccountId(resultSet.getString(startPoint + 16));
+        usertable.setDefaultSourceId(resultSet.getString(startPoint + 17));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(activityNotificationService.populateNotifications(resultSet, POPULATESIZE, ""));
         } else if (info.equals("levenshtein")) {
