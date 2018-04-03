@@ -18,20 +18,20 @@ public class StripeController {
     @Autowired
     private StripeService stripeService;
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/storeMerchantBankAccount")
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/getMerchantAccountToken")
     public Map<String, String> createRifterAccount(@RequestBody BusinessInfo businessInfo, @PathVariable Integer id) {
         Map<String, String> accountIdMap = new HashMap<>();
         String accountId = stripeService.createRifterAccount(businessInfo.getCountry(), businessInfo.getCity(), businessInfo.getAddressLine1(),
                 businessInfo.getAddressLine2(), businessInfo.getZipCode(), businessInfo.getState(), businessInfo.getDobDay(),
-                businessInfo.getDobMonth(), businessInfo.getDobYear(), businessInfo.getFirstName(), businessInfo.getLastName());
+                businessInfo.getDobMonth(), businessInfo.getDobYear(), businessInfo.getFirstName(), businessInfo.getLastName(), id);
 
         accountIdMap.put("accountId", accountId);
         return accountIdMap;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/rifterToken/{token}")
-    public boolean setPaymentMethodForRifter(@RequestBody String rifterStripeId, @PathVariable String token, @PathVariable Integer id) {
-        return stripeService.setPaymentMethodForRifter(rifterStripeId, token);
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/storeMerchantBankAccount")
+    public boolean setBankAccountForMerchant(@RequestBody Map<String, String> tokens, @PathVariable Integer id) {
+        return stripeService.setPaymentMethodForRifter(tokens.get("accountId"), tokens.get("bankAccountToken"));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/createCustomer")
