@@ -182,7 +182,7 @@ public class StripeService {
         List<Object> args = new ArrayList<>(2);
         args.add(0, customerId);
         args.add(1, usertableId);
-        String query = "UPDATE usertable SET customer_id = ? WHERE usertableId = ?";
+        String query = "UPDATE usertable SET customer_id = ? WHERE id = ?";
         return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
@@ -190,7 +190,7 @@ public class StripeService {
         List<Object> args = new ArrayList<>(2);
         args.add(0, accountId);
         args.add(1, usertableId);
-        String query = "UPDATE usertable SET account_id = ? WHERE usertableId = ?";
+        String query = "UPDATE usertable SET account_id = ? WHERE id = ?";
         return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
