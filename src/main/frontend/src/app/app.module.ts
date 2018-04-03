@@ -188,7 +188,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
-  EditGameAccountComponent, StripePaymentComponent, AddBankAccountComponent],
+  EditGameAccountComponent, StripePaymentComponent, AddBankAccountComponent, LegalBankAccountInfoComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
     YoutubeService, TwitchService, GameAccountService, StripePaymentService,

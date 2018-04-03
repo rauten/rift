@@ -310,7 +310,8 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        "riftId": this.loggedInUser.id
+        "riftId": this.loggedInUser.id,
+        "riftTag": this.profile.nickname
       }
     });
   }

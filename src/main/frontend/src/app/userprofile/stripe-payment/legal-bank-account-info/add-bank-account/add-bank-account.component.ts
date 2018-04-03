@@ -1,4 +1,6 @@
-import {Component, NgZone, OnInit} from '@angular/core';
+import {Component, Inject, NgZone, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from "@angular/material";
+import {StripePaymentService} from "../../stripe-payment.service";
 
 @Component({
   selector: 'app-add-bank-account',
@@ -17,7 +19,7 @@ export class AddBankAccountComponent implements OnInit {
   ngOnInit() {
   }
 
-  constructor(private _zone: NgZone) {}
+  constructor(private _zone: NgZone, @Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService) {}
 
   getToken() {
     this.message = 'Loading...';
@@ -35,6 +37,12 @@ export class AddBankAccountComponent implements OnInit {
       this._zone.run(() => {
         if (status === 200) {
           this.message = `Success! Bank Account token ${response.id}.`;
+          let data = {
+            "accountId": this.data.accountId,
+            "bankAccountToken": response.id
+          };
+          console.log(data);
+          // this.stripeService.storeMerchantBankAccount(data, this.data.riftId);
         } else {
           this.message = response.error.message;
         }

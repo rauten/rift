@@ -28,7 +28,7 @@ public class StripeService {
 
 
         Map<String, Object> params = new HashMap<>();
-        params.put("type", "'custom'");
+        params.put("type", "custom");
         params.put("country", country);
 
         Map<String, Object> legalInfo = new HashMap<>();

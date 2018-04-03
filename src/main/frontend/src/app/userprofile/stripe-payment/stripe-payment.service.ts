@@ -10,7 +10,7 @@ export class StripePaymentService {
 
 
   storeCustomerCard(data) {
-    console.log("storing credit card");
+    console.log("storing customer credit card");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     this.http.put(this.storeCustomerCardURL, data, options)
@@ -23,13 +23,24 @@ export class StripePaymentService {
       );
   }
 
+  getAccountId(data, id) {
+    console.log("getting account token");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.put("/api/stripe/user/" + id + "/getMerchantAccountToken", data, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+  }
+
   storeMerchantBankAccount(data, id) {
-    console.log("storing credit card");
+    console.log("storing merchant bank account");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.put("/api/stripe/user/" + id + "/storeMerchantBankAccount", data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
-
   }
+
+
+
 }
