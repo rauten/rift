@@ -52,7 +52,7 @@ public class StripeController {
         return stripeService.getRifteeCards(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/stripe/customerId/{id}/card")
+    @RequestMapping(method = RequestMethod.GET, value = "/stripe/customerId/{customerId}/card")
     public Card getDefaultCard(@PathVariable String customerId) {
         return stripeService.getDefaultCard(customerId);
     }
