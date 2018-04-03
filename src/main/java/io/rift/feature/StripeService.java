@@ -96,6 +96,9 @@ public class StripeService {
             Map<String, Object> params = new HashMap<>();
             params.put("source", tokenId);
             customer.getSources().create(params, RequestOptions.builder().setApiKey(apiKey).build());
+            Map<String, Object> customerParams = new HashMap<>();
+            customerParams.put("default_source", tokenId);
+            customer.update(customerParams, RequestOptions.builder().setApiKey(apiKey).build());
             return true;
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -124,15 +127,11 @@ public class StripeService {
     public Card getDefaultCard(String customerId) {
         try {
             Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(apiKey).build());
-            ExternalAccountCollection externalAccountCollection = customer.getSources();
-            List<ExternalAccount> externalAccounts = externalAccountCollection.getData();
-            for (ExternalAccount externalAccount : externalAccounts) {
-                String id = externalAccount.getId();
-                Card card = (Card) customer.getSources().retrieve(id, RequestOptions.builder().setApiKey(apiKey).build());
-                if (card.getDefaultForCurrency()) {
-                    return card;
-                }
+            String defaultSource = customer.getDefaultSource();
+            if (defaultSource != null) {
+                return (Card) customer.getSources().retrieve(defaultSource, RequestOptions.builder().setApiKey(apiKey).build());
             }
+            return null;
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
         }
