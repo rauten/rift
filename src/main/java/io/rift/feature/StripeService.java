@@ -24,7 +24,7 @@ public class StripeService {
 
 
     public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
-                                       String state, String day, String month, String year, String firstName, String lastName) {
+                                       String state, String day, String month, String year, String firstName, String lastName, Integer id) {
 
 
         Map<String, Object> params = new HashMap<>();
@@ -55,7 +55,9 @@ public class StripeService {
 
         try {
             Account response = Account.create(params, RequestOptions.builder().setApiKey(apiKey).build());
-            return response.getId();
+            String accountId = response.getId();
+            setUserAccountId(accountId, id);
+            return accountId;
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return "";
@@ -181,6 +183,14 @@ public class StripeService {
         args.add(0, customerId);
         args.add(1, usertableId);
         String query = "UPDATE usertable SET customer_id = ? WHERE usertableId = ?";
+        return riftRepository.doUpdate(new StringBuilder(query), args);
+    }
+
+    public boolean setUserAccountId(String accountId, Integer usertableId) {
+        List<Object> args = new ArrayList<>(2);
+        args.add(0, accountId);
+        args.add(1, usertableId);
+        String query = "UPDATE usertable SET account_id = ? WHERE usertableId = ?";
         return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
