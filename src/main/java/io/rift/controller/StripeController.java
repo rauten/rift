@@ -18,7 +18,7 @@ public class StripeController {
     @Autowired
     private StripeService stripeService;
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/createRifterAccount")
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/storeMerchantBankAccount")
     public String createRifterAccount(@RequestBody BusinessInfo businessInfo, @PathVariable Integer id) {
         return stripeService.createRifterAccount(businessInfo.getCountry(), businessInfo.getCity(), businessInfo.getAddressLine1(),
                 businessInfo.getAddressLine2(), businessInfo.getZipCode(), businessInfo.getState(), businessInfo.getDobDay(),
@@ -33,7 +33,7 @@ public class StripeController {
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/createCustomer")
     public Map<String, String> createRifteeAccount(@PathVariable Integer id) {
         Map<String, String> customerMap = new HashMap<>();
-        String customerId = stripeService.createRifteeAccount();
+        String customerId = stripeService.createRifteeAccount(id);
         customerMap.put("customerId", customerId);
         return customerMap;
     }
@@ -46,5 +46,10 @@ public class StripeController {
     @RequestMapping(method = RequestMethod.GET, value = "/stripe/rifteeStripeId/{id}")
     public List<Card> getRifteeCards(@PathVariable String id) {
         return stripeService.getRifteeCards(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stripe/customerId/{id}/card")
+    public Card getDefaultCard(@PathVariable String customerId) {
+        return stripeService.getDefaultCard(customerId);
     }
 }

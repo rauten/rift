@@ -4,8 +4,11 @@ import com.stripe.Stripe;
 import com.stripe.exception.*;
 import com.stripe.model.*;
 import com.stripe.net.RequestOptions;
+import io.rift.repository.RiftRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +18,9 @@ import java.util.Map;
 public class StripeService {
 
     private final String apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
+
+    @Autowired
+    private RiftRepository riftRepository;
 
 
     public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
@@ -69,11 +75,12 @@ public class StripeService {
         return true;
     }
 
-    public String createRifteeAccount() {
+    public String createRifteeAccount(Integer usertableId) {
         Map<String, Object> params = new HashMap<>();
         try {
             RequestOptions requestOptions = RequestOptions.builder().setApiKey(apiKey).build();
             Customer customer = Customer.create(params, requestOptions);
+            setUserCustomerId(customer.getId(), usertableId);
             return customer.getId();
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -110,6 +117,24 @@ public class StripeService {
             return null;
         }
         return cards;
+    }
+
+    public Card getDefaultCard(String customerId) {
+        try {
+            Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(apiKey).build());
+            ExternalAccountCollection externalAccountCollection = customer.getSources();
+            List<ExternalAccount> externalAccounts = externalAccountCollection.getData();
+            for (ExternalAccount externalAccount : externalAccounts) {
+                String id = externalAccount.getId();
+                Card card = (Card) customer.getSources().retrieve(id, RequestOptions.builder().setApiKey(apiKey).build());
+                if (card.getDefaultForCurrency()) {
+                    return card;
+                }
+            }
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean createCharge(Double amount, String currency, String sourceId, String rifterPaymentId) {
@@ -149,6 +174,14 @@ public class StripeService {
             return false;
         }
         return true;
+    }
+
+    public boolean setUserCustomerId(String customerId, Integer usertableId) {
+        List<Object> args = new ArrayList<>(2);
+        args.add(0, customerId);
+        args.add(1, usertableId);
+        String query = "UPDATE usertable SET customer_id = ? WHERE usertableId = ?";
+        return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
 
