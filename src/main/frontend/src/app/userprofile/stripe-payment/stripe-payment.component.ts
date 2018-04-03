@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, NgZone, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from "@angular/material";
+import {StripePaymentService} from "./stripe-payment.service";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -6,18 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./stripe-payment.component.scss']
 })
 export class StripePaymentComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
   cardNumber: string;
   expiryMonth: string;
   expiryYear: string;
   cvc: string;
 
   message: string;
+
+  ngOnInit() {
+  }
+
+  constructor(private _zone: NgZone, @Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService) {}
 
   getToken() {
     this.message = 'Loading...';
@@ -28,12 +29,24 @@ export class StripePaymentComponent implements OnInit {
       exp_year: this.expiryYear,
       cvc: this.cvc
     }, (status: number, response: any) => {
-      if (status === 200) {
-        this.message = `Success! Card token ${response.card.id}.`;
-      } else {
-        this.message = response.error.message;
-      }
+      // Wrapping inside the Angular zone
+      this._zone.run(() => {
+        if (status === 200) {
+          this.message = `Success! Card token ${response.card.id}.`;
+          let data = {
+            "customerId": this.data.customerId,
+            "token": "tok_visa"
+            // "token": response.card.id
+          };
+          console.log(data);
+          this.stripeService.storeCustomerCard(data);
+        } else {
+          this.message = response.error.message;
+        }
+      });
     });
+    console.log("hello got token");
   }
+
 
 }

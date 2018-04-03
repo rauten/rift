@@ -98,6 +98,8 @@ import { AddGameAccountComponent } from './userprofile/game-account/add-game-acc
 import { EditGameAccountComponent } from './userprofile/game-account/edit-game-account/edit-game-account.component';
 import {GameAccountService} from "./userprofile/game-account/game-account.service";
 import { StripePaymentComponent } from './userprofile/stripe-payment/stripe-payment.component';
+import { AddBankAccountComponent } from './userprofile/stripe-payment/add-bank-account/add-bank-account.component';
+import {StripePaymentService} from "./userprofile/stripe-payment/stripe-payment.service";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -148,6 +150,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AddGameAccountComponent,
     EditGameAccountComponent,
     StripePaymentComponent,
+    AddBankAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -183,10 +186,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
-  EditGameAccountComponent, StripePaymentComponent],
+  EditGameAccountComponent, StripePaymentComponent, AddBankAccountComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
-    YoutubeService, TwitchService, GameAccountService,
+    YoutubeService, TwitchService, GameAccountService, StripePaymentService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
