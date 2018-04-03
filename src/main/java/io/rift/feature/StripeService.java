@@ -84,7 +84,7 @@ public class StripeService {
     public boolean createRifteePayment(String rifteeId, String tokenId) {
         try {
             Customer customer = Customer.retrieve(rifteeId, RequestOptions.builder().setApiKey(apiKey).build());
-            Map<String, Object> params = new HashMap<String, Object>();
+            Map<String, Object> params = new HashMap<>();
             params.put("source", tokenId);
             customer.getSources().create(params, RequestOptions.builder().setApiKey(apiKey).build());
             return true;
