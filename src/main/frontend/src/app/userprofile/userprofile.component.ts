@@ -19,12 +19,12 @@ import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
-import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
 import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
 import {SESSION_ICONS} from "../constants/session-icon-variables";
 import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+import {StripePaymentComponent} from "./stripe-payment/stripe-payment.component";
 
 @Component({
   selector: 'app-userprofile',
@@ -282,6 +282,18 @@ export class UserprofileComponent implements OnInit {
   updateInfoModal() {
     //noinspection TypeScriptUnresolvedFunction
     this.dialog.open(UpdateInfoComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "updateBraintreeUserURL": this.updateBraintreeUserURL,
+        "currentUser": this.currentUser
+      }
+    });
+
+  }
+
+  updatePaymentModal() {
+    this.dialog.open(StripePaymentComponent, {
       height: '450px',
       width: '600px',
       data: {

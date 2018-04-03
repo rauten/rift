@@ -97,6 +97,7 @@ import {YoutubeService} from "./userprofile/youtube.service";
 import { AddGameAccountComponent } from './userprofile/game-account/add-game-account/add-game-account.component';
 import { EditGameAccountComponent } from './userprofile/game-account/edit-game-account/edit-game-account.component';
 import {GameAccountService} from "./userprofile/game-account/game-account.service";
+import { StripePaymentComponent } from './userprofile/stripe-payment/stripe-payment.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -146,6 +147,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     KickRifteeButtonComponent,
     AddGameAccountComponent,
     EditGameAccountComponent,
+    StripePaymentComponent,
   ],
   imports: [
     BrowserModule,
@@ -181,7 +183,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
-  EditGameAccountComponent],
+  EditGameAccountComponent, StripePaymentComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
     YoutubeService, TwitchService, GameAccountService,
