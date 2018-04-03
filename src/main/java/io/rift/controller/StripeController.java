@@ -6,7 +6,9 @@ import io.rift.model.BusinessInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -29,8 +31,11 @@ public class StripeController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/createCustomer")
-    public String createRifteeAccount(@PathVariable Integer id) {
-        return stripeService.createRifteeAccount();
+    public Map<String, String> createRifteeAccount(@PathVariable Integer id) {
+        Map<String, String> customerMap = new HashMap<>();
+        String customerId = stripeService.createRifteeAccount();
+        customerMap.put("customerId", customerId);
+        return customerMap;
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/rifteeToken/{token}")
