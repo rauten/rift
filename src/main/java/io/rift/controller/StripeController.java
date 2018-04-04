@@ -34,10 +34,10 @@ public class StripeController {
         return stripeService.setPaymentMethodForRifter(tokens.get("accountId"), tokens.get("bankAccountToken"));
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{id}/createCustomer")
-    public Map<String, String> createRifteeAccount(@PathVariable Integer id) {
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/user/{riftTag}/createCustomer")
+    public Map<String, String> createRifteeAccount(@PathVariable String riftTag) {
         Map<String, String> customerMap = new HashMap<>();
-        String customerId = stripeService.createRifteeAccount(id);
+        String customerId = stripeService.createRifteeAccount(riftTag);
         customerMap.put("customerId", customerId);
         return customerMap;
     }
