@@ -10,7 +10,11 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.google.common.base.CaseFormat;
+import com.stripe.exception.*;
+import com.stripe.model.Customer;
+import com.stripe.net.RequestOptions;
 import io.rift.component.ConnectionService;
+import io.rift.feature.StripeService;
 import io.rift.model.*;
 import io.rift.repository.RiftRepository;
 import io.rift.service.notifications.ActivityNotificationService;
@@ -57,6 +61,9 @@ public class UsertableService {
 
     @Autowired
     private ConnectionService connectionService;
+
+    @Autowired
+    private StripeService stripeService;
 
     public final int POPULATESIZE = 18;
 
@@ -301,9 +308,18 @@ public class UsertableService {
     }
 
     public Boolean createUser(Usertable usertable) {
-        return riftRepository.doInsert(createUser,
-                new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                        usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token()), usertable.getBraintreeId()});
+        Map<String, Object> params = new HashMap<>();
+        try {
+            RequestOptions requestOptions = RequestOptions.builder().setApiKey(stripeService.STRIPE_APIKEY).build();
+            Customer customer = Customer.create(params, requestOptions);
+            return riftRepository.doInsert(createUser,
+                    new Object[] {usertable.getFirstName(), usertable.getLastName(),
+                            usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token()), customer.getId()});
+            //setUserCustomerId(customer.getId(), riftTag);
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private String formatAuth0Token(String auth0Token) {
