@@ -48,9 +48,9 @@ public class StripeController {
         return customerMap;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/storeCustomerCard")
-    public boolean createRifteePayment(@RequestBody Map<String, String> params) {
-        return stripeService.createRifteePayment(params.get("customerId"), params.get("token"));
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/storeCustomerCard/setDefault={setDefault}")
+    public boolean createRifteePayment(@RequestBody Map<String, String> params, @PathVariable boolean setDefault) {
+        return stripeService.createRifteePayment(params.get("customerId"), params.get("token"), setDefault);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/stripe/rifteeStripeId/{id}")
