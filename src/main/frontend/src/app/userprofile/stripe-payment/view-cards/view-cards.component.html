@@ -1,3 +1,8 @@
-<p>
-  view-cards works!
-</p>
+<div class="container" id="tourpackages-carousel">
+  <div class="row">
+    <div *ngFor="let card of creditCards">
+      <app-credit-card [creditCard]="card"></app-credit-card>
+    </div>
+
+  </div>
+</div><!-- End container -->

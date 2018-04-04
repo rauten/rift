@@ -54,8 +54,8 @@ public class StripeController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/stripe/getCustomerCards/{customerId}")
-    public List<Card> getRifteeCards(@PathVariable String id) {
-        return stripeService.getRifteeCards(id);
+    public List<Card> getRifteeCards(@PathVariable String customerId) {
+        return stripeService.getRifteeCards(customerId);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/stripe/getDefaultCard/{customerId}")

@@ -14,6 +14,7 @@ export class StripePaymentComponent implements OnInit {
   expiryMonth: string;
   expiryYear: string;
   cvc: string;
+  isDefault = false;
 
   message: string;
 
