@@ -1,6 +1,8 @@
 import {Component, Inject, NgZone, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material";
 import {StripePaymentService} from "./stripe-payment.service";
+import {AddBankAccountComponent} from "./legal-bank-account-info/add-bank-account/add-bank-account.component";
+import {ViewCardsComponent} from "./view-cards/view-cards.component";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -18,7 +20,8 @@ export class StripePaymentComponent implements OnInit {
   ngOnInit() {
   }
 
-  constructor(private _zone: NgZone, @Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService) {}
+  constructor(private _zone: NgZone, @Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService,
+              private dialog: MatDialog) {}
 
   getToken() {
     this.message = 'Loading...';
@@ -46,6 +49,16 @@ export class StripePaymentComponent implements OnInit {
       });
     });
     console.log("hello got token");
+  }
+
+  viewCards() {
+    this.dialog.open(ViewCardsComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "customerId": this.data.customerId
+      }
+    });
   }
 
 

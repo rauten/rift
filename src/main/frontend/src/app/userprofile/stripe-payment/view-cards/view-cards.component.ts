@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from "@angular/material";
+import {StripePaymentService} from "../stripe-payment.service";
 
 @Component({
   selector: 'app-view-cards',
@@ -7,9 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewCardsComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService) { }
 
   ngOnInit() {
+    this.getAllCustomerCards();
+    this.getDefaultCustomerCard();
+  }
+
+  getAllCustomerCards() {
+    this.stripeService.getAllCustomerCards(this.data.customerId).subscribe(
+      resBody => {
+        console.log("All credit cards");
+        console.log(resBody);
+      }
+    )
+  }
+
+  getDefaultCustomerCard() {
+    this.stripeService.getCustomerDefaultCard(this.data.customerId).subscribe(
+      resBody => {
+        console.log("Default credit card");
+        console.log(resBody);
+      }
+    )
   }
 
 }
