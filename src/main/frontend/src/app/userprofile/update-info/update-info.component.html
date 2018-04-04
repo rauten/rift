@@ -47,17 +47,6 @@
         <div>
           <button (click)="addGameAccount()" type="button" class="btn-primary">Add a Game Account</button>
         </div><br>
-
-        <div class="form-group">
-          <ngx-braintree
-            [clientTokenURL]="'/api/braintree/getclienttoken'"
-            [createPurchaseURL]="data.updateBraintreeUserURL"
-            [chargeAmount]="0"
-            [allowChoose] = "true"
-            [buttonText]="'Save Payment Method'"
-            (paymentStatus)="onPaymentStatus($event)">
-          </ngx-braintree>
-        </div>
       </div>
     </div>
   </div>

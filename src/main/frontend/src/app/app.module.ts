@@ -87,7 +87,6 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { NgxBraintreeModule } from 'ngx-braintree';
 import { FeedComponent } from './feed/feed.component';
 import { FeedCardComponent } from './components/feed-card/feed-card.component';
-import {PaymentService} from "./userprofile/payment.service";
 import {NotificationsService} from "./userprofile/notifications.service";
 import { FileAComplaintComponent } from './userprofile/file-a-complaint/file-a-complaint.component';
 import {FileAComplaintService} from "./userprofile/file-a-complaint/data/file-a-complaint-service";
@@ -190,7 +189,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
   EditGameAccountComponent, StripePaymentComponent, AddBankAccountComponent, LegalBankAccountInfoComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
+    UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
     YoutubeService, TwitchService, GameAccountService, StripePaymentService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},

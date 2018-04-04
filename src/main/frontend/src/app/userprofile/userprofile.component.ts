@@ -9,15 +9,11 @@ import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {UserRatingService} from "./user-rating/data/user-rating.service";
 import {UserRating} from "../models/userrating";
-import {Notification} from "../models/notification";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 import {SessionRequest} from "../models/session-request";
-import {Globals} from "../global/globals";
 import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
-import {PaymentService} from "./payment.service";
-import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
@@ -25,7 +21,6 @@ import {SESSION_ICONS} from "../constants/session-icon-variables";
 import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {StripePaymentComponent} from "./stripe-payment/stripe-payment.component";
-import {AddBankAccountComponent} from "./stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component";
 import {LegalBankAccountInfoComponent} from "./stripe-payment/legal-bank-account-info/legal-bank-account-info.component";
 
 @Component({
@@ -69,6 +64,7 @@ export class UserprofileComponent implements OnInit {
       resBody => {
         // console.log("in logged in user resbody");
         this.loggedInUser.id = resBody.id;
+        this.loggedInUser.customerId = resBody.customerId;
         for (let i = 0; i < resBody.followings.length; i++) {
           let currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
@@ -299,7 +295,7 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        customerId: "cus_Cc4iJUU9CjqvSa"
+        customerId: this.loggedInUser.customerId
       }
     });
 

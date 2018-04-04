@@ -45,9 +45,4 @@ export class StripePaymentService {
         () => console.log("Stored bank account")
       );
   }
-
-  createCustomer()
-
-
-
 }

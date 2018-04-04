@@ -1,9 +1,7 @@
-import {Component, OnInit, OnDestroy, HostListener} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {AuthService} from "./auth/auth.service";
 import {Http} from "@angular/http";
 import {UserprofileService} from "./userprofile/userprofile.service";
-import {Userprofile} from "./models/userprofile";
-import {PaymentService} from "./userprofile/payment.service";
 import {Globals} from "./global/globals";
 import {Notification} from "./models/notification";
 import {NotificationsService} from "./userprofile/notifications.service";
@@ -42,7 +40,7 @@ export class AppComponent {
 
 
   constructor(public auth: AuthService, private userprofileService: UserprofileService,
-  private paymentService: PaymentService, private http: Http, private globals: Globals, private notificationsService: NotificationsService) {
+  private http: Http, private globals: Globals, private notificationsService: NotificationsService) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
     let notifications = this.notificationList;
     auth.handleAuthentication(function (data, createUser) {
@@ -55,24 +53,14 @@ export class AppComponent {
         });
 
       if (createUser) {
-        let btData = {
-          "firstName": data.firstName,
-          "lastName": data.lastName
-        };
-        paymentService.createBraintreeUser(btData).subscribe(
-          resBody => {
-            var braintreeId = resBody.customerId;
-            let riftData = {
-              "firstName": data.firstName,
-              "lastName": data.lastName,
-              "riftTag": data.riftTag,
-              "auth0Token": data.auth0Token,
-              "braintreeId": braintreeId,
-              "email": data.email
-            };
-            userprofileService.createUser(riftData);
-          }
-        );
+          let riftData = {
+            "firstName": data.firstName,
+            "lastName": data.lastName,
+            "riftTag": data.riftTag,
+            "auth0Token": data.auth0Token,
+            "email": data.email
+          };
+          userprofileService.createUser(riftData);
       } else {
         userprofileService.getUser(profile.nickname).subscribe(
           resBody => {

@@ -66,7 +66,7 @@ public class StripeService {
 
     public boolean setPaymentMethodForRifter(String rifterStripeId, String token) {
         try {
-            Account account = Account.retrieve(rifterStripeId, RequestOptions.builder().setApiKey(apiKey).build());
+            Account account = Account.retrieve(rifterStripeId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
             Map<String, Object> params = new HashMap<>();
             params.put("external_account", token);
             account.getExternalAccounts().create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());

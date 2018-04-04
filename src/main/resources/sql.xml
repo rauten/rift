@@ -232,7 +232,7 @@
 
     <createUser>
         INSERT INTO usertable
-        (first_name, last_name, rift_tag, is_private, is_suspended, auth0_token, braintree_id)
+        (first_name, last_name, rift_tag, is_private, is_suspended, auth0_token, customer_id)
         VALUES(?, ?, ?, false, false, ?, ?);
     </createUser>
 
