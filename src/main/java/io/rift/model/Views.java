@@ -215,6 +215,10 @@ public class Views {
 
     public interface UsertableEmail {}
 
+    public interface UsertableCustomerId {}
+
+    public interface UsertableAccountId {}
+
     public interface UsertableNotificationList {}
 
     public interface UsertableCreatorActivityList {}
@@ -288,7 +292,7 @@ public class Views {
 
     public interface ProfilePageView extends UsertableInfo, UsertableFollowers, UsertableFollowings, UsertableCreatorActivityList,
             UsertableGamesPlayed, UsertableNumberFollowing, UsertableNumberFollowers, UsertableNotificationList, UsertableBroadcastNotificationList,
-            UsertableRifterSessions, FollowingFollowingUsertable,
+            UsertableRifterSessions, UsertableCustomerId, UsertableAccountId, FollowingFollowingUsertable,
             FollowingFollowerUsertable, NotificationInfo, NotificationRifterSession, NotificationCreatorUsertable,
             RifterSessionId, RifterSessionHostId, RifterSessionTitle, RifterSessionSessionTime, RifterSessionGameId, RifterSessionConsole,
             RifterSessionSlotsRemaining, RifterSessionGame, RifterSessionUsertable, GameAttributes {}
