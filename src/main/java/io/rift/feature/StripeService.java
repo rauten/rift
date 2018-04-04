@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class StripeService {
 
-    private final String apiKey = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
+    private final String apiKey = "sk_live_1dYvYLmdp3maH1wTG8Ibgxb8";
 
     @Autowired
     private RiftRepository riftRepository;
