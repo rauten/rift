@@ -53,12 +53,12 @@ public class StripeController {
         return stripeService.createRifteePayment(params.get("customerId"), params.get("token"), setDefault);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/stripe/rifteeStripeId/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/stripe/getCustomerCards/{customerId}")
     public List<Card> getRifteeCards(@PathVariable String id) {
         return stripeService.getRifteeCards(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/stripe/customerId/{customerId}/card")
+    @RequestMapping(method = RequestMethod.GET, value = "/stripe/getDefaultCard/{customerId}")
     public Card getDefaultCard(@PathVariable String customerId) {
         Card card = stripeService.getDefaultCard(customerId);
         card.setLastResponse(null);

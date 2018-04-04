@@ -25,8 +25,11 @@ export class GameAccountService {
       );
   }
 
-  deleteGameAccountAndUpdateSession(gameAccountId) {
-    return this.http.get("/api/gameaccount/usertableId/" + gameAccountId + "/info")
+  deleteGameAccountAndUpdateSession(gameAccountId, data) {
+    console.log("Deleting game account and updating sessions");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.put("/api/rifterSession/gameAccountId/" + gameAccountId + "/deleteAndUpdate", data, options)
       .map(
         (response: Response) => {
           return response.json();

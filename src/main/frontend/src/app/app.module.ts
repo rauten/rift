@@ -87,18 +87,20 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { NgxBraintreeModule } from 'ngx-braintree';
 import { FeedComponent } from './feed/feed.component';
 import { FeedCardComponent } from './components/feed-card/feed-card.component';
-import {PaymentService} from "./userprofile/payment.service";
 import {NotificationsService} from "./userprofile/notifications.service";
 import { FileAComplaintComponent } from './userprofile/file-a-complaint/file-a-complaint.component';
 import {FileAComplaintService} from "./userprofile/file-a-complaint/data/file-a-complaint-service";
 import { KickRifteeButtonComponent } from './components/kick-riftee-button/kick-riftee-button.component';
-import { LeagueOfLegendsComponent } from './game-api/league-of-legends/league-of-legends.component';
-import {LeagueOfLegendsService} from "./game-api/league-of-legends/league-of-legends.service";
 import {TwitchService} from './userprofile/twitch.service';
 import {YoutubeService} from "./userprofile/youtube.service";
 import { AddGameAccountComponent } from './userprofile/game-account/add-game-account/add-game-account.component';
 import { EditGameAccountComponent } from './userprofile/game-account/edit-game-account/edit-game-account.component';
 import {GameAccountService} from "./userprofile/game-account/game-account.service";
+import { StripePaymentComponent } from './userprofile/stripe-payment/stripe-payment.component';
+import { AddBankAccountComponent } from './userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component';
+import {StripePaymentService} from "./userprofile/stripe-payment/stripe-payment.service";
+import { LegalBankAccountInfoComponent } from './userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component';
+import { ViewCardsComponent } from './userprofile/stripe-payment/view-cards/view-cards.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -146,9 +148,12 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     FeedCardComponent,
     FileAComplaintComponent,
     KickRifteeButtonComponent,
-    LeagueOfLegendsComponent,
     AddGameAccountComponent,
     EditGameAccountComponent,
+    StripePaymentComponent,
+    AddBankAccountComponent,
+    LegalBankAccountInfoComponent,
+    ViewCardsComponent,
   ],
   imports: [
     BrowserModule,
@@ -184,10 +189,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   ],
   entryComponents: [SessionPageComponent, UpdateSessionComponent, UsersessionsComponent, CreateSessionComponent,
   UserprofileComponent, UpdateInfoComponent, UserRatingComponent, FileAComplaintComponent, AddGameAccountComponent,
-  EditGameAccountComponent],
+  EditGameAccountComponent, StripePaymentComponent, AddBankAccountComponent, LegalBankAccountInfoComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
-    UserRatingService, UpdateSessionService, CreateSessionService, PaymentService, NotificationsService, FileAComplaintService,
-    LeagueOfLegendsService, YoutubeService, TwitchService, GameAccountService,
+    UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
+    YoutubeService, TwitchService, GameAccountService, StripePaymentService,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},

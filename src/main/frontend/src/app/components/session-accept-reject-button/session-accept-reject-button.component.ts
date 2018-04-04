@@ -12,8 +12,7 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
   @Input() status: number;
   @Input() notification;
   profile: any;
-  constructor(private userSessionService: UsersessionsService, private paymentService: PaymentService,
-              private userProfileService: UserprofileService) {
+  constructor(private userSessionService: UsersessionsService, private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
@@ -61,19 +60,6 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.userSessionService.updateSessionRequest(data);
     this.status = 0;
     console.log("Rejected request");
-  }
-
-  getTransactionData(riftId: number, sessionId: number) {
-    this.paymentService.getTransactionData(riftId, sessionId).subscribe(
-      resBody => {
-        //noinspection TypeScriptUnresolvedVariable
-        this.doTransaction(resBody.braintreeId, resBody.sessionCost)
-      }
-    )
-  }
-
-  doTransaction(customerId: string, amount: number) {
-    this.paymentService.doTransaction(customerId, amount);
   }
 
   // sendConfirmationEmail(riftEmail) {

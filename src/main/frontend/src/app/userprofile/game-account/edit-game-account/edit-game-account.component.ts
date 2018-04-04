@@ -67,9 +67,9 @@ export class EditGameAccountComponent implements OnInit {
       };
       this.sessionsToUpdate.set(currSessionId, +this.accountId);
       console.log(data);
-      // this.updateSessionService.updateUserSession(data);
     }
     console.log(this.sessionsToUpdate);
+    this.deleteAndUpdateGameAccount(this.data.account.id, this.sessionsToUpdate);
   }
 
   changeStatus(template: TemplateRef<any>) {
@@ -115,5 +115,9 @@ export class EditGameAccountComponent implements OnInit {
         }
       }
     )
+  }
+
+  deleteAndUpdateGameAccount(gameAccountId, data) {
+    this.gameAccountService.deleteGameAccountAndUpdateSession(gameAccountId, data);
   }
 }
