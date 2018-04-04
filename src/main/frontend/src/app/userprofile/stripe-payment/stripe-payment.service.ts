@@ -45,4 +45,25 @@ export class StripePaymentService {
         () => console.log("Stored bank account")
       );
   }
+
+  getCustomerDefaultCard(accountId) {
+    return this.http.get("/api/stripe/rifteeStripeId/" + accountId)
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+
+  }
+
+  getAllCustomerCards(accountId) {
+    return this.http.get("/api/stripe/customerId/" + accountId + "/card")
+      .map(
+        (response: Response) => {
+          return response.json();
+        }
+      )
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  }
 }
