@@ -50,6 +50,7 @@ public class StripeController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/storeCustomerCard/setDefault={setDefault}")
     public boolean createRifteePayment(@RequestBody Map<String, String> params, @PathVariable boolean setDefault) {
+        setDefault = true;
         return stripeService.createRifteePayment(params.get("customerId"), params.get("token"), setDefault);
     }
 
@@ -64,4 +65,10 @@ public class StripeController {
         card.setLastResponse(null);
         return card;
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/setDefaultCard/{cardId}/cardOwner/{customerId}")
+    public boolean setDefaultCard(@PathVariable String cardId, @PathVariable String customerId) {
+        return stripeService.setDefaultCard(cardId, customerId);
+    }
+
 }
