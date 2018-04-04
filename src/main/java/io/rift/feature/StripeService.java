@@ -141,6 +141,19 @@ public class StripeService {
         return null;
     }
 
+    public boolean setDefaultCard(String cardId, String customerId) {
+        try {
+            Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            Map<String, Object> updateParams = new HashMap<>();
+            updateParams.put("default_source", cardId);
+            customer.update(updateParams, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public boolean createCharge(Double amount, String currency, String sourceId, String rifterPaymentId) {
         try {
 

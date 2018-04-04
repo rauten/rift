@@ -65,4 +65,10 @@ public class StripeController {
         card.setLastResponse(null);
         return card;
     }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/setDefaultCard/{cardId}/cardOwner/{customerId}")
+    public boolean setDefaultCard(@PathVariable String cardId, @PathVariable String customerId) {
+        return stripeService.setDefaultCard(cardId, customerId);
+    }
+
 }

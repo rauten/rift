@@ -4,7 +4,7 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class StripePaymentService {
-  storeCustomerCardURL = "/api/stripe/storeCustomerCard";
+  storeCustomerCardURL = "/api/stripe/storeCustomerCard/setDefault=";
 
   constructor(private http: Http){}
 
