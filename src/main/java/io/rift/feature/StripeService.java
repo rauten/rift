@@ -77,12 +77,12 @@ public class StripeService {
         return true;
     }
 
-    public String createRifteeAccount(Integer usertableId) {
+    public String createRifteeAccount(String riftTag) {
         Map<String, Object> params = new HashMap<>();
         try {
             RequestOptions requestOptions = RequestOptions.builder().setApiKey(apiKey).build();
             Customer customer = Customer.create(params, requestOptions);
-            setUserCustomerId(customer.getId(), usertableId);
+            setUserCustomerId(customer.getId(), riftTag);
             return customer.getId();
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -177,11 +177,11 @@ public class StripeService {
         return true;
     }
 
-    public boolean setUserCustomerId(String customerId, Integer usertableId) {
+    public boolean setUserCustomerId(String customerId, String riftTag) {
         List<Object> args = new ArrayList<>(2);
         args.add(0, customerId);
-        args.add(1, usertableId);
-        String query = "UPDATE usertable SET customer_id = ? WHERE id = ?";
+        args.add(1, riftTag);
+        String query = "UPDATE usertable SET customer_id = ? WHERE rift_tag = ?";
         return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
