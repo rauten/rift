@@ -115,6 +115,7 @@ public class StripeService {
             for (ExternalAccount externalAccount : externalAccounts) {
                 String id = externalAccount.getId();
                 Card card = (Card) customer.getSources().retrieve(id, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+                card.setLastResponse(null);
                 cards.add(card);
             }
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {

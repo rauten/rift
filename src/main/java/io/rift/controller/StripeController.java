@@ -1,11 +1,17 @@
 package io.rift.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.stripe.model.Card;
+import com.stripe.net.StripeResponse;
 import io.rift.feature.StripeService;
 import io.rift.model.BusinessInfo;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +60,8 @@ public class StripeController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/stripe/customerId/{customerId}/card")
     public Card getDefaultCard(@PathVariable String customerId) {
-        return stripeService.getDefaultCard(customerId);
+        Card card = stripeService.getDefaultCard(customerId);
+        card.setLastResponse(null);
+        return card;
     }
 }
