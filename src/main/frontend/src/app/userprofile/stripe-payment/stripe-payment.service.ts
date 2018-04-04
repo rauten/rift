@@ -46,6 +46,8 @@ export class StripePaymentService {
       );
   }
 
+  createCustomer()
+
 
 
 }

@@ -35,8 +35,8 @@ export class StripePaymentComponent implements OnInit {
           this.message = `Success! Card token ${response.card.id}.`;
           let data = {
             "customerId": this.data.customerId,
-            "token": "tok_visa"
-            // "token": response.card.id
+            // "token": "tok_visa"
+            "token": response.card.id
           };
           console.log(data);
           this.stripeService.storeCustomerCard(data);
