@@ -31,9 +31,7 @@ public class ActivityNotificationService extends AbstractNotificationService {
             resultSet = riftRepository.doQuery(getUserActivity, args);
         }
         List<Notification> notifications = new ArrayList<>();
-        if (resultSet.next()) {
-            notifications = super.populateNotifications(resultSet, 1, info);
-        }
+        notifications = super.populateNotifications(resultSet, 1, info);
         resultSet.close();
         return notifications;
     }
