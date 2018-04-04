@@ -13,11 +13,13 @@ export class ViewCardsComponent implements OnInit {
 
   ngOnInit() {
     this.getAllCustomerCards();
+    this.getDefaultCustomerCard();
   }
 
   getAllCustomerCards() {
     this.stripeService.getAllCustomerCards(this.data.customerId).subscribe(
       resBody => {
+        console.log("All credit cards");
         console.log(resBody);
       }
     )
@@ -26,6 +28,7 @@ export class ViewCardsComponent implements OnInit {
   getDefaultCustomerCard() {
     this.stripeService.getCustomerDefaultCard(this.data.customerId).subscribe(
       resBody => {
+        console.log("Default credit card");
         console.log(resBody);
       }
     )

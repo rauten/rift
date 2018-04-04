@@ -47,7 +47,7 @@ export class StripePaymentService {
   }
 
   getCustomerDefaultCard(accountId) {
-    return this.http.get("/api/stripe/rifteeStripeId/" + accountId)
+    return this.http.get("/api/stripe/rifteeStripeIdgit a/" + accountId)
       .map(
         (response: Response) => {
           return response.json();
