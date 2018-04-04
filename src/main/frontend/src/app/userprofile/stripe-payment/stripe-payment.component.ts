@@ -22,7 +22,6 @@ export class StripePaymentComponent implements OnInit {
 
   getToken() {
     this.message = 'Loading...';
-
     (<any>window).Stripe.card.createToken({
       number: this.cardNumber,
       exp_month: this.expiryMonth,
@@ -33,10 +32,11 @@ export class StripePaymentComponent implements OnInit {
       this._zone.run(() => {
         if (status === 200) {
           this.message = `Success! Card token ${response.card.id}.`;
+          console.log(response);
           let data = {
             "customerId": this.data.customerId,
             // "token": "tok_visa"
-            "token": response.card.id
+            "token": response.id
           };
           console.log(data);
           this.stripeService.storeCustomerCard(data);

@@ -100,6 +100,7 @@ import { StripePaymentComponent } from './userprofile/stripe-payment/stripe-paym
 import { AddBankAccountComponent } from './userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component';
 import {StripePaymentService} from "./userprofile/stripe-payment/stripe-payment.service";
 import { LegalBankAccountInfoComponent } from './userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component';
+import { ViewCardsComponent } from './userprofile/stripe-payment/view-cards/view-cards.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -152,6 +153,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     StripePaymentComponent,
     AddBankAccountComponent,
     LegalBankAccountInfoComponent,
+    ViewCardsComponent,
   ],
   imports: [
     BrowserModule,

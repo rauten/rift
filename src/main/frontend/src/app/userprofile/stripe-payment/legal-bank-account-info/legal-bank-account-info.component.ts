@@ -28,10 +28,11 @@ export class LegalBankAccountInfoComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService,
               private userProfileService: UserprofileService, private dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
+    this.getLoggedInUserId(this.profile.nickname);
   }
 
   ngOnInit() {
-    this.getLoggedInUserId(this.profile.nickname);
+    console.log(this.profile.nickname);
     console.log(this.loggedInUserId);
 
   }
@@ -53,21 +54,25 @@ export class LegalBankAccountInfoComponent implements OnInit {
       "firstName": this.firstName,
       "lastName": this.lastName
     };
-    this.stripeService.getAccountId(data, this.loggedInUserId).subscribe(
+    this.userProfileService.getUserId(this.profile.nickname).subscribe(
       resBody => {
-        let accountId = resBody.accountId;
-        console.log(accountId);
-        this.dialog.open(AddBankAccountComponent, {
-          height: '450px',
-          width: '600px',
-          data: {
-            "accountId": accountId,
-            "riftId": this.loggedInUserId
+        this.loggedInUserId = resBody.id;
+        this.stripeService.getAccountId(data, this.loggedInUserId).subscribe(
+          resBody => {
+            let accountId = resBody.accountId;
+            console.log(accountId);
+            this.dialog.open(AddBankAccountComponent, {
+              height: '450px',
+              width: '600px',
+              data: {
+                "accountId": accountId,
+                "riftId": this.loggedInUserId
+              }
+            });
           }
-        });
+        )
       }
-    )
-
+    );
   }
 
   getLoggedInUserId(riftTag: string) {

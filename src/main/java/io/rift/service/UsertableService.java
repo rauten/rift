@@ -213,8 +213,8 @@ public class UsertableService {
         usertable.setAuth0Token(resultSet.getString(startPoint + 13));
         usertable.setBraintreeId(resultSet.getString(startPoint + 14));
         usertable.setEmail(resultSet.getString(startPoint + 15));
-        usertable.setAccountId(resultSet.getString(startPoint + 16));
-        usertable.setCustomerId(resultSet.getString(startPoint + 17));
+        usertable.setCustomerId(resultSet.getString(startPoint + 16));
+        usertable.setAccountId(resultSet.getString(startPoint + 17));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(activityNotificationService.populateNotifications(resultSet, POPULATESIZE, ""));
         } else if (info.equals("levenshtein")) {

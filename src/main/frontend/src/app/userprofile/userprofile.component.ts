@@ -64,7 +64,6 @@ export class UserprofileComponent implements OnInit {
       resBody => {
         // console.log("in logged in user resbody");
         this.loggedInUser.id = resBody.id;
-        this.loggedInUser.customerId = resBody.customerId;
         for (let i = 0; i < resBody.followings.length; i++) {
           let currFollowing = new Userprofile();
           currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
@@ -89,6 +88,7 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.bio = resBody.bio;
           this.currentUser.email = resBody.email;
           this.currentUser.id = resBody.id;
+          this.currentUser.customerId = resBody.customerId;
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
           this.currentUser.braintreeId = resBody.braintreeId;
@@ -295,7 +295,7 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        customerId: this.loggedInUser.customerId
+        customerId: this.currentUser.customerId
       }
     });
 

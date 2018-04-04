@@ -96,9 +96,6 @@ public class StripeService {
             Map<String, Object> params = new HashMap<>();
             params.put("source", tokenId);
             customer.getSources().create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
-            Map<String, Object> customerParams = new HashMap<>();
-            customerParams.put("default_source", tokenId);
-            customer.update(customerParams, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
             return true;
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();

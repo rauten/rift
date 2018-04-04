@@ -42,7 +42,8 @@ export class AddBankAccountComponent implements OnInit {
             "bankAccountToken": response.id
           };
           console.log(data);
-          this.stripeService.storeMerchantBankAccount(data, this.data.riftId);
+          console.log(response);
+          // this.stripeService.storeMerchantBankAccount(data, this.data.riftId);
         } else {
           this.message = response.error.message;
         }
