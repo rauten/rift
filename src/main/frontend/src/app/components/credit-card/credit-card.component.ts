@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {CreditCard} from "../../models/credit-card";
+import {StripePaymentService} from "../../userprofile/stripe-payment/stripe-payment.service";
+import {BsModalRef, BsModalService} from "ngx-bootstrap";
 
 @Component({
   selector: 'app-credit-card',
@@ -8,10 +10,22 @@ import {CreditCard} from "../../models/credit-card";
 })
 export class CreditCardComponent implements OnInit {
   @Input() creditCard: CreditCard;
+  @Input() customerId: any;
+  modalRef: BsModalRef;
 
-  constructor() { }
+  constructor(private stripeService: StripePaymentService, private modalService: BsModalService) {
+  }
 
   ngOnInit() {
   }
 
+  setAsDefault() {
+    this.stripeService.setCardAsDefault(this.creditCard.id, this.customerId);
+  }
+
+  changeStatus(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
 }
+

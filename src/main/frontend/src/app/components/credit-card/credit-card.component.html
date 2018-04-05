@@ -13,9 +13,14 @@
         <p clas="text-muted">Exp: {{creditCard.expMonth}}/{{creditCard.expYear}}</p>
         <p class="text-muted">{{creditCard.brand}}</p>
       </div>
-      <button type="button" class="btn btn-primary btn-xs btn-update btn-add-card">Update</button>
-      <button type="button" class="btn btn-danger btn-xs btn-update btn-add-card">Vrify Now</button>
-      <span class='glyphicon glyphicon-exclamation-sign text-danger pull-right icon-style'></span>
+      <button type="button" class="btn btn-primary btn-xs btn-update btn-add-card" (click)="changeStatus(template)">Set As Default</button>
+      <ng-template #template style="margin-top:20%">
+        <div class="modal-body text-center">
+          <p>Set Card as Default?</p>
+          <button type="button" class="btn btn-default" (click)="setAsDefault()" >Yes</button>
+          <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>

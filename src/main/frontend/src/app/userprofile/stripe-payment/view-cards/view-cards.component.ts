@@ -33,7 +33,6 @@ export class ViewCardsComponent implements OnInit {
           this.creditCards.push(currentCard);
         }
         console.log(this.creditCards);
-
       }
     )
   }
