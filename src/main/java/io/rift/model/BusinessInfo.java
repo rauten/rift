@@ -27,4 +27,6 @@ public class BusinessInfo {
 
     private String lastName;
 
+    private String type;
+
 }

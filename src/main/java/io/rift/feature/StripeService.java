@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class StripeService {
@@ -24,7 +27,7 @@ public class StripeService {
 
 
     public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
-                                       String state, String day, String month, String year, String firstName, String lastName, Integer id) {
+                                       String state, String day, String month, String year, String firstName, String lastName, Integer id, String type) {
 
 
         Map<String, Object> params = new HashMap<>();
@@ -50,6 +53,7 @@ public class StripeService {
         legalInfo.put("dob", dob);
         legalInfo.put("first_name", firstName);
         legalInfo.put("last_name", lastName);
+        legalInfo.put("type", type);
 
         params.put("legal_entity", legalInfo);
 
@@ -154,36 +158,41 @@ public class StripeService {
         return true;
     }
 
-    public boolean createCharge(Double amount, String currency, String sourceId, String rifterPaymentId) {
+    public boolean createCharge(Integer amount, String currency, String customerId, String accountId) {
         try {
 
-            /*
-            // Retrieve the default payment method for riftee
-            Customer customer = Customer.retrieve(rifteeId);
-            String sourceId = customer.getDefaultSource();
 
-            //
-            Account account = Account.retrieve(rifterId, null);
-            ExternalAccountCollection externalAccountCollection = account.getExternalAccounts();
-            List<ExternalAccount> externalAccounts = externalAccountCollection.getData();
-            for (ExternalAccount externalAccount : externalAccounts) {
-                String id = externalAccount.getId();
-                BankAccount bankAccount = (BankAccount) customer.getSources().retrieve(id);
+            /*
+            Account account = Account.retrieve(accountId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            BankAccount accountDefaultBank = new BankAccount();
+            BankAccount bankAccount;
+            ExternalAccountCollection collection = account.getExternalAccounts();
+            List<ExternalAccount> accounts = collection.getData();
+            for (ExternalAccount externalAccount : accounts) {
+                bankAccount = (BankAccount) externalAccount;
                 if (bankAccount.getDefaultForCurrency()) {
-                    defaultBank = bankAccount;
+                    accountDefaultBank = bankAccount;
                     break;
                 }
             }
+
+
+            // Destination is the default bank account token
+            String destination = accountDefaultBank.getId();
             */
+
 
             Map<String, Object> params = new HashMap<>();
             params.put("amount", amount);
             params.put("currency", currency);
-            params.put("source", sourceId);
+            params.put("customer", customerId);
             Map<String, Object> destinationParams = new HashMap<>();
-            Double transferAmount = amount * .85;
-            destinationParams.put("amount", transferAmount);
-            destinationParams.put("account", rifterPaymentId);
+            Double transferAmount = amount * .01;
+            transferAmount = Math.floor(transferAmount);
+            double transferAmountDouble = transferAmount;
+            int transferAmountInt = (int) transferAmountDouble;
+            destinationParams.put("amount", transferAmountInt);
+            destinationParams.put("account", accountId);
             params.put("destination", destinationParams);
             Charge.create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
