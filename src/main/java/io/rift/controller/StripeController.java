@@ -29,7 +29,7 @@ public class StripeController {
         Map<String, String> accountIdMap = new HashMap<>();
         String accountId = stripeService.createRifterAccount(businessInfo.getCountry(), businessInfo.getCity(), businessInfo.getAddressLine1(),
                 businessInfo.getAddressLine2(), businessInfo.getZipCode(), businessInfo.getState(), businessInfo.getDobDay(),
-                businessInfo.getDobMonth(), businessInfo.getDobYear(), businessInfo.getFirstName(), businessInfo.getLastName(), id);
+                businessInfo.getDobMonth(), businessInfo.getDobYear(), businessInfo.getFirstName(), businessInfo.getLastName(), id, businessInfo.getType());
 
         accountIdMap.put("accountId", accountId);
         return accountIdMap;
@@ -50,7 +50,6 @@ public class StripeController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/storeCustomerCard/setDefault={setDefault}")
     public boolean createRifteePayment(@RequestBody Map<String, String> params, @PathVariable boolean setDefault) {
-        setDefault = true;
         return stripeService.createRifteePayment(params.get("customerId"), params.get("token"), setDefault);
     }
 
@@ -69,6 +68,11 @@ public class StripeController {
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/setDefaultCard/{cardId}/cardOwner/{customerId}")
     public boolean setDefaultCard(@PathVariable String cardId, @PathVariable String customerId) {
         return stripeService.setDefaultCard(cardId, customerId);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/createCharge/currency/{currency}/chargeAmount/{amount}")
+    public boolean createCharge(@PathVariable String currency, @PathVariable Integer amount, @RequestBody Map<String, String> ids) {
+        return stripeService.createCharge(amount, currency, ids.get("customerId"), ids.get("accountId"));
     }
 
 }
