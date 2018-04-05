@@ -75,4 +75,9 @@ public class StripeController {
         return stripeService.createCharge(amount, currency, ids.get("customerId"), ids.get("accountId"));
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/stripe/deleteCard/{cardId}/customer/{customerId}")
+    public boolean deleteCard(@PathVariable String customerId, @PathVariable String cardId) {
+        return stripeService.deleteCard(customerId, cardId);
+    }
+
 }

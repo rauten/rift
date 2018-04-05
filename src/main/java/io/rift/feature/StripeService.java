@@ -218,6 +218,16 @@ public class StripeService {
         return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
+    public boolean deleteCard(String customerId, String cardId) {
+        try {
+            Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            customer.getSources().retrieve(cardId).delete();
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
 
 
