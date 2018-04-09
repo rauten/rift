@@ -30,8 +30,10 @@ public class SessionRequestController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/sessionRequest/update")
-    public Boolean updateSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
-        return sessionRequestService.updateSessionRequest(sessionRequest);
+    public Map<String, String> updateSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        Map<String, String> result = new HashMap<>();
+        result.put("result", sessionRequestService.updateSessionRequest(sessionRequest));
+        return result;
     }
 
     @JsonView(Views.SessionRequestsByRiftTag.class)
