@@ -21,6 +21,12 @@ public class SessionRequest {
     @JsonView(Views.SessionRequestRifteeGameAccount.class)
     private Integer rifteeGameAccount;
 
+    @JsonView(Views.SessionRequestChargeId.class)
+    private String chargeId;
+
+    @JsonView(Views.SessionRequestTransferId.class)
+    private String transferId;
+
     @JsonView(Views.SessionRequestRifterSession.class)
     private RifterSession rifterSession;
 

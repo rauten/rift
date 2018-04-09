@@ -517,11 +517,11 @@
         LANGUAGE plpgsql;
    -->
 
-    <getGameRequestBySessionAndRifteeId>
+    <getSessionRequestBySessionAndRifteeId>
         SELECT *
         FROM gamerequest
         WHERE riftee_id = ? AND session_id = ?;
-    </getGameRequestBySessionAndRifteeId>
+    </getSessionRequestBySessionAndRifteeId>
 
     <createSessionRequest>
         INSERT INTO gamerequest
