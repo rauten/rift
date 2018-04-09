@@ -6,6 +6,7 @@ import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {SessionRequest} from "../../models/session-request";
 import {Userprofile} from "../../models/userprofile";
 import {UserprofileService} from "../../userprofile/userprofile.service";
+import {SharedFunctions} from "../../shared/shared-functions";
 
 @Component({
   selector: 'app-riftsessions',
@@ -22,7 +23,7 @@ export class RiftsessionsComponent implements OnInit {
   profile: any;
 
   constructor(private searchBarService: SearchBarService, private route: ActivatedRoute,
-  private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
+  private userSessionsService: UsersessionsService, private userProfileService: UserprofileService, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'))
   }
 
@@ -42,20 +43,20 @@ export class RiftsessionsComponent implements OnInit {
     this.users = [];
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        var users = resBody[0];
-        for (var i = 0; i < users.length; i++) {
-          var currUser = new Userprofile();
+        let users = resBody[0];
+        for (let i = 0; i < users.length; i++) {
+          let currUser = new Userprofile();
           currUser.firstName = users[i].firstName;
           currUser.lastName = users[i].lastName;
           currUser.riftTag = users[i].riftTag;
           currUser.id = users[i].id;
-          this.getUserProfilePicture(currUser.riftTag, currUser);
+          this.sharedFunc.getUserProfilePicture(currUser.riftTag, currUser);
           this.users.push(currUser);
         }
-        for (var i = 0; i < resBody[1].length; i++) {
-          var currDateMS = resBody[1][i].sessionTime;
-          var date = new Date(currDateMS);
-          var currSession = new Session();
+        for (let i = 0; i < resBody[1].length; i++) {
+          let currDateMS = resBody[1][i].sessionTime;
+          let date = new Date(currDateMS);
+          let currSession = new Session();
           currSession.firstName = resBody[1][i].usertable.firstName;
           currSession.lastName = resBody[1][i].usertable.lastName;
           currSession.riftTag = resBody[1][i].usertable.riftTag;
@@ -75,28 +76,28 @@ export class RiftsessionsComponent implements OnInit {
     );
   }
 
-  getUserProfilePicture(riftTag: string, user: Userprofile): string {
-    console.log("Getting user's profile picture");
-    this.userProfileService.getProfilePicture(riftTag).subscribe(
-      resBody => {
-        if (resBody.image == "") {
-          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-        } else {
-          user.profilePic = resBody.image;
-        }
-      }
-    );
-    return;
-    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-  }
+  // getUserProfilePicture(riftTag: string, user: Userprofile): string {
+  //   console.log("Getting user's profile picture");
+  //   this.userProfileService.getProfilePicture(riftTag).subscribe(
+  //     resBody => {
+  //       if (resBody.image == "") {
+  //         user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
+  //       } else {
+  //         user.profilePic = resBody.image;
+  //       }
+  //     }
+  //   );
+  //   return;
+  //   // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
+  // }
 
   getUserSessionRequests(riftTag: string) {
     this.loggedInUser.sessionRequests = new Map<number, SessionRequest>();
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var request = new SessionRequest();
+        for (let i = 0; i < resBody.length; i++) {
+          let request = new SessionRequest();
           request.accepted = resBody[i].accepted;
           request.hostId = resBody[i].hostId;
           request.rifteeId = resBody[i].rifteeId;

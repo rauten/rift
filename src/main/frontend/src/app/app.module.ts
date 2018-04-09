@@ -102,6 +102,7 @@ import {StripePaymentService} from "./userprofile/stripe-payment/stripe-payment.
 import { LegalBankAccountInfoComponent } from './userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component';
 import { ViewCardsComponent } from './userprofile/stripe-payment/view-cards/view-cards.component';
 import { CreditCardComponent } from './components/credit-card/credit-card.component';
+import {SharedFunctions} from "./shared/shared-functions";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -184,7 +185,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AlertModule.forRoot(),
     TabsModule.forRoot(),
     ModalModule.forRoot(),
-    ImageUploadModule.forRoot()
+    ImageUploadModule.forRoot(),
   ],
   exports: [
     FileUploadComponent
@@ -195,7 +196,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   ViewCardsComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
-    YoutubeService, TwitchService, GameAccountService, StripePaymentService,
+    YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions,
     {provide: FormDataService, useClass: FormDataService},
     {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},

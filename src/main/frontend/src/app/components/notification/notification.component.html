@@ -18,7 +18,7 @@
     </div>
     <small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>
   </div>
-  <div class="btn-group pull-right activity-actions" *ngIf="notification.notificationType == 3">
+  <div class="btn-group pull-right activity-actions" *ngIf="notification.notificationType == 'SRQ'">
     <app-session-accept-reject-button
     [notification]="notification" [status]="status">
     </app-session-accept-reject-button>

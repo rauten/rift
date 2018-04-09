@@ -42,6 +42,7 @@ export class Userprofile {
   profilePicPath;
   coverPhoto;
   image;
+  accountId: string;
 
 
   constructor() {

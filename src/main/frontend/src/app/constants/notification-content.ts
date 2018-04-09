@@ -1,10 +1,3 @@
-export const NOTIFICATION_CONTENT2 = [
-  "has accepted your request to join session: ",
-  "has rejected your request to join session: ",
-  "started following you",
-  "has requested to join your session: "
-];
-
 export const NOTIFICATION_CONTENT = new Map<string, string>([
   ["FOL", "started following you"],
   ["SRQ", "has requested to join your session"],
