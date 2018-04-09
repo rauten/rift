@@ -23,6 +23,10 @@ export class CreditCardComponent implements OnInit {
     this.stripeService.setCardAsDefault(this.creditCard.id, this.customerId);
   }
 
+  deleteCard() {
+    this.stripeService.deleteCustomerCreditCard(this.creditCard.id, this.customerId)
+  }
+
   changeStatus(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }

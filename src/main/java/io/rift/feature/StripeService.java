@@ -221,7 +221,7 @@ public class StripeService {
     public boolean deleteCard(String customerId, String cardId) {
         try {
             Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
-            customer.getSources().retrieve(cardId).delete();
+            customer.getSources().retrieve(cardId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build()).delete(RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return false;

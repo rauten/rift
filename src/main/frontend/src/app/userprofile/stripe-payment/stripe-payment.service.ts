@@ -85,7 +85,7 @@ export class StripePaymentService {
     console.log("Deleting credit card for customer");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.delete("/api/stripe/deleteCustomerCreditCard/" + cardId + "/cardOwner/" + customerId, options)
+    this.http.delete("/api/stripe/deleteCard/" + cardId + "/customer/" + customerId, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe(
