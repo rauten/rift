@@ -47,10 +47,10 @@ public class SessionRequestController {
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/sessionRequest/delete/{sessionId}/{rifteeId}")
-    public Map<String, Integer> deleteSessionRequest(@PathVariable Integer sessionId, @PathVariable Integer rifteeId)  throws SQLException {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/sessionRequest/delete/{sessionId}/{rifteeId}/{hostId}")
+    public Map<String, Integer> deleteSessionRequest(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable Integer hostId)  throws SQLException {
         Map<String, Integer> result = new HashMap<>();
-        result.put("success", sessionRequestService.deleteSessionRequest(rifteeId, sessionId));
+        result.put("success", sessionRequestService.deleteSessionRequest(rifteeId, sessionId, hostId));
         return result;
     }
 

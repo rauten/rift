@@ -123,6 +123,10 @@ public class Views {
 
     public interface SessionRequestRifteeGameAccount {}
 
+    public interface SessionRequestChargeId {}
+
+    public interface SessionRequestTransferId {}
+
     public interface SessionRequestRifterSession {}
 
     public interface SessionRequestRifteeUsertable {}

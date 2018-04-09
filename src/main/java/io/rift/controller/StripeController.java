@@ -70,14 +70,22 @@ public class StripeController {
         return stripeService.setDefaultCard(cardId, customerId);
     }
 
+
+    /*
     @RequestMapping(method = RequestMethod.PUT, value = "/stripe/createCharge/currency/{currency}/chargeAmount/{amount}")
-    public boolean createCharge(@PathVariable String currency, @PathVariable Integer amount, @RequestBody Map<String, String> ids) {
-        return stripeService.createCharge(amount, currency, ids.get("customerId"), ids.get("accountId"));
+    public boolean createCharge(@PathVariable String currency, @PathVariable Double amount, @RequestBody Map<String, String> ids) {
+        return stripeService.createCharge(amount, "stuff", 0.0, 79, 78, 98);
     }
+    */
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/stripe/deleteCard/{cardId}/customer/{customerId}")
     public boolean deleteCard(@PathVariable String customerId, @PathVariable String cardId) {
         return stripeService.deleteCard(customerId, cardId);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/cancelFuturePayment/session/{sessionId}/customer/{rifteeId}")
+    public boolean cancelFuturePayment(@PathVariable Integer sessionId, @PathVariable Integer rifteeId) {
+        return stripeService.cancelFuturePayment(sessionId, rifteeId);
     }
 
 }

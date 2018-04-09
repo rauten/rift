@@ -1,29 +1,61 @@
 package io.rift.feature;
 
+import com.google.gson.JsonSyntaxException;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
 import com.stripe.model.*;
+import com.stripe.net.APIResource;
 import com.stripe.net.RequestOptions;
+import com.stripe.net.Webhook;
+import io.rift.config.FuturePayments;
+import io.rift.model.RifterSession;
+import io.rift.model.SessionRequest;
+import io.rift.model.Usertable;
 import io.rift.repository.RiftRepository;
+import io.rift.service.RifterSessionService;
+import io.rift.service.SessionRequestService;
+import io.rift.service.UsertableService;
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import spark.Response;
+import spark.Request;
 
 @Service
 public class StripeService {
 
     public static final String STRIPE_APIKEY = "sk_live_1dYvYLmdp3maH1wTG8Ibgxb8";
 
+    private final String getUserById = "getUserById";
+    private final String getRifterGameById = "getRifterGameById";
+    private final String getSessionRequestBySessionAndRifteeId = "getSessionRequestBySessionAndRifteeId";
+
     @Autowired
     private RiftRepository riftRepository;
+
+    @Autowired
+    private UsertableService usertableService;
+
+    @Autowired
+    private SessionRequestService sessionRequestService;
+
+    @Autowired
+    private RifterSessionService rifterSessionService;
+
+    @Autowired
+    private FuturePayments futurePayments;
 
 
     public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
@@ -158,50 +190,6 @@ public class StripeService {
         return true;
     }
 
-    public boolean createCharge(Integer amount, String currency, String customerId, String accountId) {
-        try {
-
-
-            /*
-            Account account = Account.retrieve(accountId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
-            BankAccount accountDefaultBank = new BankAccount();
-            BankAccount bankAccount;
-            ExternalAccountCollection collection = account.getExternalAccounts();
-            List<ExternalAccount> accounts = collection.getData();
-            for (ExternalAccount externalAccount : accounts) {
-                bankAccount = (BankAccount) externalAccount;
-                if (bankAccount.getDefaultForCurrency()) {
-                    accountDefaultBank = bankAccount;
-                    break;
-                }
-            }
-
-
-            // Destination is the default bank account token
-            String destination = accountDefaultBank.getId();
-            */
-
-
-            Map<String, Object> params = new HashMap<>();
-            params.put("amount", amount);
-            params.put("currency", currency);
-            params.put("customer", customerId);
-            Map<String, Object> destinationParams = new HashMap<>();
-            Double transferAmount = amount * .01;
-            transferAmount = Math.floor(transferAmount);
-            double transferAmountDouble = transferAmount;
-            int transferAmountInt = (int) transferAmountDouble;
-            destinationParams.put("amount", transferAmountInt);
-            destinationParams.put("account", accountId);
-            params.put("destination", destinationParams);
-            Charge.create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
-        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
     public boolean setUserCustomerId(String customerId, String riftTag) {
         List<Object> args = new ArrayList<>(2);
         args.add(0, customerId);
@@ -228,6 +216,200 @@ public class StripeService {
         }
         return true;
     }
+
+
+    public boolean createTransfer(Integer amount, String currency, String accountId, Integer rifteeId, Integer sessionId, double sessionRifteeVal) {
+        try {
+
+
+            Map<String, Object> transferParams = new HashMap<>();
+            transferParams.put("amount", (int)(amount * .85));
+            transferParams.put("currency", currency);
+            transferParams.put("destination", accountId);
+            transferParams.put("transfer_group", String.valueOf(sessionRifteeVal));
+            Transfer transfer = Transfer.create(transferParams, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+
+            String addCharge = "UPDATE gamerequest SET transfer_id = ? WHERE riftee_id = ? AND session_id = ?";
+            StringBuilder addChargeUpdate = new StringBuilder(addCharge);
+            List<Object> transferArgs = new ArrayList<>(3);
+            transferArgs.add(0, transfer.getId());
+            transferArgs.add(1, rifteeId);
+            transferArgs.add(2, sessionId);
+            riftRepository.doUpdate(addChargeUpdate, transferArgs);
+
+            /*
+            Map<String, Object> params = new HashMap<>();
+            params.put("amount", amount);
+            params.put("currency", currency);
+            params.put("customer", customerId);
+            Map<String, Object> destinationParams = new HashMap<>();
+            Double transferAmount = amount * .01;
+            transferAmount = Math.floor(transferAmount);
+            double transferAmountDouble = transferAmount;
+            int transferAmountInt = (int) transferAmountDouble;
+            destinationParams.put("amount", transferAmountInt);
+            destinationParams.put("account", accountId);
+            params.put("destination", destinationParams);
+            Charge charge = Charge.create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            */
+
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public String createCharge(Double sessionCost, String customerId, double partialCharge, double sessionRifteeVal, Integer rifteeId, Integer sessionId) {
+
+        Map<String, Object> chargeParams = new HashMap<>();
+        chargeParams.put("amount", (int)(sessionCost * partialCharge));
+        chargeParams.put("currency", "usd");
+        chargeParams.put("customer", customerId);
+        chargeParams.put("transfer_group", String.valueOf(sessionRifteeVal));
+        Charge charge = new Charge();
+        try {
+            charge = Charge.create(chargeParams, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            // Add charge token to backend
+            String addCharge = "UPDATE gamerequest SET charge_id = ? WHERE riftee_id = ? AND session_id = ?";
+            StringBuilder addChargeUpdate = new StringBuilder(addCharge);
+            List<Object> chargeArgs = new ArrayList<>(3);
+            chargeArgs.add(0, charge.getId());
+            chargeArgs.add(1, rifteeId);
+            chargeArgs.add(2, sessionId);
+            riftRepository.doUpdate(addChargeUpdate, chargeArgs);
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            return e.getMessage();
+        }
+        return "Success";
+
+    }
+
+    public String setFuturePayment(Integer sessionId, Integer rifteeId, Integer hostId, double partialCharge) throws SQLException {
+        Object[] sessionArgs = new Object[1];
+        sessionArgs[0] = sessionId;
+        ResultSet resultSet = riftRepository.doQuery(getRifterGameById, sessionArgs);
+        RifterSession rifterSession = new RifterSession();
+        if (resultSet.next()) {
+            rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "");
+        }
+        resultSet.close();
+
+        Object[] userArgs = new Object[1];
+        userArgs[0] = rifteeId;
+        resultSet = riftRepository.doQuery(getUserById, userArgs);
+        Usertable customer = new Usertable();
+        if (resultSet.next()) {
+            customer = usertableService.populateUsertable(resultSet, 1, "");
+        }
+        final Usertable executorCustomer = customer;
+        resultSet.close();
+
+        userArgs[0] = hostId;
+        resultSet = riftRepository.doQuery(getUserById, userArgs);
+        Usertable rifter = new Usertable();
+        if (resultSet.next()) {
+            rifter = usertableService.populateUsertable(resultSet, 1, "");
+        }
+        final Usertable executorRifter = rifter;
+        resultSet.close();
+
+        // Get the time in milliseconds (from Jan 1, 1970) until the session is completed.
+        long timeToEnd = convertTimestampAndIntervalToMillis(rifterSession.getSessionTime(), rifterSession.getSessionDuration());
+
+        // Get a unique mapping for rifteeId/sessionId to save the Future object into.
+        Double sessionRifteeVal = sessionRequestService.getFuturePaymentVal(rifterSession.getId(), customer.getId());
+
+        // Create the initial charge, and return an error message if the charge is not successful
+        String result = createCharge(rifterSession.getSessionCost(), executorCustomer.getCustomerId(), partialCharge, sessionRifteeVal, rifteeId, sessionId);
+        if (!result.equals("Success")) {
+            return result;
+        }
+
+        // If the charge IS successful, create a scheduled event to transfer funds to the rifter account.
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();Future<?> future = executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                createTransfer((int) (0 * partialCharge), "usd", executorRifter.getAccountId(), rifteeId, sessionId, sessionRifteeVal);
+                futurePayments.futurePaymentMap().remove(sessionRifteeVal);
+            }
+        }, timeToEnd - System.currentTimeMillis() + 86400000L, TimeUnit.MILLISECONDS);
+
+        futurePayments.futurePaymentMap().put(sessionRifteeVal, future);
+        return "Success";
+    }
+
+    public boolean cancelFuturePayment(Integer sessionId, Integer rifteeId) {
+        try {
+            Future<?> futurePayment = futurePayments.futurePaymentMap().get(sessionId);
+            futurePayment.cancel(true);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean issueRefund(Integer rifteeId, Integer sessionId, Integer refundAmount) throws SQLException {
+
+        Object[] args = new Object[2];
+        args[0] = rifteeId;
+        args[1] = sessionId;
+        ResultSet resultSet = riftRepository.doQuery(getSessionRequestBySessionAndRifteeId, args);
+        SessionRequest sessionRequest = new SessionRequest();
+        if (resultSet.next()) {
+            sessionRequest = sessionRequestService.populateSessionRequest(resultSet, 1);
+        }
+        resultSet.close();
+        String chargeId = sessionRequest.getChargeId();
+
+        Map<String, Object> refundParams = new HashMap<>();
+        refundParams.put("charge", chargeId);
+        if (refundAmount != null) {
+            refundParams.put("amount", refundAmount);
+        }
+        try {
+            if (sessionRequest.getTransferId() != null) {
+                Transfer transfer = Transfer.retrieve(sessionRequest.getTransferId(), RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+                Map<String, Object> params = new HashMap<>();
+                transfer.getReversals().create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            }
+            Refund.create(refundParams, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+        } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public long convertTimestampAndIntervalToMillis(Timestamp timestamp, PGInterval pgInterval) {
+        long millis = timestamp.getTime();
+        long intervalMillis = (pgInterval.getDays() * 86400000L) + (pgInterval.getHours() * 3600000L) + (pgInterval.getMinutes() * 60000);
+        return millis + intervalMillis;
+    }
+
+
+    public void handleChargeFailed(Request request, Response response) {
+
+        String payload = request.body();
+        String sigHeader = request.headers("Stripe-Signature");
+        Event event = null;
+
+        try {
+            event = Webhook.constructEvent(payload, sigHeader, "whsec_fjRJIo2VVVMMd7y4M0XxZMTPd8xk0pGK");
+        } catch (JsonSyntaxException e) {
+            // Invalid payload
+            response.status(400);
+        } catch (SignatureVerificationException e) {
+            // Invalid signature
+            response.status(400);
+        }
+        event = APIResource.GSON.fromJson(request.body(), Event.class);
+
+
+
+    }
+
 
 
 
