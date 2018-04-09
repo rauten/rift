@@ -14,7 +14,7 @@ export class UserprofileService {
   }
 
   getUser(riftTag: string): Observable<Userprofile> {
-    console.log("running getUser: " + riftTag);
+    // console.log("running getUser: " + riftTag);
     return this.http.get("/api/user/" + riftTag + "/profilePage")
       .map(
           (response: Response) => {
@@ -129,7 +129,7 @@ export class UserprofileService {
   }
 
   getProfilePicture(riftTag: string): Observable<Userprofile> {
-    console.log("running getProfilePicture");
+    // console.log("running getProfilePicture");
     return this.http.get(this.getPictureURL + riftTag + "/rift-profilepictures")
       .map(
         (response: Response) => {
@@ -140,7 +140,7 @@ export class UserprofileService {
   }
 
   getCoverPhoto(riftTag: string): Observable<Userprofile> {
-    console.log("running getProfilePicture");
+    // console.log("running getProfilePicture");
     return this.http.get(this.getPictureURL + riftTag + "/rift-coverphotos")
       .map(
         (response: Response) => {

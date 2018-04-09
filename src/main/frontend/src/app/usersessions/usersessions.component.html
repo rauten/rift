@@ -1,7 +1,7 @@
 <div class="container" style="width: 95%">
 
   <div class="filters">
-    <button (click)="openDialog()" type="button" class="btn btn-primary createASession" >
+    <button (click)="openCreateSessionDialog()" type="button" class="btn btn-primary createASession" >
       Create a Session
     </button>
     <h5>Filter by Session Type</h5>
@@ -46,6 +46,7 @@
             <app-session-card [routerLink]="['../session', session.id]"
                               [session]="session" [type]="session.type" [isLoggedIn]="true"
                               [request]="loggedInUser.sessionRequests.get(session.id)"
+                              [loggedInUserId]="loggedInUser.id"
             ></app-session-card>
           </div>
         </div>

@@ -79,8 +79,8 @@ export class AppComponent {
       userprofileService.getUserNotifications(riftTag).subscribe(
         resBody => {
           if(resBody.length > 0) {
-            for (var i = resBody.length-1; i > -1; i--) {
-              var notification = new Notification();
+            for (let i = resBody.length-1; i > -1; i--) {
+              let notification = new Notification();
               notification.createdTime = resBody[i].createdTime;
               notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
               notification.creatorEmail = resBody[i].creatorUsertable.email;
@@ -99,7 +99,7 @@ export class AppComponent {
               notifications.push(notification);
             }
           } else {
-            var notification = new Notification();
+            let notification = new Notification();
             notification.notificationContent = "No notifications";
             notification.creatorProfilePic = "";
             notification.createdTime = -1;

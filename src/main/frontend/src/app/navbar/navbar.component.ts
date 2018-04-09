@@ -25,10 +25,6 @@ export class NavbarComponent implements OnInit {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('profile'));
-  }
-
   clearUnseen() {
     this.globals.unseenNotifications = 0;
     let profile = JSON.parse(localStorage.getItem('profile'));

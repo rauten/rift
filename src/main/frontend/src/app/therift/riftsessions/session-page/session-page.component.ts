@@ -45,7 +45,7 @@ export class SessionPageComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       if (this.isLoggedIn) {
-        this.sharedFunc.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname, this.loggedInUserId);
+        this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
       }
       this.id = params['sessionId'];
       this.getSessionById();
@@ -71,7 +71,7 @@ export class SessionPageComponent implements OnInit {
         this.session.numSlots = this.response.numSlots;
         this.session.gameId = this.response.gameId;
         this.session.console = this.response.console;
-        this.sessionIcon=SESSION_ICONS[this.session.gameId];
+        this.sessionIcon = SESSION_ICONS[this.session.gameId];
         this.consoleIcon = CONSOLE_ICONS[this.session.console];
         this.getSessionRiftees(this.response.players);
         this.checkRifteeStatus(this.session.id);
@@ -114,32 +114,19 @@ export class SessionPageComponent implements OnInit {
     alert("Sent request");
   }
 
-  // getLoggedInUserId(riftTag: string) {
-  //   this.userProfileService.getUserId(riftTag).subscribe(
-  //     resBody => {
-  //       this.loggedInUserId = resBody.id;
-  //     }
-  //   )
-  // }
-  //
-  // getUserProfilePicture(riftTag: string, user: Userprofile) {
-  //   this.userProfileService.getProfilePicture(riftTag).subscribe(
-  //     resBody => {
-  //       if (resBody.image == "") {
-  //         user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-  //       } else {
-  //         user.profilePic = resBody.image;
-  //       }
-  //     }
-  //   );
-  // }
+  getLoggedInUserId(riftTag: string) {
+    this.userProfileService.getUserId(riftTag).subscribe(
+      resBody => {
+        this.loggedInUserId = resBody.id;
+      }
+    )
+  }
 
-  openDialog() {
-    //noinspection TypeScriptUnresolvedFunction
+  openUpdateSessionDialog() {
     this.dialog.open(UpdateSessionComponent, {
       data: {
         sessionTime: this.session.sessionTime,
-        sessionId: this.session.id
+        sessionId: this.session.id,
       }
     });
 

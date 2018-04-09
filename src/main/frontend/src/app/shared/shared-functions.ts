@@ -8,15 +8,16 @@ export class SharedFunctions {
 
   }
 
-  getLoggedInUserId(riftTag: string, loggedInUserId) {
+  getLoggedInUserId(riftTag, loggedInUser){
     this.userProfileService.getUserId(riftTag).subscribe(
       resBody => {
-        loggedInUserId = resBody.id;
+        loggedInUser.id = resBody.id;
+        console.log(loggedInUser.id);
       }
     )
   }
 
-  getUserProfilePicture(riftTag: string, user: Userprofile) {
+  getUserProfilePicture(riftTag, user) {
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {
@@ -26,5 +27,13 @@ export class SharedFunctions {
         }
       }
     );
+  }
+
+  timeToMilliseconds(time: string) {
+    let list = time.split(":");
+    let hour = (+list[0]);
+    let minute = (+list[1]);
+    let seconds = (hour * 60 * 60) + (minute * 60);
+    return seconds * 1000;
   }
 }

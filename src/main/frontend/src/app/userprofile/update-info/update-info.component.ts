@@ -13,7 +13,6 @@ import {AddGameAccountComponent} from "../game-account/add-game-account/add-game
 export class UpdateInfoComponent implements OnInit {
   title = "Update your Profile Information";
   currentUser: Userprofile = new Userprofile();
-  loggedInUser: Userprofile = new Userprofile();
   profile: any;
   @Input() updateInfoData;
   profilePic: any;
@@ -27,32 +26,20 @@ export class UpdateInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCurrentLoggedInUser();
     this.currentUser = this.updateInfoService.getUserData();
     this.updateInfoData = this.updateInfoService.getFormData();
     console.log("Current user info loaded to Update Profile");
   }
 
-  getCurrentLoggedInUser() {
-    this.userProfileService.getUser(this.profile.nickname).subscribe(
-      resBody => {
-        this.loggedInUser.firstName = resBody.firstName;
-        this.loggedInUser.lastName = resBody.lastName;
-        this.loggedInUser.riftTag = resBody.riftTag;
-        this.loggedInUser.id = resBody.id;
-      }
-    )
-  }
-
   uploadProfilePic() {
     let base64 = this.profilePic;
-    let riftTag = this.loggedInUser.riftTag;
+    let riftTag = this.data.loggedInUser.riftTag;
     this.userProfileService.uploadProfilePicture(riftTag, base64);
   }
 
   uploadCoverPhoto() {
     let base64 = this.profilePic;
-    let riftTag = this.loggedInUser.riftTag;
+    let riftTag = this.data.loggedInUser.riftTag;
     this.userProfileService.uploadCoverPhoto(riftTag, base64);
   }
 
@@ -62,7 +49,7 @@ export class UpdateInfoComponent implements OnInit {
       "firstName" : this.updateInfoData.firstName,
       "lastName" : this.updateInfoData.lastName,
       "riftTag" : this.updateInfoData.riftTag,
-      "id" : this.loggedInUser.id,
+      "id" : this.data.loggedInUser.id,
       "bio" : this.updateInfoData.bio,
       "email": this.updateInfoData.email
     };
@@ -105,7 +92,7 @@ export class UpdateInfoComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        "loggedInUserId": this.loggedInUser.id
+        "loggedInUserId": this.data.loggedInUser.id
       }
     });
   }

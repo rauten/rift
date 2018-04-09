@@ -16,7 +16,7 @@
           <a routerLink="sessions" *ngIf="auth.isAuthenticated()">Sessions</a>
         </li>
         <li>
-          <a [routerLink]="['user', getCurrentUser().nickname]" *ngIf="auth.isAuthenticated()">Profile</a>
+          <a [routerLink]="['user', profile.nickname]" *ngIf="auth.isAuthenticated()">{{profile.nickname}}</a>
         </li>
         <li class="dropdown" *ngIf="auth.isAuthenticated()">
           <div class="btn-group" dropdown>

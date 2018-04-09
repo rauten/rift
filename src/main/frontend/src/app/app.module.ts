@@ -10,7 +10,7 @@ import 'hammerjs';
 import {MatTabsModule} from '@angular/material/tabs';
 import {
   MatStepperModule, MatFormFieldModule, MatInputModule, MatDatepickerModule,
-  MatNativeDateModule, MAT_DIALOG_DATA, MatDialog
+  MatNativeDateModule, MAT_DIALOG_DATA
 } from "@angular/material";
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -33,14 +33,6 @@ import { SessionCardComponent } from './components/session-card/session-card.com
 import { AuthService } from "./auth/auth.service";
 import { CapitalizePipe } from "./pipes/capitalize.pipe";
 
-import { SessionformComponent } from './usersessions/sessionform/sessionform.component';
-import { FormnavComponent } from './usersessions/sessionform/formnav/formnav.component';
-import { Step1Component } from './usersessions/sessionform/step1/step1.component';
-import { Step2Component } from './usersessions/sessionform/step2/step2.component';
-import { Step3Component } from './usersessions/sessionform/step3/step3.component';
-import { ResultComponent } from './usersessions/sessionform/result/result.component';
-import { FormDataService } from "./usersessions/sessionform/data/formData.service";
-import { WorkflowService } from "./usersessions/sessionform/workflow/workflow.service";
 import { FormWizardModule } from "angular2-wizard/dist";
 import { FollowButtonComponent } from './components/follow-button/follow-button.component';
 import { UpdateInfoComponent } from './userprofile/update-info/update-info.component';
@@ -120,12 +112,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     TheriftComponent,
     RiftsessionsComponent,
     SessionCardComponent,
-    SessionformComponent,
-    FormnavComponent,
-    Step1Component,
-    Step2Component,
-    Step3Component,
-    ResultComponent,
     FollowButtonComponent,
     UpdateInfoComponent,
     SearchBarComponent,
@@ -197,8 +183,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
     YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions,
-    {provide: FormDataService, useClass: FormDataService},
-    {provide: WorkflowService, useClass: WorkflowService},
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
     { provide: MAT_DIALOG_DATA, useValue: {} },
     Globals

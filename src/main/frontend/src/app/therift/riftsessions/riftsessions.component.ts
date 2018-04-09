@@ -30,11 +30,12 @@ export class RiftsessionsComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.searchQuery = params['searchQuery'];
-      if (JSON.parse(localStorage.getItem('profile')) != null) {
+      if (this.profile) {
         this.isLoggedIn = true;
+        this.getCurrentLoggedInUser();
+        this.getUserSessionRequests(this.profile.nickname);
       }
       this.getUserSearchResults(this.searchQuery);
-      this.getUserSessionRequests(this.profile.nickname);
     })
   }
 
@@ -76,26 +77,10 @@ export class RiftsessionsComponent implements OnInit {
     );
   }
 
-  // getUserProfilePicture(riftTag: string, user: Userprofile): string {
-  //   console.log("Getting user's profile picture");
-  //   this.userProfileService.getProfilePicture(riftTag).subscribe(
-  //     resBody => {
-  //       if (resBody.image == "") {
-  //         user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-  //       } else {
-  //         user.profilePic = resBody.image;
-  //       }
-  //     }
-  //   );
-  //   return;
-  //   // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-  // }
-
   getUserSessionRequests(riftTag: string) {
     this.loggedInUser.sessionRequests = new Map<number, SessionRequest>();
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
-        //noinspection TypeScriptUnresolvedVariable
         for (let i = 0; i < resBody.length; i++) {
           let request = new SessionRequest();
           request.accepted = resBody[i].accepted;
@@ -103,6 +88,21 @@ export class RiftsessionsComponent implements OnInit {
           request.rifteeId = resBody[i].rifteeId;
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
+  }
+
+  getCurrentLoggedInUser():any {
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
+      resBody => {
+        this.loggedInUser.id = resBody.id;
+        for (let i = 0; i < resBody.followings.length; i++) {
+          let currFollowing = new Userprofile();
+          currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
+          currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
+          currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+          this.loggedInUser.followings.push(currFollowing);
         }
       }
     )

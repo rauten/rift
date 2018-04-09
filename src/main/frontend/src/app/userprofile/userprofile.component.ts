@@ -80,7 +80,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string) {
-    console.log("Getting " + riftTag+ "'s profile information");
+    // console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -224,21 +224,6 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  // getUserProfilePicture(riftTag: string, user: Userprofile): string {
-  //   // console.log("Getting user's profile picture");
-  //   this.userProfileService.getProfilePicture(riftTag).subscribe(
-  //     resBody => {
-  //       if (resBody.image == "") {
-  //         user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-  //       } else {
-  //         user.profilePic = resBody.image;
-  //       }
-  //     }
-  //   );
-  //   return;
-  //   // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-  // }
-
   getUserCoverPhoto(riftTag: string) {
     // console.log("Getting user's cover photo");
     this.userProfileService.getCoverPhoto(riftTag).subscribe(
@@ -286,8 +271,8 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        "updateBraintreeUserURL": this.updateBraintreeUserURL,
-        "currentUser": this.currentUser
+        currentUser: this.currentUser,
+        loggedInUser: this.loggedInUser
       }
     });
 

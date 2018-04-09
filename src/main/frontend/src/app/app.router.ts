@@ -5,7 +5,6 @@ import { UserprofileComponent} from './userprofile/userprofile.component';
 import { UsersessionsComponent } from './usersessions/usersessions.component';
 import { TheriftComponent } from './therift/therift.component';
 import {RiftsessionsComponent} from "./therift/riftsessions/riftsessions.component";
-import {SessionformComponent} from "./usersessions/sessionform/sessionform.component";
 import {UpdateInfoComponent} from './userprofile/update-info/update-info.component';
 import {SessionPageComponent} from "./therift/riftsessions/session-page/session-page.component";
 import {UserRatingComponent} from "./userprofile/user-rating/user-rating.component";
@@ -21,9 +20,6 @@ export const router: Routes = [
     ]
   },
   { path: 'sessions', component: UsersessionsComponent,
-    children: [
-      {path: 'create', component: SessionformComponent},
-    ]
   },
   { path: 'home', component: TheriftComponent,
   },

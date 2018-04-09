@@ -19,8 +19,8 @@ export class FileUploadComponent implements ControlValueAccessor {
   @Input() uploadButtonText: string;
 
   writeValue(value: any) {
-    //Handle write value
   }
+
   propagateChange = (_: any) => { };
   registerOnChange(fn) {
     this.propagateChange = fn;
@@ -28,13 +28,11 @@ export class FileUploadComponent implements ControlValueAccessor {
   registerOnTouched() { }
 
   changeListener($event): void {
-    // debugger; // uncomment this for debugging purposes
     this.readThis($event.target);
   }
   readThis(inputValue: any): void {
-    // debugger; // uncomment this for debugging purposes
-    var file: File = inputValue.files[0];
-    var myReader: FileReader = new FileReader();
+    let file: File = inputValue.files[0];
+    let myReader: FileReader = new FileReader();
 
     myReader.onloadend = (e) => {
       this.propagateChange(myReader.result);

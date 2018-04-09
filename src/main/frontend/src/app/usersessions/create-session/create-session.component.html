@@ -17,7 +17,7 @@
                 <label class="control-label" for="sessiongame">What game will you be playing?</label>
                 <!--<input class="form-control input-md" #sessiongame="ngModel"  id="sessiongame" name="sessiongame" type="text" placeholder="Session Game" [(ngModel)]="currentSession.game">-->
                 <mat-form-field>
-                  <mat-select placeholder="Select a Game" [(value)]="gameId" (selectionChange)="getUserGameAccountsByGameId(gameId, loggedInUserId)">
+                  <mat-select placeholder="Select a Game" [(value)]="gameId" (selectionChange)="getUserGameAccountsByGameId(gameId, data.loggedInUserId)">
                     <mat-option *ngFor="let game of games" [value]="game.id">
                       {{ game.name }}
                     </mat-option>

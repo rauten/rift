@@ -18,7 +18,6 @@ export class FollowButtonComponent implements OnInit {
   ngOnInit() {
   }
 
-
   followUser() {
     this.userProfileService.followUser(this.riftTag, this.id).subscribe(
       resBody => {
