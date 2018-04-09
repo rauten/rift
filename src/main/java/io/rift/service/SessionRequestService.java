@@ -351,16 +351,16 @@ public class SessionRequestService {
                     Timestamp timestamp = rifterSession.getSessionTime();
                     long seconds = (long)Math.ceil((timestamp.getTime() - currentTime.getTime())/1000.0);
                     if (seconds >= 172800) {
+                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
+                        /*
                         Double futurePaymentVal = getFuturePaymentVal(sessionId, rifteeId);
                         Future<?> future = futurePayments.futurePaymentMap().get(futurePaymentVal);
                         future.cancel(true);
                         futurePayments.futurePaymentMap().remove(futurePaymentVal);
+                        */
                         return 2;
                     } else if (seconds >= 43200) {
-                        Double futurePaymentVal = getFuturePaymentVal(sessionId, rifteeId);
-                        Future<?> future = futurePayments.futurePaymentMap().get(futurePaymentVal);
-                        future.cancel(true);
-                        futurePayments.futurePaymentMap().remove(futurePaymentVal);
+                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
 
                         // Charge the customer 50%
                         stripeService.setFuturePayment(sessionId, rifteeId, hostId, .5);

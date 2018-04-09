@@ -83,9 +83,9 @@ public class StripeController {
         return stripeService.deleteCard(customerId, cardId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/cancelFuturePayment/session/{sessionId}/customer/{rifteeId}")
-    public boolean cancelFuturePayment(@PathVariable Integer sessionId, @PathVariable Integer rifteeId) {
-        return stripeService.cancelFuturePayment(sessionId, rifteeId);
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/cancelFuturePayment/session/{sessionId}/customer/{rifteeId}/{nullifyIds}")
+    public boolean cancelFuturePayment(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable boolean nullifyIds) {
+        return stripeService.cancelFuturePayment(sessionId, rifteeId, nullifyIds);
     }
 
 }
