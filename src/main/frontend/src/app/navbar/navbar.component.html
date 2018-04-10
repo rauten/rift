@@ -1,22 +1,91 @@
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+<!--<nav class="navbar navbar-default navbar-custom navbar-fixed-top">-->
+  <!--<div class="container-fluid">-->
+    <!--<div class="navbar-header page-scroll">-->
+      <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">-->
+        <!--<span class="sr-only">Toggle navigation</span>-->
+        <!--Menu <i class="fa fa-bars"></i>-->
+      <!--</button>-->
+      <!--<app-search-bar></app-search-bar>-->
+    <!--</div>-->
+    <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
+      <!--<ul class="nav navbar-nav navbar-right">-->
+        <!--<li>-->
+          <!--<a routerLink="feed" *ngIf="auth.isAuthenticated()">Feed</a>-->
+        <!--</li>-->
+        <!--<li>-->
+          <!--<a routerLink="sessions" *ngIf="auth.isAuthenticated()">Sessions</a>-->
+        <!--</li>-->
+        <!--<li>-->
+          <!--<a [routerLink]="['user', profile.nickname]" *ngIf="auth.isAuthenticated()">{{profile.nickname}}</a>-->
+        <!--</li>-->
+        <!--<li class="dropdown" *ngIf="auth.isAuthenticated()">-->
+          <!--<div class="btn-group" dropdown>-->
+            <!--<button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" (click)="clearUnseen();">-->
+              <!--<span class="glyphicon glyphicon-bell"></span>-->
+              <!--<span class="badge badge-notify" *ngIf="globals.unseenNotifications > 0">{{globals.unseenNotifications}}</span>-->
+
+            <!--</button>-->
+            <!--<ul *dropdownMenu class="dropdown-menu" role="menu">-->
+              <!--<li class="media" *ngFor="let notification of notificationsList">-->
+                <!--<app-notification [notification]="notification"></app-notification>-->
+              <!--</li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</li>-->
+
+        <!--<li>-->
+          <!--<a (click)="auth.login()" *ngIf="!auth.isAuthenticated()">Login</a>-->
+        <!--</li>-->
+        <!--<li>-->
+          <!--<a (click)="auth.logout()" *ngIf="auth.isAuthenticated()">Logout</a>-->
+        <!--</li>-->
+
+      <!--</ul>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</nav>-->
+
+<nav class="navbar navbar-default">
   <div class="container-fluid">
-    <div class="navbar-header page-scroll">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" (click)="isCollapsed = !isCollapsed" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
-        Menu <i class="fa fa-bars"></i>
+        <i class="fa fa-bars"></i>
       </button>
-      <app-search-bar></app-search-bar>
+      <a class="navbar-brand" routerLink="home">
+        <img src="https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/256x256/plain/crack.png" class="rift-icon">
+        RIFT
+      </a>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" [collapse]=isCollapsed>
+      <app-search-bar></app-search-bar>
+
       <ul class="nav navbar-nav navbar-right">
+
         <li>
           <a routerLink="feed" *ngIf="auth.isAuthenticated()">Feed</a>
         </li>
         <li>
           <a routerLink="sessions" *ngIf="auth.isAuthenticated()">Sessions</a>
         </li>
-        <li>
-          <a [routerLink]="['user', getCurrentUser().nickname]" *ngIf="auth.isAuthenticated()">Profile</a>
+        <li class="dropdown profileDrop" *ngIf="auth.isAuthenticated()" dropdown>
+            <a class="dropdown-toggle" dropdownToggle>
+              <!--<img src="{{loggedInUser.profilePic}}" class="profilePic img-circle">-->
+               {{profile.nickname}}
+              <!--<b class="caret"></b>-->
+            </a>
+            <ul class="dropdown-menu" *dropdownMenu>
+              <li class="profile-dropdown">
+                <a [routerLink]="['user', profile.nickname]">View Profile</a>
+              </li>
+              <li class="divider"></li>
+              <li class="profile-dropdown">
+                <a (click)="auth.logout()" *ngIf="auth.isAuthenticated()">Sign Out</a>
+              </li>
+            </ul>
         </li>
         <li class="dropdown" *ngIf="auth.isAuthenticated()">
           <div class="btn-group" dropdown>
@@ -36,12 +105,8 @@
         <li>
           <a (click)="auth.login()" *ngIf="!auth.isAuthenticated()">Login</a>
         </li>
-        <li>
-          <a (click)="auth.logout()" *ngIf="auth.isAuthenticated()">Logout</a>
-        </li>
-
       </ul>
-    </div>
-  </div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
 

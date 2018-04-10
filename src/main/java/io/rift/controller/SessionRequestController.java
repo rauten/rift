@@ -30,8 +30,10 @@ public class SessionRequestController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/sessionRequest/update")
-    public Boolean updateSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
-        return sessionRequestService.updateSessionRequest(sessionRequest);
+    public Map<String, String> updateSessionRequest(@RequestBody SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+        Map<String, String> result = new HashMap<>();
+        result.put("result", sessionRequestService.updateSessionRequest(sessionRequest));
+        return result;
     }
 
     @JsonView(Views.SessionRequestsByRiftTag.class)
@@ -47,10 +49,10 @@ public class SessionRequestController {
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/sessionRequest/delete/{sessionId}/{rifteeId}")
-    public Map<String, Integer> deleteSessionRequest(@PathVariable Integer sessionId, @PathVariable Integer rifteeId)  throws SQLException {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/sessionRequest/delete/{sessionId}/{rifteeId}/{hostId}")
+    public Map<String, Integer> deleteSessionRequest(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable Integer hostId)  throws SQLException {
         Map<String, Integer> result = new HashMap<>();
-        result.put("success", sessionRequestService.deleteSessionRequest(rifteeId, sessionId));
+        result.put("success", sessionRequestService.deleteSessionRequest(rifteeId, sessionId, hostId));
         return result;
     }
 

@@ -5,6 +5,7 @@ import {Activity} from "../models/activity";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {Session} from "../models/session";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+import {SharedFunctions} from "../shared/shared-functions";
 
 @Component({
   selector: 'app-feed',
@@ -56,7 +57,7 @@ export class FeedComponent implements OnInit {
   }
 
   getActivityProfilePicture(riftTag: string, activity: Activity): string {
-    console.log("Getting user's profile picture");
+    // console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {

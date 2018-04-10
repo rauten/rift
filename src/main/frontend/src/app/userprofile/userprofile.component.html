@@ -22,6 +22,12 @@
             </div>
             <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
               <button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>
+            </div><br>
+            <div class="stripe-payment">
+              <button (click)="updatePaymentModal()" type="button" class="btn-primary">Update Payment</button>
+            </div><br>
+            <div class="stripe-payment">
+              <button *ngIf="!currentUser.accountId" (click)="updateBankAccountModal()" type="button" class="btn-primary">Update Bank Account</button>
             </div>
             <div id="rate_user_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
               <button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>

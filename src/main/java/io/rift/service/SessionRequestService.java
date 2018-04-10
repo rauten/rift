@@ -2,7 +2,9 @@ package io.rift.service;
 
 
 import com.google.common.base.CaseFormat;
+import io.rift.config.FuturePayments;
 import io.rift.config.PollingConfig;
+import io.rift.feature.StripeService;
 import io.rift.model.Notification;
 import io.rift.model.RifterSession;
 import io.rift.model.SessionRequest;
@@ -11,6 +13,7 @@ import io.rift.repository.RiftRepository;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SessionRequestService {
@@ -40,11 +47,19 @@ public class SessionRequestService {
     public PollingConfig pollingConfig;
 
     @Autowired
+    private FuturePayments futurePayments;
+
+    @Autowired
     private RiftRepository riftRepository;
 
-    private final Integer POPULATESIZE = 5;
+    @Autowired
+    private StripeService stripeService;
 
-    private final String getGameRequestBySessionAndRifteeId = "getGameRequestBySessionAndRifteeId";
+    private final Integer POPULATESIZE = 7;
+
+    public static Usertable customerUsertable = new Usertable();
+
+    private final String getSessionRequestBySessionAndRifteeId = "getSessionRequestBySessionAndRifteeId";
     private final String createSessionRequest = "createSessionRequest";
     private final String getSessionRequestByRiftTag = "getSessionRequestByRiftTag";
     private final String getRequestStatus = "getRequestStatus";
@@ -60,6 +75,9 @@ public class SessionRequestService {
     private final String getRequestsByUser = "getRequestsByUser";
     private final String getGameRequestsByUserIdAndAccepted = "getGameRequestsByUserIdAndAccepted";
 
+    private final String getRifterGameById = "getRifterGameById";
+    private final String getUserById = "getUserById";
+
     private final String updateSessionRequestStart = "UPDATE gameRequest SET (";
     private final String updateSessionRequestPath = "/io/rift/model/SessionRequest.class";
     private final String sessionRequestClass = "SessionRequest.class";
@@ -71,6 +89,8 @@ public class SessionRequestService {
     private final String doubleStr = "Double";
 
 
+    /************************************ POPULATES **************************************/
+    /*************************************************************************************/
 
     public SessionRequest populateSessionRequest(ResultSet resultSet, int startPoint) throws SQLException {
         SessionRequest sessionRequest = new SessionRequest();
@@ -79,6 +99,8 @@ public class SessionRequestService {
         sessionRequest.setHostId(resultSet.getInt(startPoint + 2));
         sessionRequest.setAccepted(resultSet.getShort(startPoint + 3));
         sessionRequest.setRifteeGameAccount(resultSet.getInt(startPoint + 4));
+        sessionRequest.setChargeId(resultSet.getString(startPoint + 5));
+        sessionRequest.setTransferId(resultSet.getString(startPoint + 6));
         return sessionRequest;
     }
 
@@ -91,6 +113,8 @@ public class SessionRequestService {
             sessionRequest.setHostId(resultSet.getInt(3));
             sessionRequest.setAccepted(resultSet.getShort(4));
             sessionRequest.setRifteeGameAccount(resultSet.getInt(5));
+            sessionRequest.setChargeId(resultSet.getString(6));
+            sessionRequest.setTransferId(resultSet.getString(7));
             rifteeSessions.add(sessionRequest);
         }
         return rifteeSessions;
@@ -105,6 +129,8 @@ public class SessionRequestService {
             sessionRequest.setHostId(resultSet.getInt(3));
             sessionRequest.setAccepted(resultSet.getShort(4));
             sessionRequest.setRifteeGameAccount(resultSet.getInt(5));
+            sessionRequest.setChargeId(resultSet.getString(6));
+            sessionRequest.setTransferId(resultSet.getString(7));
             int startPoint = POPULATESIZE + 1;
             for (String str : info) {
                 if (str.equals("hostInfo")) {
@@ -121,6 +147,12 @@ public class SessionRequestService {
         }
         return rifteeSessions;
     }
+
+
+
+
+    /************************************ GETTERS **************************************/
+    /***********************************************************************************/
 
     public int getRequestStatus(Integer sessionId, Integer rifteeId) throws SQLException {
         Object[] args = new Object[2];
@@ -201,10 +233,16 @@ public class SessionRequestService {
         }
     }
 
+
+
+
+    /********************************** CREATE *****************************************/
+    /***********************************************************************************/
+
     public Boolean createSessionRequest(SessionRequest sessionRequest) throws SQLException {
 
         boolean success = false;
-        if (!riftRepository.doQuery(getGameRequestBySessionAndRifteeId, new Object[] {sessionRequest.getRifteeId(),
+        if (!riftRepository.doQuery(getSessionRequestBySessionAndRifteeId, new Object[] {sessionRequest.getRifteeId(),
                 sessionRequest.getSessionId()}).next()) {
 
             success = riftRepository.doInsert(createSessionRequest, new Object[] {sessionRequest.getRifteeId(),
@@ -216,7 +254,32 @@ public class SessionRequestService {
         return false;
     }
 
-    public Boolean updateSessionRequest(SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+    public String updateSessionRequest(SessionRequest sessionRequest) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+
+        Object[] args1 = new Object[1];
+        args1[0] = sessionRequest.getSessionId();
+        ResultSet resultSet = riftRepository.doQuery(getRifterGameById, args1);
+        RifterSession rifterSession = new RifterSession();
+        if (resultSet.next()) {
+            rifterSession = rifterSessionService.populateRifterSession(resultSet, 1, "");
+        }
+
+        if (sessionRequest.getAccepted() == 2) {
+            String result = stripeService.setFuturePayment(sessionRequest.getSessionId(), sessionRequest.getRifteeId(), sessionRequest.getHostId(), 1);
+            if (!result.equals("Success")) {
+                return result;
+            }
+        }
+
+        // If the session is within an hour of starting, the rifter can no longer accept new riftees or kick existing ones.
+        // We can always change this
+
+        /*
+        if ((rifterSession.getSessionTime().getTime() < System.currentTimeMillis() + 3600000) && sessionRequest.getAccepted() != 0) {
+            return false;
+        }
+        */
+
         int rifteeId = sessionRequest.getRifteeId();
         int sessionId = sessionRequest.getSessionId();
         String str = updateSessionRequestStart;
@@ -264,10 +327,11 @@ public class SessionRequestService {
             args.add(sessionId);
             success = riftRepository.doUpdate(query, args);
         }
-        return true;
+
+        return "Success";
     }
 
-    public Integer deleteSessionRequest(Integer rifteeId, Integer sessionId) throws SQLException {
+    public Integer deleteSessionRequest(Integer rifteeId, Integer sessionId, Integer hostId) throws SQLException {
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         Object[] args = new Object[2];
         args[0] = rifteeId;
@@ -287,13 +351,23 @@ public class SessionRequestService {
                     Timestamp timestamp = rifterSession.getSessionTime();
                     long seconds = (long)Math.ceil((timestamp.getTime() - currentTime.getTime())/1000.0);
                     if (seconds >= 172800) {
-                        // Flat rate charge
+                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
+                        /*
+                        Double futurePaymentVal = getFuturePaymentVal(sessionId, rifteeId);
+                        Future<?> future = futurePayments.futurePaymentMap().get(futurePaymentVal);
+                        future.cancel(true);
+                        futurePayments.futurePaymentMap().remove(futurePaymentVal);
+                        */
                         return 2;
                     } else if (seconds >= 43200) {
-                        // 50% refund, automatically charge card 50%
+                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
+
+                        // Charge the customer 50%
+                        stripeService.setFuturePayment(sessionId, rifteeId, hostId, .5);
                         return 1;
                     } else {
-                        // 0% refund, automatically charge card full amount
+                        // 0% refund, will still charge after the session. If session gets cancelled, the customer
+                        // is in luck, won't get charged
                         return 0;
                     }
                 }
@@ -304,5 +378,11 @@ public class SessionRequestService {
         }
         // No session request found
         return -2;
+    }
+
+    public Double getFuturePaymentVal(Integer rifterSessionId, Integer customerId) {
+        return rifterSessionId >= customerId ?
+                ((double)rifterSessionId * (double)rifterSessionId) + rifterSessionId + customerId :
+                rifterSessionId + ((double)customerId * (double)customerId);
     }
 }

@@ -1,13 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "fullcalendar/dist/fullcalendar.min.css";
-
-
-.navbar-fixed-top {
-  background-color: #293e49;
-  border: none;
-  color: white;
-}
 
 @media (min-width: 0px) {
   .container {

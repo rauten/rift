@@ -13,6 +13,8 @@ import {UserprofileService} from "../../userprofile/userprofile.service";
 import {GameAccountService} from "../../userprofile/game-account/game-account.service";
 import {GameAccount} from "../../models/game-account";
 import {SESSION_ICONS} from "../../constants/session-icon-variables";
+import {SharedFunctions} from "../../shared/shared-functions";
+import {Userprofile} from "../../models/userprofile";
 
 @Component({
   selector: 'app-create-session',
@@ -30,47 +32,30 @@ export class CreateSessionComponent implements OnInit {
   gameId: any;
   language: any;
   platform: any;
-  loggedInUserId: number;
-  profile: any;
   gameAccounts: GameAccount[] = [];
   accountId: any;
 
-  //noinspection JSAnnotator
   constructor(private createSessionService: CreateSessionService, private route: ActivatedRoute,
               private userSessionService: UsersessionsService, private globals: Globals,
               private userProfileService: UserprofileService, private gameAccountService: GameAccountService,
               private dialogRef: MatDialogRef<CreateSessionComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any, private sharedFunc: SharedFunctions) {
     this.games = GAMES;
     this.consoles = CONSOLES;
     this.languages = LANGUAGES;
-    this.profile = JSON.parse(localStorage.getItem('profile'));
-
   }
 
   ngOnInit() {
-    this.getLoggedInUserId(this.profile.nickname);
+    console.log(this.data.loggedInUserId);
     this.currentSession = this.createSessionService.getSessionData();
     this.createSessionData = this.createSessionService.getFormData();
   }
 
-  getLoggedInUserId(riftTag: string) {
-    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-      this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
-    } else {
-      this.userProfileService.getUserId(riftTag).subscribe(
-        resBody => {
-          this.loggedInUserId = resBody.id;
-        }
-      )
-    }
-  }
-
   save() {
   this.createSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-  let timeMS = CreateSessionComponent.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
+  let timeMS = this.sharedFunc.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
     let data = {
-      "hostId": this.loggedInUserId,
+      "hostId": this.data.loggedInUserId,
       "title": this.createSessionData.title,
       "description": this.createSessionData.description,
       "gameId": this.gameId,
@@ -90,14 +75,6 @@ export class CreateSessionComponent implements OnInit {
   cancel(): void {
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();
-  }
-
-  static timeToMilliseconds(time: string) {
-    let list = time.split(":");
-    let hour = (+list[0]);
-    let minute = (+list[1]);
-    let seconds = (hour * 60 * 60) + (minute * 60);
-    return seconds * 1000;
   }
 
   getUserGameAccountsByGameId(gameId, riftId) {

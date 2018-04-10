@@ -6,6 +6,7 @@ import {UsersessionsService} from "../../usersessions/usersessions.service";
 import {SessionRequest} from "../../models/session-request";
 import {Userprofile} from "../../models/userprofile";
 import {UserprofileService} from "../../userprofile/userprofile.service";
+import {SharedFunctions} from "../../shared/shared-functions";
 
 @Component({
   selector: 'app-riftsessions',
@@ -22,18 +23,19 @@ export class RiftsessionsComponent implements OnInit {
   profile: any;
 
   constructor(private searchBarService: SearchBarService, private route: ActivatedRoute,
-  private userSessionsService: UsersessionsService, private userProfileService: UserprofileService) {
+  private userSessionsService: UsersessionsService, private userProfileService: UserprofileService, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'))
   }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.searchQuery = params['searchQuery'];
-      if (JSON.parse(localStorage.getItem('profile')) != null) {
+      if (this.profile) {
         this.isLoggedIn = true;
+        this.getCurrentLoggedInUser();
+        this.getUserSessionRequests(this.profile.nickname);
       }
       this.getUserSearchResults(this.searchQuery);
-      this.getUserSessionRequests(this.profile.nickname);
     })
   }
 
@@ -42,20 +44,20 @@ export class RiftsessionsComponent implements OnInit {
     this.users = [];
     this.searchBarService.getSearchResults(searchQuery).subscribe(
       resBody => {
-        var users = resBody[0];
-        for (var i = 0; i < users.length; i++) {
-          var currUser = new Userprofile();
+        let users = resBody[0];
+        for (let i = 0; i < users.length; i++) {
+          let currUser = new Userprofile();
           currUser.firstName = users[i].firstName;
           currUser.lastName = users[i].lastName;
           currUser.riftTag = users[i].riftTag;
           currUser.id = users[i].id;
-          this.getUserProfilePicture(currUser.riftTag, currUser);
+          this.sharedFunc.getUserProfilePicture(currUser.riftTag, currUser);
           this.users.push(currUser);
         }
-        for (var i = 0; i < resBody[1].length; i++) {
-          var currDateMS = resBody[1][i].sessionTime;
-          var date = new Date(currDateMS);
-          var currSession = new Session();
+        for (let i = 0; i < resBody[1].length; i++) {
+          let currDateMS = resBody[1][i].sessionTime;
+          let date = new Date(currDateMS);
+          let currSession = new Session();
           currSession.firstName = resBody[1][i].usertable.firstName;
           currSession.lastName = resBody[1][i].usertable.lastName;
           currSession.riftTag = resBody[1][i].usertable.riftTag;
@@ -75,33 +77,32 @@ export class RiftsessionsComponent implements OnInit {
     );
   }
 
-  getUserProfilePicture(riftTag: string, user: Userprofile): string {
-    console.log("Getting user's profile picture");
-    this.userProfileService.getProfilePicture(riftTag).subscribe(
-      resBody => {
-        if (resBody.image == "") {
-          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-        } else {
-          user.profilePic = resBody.image;
-        }
-      }
-    );
-    return;
-    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-  }
-
   getUserSessionRequests(riftTag: string) {
     this.loggedInUser.sessionRequests = new Map<number, SessionRequest>();
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
-        //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var request = new SessionRequest();
+        for (let i = 0; i < resBody.length; i++) {
+          let request = new SessionRequest();
           request.accepted = resBody[i].accepted;
           request.hostId = resBody[i].hostId;
           request.rifteeId = resBody[i].rifteeId;
           request.sessionId = resBody[i].sessionId;
           this.loggedInUser.sessionRequests.set(request.sessionId, request);
+        }
+      }
+    )
+  }
+
+  getCurrentLoggedInUser():any {
+    this.userProfileService.getUser(this.profile.nickname).subscribe(
+      resBody => {
+        this.loggedInUser.id = resBody.id;
+        for (let i = 0; i < resBody.followings.length; i++) {
+          let currFollowing = new Userprofile();
+          currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
+          currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
+          currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+          this.loggedInUser.followings.push(currFollowing);
         }
       }
     )

@@ -9,21 +9,20 @@ import {AuthService} from "../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {UserRatingService} from "./user-rating/data/user-rating.service";
 import {UserRating} from "../models/userrating";
-import {Notification} from "../models/notification";
 import {UsersessionsService} from "../usersessions/usersessions.service";
 import {SessionRequest} from "../models/session-request";
-import {Globals} from "../global/globals";
 import {MatDialog} from "@angular/material";
 import {UpdateInfoComponent} from "./update-info/update-info.component";
 import {UserRatingComponent} from "./user-rating/user-rating.component";
-import {PaymentService} from "./payment.service";
-import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
 import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
 import {SESSION_ICONS} from "../constants/session-icon-variables";
 import {EditGameAccountComponent} from "./game-account/edit-game-account/edit-game-account.component";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
+import {StripePaymentComponent} from "./stripe-payment/stripe-payment.component";
+import {LegalBankAccountInfoComponent} from "./stripe-payment/legal-bank-account-info/legal-bank-account-info.component";
+import {SharedFunctions} from "../shared/shared-functions";
 
 @Component({
   selector: 'app-userprofile',
@@ -40,12 +39,11 @@ export class UserprofileComponent implements OnInit {
   isDataAvailable:boolean = false;
   isLoggedIn: boolean = false;
   ratingStatus: number;
-  updateBraintreeUserURL = '/api/braintree/updateCustomer/';
-
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService) {
+  public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService,
+              private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if(this.profile != null) {
       this.isLoggedIn = true;
@@ -80,7 +78,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string) {
-    console.log("Getting " + riftTag+ "'s profile information");
+    // console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -90,13 +88,13 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.bio = resBody.bio;
           this.currentUser.email = resBody.email;
           this.currentUser.id = resBody.id;
+          this.currentUser.customerId = resBody.customerId;
+          this.currentUser.accountId = resBody.accountId;
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
-          this.currentUser.braintreeId = resBody.braintreeId;
           this.currentUser.twitchAccount = resBody.twitchAccount;
           this.currentUser.youtubeAccount = resBody.youtubeAccount;
-          this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
-          this.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
+          this.sharedFunc.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
           this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
           this.getUserRatings(this.currentUser.id);
@@ -121,7 +119,7 @@ export class UserprofileComponent implements OnInit {
       currFollower.lastName = followers[i].followerUsertable.lastName;
       currFollower.riftTag = followers[i].followerUsertable.riftTag;
       currFollower.id = followers[i].followerUsertable.id;
-      this.getUserProfilePicture(currFollower.riftTag, currFollower);
+      this.sharedFunc.getUserProfilePicture(currFollower.riftTag, currFollower);
       this.currentUser.followers.push(currFollower);
     }
     for (let i = 0; i < followings.length; i++) {
@@ -130,7 +128,7 @@ export class UserprofileComponent implements OnInit {
       currFollowing.lastName = followings[i].followingUsertable.lastName;
       currFollowing.riftTag = followings[i].followingUsertable.riftTag;
       currFollowing.id = followings[i].followingUsertable.id;
-      this.getUserProfilePicture(currFollowing.riftTag, currFollowing);
+      this.sharedFunc.getUserProfilePicture(currFollowing.riftTag, currFollowing);
       this.currentUser.followings.push(currFollowing);
     }
   }
@@ -151,7 +149,7 @@ export class UserprofileComponent implements OnInit {
           reviewer.firstName = resBody[i].reviewerUsertable.firstName;
           reviewer.lastName = resBody[i].reviewerUsertable.lastName;
           reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
-          this.getUserProfilePicture(reviewer.riftTag, reviewer);
+          this.sharedFunc.getUserProfilePicture(reviewer.riftTag, reviewer);
           userRating.reviewerUsertable = reviewer;
           this.currentUser.ratings.push(userRating);
         }
@@ -222,21 +220,6 @@ export class UserprofileComponent implements OnInit {
     )
   }
 
-  getUserProfilePicture(riftTag: string, user: Userprofile): string {
-    // console.log("Getting user's profile picture");
-    this.userProfileService.getProfilePicture(riftTag).subscribe(
-      resBody => {
-        if (resBody.image == "") {
-          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-        } else {
-          user.profilePic = resBody.image;
-        }
-      }
-    );
-    return;
-    // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-  }
-
   getUserCoverPhoto(riftTag: string) {
     // console.log("Getting user's cover photo");
     this.userProfileService.getCoverPhoto(riftTag).subscribe(
@@ -284,11 +267,33 @@ export class UserprofileComponent implements OnInit {
       height: '450px',
       width: '600px',
       data: {
-        "updateBraintreeUserURL": this.updateBraintreeUserURL,
-        "currentUser": this.currentUser
+        currentUser: this.currentUser,
+        loggedInUser: this.loggedInUser
       }
     });
 
+  }
+
+  updatePaymentModal() {
+    this.dialog.open(StripePaymentComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        customerId: this.currentUser.customerId
+      }
+    });
+
+  }
+
+  updateBankAccountModal() {
+    this.dialog.open(LegalBankAccountInfoComponent, {
+      height: '450px',
+      width: '600px',
+      data: {
+        "riftId": this.loggedInUser.id,
+        "riftTag": this.profile.nickname
+      }
+    });
   }
 
   editGameAccount(account) {

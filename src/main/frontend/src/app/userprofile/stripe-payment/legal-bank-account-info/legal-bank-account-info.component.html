@@ -1,0 +1,91 @@
+<h1>Custom Stripe Form</h1>
+
+<form action="" method="POST" id="payment-form" (submit)="getToken()">
+  <span class="payment-message">{{message}}</span>
+
+  <div class="form-row">
+    <label>
+      <span>Country</span>
+      <input [(ngModel)]="country" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>City</span>
+      <input [(ngModel)]="city" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Address Line 1</span>
+      <input [(ngModel)]="addressLine1" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Address Line 2</span>
+      <input [(ngModel)]="addressLine2" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Postal Code</span>
+      <input [(ngModel)]="zipCode" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Postal State</span>
+      <input [(ngModel)]="state" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Date of Birth</span>
+      <input [(ngModel)]="dobDay" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Month of Birth</span>
+      <input [(ngModel)]="dobMonth" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Year of Birth</span>
+      <input [(ngModel)]="dobYear" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>First Name</span>
+      <input [(ngModel)]="firstName" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Last Name</span>
+      <input [(ngModel)]="lastName" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Legal Entity Type</span>
+      <input [(ngModel)]="type" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <input type="submit" value="Submit Payment">
+</form>

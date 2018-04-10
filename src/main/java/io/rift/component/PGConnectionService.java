@@ -17,12 +17,14 @@ public class PGConnectionService {
 
     public PGConnection pgConnection;
 
+    /*
     @PostConstruct
     public void init() throws SQLException {
         PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
         pgConnection = (PGConnection) pgDataSource.getConnection();
         System.out.println("PG connected");
     }
+    */
 
 
 

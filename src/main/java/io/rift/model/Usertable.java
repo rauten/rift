@@ -1,6 +1,7 @@
 package io.rift.model;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
@@ -61,6 +62,12 @@ public class Usertable {
     @JsonView(Views.UsertableEmail.class)
     private String email;
 
+    @JsonView(Views.UsertableCustomerId.class)
+    private String customerId;
+
+    @JsonView(Views.UsertableAccountId.class)
+    private String accountId;
+
     @JsonView(Views.UsertableNotificationList.class)
     private List<Notification> notificationList;
 
@@ -114,6 +121,8 @@ public class Usertable {
 
     @JsonView(Views.UsertableFullNameLevenshtein.class)
     private Double fullNameLevenshtein;
+
+    private Map<Integer, Future<?>> futures;
     
     public Usertable() {}
 

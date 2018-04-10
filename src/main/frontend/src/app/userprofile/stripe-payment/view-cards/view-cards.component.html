@@ -1,0 +1,8 @@
+<div class="container" id="tourpackages-carousel">
+  <div class="row">
+    <div *ngFor="let card of creditCards">
+      <app-credit-card [creditCard]="card" [customerId]="data.customerId"></app-credit-card>
+    </div>
+
+  </div>
+</div><!-- End container -->

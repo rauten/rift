@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {UsersessionsService} from "../../usersessions/usersessions.service";
-import {PaymentService} from "../../userprofile/payment.service";
 import {UserprofileService} from "../../userprofile/userprofile.service";
 
 @Component({
@@ -12,26 +11,11 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
   @Input() status: number;
   @Input() notification;
   profile: any;
-  constructor(private userSessionService: UsersessionsService, private paymentService: PaymentService,
-              private userProfileService: UserprofileService) {
+  constructor(private userSessionService: UsersessionsService, private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
   }
 
   ngOnInit() {
-  }
-
-  acceptRequest() {
-    let data = {
-      "accepted": 2,
-      "hostId": this.notification.userId,
-      "sessionId": this.notification.sessionId,
-      "rifteeId": this.notification.creatorId
-    };
-    // this.getTransactionData(data.rifteeId, data.sessionId);
-    this.userSessionService.updateSessionRequest(data);
-    this.status = 2;
-    this.sendConfirmationEmail();
-    console.log("Accepted request");
   }
 
   sendConfirmationEmail() {
@@ -51,6 +35,19 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.userProfileService.sendConfirmationEmail(rifteeEmail);
   }
 
+  acceptRequest() {
+    let data = {
+      "accepted": 2,
+      "hostId": this.notification.userId,
+      "sessionId": this.notification.sessionId,
+      "rifteeId": this.notification.creatorId
+    };
+    this.userSessionService.updateSessionRequest(data);
+    this.status = 2;
+    this.sendConfirmationEmail();
+    console.log("Accepted request");
+  }
+
   rejectRequest() {
     let data = {
       "accepted": 0,
@@ -62,21 +59,4 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.status = 0;
     console.log("Rejected request");
   }
-
-  getTransactionData(riftId: number, sessionId: number) {
-    this.paymentService.getTransactionData(riftId, sessionId).subscribe(
-      resBody => {
-        //noinspection TypeScriptUnresolvedVariable
-        this.doTransaction(resBody.braintreeId, resBody.sessionCost)
-      }
-    )
-  }
-
-  doTransaction(customerId: string, amount: number) {
-    this.paymentService.doTransaction(customerId, amount);
-  }
-
-  // sendConfirmationEmail(riftEmail) {
-  //   this.userSessionService.sendConfirmationEmail(riftEmail, "hello there");
-  // }
 }

@@ -1,0 +1,49 @@
+<h1>Custom Stripe Form</h1>
+<h3>{{data.accountId}}</h3>
+<form action="" method="POST" id="payment-form" (submit)="getToken()">
+  <span class="payment-message">{{message}}</span>
+
+  <div class="form-row">
+    <label>
+      <span>Country</span>
+      <input [(ngModel)]="country" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Currency</span>
+      <input [(ngModel)]="currency" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Routing Number</span>
+      <input [(ngModel)]="routing_number" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Account Number</span>
+      <input [(ngModel)]="account_number" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Account Holder Name</span>
+      <input [(ngModel)]="account_holder_name" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Account Holder Type</span>
+      <input [(ngModel)]="account_holder_type" name="card-number" type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <input type="submit" value="Submit Payment">
+</form>

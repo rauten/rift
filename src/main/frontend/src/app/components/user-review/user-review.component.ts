@@ -20,5 +20,4 @@ export class UserReviewComponent implements OnInit {
       this.accountType = "Riftee";
     }
   }
-
 }
