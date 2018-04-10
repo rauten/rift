@@ -19,7 +19,6 @@ import {UserRatingComponent} from "./user-rating/user-rating.component";
 import {PaymentService} from "./payment.service";
 import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {FileAComplaintComponent} from "./file-a-complaint/file-a-complaint.component";
-import {LeagueOfLegendsService} from "../game-api/league-of-legends/league-of-legends.service";
 import {GameAccount} from "../models/game-account";
 import {GameAccountService} from "./game-account/game-account.service";
 import {SESSION_ICONS} from "../constants/session-icon-variables";
