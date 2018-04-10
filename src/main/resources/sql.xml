@@ -943,6 +943,12 @@
 
     <!--
 
+
+
+    -->
+
+    <!--
+
         CREATE OR REPLACE FUNCTION add_placeholder_game_account()
             RETURNS trigger AS
         $BODY$

@@ -15,12 +15,14 @@ export class TheriftComponent implements OnInit {
   sub: any;
   profile: any;
   loggedInUserId: any;
+  sessionId: any;
 
   constructor(public auth: AuthService, private router: Router, private activatedRoute: ActivatedRoute,
               private twitchService: TwitchService, private youtubeService: YoutubeService,
               private updateInfoService: UpdateInfoService,
               private userProfileService: UserprofileService) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
+    this.sessionId = localStorage.getItem("sessionId");
     if(this.profile){
       this.userProfileService.getUserId(this.profile.nickname).subscribe(
         resBody => {

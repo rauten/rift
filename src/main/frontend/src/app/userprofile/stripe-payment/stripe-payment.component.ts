@@ -14,6 +14,7 @@ export class StripePaymentComponent implements OnInit {
   expiryMonth: string;
   expiryYear: string;
   cvc: string;
+  isDefault = false;
 
   message: string;
 
@@ -42,7 +43,7 @@ export class StripePaymentComponent implements OnInit {
             "token": response.id
           };
           console.log(data);
-          this.stripeService.storeCustomerCard(data);
+          this.stripeService.storeCustomerCard(data, this.isDefault);
         } else {
           this.message = response.error.message;
         }
@@ -61,5 +62,9 @@ export class StripePaymentComponent implements OnInit {
     });
   }
 
+  setDefault(){
+    this.isDefault = !this.isDefault;
+    console.log(this.isDefault);
+  }
 
 }

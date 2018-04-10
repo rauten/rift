@@ -6,19 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.validation.constraints.Null;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 @Service("DeferredService")
-public class DeferredResultService implements Runnable {
+public class DeferredResultService {
 
-    private Hook hook;
+    private Map<String, Hook> hooks = new HashMap<>();
 
-    private volatile boolean start = true;
+    private volatile Map<String, Boolean> start = new HashMap<>();
 
-    private Thread thread;
+    private Map<String, Thread> threads = new HashMap<>();
 
-    private final BlockingQueue<DeferredResult<String>> resultQueue = new LinkedBlockingQueue<>();
+    private final Map<String, BlockingQueue<DeferredResult<String>>> resultQueueMap = new HashMap<>();
 
     @Autowired
     private ShutdownService shutdownService;
@@ -26,61 +30,123 @@ public class DeferredResultService implements Runnable {
     @Autowired
     private PollingConfig pollingConfig;
 
-    public void subscribe() {
+    public void subscribe(String sessionId) {
+        if (!start.containsKey(sessionId)) {
+            System.out.println("Putting sessionId in map");
+            start.put(sessionId, true);
+        }
         System.out.println("Starting server");
         System.out.println("Subscribe: " + this.pollingConfig);
-        startThread();
+        BlockingQueue<DeferredResult<String>> blockingQueue = new LinkedBlockingQueue<>();
+        resultQueueMap.put(sessionId, blockingQueue);
+        LinkedBlockingQueue<Map<String, String>> theQueueBlockingQueue = new LinkedBlockingQueue<>();
+        pollingConfig.theQueues().put(sessionId, theQueueBlockingQueue);
+        startThread(sessionId);
     }
 
-    private void startThread() {
-        if (start) {
+    private void startThread(String sessionId) {
+        boolean didCreate = false;
+        System.out.println("Start: " + start);
+        System.out.println("SessionId: " + sessionId);
+        System.out.println("Start contains: " + start.containsKey(sessionId));
+        if (start.containsKey(sessionId) && start.get(sessionId)) {
             synchronized (this) {
-                if (start) {
-                    start = false;
-                    thread = new Thread(this, "Notification");
-                    hook = shutdownService.createHook(thread);
-                    thread.start();
+                if (start.get(sessionId)) {
+                    start.put(sessionId, false);
+                    Thread thread;
+                    if (!threads.containsKey(sessionId)) {
+                        thread = new Thread();
+                        threads.put(sessionId, thread);
+                        didCreate = true;
+                    } else {
+                        thread = threads.get(sessionId);
+                    }
+                    Hook hook;
+                    if (!hooks.containsKey(sessionId)) {
+                        hook = shutdownService.createHook(thread);
+                        hooks.put(sessionId, hook);
+                    } else {
+                        hook = hooks.get(sessionId);
+                    }
+                    if (didCreate) {
+                        System.out.println("This session id: " + sessionId);
+                        thread = new Thread(new OneShotTask(sessionId, hook));
+                        threads.put(sessionId, thread);
+                        thread.start();
+                    }
                 }
             }
         }
     }
 
-    @Override
-    public void run() {
-        while (hook.keepRunning()) {
-            try {
-                System.out.println("Size of deferred queue: " + resultQueue.size());
-                DeferredResult<String> result = resultQueue.take();
-                System.out.println("Size of queue before: " + pollingConfig.theQueue().size());
-                String notification = pollingConfig.theQueue().take();
-                System.out.println("Size of queue after: " + pollingConfig.theQueue().size());
-                System.out.println("Size of hook list: " + shutdownService.getHooks());
+    class OneShotTask implements Runnable {
 
-                System.out.println("Id of notification returning: " + notification);
-                System.out.println();
-                System.out.println("Result: " + result.getResult());
-                while (result.getResult() != null) {
-                    result = resultQueue.take();
-                }
-                result.setResult(notification);
-                //hook.shutdown();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        public OneShotTask(String sessionId, Hook hook) {
+            this.sessionId = sessionId;
+            this.hook = hook;
         }
-        System.out.println("DeferredResultService - Thread ending");
+
+        String sessionId;
+        Hook hook;
+        @Override
+        public void run() {
+            System.out.println("First time sessionId is: " + sessionId);
+            while (hook.keepRunning()) {
+                try {
+                    BlockingQueue<DeferredResult<String>> resultQueue = resultQueueMap.get(sessionId);
+                    DeferredResult<String> result = resultQueue.take();
+                    Map<String, String> notification = pollingConfig.theQueues().get(sessionId).peek();
+                    Iterator<Map<String, String>> iterator = pollingConfig.theQueues().get(sessionId).iterator();
+                    if (notification != null) {
+                        if (iterator.hasNext()) {
+                            while (!notification.containsKey(sessionId) && iterator.hasNext()) {
+                                notification = iterator.next();
+                            }
+                        }
+                        if (notification.containsKey(sessionId)) {
+                            pollingConfig.theQueues().get(sessionId).remove(notification);
+                            String resultNotification = notification.get(sessionId);
+                            System.out.println("Result notification: " + resultNotification);
+                            //String notification = pollingConfig.theQueue().take();
+                            while (result.getResult() != null) {
+                                System.out.println("Result in null loop: " + result);
+                                result = resultQueue.take();
+                            }
+                            System.out.println("Setting result: " + resultNotification + " for sessionId: " + sessionId);
+                            result.setResult(resultNotification);
+                        } else {
+                            System.out.println("Not yours!");
+                        }
+                    }
+                    //hook.shutdown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("DeferredResultService - Thread ending");
+        }
     }
 
-    public void getUpdate(DeferredResult<String> result) {
+    public void getUpdate(DeferredResult<String> result, String sessionId) {
+        BlockingQueue<DeferredResult<String>> resultQueue = resultQueueMap.get(sessionId);
         resultQueue.add(result);
-        System.out.println("Size of queue at API call: " + pollingConfig.theQueue().size());
-
+        System.out.println("Size of queue at API call: " + pollingConfig.theQueues().get(sessionId).size());
     }
 
-    public void shutdown() {
+    public void shutdown(String sessionId) {
         try {
+            Hook hook = hooks.get(sessionId);
             hook.setKeepRunning(false);
+            hooks.remove(sessionId);
+
+            Thread thread = threads.get(sessionId);
+            thread.interrupt();
+            threads.remove(sessionId);
+
+            start.remove(sessionId);
+
+            resultQueueMap.remove(sessionId);
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

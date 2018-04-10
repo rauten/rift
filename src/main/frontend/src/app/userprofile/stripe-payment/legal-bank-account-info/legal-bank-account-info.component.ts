@@ -25,6 +25,8 @@ export class LegalBankAccountInfoComponent implements OnInit {
   lastName: string;
   loggedInUserId: number;
   profile: any;
+  type: any;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService,
               private userProfileService: UserprofileService, private dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
@@ -52,7 +54,8 @@ export class LegalBankAccountInfoComponent implements OnInit {
       "dobMonth": this.dobMonth,
       "dobYear": this.dobYear,
       "firstName": this.firstName,
-      "lastName": this.lastName
+      "lastName": this.lastName,
+      "type": this.type
     };
     this.userProfileService.getUserId(this.profile.nickname).subscribe(
       resBody => {

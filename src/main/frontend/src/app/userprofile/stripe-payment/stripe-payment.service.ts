@@ -9,11 +9,11 @@ export class StripePaymentService {
   constructor(private http: Http){}
 
 
-  storeCustomerCard(data) {
+  storeCustomerCard(data, isDefault) {
     console.log("storing customer credit card");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    this.http.put(this.storeCustomerCardURL, data, options)
+    this.http.put(this.storeCustomerCardURL + isDefault, data, options)
       .map(res => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
       .subscribe(
@@ -47,7 +47,7 @@ export class StripePaymentService {
   }
 
   getCustomerDefaultCard(accountId) {
-    return this.http.get("/api/stripe/rifteeStripeIdgit a/" + accountId)
+    return this.http.get("/api/stripe/getDefaultCard/" + accountId)
       .map(
         (response: Response) => {
           return response.json();
@@ -58,7 +58,7 @@ export class StripePaymentService {
   }
 
   getAllCustomerCards(accountId) {
-    return this.http.get("/api/stripe/customerId/" + accountId + "/card")
+    return this.http.get("/api/stripe/getCustomerCards/" + accountId)
       .map(
         (response: Response) => {
           return response.json();
@@ -66,4 +66,48 @@ export class StripePaymentService {
       )
       .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
+
+  setCardAsDefault(cardId, customerId) {
+    console.log("Changing card to default card");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put("/api/stripe/setDefaultCard/" + cardId + "/cardOwner/" + customerId, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log("Set new default card")
+      );
+  }
+
+  deleteCustomerCreditCard(cardId, customerId) {
+    console.log("Deleting credit card for customer");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.delete("/api/stripe/deleteCard/" + cardId + "/customer/" + customerId, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log("Deleted customer credit card")
+      );
+  }
+
+  createTransaction(data, customerId, accountId) {
+    console.log("Creating transaction");
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    this.http.put("/api/stripe/createTransaction/bankAccount/" + accountId + "/customerId/" + customerId, data, options)
+      .map(res => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Serve error'))
+      .subscribe(
+        data => {console.log(data);},
+        err => console.log(err),
+        () => console.log("Transaction completed")
+      );
+  }
+
+
 }

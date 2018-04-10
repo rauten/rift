@@ -23,7 +23,7 @@ export class AppComponent {
       this.userprofileService.getUser(this.profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
-          // this.notificationsService.pollNotifications(id, this.notificationList, false);
+          this.notificationsService.pollNotifications(id, this.notificationList, false);
         });
       this.getUserNotifications(this.profile.nickname);
     }
@@ -34,7 +34,7 @@ export class AppComponent {
     this.userprofileService.getUser(this.profile.nickname).subscribe(
       resBody => {
         let id = resBody.id;
-        // this.notificationsService.stopPolling(id);
+        this.notificationsService.stopPolling(id);
       });
   }
 
@@ -48,7 +48,7 @@ export class AppComponent {
       userprofileService.getUser(profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
-          // pollNotifications(id);
+          pollNotifications(id);
           getUserNotifications(profile.nickname);
         });
 

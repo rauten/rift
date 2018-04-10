@@ -36,11 +36,13 @@ export class NotificationsService {
     this.allow = true;
     this.http.get(this.startUrl + riftId + "/" + login).subscribe(
       success => {
+        let sessionId = JSON.parse(success["_body"]).result;
+        localStorage.setItem("sessionId", sessionId);
         console.log("Game on...");
         if(this.allow) {
           console.log("in if statemnet");
           this.allow = false;
-          setInterval(this.getUpdate(notifications),6000);
+          setInterval(this.getUpdate(notifications, sessionId),6000);
         }
       },
       error => {
@@ -49,25 +51,26 @@ export class NotificationsService {
     )
   }
 
-  getUpdate(notifications) {
+  getUpdate(notifications, sessionId) {
     console.log("Okay let's go...");
-    this.http.get(this.pollUrl).subscribe(
+    this.http.get(this.pollUrl + "/" + sessionId).subscribe(
       success => {
         console.log("Stop polling: " + this.globals.stopPolling);
         console.log("Received a new notification");
+        console.log(success);
         console.log(JSON.parse(success["_body"]).data);
         let data = JSON.parse(success["_body"]).data;
         let notification = getNotification(data);
         notifications.unshift(notification);
         this.globals.unseenNotifications += 1;
         if(!this.globals.stopPolling) {
-          setInterval(this.getUpdate(notifications), 6000);
+          setInterval(this.getUpdate(notifications, sessionId), 6000);
         }
       },
       error => {
         console.log("error, trying again");
         if(!this.globals.stopPolling) {
-          setInterval(this.getUpdate(notifications), 6000);
+          setInterval(this.getUpdate(notifications, sessionId), 6000);
         }
       }
     );
@@ -86,12 +89,13 @@ export class NotificationsService {
 
   stopPolling(riftId) {
     this.globals.stopPolling = true;
-    this.http.get("/api/stop/" + riftId).subscribe(
+    this.http.get("/api/stop/" + riftId + "/" + localStorage.getItem("sessionId")).subscribe(
       success => {
         console.log("Stopped polling");
+        console.log(success);
       },
       error => {
-        console.log("Error when stopping polling")
+        console.log(error)
       }
     )
   }
