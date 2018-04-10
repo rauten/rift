@@ -5,6 +5,7 @@ import {UserprofileService} from "../userprofile/userprofile.service";
 import {Notification} from "../models/notification";
 import {Globals} from "../global/globals";
 import {NotificationsService} from "../userprofile/notifications.service";
+import {SharedFunctions} from "../shared/shared-functions";
 
 @Component({
   selector: 'app-navbar',
@@ -15,12 +16,14 @@ export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
   loggedInUserId: number;
   profile: any;
+  loggedInUser: Userprofile = new Userprofile();
   @Input() notificationsList;
 
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
-  private notificationService: NotificationsService, private globals: Globals) {
+  private notificationService: NotificationsService, private globals: Globals, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
   }
 
   clearUnseen() {

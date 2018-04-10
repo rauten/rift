@@ -57,7 +57,7 @@ export class FeedComponent implements OnInit {
   }
 
   getActivityProfilePicture(riftTag: string, activity: Activity): string {
-    console.log("Getting user's profile picture");
+    // console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {

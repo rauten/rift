@@ -1,10 +1,21 @@
 <div class="navbar-form navbar-left">
   <div class="input-group">
-    <input type="text" class="form-control form-rounded" placeholder="Search the Rift" [(ngModel)]="searchQuery">
+    <input type="text" class="search-query form-control" placeholder="Search the Rift" [(ngModel)]="searchQuery">
     <span class="input-group-btn">
-      <button class="btn btn-default btn-rounded" type="button" [routerLink]="['therift/', searchQuery]">
-        <i class="glyphicon glyphicon-search" style="color: white"></i>
+      <button class="btn btn-danger searchButton" type="button" [routerLink]="['therift/', searchQuery]">
+        <i class="glyphicon glyphicon-search"></i>
       </button>
     </span>
   </div>
 </div>
+
+    <!--<div id="custom-search-input">-->
+      <!--<div class="input-group col-md-3">-->
+        <!--<input type="text" class="  search-query form-control" placeholder="Search the Rift" [(ngModel)]="searchQuery" />-->
+        <!--<span class="input-group-btn">-->
+            <!--<button class="btn btn-danger" type="button" [routerLink]="['therift/', searchQuery]">-->
+                <!--<span class=" glyphicon glyphicon-search"></span>-->
+            <!--</button>-->
+        <!--</span>-->
+      <!--</div>-->
+    <!--</div>-->
