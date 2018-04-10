@@ -39,8 +39,6 @@ export class UserprofileComponent implements OnInit {
   isDataAvailable:boolean = false;
   isLoggedIn: boolean = false;
   ratingStatus: number;
-  updateBraintreeUserURL = '/api/braintree/updateCustomer/';
-
 
   constructor(private userProfileService: UserprofileService,
   public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
@@ -94,10 +92,8 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.accountId = resBody.accountId;
           this.currentUser.rifterRating = resBody.rifterRating;
           this.currentUser.rifteeRating = resBody.rifteeRating;
-          this.currentUser.braintreeId = resBody.braintreeId;
           this.currentUser.twitchAccount = resBody.twitchAccount;
           this.currentUser.youtubeAccount = resBody.youtubeAccount;
-          this.updateBraintreeUserURL = this.updateBraintreeUserURL + resBody.braintreeId;
           this.sharedFunc.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
           this.getUserCoverPhoto(riftTag);
           this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);

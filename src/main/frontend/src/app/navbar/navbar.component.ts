@@ -1,10 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {SearchBarService} from "../components/search-bar/search-bar.service";
 import {Userprofile} from "../models/userprofile";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Notification} from "../models/notification";
-import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {Globals} from "../global/globals";
 import {NotificationsService} from "../userprofile/notifications.service";
 

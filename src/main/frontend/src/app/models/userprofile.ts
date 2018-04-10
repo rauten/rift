@@ -28,7 +28,6 @@ export class Userprofile {
   notifications: Notification[] = [];
   sessionRequests: any;
   profilePic: string;
-  braintreeId: string;
   gameAccounts: GameAccount[] = [];
 
   customerId: string;
@@ -39,7 +38,6 @@ export class Userprofile {
   activities: Activity[] = [];
   creatorUsertable: any;
   length;
-  profilePicPath;
   coverPhoto;
   image;
   accountId: string;
