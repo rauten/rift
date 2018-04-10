@@ -26,10 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+
 import spark.Response;
 import spark.Request;
 
@@ -58,8 +56,30 @@ public class StripeService {
     private FuturePayments futurePayments;
 
 
-    public String createRifterAccount(String country, String city, String line1, String line2, String postalCode,
-                                       String state, String day, String month, String year, String firstName, String lastName, Integer id, String type) {
+    /**
+     * Stores all the legal information of a Rifter into a new Stripe Account object.
+     * The Stripe Account object has a 1-to-1 relationship with a Rifter and stores all legal information and all payment
+     *  information
+     *
+     * Stripe requires all individuals who receive money from Rift to enter the following information for legal purposes
+     *
+     * @param country - The country where the Rifter is domiciled
+     * @param city - The city where the Rifter resides
+     * @param addressLine1 - The first line of the Rifter's legal address
+     * @param addressLine2 - The second line of the Rifter's legal address
+     * @param postalCode - The 5-digit zip code of the Rifter's legal address
+     * @param state - The state (if applicable) where the Rifter resides
+     * @param dobDay - The birth date (0-31) of the Rifter
+     * @param dobMonth - The birth month (0-12) of the Rifter
+     * @param dobYear - The birth year of the Rifter
+     * @param firstName - The legal first name of the Rifter
+     * @param lastName - The legal last name of the Rifter
+     * @param id - The Rift account id of the Rifter
+     * @param type - The business type of the Rifter (individual or company)
+     * @return
+     */
+    public String createRifterAccount(String country, String city, String addressLine1, String addressLine2, String postalCode,
+                                       String state, String dobDay, String dobMonth, String dobYear, String firstName, String lastName, Integer id, String type) {
 
 
         Map<String, Object> params = new HashMap<>();
@@ -70,16 +90,16 @@ public class StripeService {
 
         Map<String, String> address = new HashMap<>();
         address.put("city", city);
-        address.put("line1", line1);
-        address.put("line2", line2);
+        address.put("line1", addressLine1);
+        address.put("line2", addressLine2);
         address.put("postal_code", postalCode);
         address.put("state", state);
         address.put("country", country);
 
         Map<String, Object> dob = new HashMap<>();
-        dob.put("day", day);
-        dob.put("month", month);
-        dob.put("year", year);
+        dob.put("day", dobDay);
+        dob.put("month", dobMonth);
+        dob.put("year", dobYear);
 
         legalInfo.put("address", address);
         legalInfo.put("dob", dob);
@@ -100,6 +120,14 @@ public class StripeService {
         }
     }
 
+    /**
+     * Stores a payout account (currently only a bank account) to a Rifter's Stripe Account object.
+     * Takes in a Stripe bank account "ba_..." token and stores it with the corresponding Rifter Account object.
+     *
+     * @param rifterStripeId - The "acct_..." object for a Rifter. Stored in our own databases
+     * @param token - The bank account token to be associated with the Account
+     * @return
+     */
     public boolean setPaymentMethodForRifter(String rifterStripeId, String token) {
         try {
             Account account = Account.retrieve(rifterStripeId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
@@ -113,22 +141,65 @@ public class StripeService {
         return true;
     }
 
+    /**
+     * Stores a created Stripe Account id to our backend for reference/retrieval
+     *
+     * @param accountId - The Stripe Account id (String) for a Rifter
+     * @param usertableId - The Rifter's Rift account id
+     * @return
+     */
+    private boolean setUserAccountId(String accountId, Integer usertableId) {
+        List<Object> args = new ArrayList<>(2);
+        args.add(0, accountId);
+        args.add(1, usertableId);
+        String query = "UPDATE usertable SET account_id = ? WHERE id = ?";
+        return riftRepository.doUpdate(new StringBuilder(query), args);
+    }
+
+    /**
+     * Creates a Customer object for a Riftee.
+     * Automatically called upon a Rift account creation
+     * Calls setUserCustomerId, which stores the created "cus_..." id into our own database for reference/retrieval
+     *
+     * @param riftTag - The user's riftTag
+     * @return String - The Stripe Customer id if successful, and empty string otherwise
+     */
     public String createRifteeAccount(String riftTag) {
         Map<String, Object> params = new HashMap<>();
         try {
             RequestOptions requestOptions = RequestOptions.builder().setApiKey(STRIPE_APIKEY).build();
             Customer customer = Customer.create(params, requestOptions);
-            //setUserCustomerId(customer.getId(), riftTag);
-            return customer.getId();
+            boolean success = setUserCustomerId(customer.getId(), riftTag);
+            if (success) {
+                return customer.getId();
+            }
+            return "";
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    public boolean createRifteePayment(String rifteeId, String tokenId, boolean setDefault) {
+    private boolean setUserCustomerId(String customerId, String riftTag) {
+        List<Object> args = new ArrayList<>(2);
+        args.add(0, customerId);
+        args.add(1, riftTag);
+        String query = "UPDATE usertable SET customer_id = ? WHERE rift_tag = ?";
+        return riftRepository.doUpdate(new StringBuilder(query), args);
+    }
+
+    /**
+     * Stores a payment method (currently only a credit card) to a Riftee's Stripe Customer object.
+     * Takes in a Stripe credit card object "card_..." and stores it with the corresponding Riftee Customer object.
+     *
+     * @param customerId - The Stripe customerId of the Riftee
+     * @param tokenId - The Stripe Card token created when the Riftee enters a card payment method
+     * @param setDefault - Whether or not to set the card as the Riftee's default credit card
+     * @return Boolean - True on success, false otherwise
+     */
+    public boolean createRifteePayment(String customerId, String tokenId, boolean setDefault) {
         try {
-            Customer customer = Customer.retrieve(rifteeId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
+            Customer customer = Customer.retrieve(customerId, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
             Map<String, Object> params = new HashMap<>();
             params.put("source", tokenId);
             ExternalAccount externalAccount = customer.getSources().create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
@@ -188,22 +259,6 @@ public class StripeService {
             return false;
         }
         return true;
-    }
-
-    public boolean setUserCustomerId(String customerId, String riftTag) {
-        List<Object> args = new ArrayList<>(2);
-        args.add(0, customerId);
-        args.add(1, riftTag);
-        String query = "UPDATE usertable SET customer_id = ? WHERE rift_tag = ?";
-        return riftRepository.doUpdate(new StringBuilder(query), args);
-    }
-
-    public boolean setUserAccountId(String accountId, Integer usertableId) {
-        List<Object> args = new ArrayList<>(2);
-        args.add(0, accountId);
-        args.add(1, usertableId);
-        String query = "UPDATE usertable SET account_id = ? WHERE id = ?";
-        return riftRepository.doUpdate(new StringBuilder(query), args);
     }
 
     public boolean deleteCard(String customerId, String cardId) {
@@ -322,27 +377,52 @@ public class StripeService {
 
         // Create the initial charge, and return an error message if the charge is not successful
         String result = createCharge(rifterSession.getSessionCost(), executorCustomer.getCustomerId(), partialCharge, sessionRifteeVal, rifteeId, sessionId);
+
+        /**
+         * Commented out for testing
+         */
+        /*
         if (!result.equals("Success")) {
             return result;
         }
+        */
 
         // If the charge IS successful, create a scheduled event to transfer funds to the rifter account.
+        /**
+         * FOR TESTING PURPOSES, CURRENT TEST VALUE OF 45 SECONDS FOR EVERY TRANSFER
+         * FOR TESTING PURPOSES, TRANSFER AMOUNT IS SET TO 0, USD
+         * TRUE DELAY VALUE FOR TRANSFER: timeToEnd - System.currentTimeMillis() + 86400000L
+         * TRUE AMOUNT VALUE FOR TRANSFER: rifterSession.sessionCost (*.85 is handled in createTransfer method)
+         */
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();Future<?> future = executorService.schedule(new Runnable() {
             @Override
             public void run() {
                 createTransfer((int) (0 * partialCharge), "usd", executorRifter.getAccountId(), rifteeId, sessionId, sessionRifteeVal);
                 futurePayments.futurePaymentMap().remove(sessionRifteeVal);
             }
-        }, timeToEnd - System.currentTimeMillis() + 86400000L, TimeUnit.MILLISECONDS);
+        }, 45000, TimeUnit.MILLISECONDS);
 
         futurePayments.futurePaymentMap().put(sessionRifteeVal, future);
         return "Success";
     }
 
-    public boolean cancelFuturePayment(Integer sessionId, Integer rifteeId) {
+    public boolean cancelFuturePayment(Integer sessionId, Integer rifteeId, boolean nullifyIds) {
         try {
-            Future<?> futurePayment = futurePayments.futurePaymentMap().get(sessionId);
+            double futureId = sessionRequestService.getFuturePaymentVal(sessionId, rifteeId);
+            Future<?> futurePayment = futurePayments.futurePaymentMap().get(futureId);
             futurePayment.cancel(true);
+            futurePayments.futurePaymentMap().remove(futureId);
+
+
+            if (nullifyIds) {
+                List<Object> args = new ArrayList<>(2);
+                args.add(0, sessionId);
+                args.add(1, rifteeId);
+                String query = "UPDATE gamerequest SET charge_id = null, transfer_id = null WHERE session_id = ? AND riftee_id = ?";
+                StringBuilder removeChargeAndTransferId = new StringBuilder(query);
+                riftRepository.doUpdate(removeChargeAndTransferId, args);
+            }
+
         } catch (NullPointerException e) {
             e.printStackTrace();
             return false;
@@ -405,8 +485,6 @@ public class StripeService {
             response.status(400);
         }
         event = APIResource.GSON.fromJson(request.body(), Event.class);
-
-
 
     }
 
