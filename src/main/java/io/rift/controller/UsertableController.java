@@ -17,8 +17,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.http.HttpSession;
 import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -319,6 +321,12 @@ public class UsertableController {
         String str = usertableService.getPicture(keyBase, bucket);
         imageMap.put("image", str);
         return imageMap;
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/httprequest")
+    public void myMethod (HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        System.out.println(session.getId());
     }
 
 }

@@ -8,11 +8,9 @@ public class Hook {
 
     private boolean keepRunning = true;
 
-    private final Thread thread;
+    //private final Thread thread;
 
-    public Hook(Thread thread) {
-        this.thread = thread;
-    }
+    public Hook() {}
 
     /**
      * @return True if the daemon thread is to keep running
@@ -30,12 +28,14 @@ public class Hook {
      */
     public void shutdown() {
         keepRunning = false;
+        /*
         thread.interrupt();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        */
     }
 
 }
