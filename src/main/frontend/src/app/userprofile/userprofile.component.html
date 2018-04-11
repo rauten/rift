@@ -107,7 +107,7 @@
               </div>
             </mat-tab>
             <mat-tab label="following">
-              <div class="media user-following" *ngFor="let following of currentUser.followings">
+              <div class="media user-info" *ngFor="let following of currentUser.followings">
                   <img src="{{following.profilePic}}" alt="User Avatar" class="media-object pull-left">
                   <div class="media-body">
                     <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
@@ -144,7 +144,7 @@
               </div>
             </mat-tab>
             <mat-tab label="game accounts">
-              <div class="media user-following" *ngFor="let account of currentUser.gameAccounts">
+              <div class="media user-info" *ngFor="let account of currentUser.gameAccounts">
                 <img src="{{account.gameIcon}}" alt="User Avatar" class="media-object pull-left">
                 <div class="media-body">
                   {{account.gameName}}

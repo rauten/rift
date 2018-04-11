@@ -20,7 +20,7 @@ header {
   padding: 0px;
   margin: 0px;
   display: block;
-  background-image: url(../img/welcome_background_optimized.jpg);
+  background-image: url(../img/rift-welcome.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
@@ -28,9 +28,13 @@ header {
 
 #text-holder {
   margin-left: 14%;
-  margin-top: 40vh;
+  margin-top: 25vh;
   display: inline-block;
   position: relative;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
 }
 #gradient {
   width: 50%;
@@ -44,11 +48,13 @@ h1 {
   letter-spacing: 5px;
   color: #f7f7f2;
   font-weight: 300;
+  margin-bottom: 10%;
 }
 h2 {
   font-size: 30px;
   color: #f7f7f2;
   font-weight: 300;
-
-
+  margin-bottom: 10%;
 }
+
+

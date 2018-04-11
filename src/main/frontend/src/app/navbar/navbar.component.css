@@ -35,12 +35,23 @@ li a:after {
   font-family: "FontAwesome";
   content: "\f111";
   font-size: 6px;
-  margin-left: 20px;
+  margin-left: 15px;
+  margin-right: 10px;
   margin-top: 0px;
   color: #FAB702;
+  display:inline-block;
 }
 
 .profile-dropdown a{
+  color: #18191b !important;
+  font-size: 13px;
+  font-weight: 500 !important;
+  letter-spacing: 0px;
+  text-transform: none;
+  font-family: "Montserrat", sans-serif;
+}
+
+.notifications-dropdown {
   color: #18191b !important;
   font-size: 13px;
   font-weight: 500 !important;
@@ -59,6 +70,10 @@ li a:after {
   margin-right: 10%;
 }
 
+#user-profile-label {
+  margin-bottom: 10%;
+}
+
 .rift-icon {
   height: 25px;
   width: 25px;
@@ -68,13 +83,14 @@ li a:after {
 .badge-notify{
   background:red;
   position:absolute;
-  top:0px;
+  top:0;
   color: white;
 }
 
 a {
   color: white !important;
   cursor: pointer;
+  width: 110%;
 }
 .container-fluid {
   margin-top: 10px !important;
@@ -96,20 +112,48 @@ a {
   margin-left: 5px !important;
   margin-right: 5px !important;
 }
-app-notification {
-  color: black !important;
-}
+/*app-notification {*/
+  /*color: black !important;*/
+/*}*/
 .dropdown-menu {
   max-height: 600px !important;
-  min-width: 50px !important;
+  min-width: 200px !important;
   overflow-y: hidden !important;
-  display:inline-block;
+  /*display:inline-block;*/
   padding: 5px 10px;
   margin-top: 10px !important;
-
-
+  animation: fadein 0.25s;
+  -moz-animation: fadein 0.25s; /* Firefox */
+  -webkit-animation: fadein 0.25s; /* Safari and Chrome */
+  -o-animation: fadein 0.25s; /* Opera */
 }
+
 .media {
   margin-left: 10px !important;
   margin-right: 10px !important;
+}
+
+.user-info {
+  position: relative;
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
+.user-info img {
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  width: 40px;
+}
+.user-info a {
+  font-size: 1.1em;
+  line-height: 1;
+}
+.user-info .username {
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.media-body {
+  margin-left: 10%;
+  padding-left: 10%;
 }

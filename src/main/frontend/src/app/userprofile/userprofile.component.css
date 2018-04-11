@@ -90,30 +90,30 @@ body {
 }
 
 .user-follower,
-.user-following {
+.user-info {
   position: relative;
   margin-bottom: 40px;
   margin-top: 30px;
 }
 .user-follower img,
-.user-following img {
+.user-info img {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
   width: 40px;
 }
 .user-follower a,
-.user-following a {
+.user-info a {
   font-size: 1.1em;
   line-height: 1;
 }
 .user-follower .username,
-.user-following .username {
+.user-info .username {
   font-size: 0.9em;
   line-height: 1.5;
 }
 .user-follower .btn,
-.user-following .btn {
+.user-info .btn {
   position: absolute;
   top: 0;
   right: 0;

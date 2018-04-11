@@ -23,13 +23,14 @@ export class NavbarComponent implements OnInit {
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService, private globals: Globals, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
+    this.loggedInUser.lastName  = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;
     this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
   }
 
   clearUnseen() {
     this.globals.unseenNotifications = 0;
-    let profile = JSON.parse(localStorage.getItem('profile'));
-    this.notificationService.clearUnseen(profile.nickname);
+    this.notificationService.clearUnseen(this.profile.nickname);
   }
 
   ngOnInit() {
