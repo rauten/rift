@@ -23,6 +23,7 @@ public class PGConnectionService {
         PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
         pgConnection = (PGConnection) pgDataSource.getConnection();
         System.out.println("PG connected");
+
     }
 
 

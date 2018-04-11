@@ -63,14 +63,14 @@ public class DeferredResultService {
                     }
                     Hook hook;
                     if (!hooks.containsKey(sessionId)) {
-                        hook = shutdownService.createHook(thread);
+                        hook = shutdownService.createHook();
                         hooks.put(sessionId, hook);
                     } else {
                         hook = hooks.get(sessionId);
                     }
                     if (didCreate) {
                         System.out.println("This session id: " + sessionId);
-                        thread = new Thread(new OneShotTask(sessionId, hook));
+                        thread = new Thread(new LongPoll(sessionId, hook));
                         threads.put(sessionId, thread);
                         thread.start();
                     }
@@ -79,9 +79,9 @@ public class DeferredResultService {
         }
     }
 
-    class OneShotTask implements Runnable {
+    class LongPoll implements Runnable {
 
-        public OneShotTask(String sessionId, Hook hook) {
+        public LongPoll(String sessionId, Hook hook) {
             this.sessionId = sessionId;
             this.hook = hook;
         }

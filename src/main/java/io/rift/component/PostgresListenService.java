@@ -6,9 +6,11 @@ import com.impossibl.postgres.jdbc.PGDataSource;
 import io.rift.component.PGConnectionService;
 import io.rift.config.PGConnectionConfig;
 import io.rift.config.PollingConfig;
+import io.rift.config.SwaggerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class PostgresListenService {
 
     @Autowired
     private PGConnectionConfig pgConnectionConfig;
+
+    @Autowired
+    private SwaggerConfig swaggerConfig;
 
     boolean stuff = true;
 
@@ -66,34 +71,30 @@ public class PostgresListenService {
         };
 
         // Create a data source for logging into the db
-        PGDataSource dataSource = new PGDataSource();
-        dataSource.setHost(DBHost);
-        dataSource.setPort(5432);
-        dataSource.setDatabase(DBName);
-        dataSource.setUser(DBUserName);
-        dataSource.setPassword(DBPassword);
+
+
 
         //listener.notification(5, "Riley_Rift", "Payload$$");
 
 
         try {
             // Log into the db
-
-            PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
-            PGConnection pgConnection = (PGConnection) pgDataSource.getConnection();
+            //PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
+            PGDataSource dataSource = pgConnectionConfig.pgDataSource();
+            //PGConnection pgConnection = (PGConnection) pgDataSource.getConnection();
 
             System.out.println("Establishing connection");
-            //PGConnection connection = (PGConnection) dataSource.getConnection();
+            PGConnection connection = (PGConnection) dataSource.getConnection();
             System.out.println("Connection made");
-            pgConnectionMap.put(sessionId, pgConnection);
-            pgConnection.addNotificationListener(listener);
+            pgConnectionMap.put(sessionId, connection);
+            connection.addNotificationListener(listener);
 
             // add the callback listener created earlier to the connection
             //pgConnectionServiceMap.get(sessionId).pgConnection.addNotificationListener(listener);
             //pgConnectionService.pgConnection.addNotificationListener(listener);
 
             // Tell Postgres to send NOTIFY q_event to our connection and listener
-            Statement statement = pgConnection.createStatement();
+            Statement statement = connection.createStatement();
 
             System.out.println("Listening to: " + id + " on sessionId: " + sessionId);
             String queryBuilder = "LISTEN q_event" + id;

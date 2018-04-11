@@ -38,11 +38,11 @@ public class DeferredNotificationController {
     public Map<String, String> start(@PathVariable Integer id, @PathVariable boolean login, HttpServletRequest request) {
         HttpSession session = request.getSession();
         System.out.println(session.getId());
-        resultService.subscribe(session.getId());
-        //postgresListenService.init(id);
         if (login) {
             postgresListenService.init(id, session.getId());
         }
+        resultService.subscribe(session.getId());
+        //postgresListenService.init(id);
         Map<String, String> res = new HashMap<>();
         res.put("result", session.getId());
         return res;
