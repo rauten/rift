@@ -31,11 +31,12 @@
           <input class="form-control input-md" #email="ngModel" id="bio" name="bio" type="text" placeholder="Change your bio" [(ngModel)]="currentUser.bio">
         </div>
         <div class="form-group">
-          <app-file-upload name="profilePic"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="profilePic"></app-file-upload>
+          <!--<app-file-upload name="profilePic"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="profilePic"></app-file-upload>-->
+          <app-file-upload [(ngModel)]="profilePic"></app-file-upload>
           <img src={{profilePic}} alt="" class="profilePicPreview"/>
         </div>
         <div class="form-group">
-          <app-file-upload name="coverPhoto"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="coverPhoto"></app-file-upload>
+          <!--<app-file-upload name="coverPhoto"ngDefaultControl [showFileNameInput]="true" allowedTypes="image/*" [uploadButtonText]="'Upload File'" [(ngModel)]="coverPhoto"></app-file-upload>-->
           <img src={{coverPhoto}} alt="" class="profilePicPreview"/>
         </div>
         <div *ngIf="!data.currentUser.twitchAccount">

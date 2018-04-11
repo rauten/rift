@@ -92,6 +92,7 @@ import {LegalBankAccountInfoComponent} from './userprofile/stripe-payment/legal-
 import {ViewCardsComponent} from './userprofile/stripe-payment/view-cards/view-cards.component';
 import {CreditCardComponent} from './components/credit-card/credit-card.component';
 import {SharedFunctions} from "./shared/shared-functions";
+import {ImageCropperComponent} from "ngx-img-cropper";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -139,6 +140,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     LegalBankAccountInfoComponent,
     ViewCardsComponent,
     CreditCardComponent,
+    ImageCropperComponent
   ],
   imports: [
     BrowserModule,
