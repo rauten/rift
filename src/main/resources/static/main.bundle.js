@@ -701,7 +701,7 @@ var AuthService = /** @class */ (function () {
 var AUTH_CONFIG = {
     clientID: 'XOgkYhvWQEv3ZR1qVF1oJnqqrmdyNL4g',
     domain: 'riftgaming.auth0.com',
-    callbackURL: 'http://go-rift.herokuapp.com/home',
+    callbackURL: 'https://go-rift.herokuapp.com/home',
     apiUrl: 'https://riftgaming.auth0.com/api/v2/'
 };
 
