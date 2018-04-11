@@ -15,45 +15,40 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 
 @Service
 public class PostgresListenService {
-
-
-    private Map<String, PGConnection> pgConnectionMap = new HashMap<>();
 
 
     @Autowired
     private PollingConfig pollingConfig;
 
     @Autowired
-    private PGConnectionConfig pgConnectionConfig;
-
-    @Autowired
-    private SwaggerConfig swaggerConfig;
+    private PGConnectionService pgConnectionService;
 
     boolean stuff = true;
 
-    public void put(String string, String sessionId) throws InterruptedException {
-        System.out.println("In put");
-        Map<String, String> notification = new HashMap<>();
-        notification.put(sessionId, string);
-        pollingConfig.theQueues().get(sessionId).put(notification);
-        //pollingConfig.theQueue().put(notification);
-        System.out.println("The queue after put: " + pollingConfig.theQueues());
-    }
 
-    public void init(Integer id, String sessionId) {
+    public void init(Integer id) {
         //PGConnectionService pgConnectionService = new PGConnectionService();
         //pgConnectionServiceMap.put(sessionId, pgConnectionService);
 
         // Get database info from environment variables
+        /*
         String DBHost = "rds-rift.ca8aw0350uex.us-east-1.rds.amazonaws.com";
         String DBName = "Rift_Backend";
         String DBUserName = "riley_rift";
         String DBPassword = "RMARiftAWS2016!";
+        */
 
         // Create the listener callback
+
+
+        /*
+        String id2 = id.toString();
+
+
         PGNotificationListener listener = new PGNotificationListener() {
 
             @Override
@@ -62,13 +57,16 @@ public class PostgresListenService {
                 System.out.println("Channel name: " + channelName);
                 System.out.println("Id: " + id);
                 try {
-                    put(payload, sessionId);
+                    put(payload, id2);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
             }
         };
+        */
+
+
 
         // Create a data source for logging into the db
 
@@ -77,37 +75,55 @@ public class PostgresListenService {
         //listener.notification(5, "Riley_Rift", "Payload$$");
 
 
+        // Log into the db
+        //PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
         try {
-            // Log into the db
-            //PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
-            PGDataSource dataSource = pgConnectionConfig.pgDataSource();
-            //PGConnection pgConnection = (PGConnection) pgDataSource.getConnection();
-
-            System.out.println("Establishing connection");
-            PGConnection connection = (PGConnection) dataSource.getConnection();
-            System.out.println("Connection made");
-            pgConnectionMap.put(sessionId, connection);
-            connection.addNotificationListener(listener);
-
-            // add the callback listener created earlier to the connection
-            //pgConnectionServiceMap.get(sessionId).pgConnection.addNotificationListener(listener);
-            //pgConnectionService.pgConnection.addNotificationListener(listener);
-
-            // Tell Postgres to send NOTIFY q_event to our connection and listener
-            Statement statement = connection.createStatement();
-
-            System.out.println("Listening to: " + id + " on sessionId: " + sessionId);
             String queryBuilder = "LISTEN q_event" + id;
-            statement.execute(queryBuilder);
-
-            statement.close();
-        }
-        catch (SQLException e) {
+            pgConnectionService.pgConnection.createStatement().execute(queryBuilder);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        //pgConnectionService.pgConnection.addNotificationListener(listener);
+        /*
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PGDataSource dataSource = pgConnectionConfig.pgDataSource();
+                    //PGConnection pgConnection = (PGConnection) pgDataSource.getConnection();
 
+                    System.out.println("Establishing connection");
+                    PGConnection connection = (PGConnection) dataSource.getConnection();
+                    System.out.println("Connection made");
+                    connection.addNotificationListener(listener);
+
+                    .
+
+                    // add the callback listener created earlier to the connection
+                    //pgConnectionServiceMap.get(sessionId).pgConnection.addNotificationListener(listener);
+                    //pgConnectionService.pgConnection.addNotificationListener(listener);
+
+                    // Tell Postgres to send NOTIFY q_event to our connection and listener
+                    Statement statement = connection.createStatement();
+
+                    //pgConnectionMap.put(sessionId, connection);
+
+                    System.out.println("Listening to: " + id + " on sessionId: " + sessionId);
+                    String queryBuilder = "LISTEN q_event" + id;
+                    statement.execute(queryBuilder);
+
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.setPriority(10);
+        thread.start();
+        */
     }
 
+    /*
     public void closePGConnection(String sessionId) {
         PGConnection connection = pgConnectionMap.get(sessionId);
         try {
@@ -117,6 +133,7 @@ public class PostgresListenService {
             e.printStackTrace();
         }
     }
+    */
 
 
 

@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import spark.Response;
-import spark.Request;
 
 @Service
 public class StripeService {
@@ -470,6 +468,7 @@ public class StripeService {
     }
 
 
+    /*
     public void handleChargeFailed(Request request, Response response) {
 
         String payload = request.body();
@@ -488,6 +487,7 @@ public class StripeService {
         event = APIResource.GSON.fromJson(request.body(), Event.class);
 
     }
+    */
 
 
 

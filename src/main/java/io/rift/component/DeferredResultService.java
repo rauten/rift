@@ -30,7 +30,7 @@ public class DeferredResultService {
     @Autowired
     private PollingConfig pollingConfig;
 
-    public void subscribe(String sessionId) {
+    public void subscribe(Integer id, String sessionId) {
         if (!start.containsKey(sessionId)) {
             System.out.println("Putting sessionId in map");
             start.put(sessionId, true);
@@ -40,11 +40,11 @@ public class DeferredResultService {
         BlockingQueue<DeferredResult<String>> blockingQueue = new LinkedBlockingQueue<>();
         resultQueueMap.put(sessionId, blockingQueue);
         LinkedBlockingQueue<Map<String, String>> theQueueBlockingQueue = new LinkedBlockingQueue<>();
-        pollingConfig.theQueues().put(sessionId, theQueueBlockingQueue);
-        startThread(sessionId);
+        pollingConfig.theQueues().put(id + sessionId, theQueueBlockingQueue);
+        startThread(sessionId, id);
     }
 
-    private void startThread(String sessionId) {
+    private void startThread(String sessionId, Integer id) {
         boolean didCreate = false;
         System.out.println("Start: " + start);
         System.out.println("SessionId: " + sessionId);
@@ -70,7 +70,7 @@ public class DeferredResultService {
                     }
                     if (didCreate) {
                         System.out.println("This session id: " + sessionId);
-                        thread = new Thread(new LongPoll(sessionId, hook));
+                        thread = new Thread(new LongPoll(sessionId, id.toString(), hook));
                         threads.put(sessionId, thread);
                         thread.start();
                     }
@@ -81,31 +81,33 @@ public class DeferredResultService {
 
     class LongPoll implements Runnable {
 
-        public LongPoll(String sessionId, Hook hook) {
+        public LongPoll(String sessionId, String id, Hook hook) {
             this.sessionId = sessionId;
             this.hook = hook;
+            this.id = id;
         }
 
         String sessionId;
+        String id;
         Hook hook;
         @Override
         public void run() {
             System.out.println("First time sessionId is: " + sessionId);
-            while (hook.keepRunning()) {
+            while (hook.keepRunning() && !Thread.interrupted()) {
                 try {
                     BlockingQueue<DeferredResult<String>> resultQueue = resultQueueMap.get(sessionId);
                     DeferredResult<String> result = resultQueue.take();
-                    Map<String, String> notification = pollingConfig.theQueues().get(sessionId).peek();
-                    Iterator<Map<String, String>> iterator = pollingConfig.theQueues().get(sessionId).iterator();
+                    Map<String, String> notification = pollingConfig.theQueues().get(id + sessionId).peek();
+                    Iterator<Map<String, String>> iterator = pollingConfig.theQueues().get(id + sessionId).iterator();
                     if (notification != null) {
                         if (iterator.hasNext()) {
-                            while (!notification.containsKey(sessionId) && iterator.hasNext()) {
+                            while (!notification.containsKey(id + sessionId) && iterator.hasNext()) {
                                 notification = iterator.next();
                             }
                         }
-                        if (notification.containsKey(sessionId)) {
-                            pollingConfig.theQueues().get(sessionId).remove(notification);
-                            String resultNotification = notification.get(sessionId);
+                        if (notification.containsKey(id + sessionId)) {
+                            pollingConfig.theQueues().get(id + sessionId).remove(notification);
+                            String resultNotification = notification.get(id + sessionId);
                             System.out.println("Result notification: " + resultNotification);
                             //String notification = pollingConfig.theQueue().take();
                             while (result.getResult() != null) {
@@ -115,6 +117,8 @@ public class DeferredResultService {
                             System.out.println("Setting result: " + resultNotification + " for sessionId: " + sessionId);
                             result.setResult(resultNotification);
                         } else {
+                            System.out.println("This is the notification: " + notification);
+                            System.out.println("This is your key: " + id + sessionId);
                             System.out.println("Not yours!");
                         }
                     }
@@ -130,10 +134,10 @@ public class DeferredResultService {
     public void getUpdate(DeferredResult<String> result, String sessionId) {
         BlockingQueue<DeferredResult<String>> resultQueue = resultQueueMap.get(sessionId);
         resultQueue.add(result);
-        System.out.println("Size of queue at API call: " + pollingConfig.theQueues().get(sessionId).size());
+        //System.out.println("Size of queue at API call: " + pollingConfig.theQueues().get(sessionId).size());
     }
 
-    public void shutdown(String sessionId) {
+    public void shutdown(String sessionId, String id) {
         try {
             Hook hook = hooks.get(sessionId);
             hook.setKeepRunning(false);
@@ -146,6 +150,8 @@ public class DeferredResultService {
             start.remove(sessionId);
 
             resultQueueMap.remove(sessionId);
+
+            pollingConfig.theQueues().remove(id + sessionId);
 
         } catch (NullPointerException e) {
             e.printStackTrace();
