@@ -73,7 +73,7 @@
         </li>
         <li class="dropdown profileDrop" *ngIf="auth.isAuthenticated()" dropdown>
             <a class="dropdown-toggle" dropdownToggle>
-              <!--<img src="{{loggedInUser.profilePic}}" class="profilePic img-circle">-->
+              <img src="{{loggedInUser.profilePic}}" class="profilePic img-circle">
                {{profile.nickname}}
               <!--<b class="caret"></b>-->
             </a>
@@ -89,7 +89,7 @@
         </li>
         <li class="dropdown" *ngIf="auth.isAuthenticated()">
           <div class="btn-group" dropdown>
-            <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" (click)="clearUnseen();">
+            <button id="notify-icon" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" (click)="clearUnseen();">
               <span class="glyphicon glyphicon-bell"></span>
               <span class="badge badge-notify" *ngIf="globals.unseenNotifications > 0">{{globals.unseenNotifications}}</span>
 

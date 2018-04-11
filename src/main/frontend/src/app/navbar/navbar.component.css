@@ -42,11 +42,11 @@ li a:after {
 
 .profile-dropdown a{
   color: #18191b !important;
-  font-family: "Raleway", Arial, Helvetica, sans-serif;
-  font-size: 11px;
-  font-weight: 400 !important;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500 !important;
+  letter-spacing: 0px;
+  text-transform: none;
+  font-family: "Montserrat", sans-serif;
 }
 
 .profile-dropdown a:after, .profileToggle a:after{
@@ -84,6 +84,13 @@ a {
   background-color: transparent !important;
   border: none !important;
 }
+#notify-icon {
+  padding: 15px 12px;
+  display: inline;
+  line-height: 20px;
+  vertical-align: middle;
+}
+
 .dropdown-item {
   color: black !important;
   margin-left: 5px !important;
@@ -94,8 +101,13 @@ app-notification {
 }
 .dropdown-menu {
   max-height: 600px !important;
-  min-width: 500px !important;
-  overflow-y:scroll !important;
+  min-width: 50px !important;
+  overflow-y: hidden !important;
+  display:inline-block;
+  padding: 5px 10px;
+  margin-top: 10px !important;
+
+
 }
 .media {
   margin-left: 10px !important;
