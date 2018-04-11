@@ -701,7 +701,7 @@ var AuthService = /** @class */ (function () {
 var AUTH_CONFIG = {
     clientID: 'XOgkYhvWQEv3ZR1qVF1oJnqqrmdyNL4g',
     domain: 'riftgaming.auth0.com',
-    callbackURL: 'http://localhost:4200/home',
+    callbackURL: 'http://go-rift.herokuapp.com/home',
     apiUrl: 'https://riftgaming.auth0.com/api/v2/'
 };
 
@@ -4940,7 +4940,7 @@ var UpdateInfoComponent = /** @class */ (function () {
     UpdateInfoComponent.prototype.verifyWithTwitch = function () {
         window.location.href = 'https://api.twitch.tv/kraken/oauth2/authorize?response_type=code' +
             '&client_id=aoxhv1qbec0v2fqalc68euxkn4c66e' +
-            '&redirect_uri=http://localhost:4200/twitch' +
+            '&redirect_uri=http://go-rift.herokuapp.com/twitch' +
             '&scope=openid';
     };
     UpdateInfoComponent.prototype.verifyWithYouTube = function () {
@@ -4948,7 +4948,7 @@ var UpdateInfoComponent = /** @class */ (function () {
             'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly' +
             '&access_type=offline' +
             '&include_granted_scopes=true' +
-            '&redirect_uri=https://localhost:4200/youtube' +
+            '&redirect_uri=https://go-rift.herokuapp.com/youtube' +
             '&response_type=code&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com';
     };
     UpdateInfoComponent.prototype.addGameAccount = function () {

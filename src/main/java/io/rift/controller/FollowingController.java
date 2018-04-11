@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://go-rift.herokuapp.com")
 @RestController
 @RequestMapping("/api")
 public class FollowingController {
