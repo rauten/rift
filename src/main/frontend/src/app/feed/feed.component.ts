@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Userprofile} from "../models/userprofile";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Activity} from "../models/activity";
-import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {Session} from "../models/session";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
-import {SharedFunctions} from "../shared/shared-functions";
 
 @Component({
   selector: 'app-feed',
