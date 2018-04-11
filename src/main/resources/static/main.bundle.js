@@ -51,11 +51,10 @@ module.exports = "<div class=\"container\">\n  <app-navbar [notificationsList]=\
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_auth_service__ = __webpack_require__("../../../../../src/app/auth/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__userprofile_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/payment.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__global_globals__ = __webpack_require__("../../../../../src/app/global/globals.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_notification__ = __webpack_require__("../../../../../src/app/models/notification.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__userprofile_notifications_service__ = __webpack_require__("../../../../../src/app/userprofile/notifications.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__constants_notification_content__ = __webpack_require__("../../../../../src/app/constants/notification-content.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_globals__ = __webpack_require__("../../../../../src/app/global/globals.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_notification__ = __webpack_require__("../../../../../src/app/models/notification.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__userprofile_notifications_service__ = __webpack_require__("../../../../../src/app/userprofile/notifications.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__constants_notification_content__ = __webpack_require__("../../../../../src/app/constants/notification-content.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -73,12 +72,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var AppComponent = /** @class */ (function () {
-    function AppComponent(auth, userprofileService, paymentService, http, globals, notificationsService) {
+    function AppComponent(auth, userprofileService, http, globals, notificationsService) {
         this.auth = auth;
         this.userprofileService = userprofileService;
-        this.paymentService = paymentService;
         this.http = http;
         this.globals = globals;
         this.notificationsService = notificationsService;
@@ -90,26 +87,18 @@ var AppComponent = /** @class */ (function () {
             var profile = JSON.parse(localStorage.getItem("profile"));
             userprofileService.getUser(profile.nickname).subscribe(function (resBody) {
                 var id = resBody.id;
-                // pollNotifications(id);
+                pollNotifications(id);
                 getUserNotifications(profile.nickname);
             });
             if (createUser) {
-                var btData = {
+                var riftData = {
                     "firstName": data.firstName,
-                    "lastName": data.lastName
+                    "lastName": data.lastName,
+                    "riftTag": data.riftTag,
+                    "auth0Token": data.auth0Token,
+                    "email": data.email
                 };
-                paymentService.createBraintreeUser(btData).subscribe(function (resBody) {
-                    var braintreeId = resBody.customerId;
-                    var riftData = {
-                        "firstName": data.firstName,
-                        "lastName": data.lastName,
-                        "riftTag": data.riftTag,
-                        "auth0Token": data.auth0Token,
-                        "braintreeId": braintreeId,
-                        "email": data.email
-                    };
-                    userprofileService.createUser(riftData);
-                });
+                userprofileService.createUser(riftData);
             }
             else {
                 userprofileService.getUser(profile.nickname).subscribe(function (resBody) {
@@ -126,14 +115,14 @@ var AppComponent = /** @class */ (function () {
             userprofileService.getUserNotifications(riftTag).subscribe(function (resBody) {
                 if (resBody.length > 0) {
                     for (var i = resBody.length - 1; i > -1; i--) {
-                        var notification = new __WEBPACK_IMPORTED_MODULE_6__models_notification__["a" /* Notification */]();
+                        var notification = new __WEBPACK_IMPORTED_MODULE_5__models_notification__["a" /* Notification */]();
                         notification.createdTime = resBody[i].createdTime;
                         notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
                         notification.creatorEmail = resBody[i].creatorUsertable.email;
                         notification.creatorId = resBody[i].creatorUsertable.id;
                         // this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
                         notification.notificationType = resBody[i].notificationType;
-                        notification.notificationContent = __WEBPACK_IMPORTED_MODULE_8__constants_notification_content__["a" /* NOTIFICATION_CONTENT */][notification.notificationType];
+                        notification.notificationContent = __WEBPACK_IMPORTED_MODULE_7__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(notification.notificationType);
                         notification.sessionId = resBody[i].sessionId;
                         notification.seen = resBody[i].seen;
                         if (!notification.seen) {
@@ -146,7 +135,7 @@ var AppComponent = /** @class */ (function () {
                     }
                 }
                 else {
-                    var notification = new __WEBPACK_IMPORTED_MODULE_6__models_notification__["a" /* Notification */]();
+                    var notification = new __WEBPACK_IMPORTED_MODULE_5__models_notification__["a" /* Notification */]();
                     notification.notificationContent = "No notifications";
                     notification.creatorProfilePic = "";
                     notification.createdTime = -1;
@@ -156,19 +145,21 @@ var AppComponent = /** @class */ (function () {
         }
     }
     AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.profile = JSON.parse(localStorage.getItem("profile"));
         if (this.profile) {
             this.userprofileService.getUser(this.profile.nickname).subscribe(function (resBody) {
                 var id = resBody.id;
-                // this.notificationsService.pollNotifications(id, this.notificationList, false);
+                _this.notificationsService.pollNotifications(id, _this.notificationList, false);
             });
             this.getUserNotifications(this.profile.nickname);
         }
     };
     AppComponent.prototype.beforeUnloadHandler = function (event) {
+        var _this = this;
         this.userprofileService.getUser(this.profile.nickname).subscribe(function (resBody) {
             var id = resBody.id;
-            // this.notificationsService.stopPolling(id);
+            _this.notificationsService.stopPolling(id);
         });
     };
     AppComponent.prototype.getUserNotifications = function (riftTag) {
@@ -177,14 +168,14 @@ var AppComponent = /** @class */ (function () {
         this.userprofileService.getUserNotifications(riftTag).subscribe(function (resBody) {
             if (resBody.length > 0) {
                 for (var i = resBody.length - 1; i > -1; i--) {
-                    var notification = new __WEBPACK_IMPORTED_MODULE_6__models_notification__["a" /* Notification */]();
+                    var notification = new __WEBPACK_IMPORTED_MODULE_5__models_notification__["a" /* Notification */]();
                     notification.createdTime = resBody[i].createdTime;
                     notification.creatorRiftTag = resBody[i].creatorUsertable.riftTag;
                     notification.creatorEmail = resBody[i].creatorUsertable.email;
                     notification.creatorId = resBody[i].creatorUsertable.id;
                     // this.getNotificationProfilePicture(notification.creatorRiftTag, notification);
                     notification.notificationType = resBody[i].notificationType;
-                    notification.notificationContent = __WEBPACK_IMPORTED_MODULE_8__constants_notification_content__["a" /* NOTIFICATION_CONTENT */][notification.notificationType];
+                    notification.notificationContent = __WEBPACK_IMPORTED_MODULE_7__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(notification.notificationType);
                     notification.sessionId = resBody[i].sessionId;
                     notification.seen = resBody[i].seen;
                     if (!notification.seen) {
@@ -197,7 +188,7 @@ var AppComponent = /** @class */ (function () {
                 }
             }
             else {
-                var notification = new __WEBPACK_IMPORTED_MODULE_6__models_notification__["a" /* Notification */]();
+                var notification = new __WEBPACK_IMPORTED_MODULE_5__models_notification__["a" /* Notification */]();
                 notification.notificationContent = "No notifications";
                 notification.creatorProfilePic = "";
                 notification.createdTime = -1;
@@ -218,7 +209,7 @@ var AppComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/app.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__["a" /* UserprofileService */],
-            __WEBPACK_IMPORTED_MODULE_4__userprofile_payment_service__["a" /* PaymentService */], __WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_5__global_globals__["a" /* Globals */], __WEBPACK_IMPORTED_MODULE_7__userprofile_notifications_service__["a" /* NotificationsService */]])
+            __WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_4__global_globals__["a" /* Globals */], __WEBPACK_IMPORTED_MODULE_6__userprofile_notifications_service__["a" /* NotificationsService */]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -255,80 +246,69 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_session_card_session_card_component__ = __webpack_require__("../../../../../src/app/components/session-card/session-card.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__auth_auth_service__ = __webpack_require__("../../../../../src/app/auth/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pipes_capitalize_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__usersessions_sessionform_sessionform_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/sessionform.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__usersessions_sessionform_formnav_formnav_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/formnav/formnav.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__usersessions_sessionform_step1_step1_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/step1/step1.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__usersessions_sessionform_step2_step2_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/step2/step2.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__usersessions_sessionform_step3_step3_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/step3/step3.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__usersessions_sessionform_result_result_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/result/result.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__usersessions_sessionform_data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__usersessions_sessionform_workflow_workflow_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/workflow/workflow.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_angular2_wizard_dist__ = __webpack_require__("../../../../angular2-wizard/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29_angular2_wizard_dist___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_29_angular2_wizard_dist__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_follow_button_follow_button_component__ = __webpack_require__("../../../../../src/app/components/follow-button/follow-button.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__userprofile_update_info_update_info_component__ = __webpack_require__("../../../../../src/app/userprofile/update-info/update-info.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__userprofile_update_info_data_update_info_service__ = __webpack_require__("../../../../../src/app/userprofile/update-info/data/update-info.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_jwt__ = __webpack_require__("../../../../angular2-jwt/angular2-jwt.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_33_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__components_search_bar_search_bar_component__ = __webpack_require__("../../../../../src/app/components/search-bar/search-bar.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__components_search_bar_search_bar_service__ = __webpack_require__("../../../../../src/app/components/search-bar/search-bar.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__components_user_card_user_card_component__ = __webpack_require__("../../../../../src/app/components/user-card/user-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__therift_riftsessions_session_page_session_page_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__therift_riftsessions_session_page_session_page_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__userprofile_user_rating_user_rating_component__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/user-rating.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__userprofile_user_rating_data_user_rating_service__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/data/user-rating.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__angular_material_select__ = __webpack_require__("../../../material/esm5/select.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__angular_material_slider__ = __webpack_require__("../../../material/esm5/slider.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__components_user_review_user_review_component__ = __webpack_require__("../../../../../src/app/components/user-review/user-review.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__components_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/notification/notification.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45_angular_calendar__ = __webpack_require__("../../../../angular-calendar/esm5/angular-calendar.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__components_rating_rating_component__ = __webpack_require__("../../../../../src/app/components/rating/rating.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__therift_riftsessions_session_page_update_session_update_session_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__therift_riftsessions_session_page_update_session_data_update_session_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/data/update-session.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__components_session_accept_reject_button_session_accept_reject_button_component__ = __webpack_require__("../../../../../src/app/components/session-accept-reject-button/session-accept-reject-button.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__angular_material_dialog__ = __webpack_require__("../../../material/esm5/dialog.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__angular_material_checkbox__ = __webpack_require__("../../../material/esm5/checkbox.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_53_ngx_bootstrap__ = __webpack_require__("../../../../ngx-bootstrap/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_54__global_globals__ = __webpack_require__("../../../../../src/app/global/globals.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__usersessions_create_session_data_create_session_service__ = __webpack_require__("../../../../../src/app/usersessions/create-session/data/create-session.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__usersessions_create_session_create_session_component__ = __webpack_require__("../../../../../src/app/usersessions/create-session/create-session.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__pipes_session_type_pipe__ = __webpack_require__("../../../../../src/app/pipes/session-type.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__pipes_session_time_pipe__ = __webpack_require__("../../../../../src/app/pipes/session-time.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__pipes_game_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/game-filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__pipes_console_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/console-filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61_ap_angular2_fullcalendar_src_calendar_calendar__ = __webpack_require__("../../../../ap-angular2-fullcalendar/src/calendar/calendar.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61_ap_angular2_fullcalendar_src_calendar_calendar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_61_ap_angular2_fullcalendar_src_calendar_calendar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62_angular2_image_upload__ = __webpack_require__("../../../../angular2-image-upload/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__components_file_upload_file_upload_component__ = __webpack_require__("../../../../../src/app/components/file-upload/file-upload.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_64_ngx_braintree__ = __webpack_require__("../../../../ngx-braintree/ngx-braintree.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_65__feed_feed_component__ = __webpack_require__("../../../../../src/app/feed/feed.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_66__components_feed_card_feed_card_component__ = __webpack_require__("../../../../../src/app/components/feed-card/feed-card.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_67__userprofile_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/payment.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_68__userprofile_notifications_service__ = __webpack_require__("../../../../../src/app/userprofile/notifications.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_69__userprofile_file_a_complaint_file_a_complaint_component__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/file-a-complaint.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_70__userprofile_file_a_complaint_data_file_a_complaint_service__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/data/file-a-complaint-service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_71__components_kick_riftee_button_kick_riftee_button_component__ = __webpack_require__("../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_72__game_api_league_of_legends_league_of_legends_component__ = __webpack_require__("../../../../../src/app/game-api/league-of-legends/league-of-legends.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_73__game_api_league_of_legends_league_of_legends_service__ = __webpack_require__("../../../../../src/app/game-api/league-of-legends/league-of-legends.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_74__userprofile_twitch_service__ = __webpack_require__("../../../../../src/app/userprofile/twitch.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_75__userprofile_youtube_service__ = __webpack_require__("../../../../../src/app/userprofile/youtube.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_76__userprofile_game_account_add_game_account_add_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/add-game-account/add-game-account.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_77__userprofile_game_account_edit_game_account_edit_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_78__userprofile_game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_angular2_wizard_dist__ = __webpack_require__("../../../../angular2-wizard/dist/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_angular2_wizard_dist___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_21_angular2_wizard_dist__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_follow_button_follow_button_component__ = __webpack_require__("../../../../../src/app/components/follow-button/follow-button.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__userprofile_update_info_update_info_component__ = __webpack_require__("../../../../../src/app/userprofile/update-info/update-info.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__userprofile_update_info_data_update_info_service__ = __webpack_require__("../../../../../src/app/userprofile/update-info/data/update-info.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_angular2_jwt__ = __webpack_require__("../../../../angular2-jwt/angular2-jwt.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_25_angular2_jwt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_search_bar_search_bar_component__ = __webpack_require__("../../../../../src/app/components/search-bar/search-bar.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_search_bar_search_bar_service__ = __webpack_require__("../../../../../src/app/components/search-bar/search-bar.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_user_card_user_card_component__ = __webpack_require__("../../../../../src/app/components/user-card/user-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__therift_riftsessions_session_page_session_page_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__therift_riftsessions_session_page_session_page_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__userprofile_user_rating_user_rating_component__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/user-rating.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__userprofile_user_rating_data_user_rating_service__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/data/user-rating.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__angular_material_select__ = __webpack_require__("../../../material/esm5/select.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__angular_material_slider__ = __webpack_require__("../../../material/esm5/slider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__components_user_review_user_review_component__ = __webpack_require__("../../../../../src/app/components/user-review/user-review.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__components_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/notification/notification.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_37_angular_calendar__ = __webpack_require__("../../../../angular-calendar/esm5/angular-calendar.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38__ng_bootstrap_ng_bootstrap__ = __webpack_require__("../../../../@ng-bootstrap/ng-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__components_rating_rating_component__ = __webpack_require__("../../../../../src/app/components/rating/rating.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__therift_riftsessions_session_page_update_session_update_session_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__therift_riftsessions_session_page_update_session_data_update_session_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/data/update-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__components_session_accept_reject_button_session_accept_reject_button_component__ = __webpack_require__("../../../../../src/app/components/session-accept-reject-button/session-accept-reject-button.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__angular_material_dialog__ = __webpack_require__("../../../material/esm5/dialog.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__angular_material_checkbox__ = __webpack_require__("../../../material/esm5/checkbox.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__ = __webpack_require__("../../../../ngx-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__global_globals__ = __webpack_require__("../../../../../src/app/global/globals.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_47__usersessions_create_session_data_create_session_service__ = __webpack_require__("../../../../../src/app/usersessions/create-session/data/create-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_48__usersessions_create_session_create_session_component__ = __webpack_require__("../../../../../src/app/usersessions/create-session/create-session.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_49__pipes_session_type_pipe__ = __webpack_require__("../../../../../src/app/pipes/session-type.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_50__pipes_session_time_pipe__ = __webpack_require__("../../../../../src/app/pipes/session-time.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_51__pipes_game_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/game-filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_52__pipes_console_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/console-filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_53_ap_angular2_fullcalendar_src_calendar_calendar__ = __webpack_require__("../../../../ap-angular2-fullcalendar/src/calendar/calendar.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_53_ap_angular2_fullcalendar_src_calendar_calendar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_53_ap_angular2_fullcalendar_src_calendar_calendar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_54_angular2_image_upload__ = __webpack_require__("../../../../angular2-image-upload/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_55__components_file_upload_file_upload_component__ = __webpack_require__("../../../../../src/app/components/file-upload/file-upload.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_56__feed_feed_component__ = __webpack_require__("../../../../../src/app/feed/feed.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_57__components_feed_card_feed_card_component__ = __webpack_require__("../../../../../src/app/components/feed-card/feed-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_58__userprofile_notifications_service__ = __webpack_require__("../../../../../src/app/userprofile/notifications.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_59__userprofile_file_a_complaint_file_a_complaint_component__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/file-a-complaint.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_60__userprofile_file_a_complaint_data_file_a_complaint_service__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/data/file-a-complaint-service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_61__components_kick_riftee_button_kick_riftee_button_component__ = __webpack_require__("../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_62__userprofile_twitch_service__ = __webpack_require__("../../../../../src/app/userprofile/twitch.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_63__userprofile_youtube_service__ = __webpack_require__("../../../../../src/app/userprofile/youtube.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_64__userprofile_game_account_add_game_account_add_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/add-game-account/add-game-account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_65__userprofile_game_account_edit_game_account_edit_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_66__userprofile_game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_67__userprofile_stripe_payment_stripe_payment_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_68__userprofile_stripe_payment_legal_bank_account_info_add_bank_account_add_bank_account_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_69__userprofile_stripe_payment_stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_70__userprofile_stripe_payment_legal_bank_account_info_legal_bank_account_info_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_71__userprofile_stripe_payment_view_cards_view_cards_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_72__components_credit_card_credit_card_component__ = __webpack_require__("../../../../../src/app/components/credit-card/credit-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_73__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_74_ngx_img_cropper__ = __webpack_require__("../../../../ngx-img-cropper/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-
-
-
-
-
-
 
 
 
@@ -405,7 +385,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 function authHttpServiceFactory(http, options) {
-    return new __WEBPACK_IMPORTED_MODULE_33_angular2_jwt__["AuthHttp"](new __WEBPACK_IMPORTED_MODULE_33_angular2_jwt__["AuthConfig"]({
+    return new __WEBPACK_IMPORTED_MODULE_25_angular2_jwt__["AuthHttp"](new __WEBPACK_IMPORTED_MODULE_25_angular2_jwt__["AuthConfig"]({
         tokenGetter: (function () { return localStorage.getItem('access_token'); }),
         globalHeaders: [{ 'Content-Type': 'application/json' }],
     }), http, options);
@@ -423,38 +403,37 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_16__therift_therift_component__["a" /* TheriftComponent */],
                 __WEBPACK_IMPORTED_MODULE_17__therift_riftsessions_riftsessions_component__["a" /* RiftsessionsComponent */],
                 __WEBPACK_IMPORTED_MODULE_18__components_session_card_session_card_component__["a" /* SessionCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_21__usersessions_sessionform_sessionform_component__["a" /* SessionformComponent */],
-                __WEBPACK_IMPORTED_MODULE_22__usersessions_sessionform_formnav_formnav_component__["a" /* FormnavComponent */],
-                __WEBPACK_IMPORTED_MODULE_23__usersessions_sessionform_step1_step1_component__["a" /* Step1Component */],
-                __WEBPACK_IMPORTED_MODULE_24__usersessions_sessionform_step2_step2_component__["a" /* Step2Component */],
-                __WEBPACK_IMPORTED_MODULE_25__usersessions_sessionform_step3_step3_component__["a" /* Step3Component */],
-                __WEBPACK_IMPORTED_MODULE_26__usersessions_sessionform_result_result_component__["a" /* ResultComponent */],
-                __WEBPACK_IMPORTED_MODULE_30__components_follow_button_follow_button_component__["a" /* FollowButtonComponent */],
-                __WEBPACK_IMPORTED_MODULE_31__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */],
-                __WEBPACK_IMPORTED_MODULE_34__components_search_bar_search_bar_component__["a" /* SearchBarComponent */],
-                __WEBPACK_IMPORTED_MODULE_36__components_user_card_user_card_component__["a" /* UserCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_37__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */],
-                __WEBPACK_IMPORTED_MODULE_39__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */],
-                __WEBPACK_IMPORTED_MODULE_43__components_user_review_user_review_component__["a" /* UserReviewComponent */],
-                __WEBPACK_IMPORTED_MODULE_44__components_notification_notification_component__["a" /* NotificationComponent */],
-                __WEBPACK_IMPORTED_MODULE_47__components_rating_rating_component__["a" /* RatingComponent */],
-                __WEBPACK_IMPORTED_MODULE_48__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */],
-                __WEBPACK_IMPORTED_MODULE_50__components_session_accept_reject_button_session_accept_reject_button_component__["a" /* SessionAcceptRejectButtonComponent */],
-                __WEBPACK_IMPORTED_MODULE_56__usersessions_create_session_create_session_component__["a" /* CreateSessionComponent */],
-                __WEBPACK_IMPORTED_MODULE_61_ap_angular2_fullcalendar_src_calendar_calendar__["CalendarComponent"],
+                __WEBPACK_IMPORTED_MODULE_22__components_follow_button_follow_button_component__["a" /* FollowButtonComponent */],
+                __WEBPACK_IMPORTED_MODULE_23__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */],
+                __WEBPACK_IMPORTED_MODULE_26__components_search_bar_search_bar_component__["a" /* SearchBarComponent */],
+                __WEBPACK_IMPORTED_MODULE_28__components_user_card_user_card_component__["a" /* UserCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_29__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */],
+                __WEBPACK_IMPORTED_MODULE_31__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */],
+                __WEBPACK_IMPORTED_MODULE_35__components_user_review_user_review_component__["a" /* UserReviewComponent */],
+                __WEBPACK_IMPORTED_MODULE_36__components_notification_notification_component__["a" /* NotificationComponent */],
+                __WEBPACK_IMPORTED_MODULE_39__components_rating_rating_component__["a" /* RatingComponent */],
+                __WEBPACK_IMPORTED_MODULE_40__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */],
+                __WEBPACK_IMPORTED_MODULE_42__components_session_accept_reject_button_session_accept_reject_button_component__["a" /* SessionAcceptRejectButtonComponent */],
+                __WEBPACK_IMPORTED_MODULE_48__usersessions_create_session_create_session_component__["a" /* CreateSessionComponent */],
+                __WEBPACK_IMPORTED_MODULE_53_ap_angular2_fullcalendar_src_calendar_calendar__["CalendarComponent"],
                 __WEBPACK_IMPORTED_MODULE_20__pipes_capitalize_pipe__["a" /* CapitalizePipe */],
-                __WEBPACK_IMPORTED_MODULE_57__pipes_session_type_pipe__["a" /* SessionTypePipe */],
-                __WEBPACK_IMPORTED_MODULE_58__pipes_session_time_pipe__["a" /* SessionTimePipe */],
-                __WEBPACK_IMPORTED_MODULE_59__pipes_game_filter_pipe__["a" /* GameFilterPipe */],
-                __WEBPACK_IMPORTED_MODULE_60__pipes_console_filter_pipe__["a" /* ConsoleFilterPipe */],
-                __WEBPACK_IMPORTED_MODULE_63__components_file_upload_file_upload_component__["a" /* FileUploadComponent */],
-                __WEBPACK_IMPORTED_MODULE_65__feed_feed_component__["a" /* FeedComponent */],
-                __WEBPACK_IMPORTED_MODULE_66__components_feed_card_feed_card_component__["a" /* FeedCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_69__userprofile_file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */],
-                __WEBPACK_IMPORTED_MODULE_71__components_kick_riftee_button_kick_riftee_button_component__["a" /* KickRifteeButtonComponent */],
-                __WEBPACK_IMPORTED_MODULE_72__game_api_league_of_legends_league_of_legends_component__["a" /* LeagueOfLegendsComponent */],
-                __WEBPACK_IMPORTED_MODULE_76__userprofile_game_account_add_game_account_add_game_account_component__["a" /* AddGameAccountComponent */],
-                __WEBPACK_IMPORTED_MODULE_77__userprofile_game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */],
+                __WEBPACK_IMPORTED_MODULE_49__pipes_session_type_pipe__["a" /* SessionTypePipe */],
+                __WEBPACK_IMPORTED_MODULE_50__pipes_session_time_pipe__["a" /* SessionTimePipe */],
+                __WEBPACK_IMPORTED_MODULE_51__pipes_game_filter_pipe__["a" /* GameFilterPipe */],
+                __WEBPACK_IMPORTED_MODULE_52__pipes_console_filter_pipe__["a" /* ConsoleFilterPipe */],
+                __WEBPACK_IMPORTED_MODULE_55__components_file_upload_file_upload_component__["a" /* FileUploadComponent */],
+                __WEBPACK_IMPORTED_MODULE_56__feed_feed_component__["a" /* FeedComponent */],
+                __WEBPACK_IMPORTED_MODULE_57__components_feed_card_feed_card_component__["a" /* FeedCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_59__userprofile_file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */],
+                __WEBPACK_IMPORTED_MODULE_61__components_kick_riftee_button_kick_riftee_button_component__["a" /* KickRifteeButtonComponent */],
+                __WEBPACK_IMPORTED_MODULE_64__userprofile_game_account_add_game_account_add_game_account_component__["a" /* AddGameAccountComponent */],
+                __WEBPACK_IMPORTED_MODULE_65__userprofile_game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */],
+                __WEBPACK_IMPORTED_MODULE_67__userprofile_stripe_payment_stripe_payment_component__["a" /* StripePaymentComponent */],
+                __WEBPACK_IMPORTED_MODULE_68__userprofile_stripe_payment_legal_bank_account_info_add_bank_account_add_bank_account_component__["a" /* AddBankAccountComponent */],
+                __WEBPACK_IMPORTED_MODULE_70__userprofile_stripe_payment_legal_bank_account_info_legal_bank_account_info_component__["a" /* LegalBankAccountInfoComponent */],
+                __WEBPACK_IMPORTED_MODULE_71__userprofile_stripe_payment_view_cards_view_cards_component__["a" /* ViewCardsComponent */],
+                __WEBPACK_IMPORTED_MODULE_72__components_credit_card_credit_card_component__["a" /* CreditCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_74_ngx_img_cropper__["b" /* ImageCropperComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -471,34 +450,33 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_8__angular_material__["f" /* MatInputModule */],
                 __WEBPACK_IMPORTED_MODULE_8__angular_material__["b" /* MatDatepickerModule */],
                 __WEBPACK_IMPORTED_MODULE_8__angular_material__["g" /* MatNativeDateModule */],
-                __WEBPACK_IMPORTED_MODULE_51__angular_material_dialog__["c" /* MatDialogModule */],
-                __WEBPACK_IMPORTED_MODULE_29_angular2_wizard_dist__["FormWizardModule"],
-                __WEBPACK_IMPORTED_MODULE_41__angular_material_select__["a" /* MatSelectModule */],
-                __WEBPACK_IMPORTED_MODULE_42__angular_material_slider__["a" /* MatSliderModule */],
-                __WEBPACK_IMPORTED_MODULE_52__angular_material_checkbox__["a" /* MatCheckboxModule */],
-                __WEBPACK_IMPORTED_MODULE_64_ngx_braintree__["a" /* NgxBraintreeModule */],
-                __WEBPACK_IMPORTED_MODULE_45_angular_calendar__["a" /* CalendarModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_46__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_53_ngx_bootstrap__["b" /* BsDropdownModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_53_ngx_bootstrap__["a" /* AlertModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_53_ngx_bootstrap__["e" /* TabsModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_53_ngx_bootstrap__["d" /* ModalModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_62_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
+                __WEBPACK_IMPORTED_MODULE_43__angular_material_dialog__["c" /* MatDialogModule */],
+                __WEBPACK_IMPORTED_MODULE_21_angular2_wizard_dist__["FormWizardModule"],
+                __WEBPACK_IMPORTED_MODULE_33__angular_material_select__["a" /* MatSelectModule */],
+                __WEBPACK_IMPORTED_MODULE_34__angular_material_slider__["a" /* MatSliderModule */],
+                __WEBPACK_IMPORTED_MODULE_44__angular_material_checkbox__["a" /* MatCheckboxModule */],
+                __WEBPACK_IMPORTED_MODULE_37_angular_calendar__["a" /* CalendarModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_38__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["b" /* BsDropdownModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["a" /* AlertModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["f" /* TabsModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["e" /* ModalModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_54_angular2_image_upload__["a" /* ImageUploadModule */].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["d" /* CollapseModule */]
             ],
             exports: [
-                __WEBPACK_IMPORTED_MODULE_63__components_file_upload_file_upload_component__["a" /* FileUploadComponent */]
+                __WEBPACK_IMPORTED_MODULE_55__components_file_upload_file_upload_component__["a" /* FileUploadComponent */]
             ],
-            entryComponents: [__WEBPACK_IMPORTED_MODULE_37__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */], __WEBPACK_IMPORTED_MODULE_48__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */], __WEBPACK_IMPORTED_MODULE_15__usersessions_usersessions_component__["a" /* UsersessionsComponent */], __WEBPACK_IMPORTED_MODULE_56__usersessions_create_session_create_session_component__["a" /* CreateSessionComponent */],
-                __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_component__["a" /* UserprofileComponent */], __WEBPACK_IMPORTED_MODULE_31__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */], __WEBPACK_IMPORTED_MODULE_39__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */], __WEBPACK_IMPORTED_MODULE_69__userprofile_file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */], __WEBPACK_IMPORTED_MODULE_76__userprofile_game_account_add_game_account_add_game_account_component__["a" /* AddGameAccountComponent */],
-                __WEBPACK_IMPORTED_MODULE_77__userprofile_game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */]],
-            providers: [__WEBPACK_IMPORTED_MODULE_12__userprofile_userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_13__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_19__auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_32__userprofile_update_info_data_update_info_service__["a" /* UpdateInfoService */], __WEBPACK_IMPORTED_MODULE_35__components_search_bar_search_bar_service__["a" /* SearchBarService */], __WEBPACK_IMPORTED_MODULE_38__therift_riftsessions_session_page_session_page_service__["a" /* SessionPageService */],
-                __WEBPACK_IMPORTED_MODULE_40__userprofile_user_rating_data_user_rating_service__["a" /* UserRatingService */], __WEBPACK_IMPORTED_MODULE_49__therift_riftsessions_session_page_update_session_data_update_session_service__["a" /* UpdateSessionService */], __WEBPACK_IMPORTED_MODULE_55__usersessions_create_session_data_create_session_service__["a" /* CreateSessionService */], __WEBPACK_IMPORTED_MODULE_67__userprofile_payment_service__["a" /* PaymentService */], __WEBPACK_IMPORTED_MODULE_68__userprofile_notifications_service__["a" /* NotificationsService */], __WEBPACK_IMPORTED_MODULE_70__userprofile_file_a_complaint_data_file_a_complaint_service__["a" /* FileAComplaintService */],
-                __WEBPACK_IMPORTED_MODULE_73__game_api_league_of_legends_league_of_legends_service__["a" /* LeagueOfLegendsService */], __WEBPACK_IMPORTED_MODULE_75__userprofile_youtube_service__["a" /* YoutubeService */], __WEBPACK_IMPORTED_MODULE_74__userprofile_twitch_service__["a" /* TwitchService */], __WEBPACK_IMPORTED_MODULE_78__userprofile_game_account_game_account_service__["a" /* GameAccountService */],
-                { provide: __WEBPACK_IMPORTED_MODULE_27__usersessions_sessionform_data_formData_service__["a" /* FormDataService */], useClass: __WEBPACK_IMPORTED_MODULE_27__usersessions_sessionform_data_formData_service__["a" /* FormDataService */] },
-                { provide: __WEBPACK_IMPORTED_MODULE_28__usersessions_sessionform_workflow_workflow_service__["a" /* WorkflowService */], useClass: __WEBPACK_IMPORTED_MODULE_28__usersessions_sessionform_workflow_workflow_service__["a" /* WorkflowService */] },
-                { provide: __WEBPACK_IMPORTED_MODULE_33_angular2_jwt__["AuthHttp"], useFactory: authHttpServiceFactory, deps: [__WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["RequestOptions"]] },
+            entryComponents: [__WEBPACK_IMPORTED_MODULE_29__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */], __WEBPACK_IMPORTED_MODULE_40__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */], __WEBPACK_IMPORTED_MODULE_15__usersessions_usersessions_component__["a" /* UsersessionsComponent */], __WEBPACK_IMPORTED_MODULE_48__usersessions_create_session_create_session_component__["a" /* CreateSessionComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_component__["a" /* UserprofileComponent */], __WEBPACK_IMPORTED_MODULE_23__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */], __WEBPACK_IMPORTED_MODULE_31__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */], __WEBPACK_IMPORTED_MODULE_59__userprofile_file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */], __WEBPACK_IMPORTED_MODULE_64__userprofile_game_account_add_game_account_add_game_account_component__["a" /* AddGameAccountComponent */],
+                __WEBPACK_IMPORTED_MODULE_65__userprofile_game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */], __WEBPACK_IMPORTED_MODULE_67__userprofile_stripe_payment_stripe_payment_component__["a" /* StripePaymentComponent */], __WEBPACK_IMPORTED_MODULE_68__userprofile_stripe_payment_legal_bank_account_info_add_bank_account_add_bank_account_component__["a" /* AddBankAccountComponent */], __WEBPACK_IMPORTED_MODULE_70__userprofile_stripe_payment_legal_bank_account_info_legal_bank_account_info_component__["a" /* LegalBankAccountInfoComponent */],
+                __WEBPACK_IMPORTED_MODULE_71__userprofile_stripe_payment_view_cards_view_cards_component__["a" /* ViewCardsComponent */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_12__userprofile_userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_13__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_19__auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_24__userprofile_update_info_data_update_info_service__["a" /* UpdateInfoService */], __WEBPACK_IMPORTED_MODULE_27__components_search_bar_search_bar_service__["a" /* SearchBarService */], __WEBPACK_IMPORTED_MODULE_30__therift_riftsessions_session_page_session_page_service__["a" /* SessionPageService */],
+                __WEBPACK_IMPORTED_MODULE_32__userprofile_user_rating_data_user_rating_service__["a" /* UserRatingService */], __WEBPACK_IMPORTED_MODULE_41__therift_riftsessions_session_page_update_session_data_update_session_service__["a" /* UpdateSessionService */], __WEBPACK_IMPORTED_MODULE_47__usersessions_create_session_data_create_session_service__["a" /* CreateSessionService */], __WEBPACK_IMPORTED_MODULE_58__userprofile_notifications_service__["a" /* NotificationsService */], __WEBPACK_IMPORTED_MODULE_60__userprofile_file_a_complaint_data_file_a_complaint_service__["a" /* FileAComplaintService */],
+                __WEBPACK_IMPORTED_MODULE_63__userprofile_youtube_service__["a" /* YoutubeService */], __WEBPACK_IMPORTED_MODULE_62__userprofile_twitch_service__["a" /* TwitchService */], __WEBPACK_IMPORTED_MODULE_66__userprofile_game_account_game_account_service__["a" /* GameAccountService */], __WEBPACK_IMPORTED_MODULE_69__userprofile_stripe_payment_stripe_payment_service__["a" /* StripePaymentService */], __WEBPACK_IMPORTED_MODULE_73__shared_shared_functions__["a" /* SharedFunctions */],
+                { provide: __WEBPACK_IMPORTED_MODULE_25_angular2_jwt__["AuthHttp"], useFactory: authHttpServiceFactory, deps: [__WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_2__angular_http__["RequestOptions"]] },
                 { provide: __WEBPACK_IMPORTED_MODULE_8__angular_material__["a" /* MAT_DIALOG_DATA */], useValue: {} },
-                __WEBPACK_IMPORTED_MODULE_54__global_globals__["a" /* Globals */]
+                __WEBPACK_IMPORTED_MODULE_46__global_globals__["a" /* Globals */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_10__app_component__["a" /* AppComponent */]]
         })
@@ -521,13 +499,11 @@ var AppModule = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__usersessions_usersessions_component__ = __webpack_require__("../../../../../src/app/usersessions/usersessions.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__therift_therift_component__ = __webpack_require__("../../../../../src/app/therift/therift.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__therift_riftsessions_riftsessions_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/riftsessions.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__usersessions_sessionform_sessionform_component__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/sessionform.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__userprofile_update_info_update_info_component__ = __webpack_require__("../../../../../src/app/userprofile/update-info/update-info.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__therift_riftsessions_session_page_session_page_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__userprofile_user_rating_user_rating_component__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/user-rating.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__therift_riftsessions_session_page_update_session_update_session_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__feed_feed_component__ = __webpack_require__("../../../../../src/app/feed/feed.component.ts");
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__userprofile_update_info_update_info_component__ = __webpack_require__("../../../../../src/app/userprofile/update-info/update-info.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__therift_riftsessions_session_page_session_page_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__userprofile_user_rating_user_rating_component__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/user-rating.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__therift_riftsessions_session_page_update_session_update_session_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__feed_feed_component__ = __webpack_require__("../../../../../src/app/feed/feed.component.ts");
 
 
 
@@ -542,26 +518,23 @@ var router = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'user/:rifttag', component: __WEBPACK_IMPORTED_MODULE_1__userprofile_userprofile_component__["a" /* UserprofileComponent */],
         children: [
-            { path: 'update', component: __WEBPACK_IMPORTED_MODULE_6__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */] },
-            { path: 'rate', component: __WEBPACK_IMPORTED_MODULE_8__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */] }
+            { path: 'update', component: __WEBPACK_IMPORTED_MODULE_5__userprofile_update_info_update_info_component__["a" /* UpdateInfoComponent */] },
+            { path: 'rate', component: __WEBPACK_IMPORTED_MODULE_7__userprofile_user_rating_user_rating_component__["a" /* UserRatingComponent */] }
         ]
     },
     { path: 'sessions', component: __WEBPACK_IMPORTED_MODULE_2__usersessions_usersessions_component__["a" /* UsersessionsComponent */],
-        children: [
-            { path: 'create', component: __WEBPACK_IMPORTED_MODULE_5__usersessions_sessionform_sessionform_component__["a" /* SessionformComponent */] },
-        ]
     },
     { path: 'home', component: __WEBPACK_IMPORTED_MODULE_3__therift_therift_component__["a" /* TheriftComponent */],
     },
     { path: 'youtube', component: __WEBPACK_IMPORTED_MODULE_3__therift_therift_component__["a" /* TheriftComponent */] },
     { path: 'twitch', component: __WEBPACK_IMPORTED_MODULE_3__therift_therift_component__["a" /* TheriftComponent */] },
     { path: 'therift/:searchQuery', component: __WEBPACK_IMPORTED_MODULE_4__therift_riftsessions_riftsessions_component__["a" /* RiftsessionsComponent */] },
-    { path: 'session/:sessionId', component: __WEBPACK_IMPORTED_MODULE_7__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */],
+    { path: 'session/:sessionId', component: __WEBPACK_IMPORTED_MODULE_6__therift_riftsessions_session_page_session_page_component__["a" /* SessionPageComponent */],
         children: [
-            { path: 'update', component: __WEBPACK_IMPORTED_MODULE_9__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */] }
+            { path: 'update', component: __WEBPACK_IMPORTED_MODULE_8__therift_riftsessions_session_page_update_session_update_session_component__["a" /* UpdateSessionComponent */] }
         ]
     },
-    { path: 'feed', component: __WEBPACK_IMPORTED_MODULE_10__feed_feed_component__["a" /* FeedComponent */] }
+    { path: 'feed', component: __WEBPACK_IMPORTED_MODULE_9__feed_feed_component__["a" /* FeedComponent */] }
 ];
 var routes = __WEBPACK_IMPORTED_MODULE_0__angular_router__["c" /* RouterModule */].forRoot(router);
 
@@ -728,9 +701,95 @@ var AuthService = /** @class */ (function () {
 var AUTH_CONFIG = {
     clientID: 'XOgkYhvWQEv3ZR1qVF1oJnqqrmdyNL4g',
     domain: 'riftgaming.auth0.com',
-    callbackURL: 'http://localhost:4200',
+    callbackURL: 'http://localhost:4200/home',
     apiUrl: 'https://riftgaming.auth0.com/api/v2/'
 };
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/credit-card/credit-card.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"col-xs-12 col-sm-4 col-md-4 col-lg-4\">\n  <div class=\"thumbnail\">\n    <div class=\"caption\">\n      <div class='col-lg-12'>\n        <span class=\"glyphicon glyphicon-credit-card\"></span>\n        <span class=\"glyphicon glyphicon-trash pull-right text-primary\" (click)=\"changeStatus(delete)\"></span>\n      </div>\n      <div class='col-lg-12 well well-add-card'>\n        <h4>First Name Last Name</h4>\n      </div>\n      <div class='col-lg-12'>\n        <p>**** **** **** {{creditCard.last4}}</p>\n        <p clas=\"text-muted\">Exp: {{creditCard.expMonth}}/{{creditCard.expYear}}</p>\n        <p class=\"text-muted\">{{creditCard.brand}}</p>\n      </div>\n      <button type=\"button\" class=\"btn btn-primary btn-xs btn-update btn-add-card\" (click)=\"changeStatus(template)\">Set As Default</button>\n      <ng-template #setDefault style=\"margin-top:20%\">\n        <div class=\"modal-body text-center\">\n          <p>Set Card as Default?</p>\n          <button type=\"button\" class=\"btn btn-default\" (click)=\"setAsDefault()\" >Yes</button>\n          <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >No</button>\n        </div>\n      </ng-template>\n      <ng-template #delete style=\"margin-top:20%\">\n        <div class=\"modal-body text-center\">\n          <p>Are you sure you want to delete this credit card?</p>\n          <button type=\"button\" class=\"btn btn-default\" (click)=\"deleteCard()\" >Yes</button>\n          <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >No</button>\n        </div>\n      </ng-template>\n    </div>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/credit-card/credit-card.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".well {\n  min-height: 20px;\n  padding: 0px;\n  margin-bottom: 20px;\n  background-color: #D9D9D9;\n  border: 1px solid #D9D9D9;\n  border-radius: 0px;\n  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);\n  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);\n  padding-left: 15px;\n  border: 0px; }\n\n.thumbnail .caption {\n  padding: 9px;\n  color: #333;\n  padding-left: 0px;\n  padding-right: 0px; }\n\n.icon-style {\n  margin-right: 15px;\n  font-size: 18px;\n  margin-top: 20px; }\n\np {\n  margin: 3px; }\n\n.well-add-card {\n  margin-bottom: 10px; }\n\n.btn-add-card {\n  margin-top: 20px; }\n\n.thumbnail {\n  display: block;\n  padding: 4px;\n  margin-bottom: 20px;\n  line-height: 1.42857143;\n  background-color: #fff;\n  border: 6px solid #D9D9D9;\n  border-radius: 15px;\n  -webkit-transition: border .2s ease-in-out;\n  transition: border .2s ease-in-out;\n  padding-left: 0px;\n  padding-right: 0px; }\n\n.btn {\n  border-radius: 0px; }\n\n.btn-update {\n  margin-left: 15px; }\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/credit-card/credit-card.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreditCardComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_credit_card__ = __webpack_require__("../../../../../src/app/models/credit-card.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__userprofile_stripe_payment_stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap__ = __webpack_require__("../../../../ngx-bootstrap/index.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CreditCardComponent = /** @class */ (function () {
+    function CreditCardComponent(stripeService, modalService) {
+        this.stripeService = stripeService;
+        this.modalService = modalService;
+    }
+    CreditCardComponent.prototype.ngOnInit = function () {
+    };
+    CreditCardComponent.prototype.setAsDefault = function () {
+        this.stripeService.setCardAsDefault(this.creditCard.id, this.customerId);
+    };
+    CreditCardComponent.prototype.deleteCard = function () {
+        this.stripeService.deleteCustomerCreditCard(this.creditCard.id, this.customerId);
+    };
+    CreditCardComponent.prototype.changeStatus = function (template) {
+        this.modalRef = this.modalService.show(template);
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__models_credit_card__["a" /* CreditCard */])
+    ], CreditCardComponent.prototype, "creditCard", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], CreditCardComponent.prototype, "customerId", void 0);
+    CreditCardComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-credit-card',
+            template: __webpack_require__("../../../../../src/app/components/credit-card/credit-card.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/credit-card/credit-card.component.scss")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__userprofile_stripe_payment_stripe_payment_service__["a" /* StripePaymentService */], __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap__["c" /* BsModalService */]])
+    ], CreditCardComponent);
+    return CreditCardComponent;
+}());
+
 
 
 /***/ }),
@@ -803,7 +862,7 @@ var FeedCardComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/file-upload/file-upload.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<input *ngIf=\"showFileNameInput\" id=\"uploadFile\" class=\"upload-file form-control\" placeholder=\"Choose File\" [(ngModel)]=\"selectedFileName\" disabled=\"disabled\" />\n<div class=\"fileUpload btn btn-primary\">\n  <span>{{uploadButtonText}}</span>\n  <input type=\"file\" class=\"upload\" accept=\"*\" (change)=\"changeListener($event)\">\n</div>\n"
+module.exports = "<!--<input *ngIf=\"showFileNameInput\" id=\"uploadFile\" class=\"upload-file form-control\" placeholder=\"Choose File\" [(ngModel)]=\"selectedFileName\" disabled=\"disabled\" />-->\n<!--<div class=\"fileUpload btn btn-primary\">-->\n  <!--<span>{{uploadButtonText}}</span>-->\n  <!--<input type=\"file\" class=\"upload\" accept=\"*\" (change)=\"changeListener($event)\">-->\n<!--</div>-->\n\n\n<div>\n\n  <img-cropper [image]=\"data1\" [settings]=\"cropperSettings1\" (onCrop)=\"cropped($event)\"></img-cropper>\n  <span class=\"result\" *ngIf=\"data1.image\" >\n        <img [src]=\"data1.image\"\n             [width]=\"croppedWidth\"\n             [height]=\"croppedHeight\">\n        {{data1.image}}\n    </span>\n\n\n</div>\n"
 
 /***/ }),
 
@@ -832,6 +891,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FileUploadComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_img_cropper__ = __webpack_require__("../../../../ngx-img-cropper/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -843,42 +903,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var FileUploadComponent = /** @class */ (function () {
     function FileUploadComponent() {
-        this.selectedFileName = null;
-        this.propagateChange = function (_) { };
+        this.name = 'Angular2';
+        this.cropperSettings1 = new __WEBPACK_IMPORTED_MODULE_2_ngx_img_cropper__["a" /* CropperSettings */]();
+        this.cropperSettings1.width = 200;
+        this.cropperSettings1.height = 200;
+        this.cropperSettings1.croppedWidth = 200;
+        this.cropperSettings1.croppedHeight = 200;
+        this.cropperSettings1.canvasWidth = 500;
+        this.cropperSettings1.canvasHeight = 300;
+        this.cropperSettings1.minWidth = 10;
+        this.cropperSettings1.minHeight = 10;
+        this.cropperSettings1.rounded = true;
+        this.cropperSettings1.keepAspect = true;
+        this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+        this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+        this.data1 = {};
     }
     FileUploadComponent_1 = FileUploadComponent;
-    FileUploadComponent.prototype.writeValue = function (value) {
-        //Handle write value
+    FileUploadComponent.prototype.writeValue = function (obj) {
     };
     FileUploadComponent.prototype.registerOnChange = function (fn) {
-        this.propagateChange = fn;
     };
-    FileUploadComponent.prototype.registerOnTouched = function () { };
-    FileUploadComponent.prototype.changeListener = function ($event) {
-        // debugger; // uncomment this for debugging purposes
-        this.readThis($event.target);
+    FileUploadComponent.prototype.registerOnTouched = function (fn) {
     };
-    FileUploadComponent.prototype.readThis = function (inputValue) {
-        var _this = this;
-        // debugger; // uncomment this for debugging purposes
-        var file = inputValue.files[0];
+    FileUploadComponent.prototype.cropped = function (bounds) {
+        this.croppedHeight = 200;
+        this.croppedWidth = 200;
+    };
+    FileUploadComponent.prototype.fileChangeListener = function ($event) {
+        var image = new Image();
+        var file = $event.target.files[0];
         var myReader = new FileReader();
-        myReader.onloadend = function (e) {
-            _this.propagateChange(myReader.result);
-            _this.selectedFileName = file.name;
+        var that = this;
+        myReader.onloadend = function (loadEvent) {
+            image.src = loadEvent.target.result;
+            that.cropper.setImage(image);
         };
         myReader.readAsDataURL(file);
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", Boolean)
-    ], FileUploadComponent.prototype, "showFileNameInput", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", String)
-    ], FileUploadComponent.prototype, "uploadButtonText", void 0);
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('cropper', undefined),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2_ngx_img_cropper__["b" /* ImageCropperComponent */])
+    ], FileUploadComponent.prototype, "cropper", void 0);
     FileUploadComponent = FileUploadComponent_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-file-upload',
@@ -891,7 +960,8 @@ var FileUploadComponent = /** @class */ (function () {
                     multi: true
                 }
             ]
-        })
+        }),
+        __metadata("design:paramtypes", [])
     ], FileUploadComponent);
     return FileUploadComponent;
     var FileUploadComponent_1;
@@ -1035,10 +1105,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var KickRifteeButtonComponent = /** @class */ (function () {
-    function KickRifteeButtonComponent(sessionService, modalService, changeDetectorRef) {
+    function KickRifteeButtonComponent(sessionService, modalService) {
         this.sessionService = sessionService;
         this.modalService = modalService;
-        this.changeDetectorRef = changeDetectorRef;
         this.deleteRiftee = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
     KickRifteeButtonComponent.prototype.ngOnInit = function () {
@@ -1053,7 +1122,6 @@ var KickRifteeButtonComponent = /** @class */ (function () {
             "sessionId": parseInt(this.sessionId),
             "rifteeId": this.rifteeId
         };
-        console.log(data);
         this.sessionService.updateSessionRequest(data);
         console.log("Kicked riftee from session");
         this.deleteRiftee.emit(this.riftee);
@@ -1085,8 +1153,7 @@ var KickRifteeButtonComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_2_ngx_bootstrap__["c" /* BsModalService */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_2_ngx_bootstrap__["c" /* BsModalService */]])
     ], KickRifteeButtonComponent);
     return KickRifteeButtonComponent;
 }());
@@ -1098,7 +1165,7 @@ var KickRifteeButtonComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/notification/notification.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"media activity-item\">\n  <a href=\"#\" class=\"pull-left\">\n    <img src=\"{{notification.creatorProfilePic}}\" class=\"media-object avatar\">\n  </a>\n  <div class=\"media-body\">\n    <p class=\"activity-title\"><b>{{creatorRiftTag}}</b>\n      {{notification.notificationContent}}\n      <a [routerLink]=\"['../session', notification.sessionId]\">{{notification.sessionTitle}}</a>\n    </p>\n    <div *ngIf=\"status == 0\">\n      rejected\n    </div>\n    <div *ngIf=\"status == 1\">\n      pending\n    </div>\n    <div *ngIf=\"status == 2\">\n      accepted\n    </div>\n    <small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>\n  </div>\n  <div class=\"btn-group pull-right activity-actions\" *ngIf=\"notification.notificationType == 3\">\n    <app-session-accept-reject-button\n    [notification]=\"notification\" [status]=\"status\">\n    </app-session-accept-reject-button>\n  </div>\n</div>\n<div class=\"divider dropdown-divider\"></div>\n"
+module.exports = "<div class=\"media activity-item\">\n  <a href=\"#\" class=\"pull-left\">\n    <img src=\"{{notification.creatorProfilePic}}\" class=\"media-object avatar\">\n  </a>\n  <div class=\"media-body\">\n    <p class=\"activity-title\" [routerLink]=\"['../../user', notification.creatorRiftTag]\"><b>{{notification.creatorRiftTag}}</b>\n      {{notification.notificationContent}}\n      <a [routerLink]=\"['../session', notification.sessionId]\">{{notification.sessionTitle}}</a>\n    </p>\n    <div *ngIf=\"status == 0\">\n      rejected\n    </div>\n    <div *ngIf=\"status == 1\">\n      pending\n    </div>\n    <div *ngIf=\"status == 2\">\n      accepted\n    </div>\n    <small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>\n  </div>\n  <div class=\"btn-group pull-right activity-actions\" *ngIf=\"notification.notificationType == 'SRQ'\">\n    <app-session-accept-reject-button\n    [notification]=\"notification\" [status]=\"status\">\n    </app-session-accept-reject-button>\n  </div>\n</div>\n<div class=\"divider dropdown-divider\"></div>\n"
 
 /***/ }),
 
@@ -1147,7 +1214,6 @@ var NotificationComponent = /** @class */ (function () {
         this.hasProfilePic = true;
     }
     NotificationComponent.prototype.ngOnInit = function () {
-        this.getRiftTagById(this.notification.creatorId);
         this.getNotificationProfilePicture(this.creatorRiftTag, this.notification);
         if (this.notification.notificationType - 2 != 0) {
             this.getSessionStatus(this.notification.creatorId, this.notification.sessionId);
@@ -1159,15 +1225,7 @@ var NotificationComponent = /** @class */ (function () {
     NotificationComponent.prototype.getSessionStatus = function (rifteeId, sessionId) {
         var _this = this;
         this.userSessionService.getSessionStatus(rifteeId, sessionId).subscribe(function (resBody) {
-            //noinspection TypeScriptUnresolvedVariable
             _this.status = resBody.status;
-        });
-    };
-    NotificationComponent.prototype.getRiftTagById = function (id) {
-        var _this = this;
-        this.userProfileService.getUserRiftTag(this.notification.creatorId).subscribe(function (resBody) {
-            //noinspection TypeScriptUnresolvedVariable
-            _this.creatorRiftTag = resBody.riftTag;
         });
     };
     NotificationComponent.prototype.getNotificationProfilePicture = function (riftTag, notification) {
@@ -1271,7 +1329,7 @@ var RatingComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/search-bar/search-bar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"navbar-form navbar-left\">\n  <div class=\"input-group\">\n    <input type=\"text\" class=\"form-control form-rounded\" placeholder=\"Search the Rift\" [(ngModel)]=\"searchQuery\">\n    <span class=\"input-group-btn\">\n      <button class=\"btn btn-default btn-rounded\" type=\"button\" [routerLink]=\"['therift/', searchQuery]\">\n        <i class=\"glyphicon glyphicon-search\" style=\"color: white\"></i>\n      </button>\n    </span>\n  </div>\n</div>\n"
+module.exports = "<div class=\"navbar-form navbar-left\">\n  <div class=\"input-group\">\n    <input type=\"text\" class=\"search-query form-control\" placeholder=\"Search the Rift\" [(ngModel)]=\"searchQuery\">\n    <span class=\"input-group-btn\">\n      <button class=\"btn btn-danger searchButton\" type=\"button\" [routerLink]=\"['therift/', searchQuery]\">\n        <i class=\"glyphicon glyphicon-search\"></i>\n      </button>\n    </span>\n  </div>\n</div>\n\n    <!--<div id=\"custom-search-input\">-->\n      <!--<div class=\"input-group col-md-3\">-->\n        <!--<input type=\"text\" class=\"  search-query form-control\" placeholder=\"Search the Rift\" [(ngModel)]=\"searchQuery\" />-->\n        <!--<span class=\"input-group-btn\">-->\n            <!--<button class=\"btn btn-danger\" type=\"button\" [routerLink]=\"['therift/', searchQuery]\">-->\n                <!--<span class=\" glyphicon glyphicon-search\"></span>-->\n            <!--</button>-->\n        <!--</span>-->\n      <!--</div>-->\n    <!--</div>-->\n"
 
 /***/ }),
 
@@ -1283,7 +1341,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".form-rounded, .btn-rounded {\n  border-radius: 1rem;\n  background-color: transparent;\n  color: white; }\n\n.btn-rounded {\n  border-left: none; }\n\n.glyphicon .glyphicon-search {\n  color: white !important; }\n", ""]);
+exports.push([module.i, ".form-rounded, .btn-rounded {\n  border-radius: 1rem;\n  background-color: transparent;\n  color: white; }\n\n.searchButton {\n  background-color: #FAB702 !important;\n  border-color: #FAB702; }\n\n.btn-rounded {\n  border-left: none; }\n\n.glyphicon .glyphicon-search {\n  color: white !important; }\n", ""]);
 
 // exports
 
@@ -1417,8 +1475,7 @@ module.exports = module.exports.toString();
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SessionAcceptRejectButtonComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__usersessions_usersessions_service__ = __webpack_require__("../../../../../src/app/usersessions/usersessions.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__userprofile_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/payment.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1431,28 +1488,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var SessionAcceptRejectButtonComponent = /** @class */ (function () {
-    function SessionAcceptRejectButtonComponent(userSessionService, paymentService, userProfileService) {
+    function SessionAcceptRejectButtonComponent(userSessionService, userProfileService) {
         this.userSessionService = userSessionService;
-        this.paymentService = paymentService;
         this.userProfileService = userProfileService;
         this.profile = JSON.parse(localStorage.getItem('profile'));
     }
     SessionAcceptRejectButtonComponent.prototype.ngOnInit = function () {
-    };
-    SessionAcceptRejectButtonComponent.prototype.acceptRequest = function () {
-        var data = {
-            "accepted": 2,
-            "hostId": this.notification.userId,
-            "sessionId": this.notification.sessionId,
-            "rifteeId": this.notification.creatorId
-        };
-        // this.getTransactionData(data.rifteeId, data.sessionId);
-        this.userSessionService.updateSessionRequest(data);
-        this.status = 2;
-        this.sendConfirmationEmail();
-        console.log("Accepted request");
     };
     SessionAcceptRejectButtonComponent.prototype.sendConfirmationEmail = function () {
         var rifterEmail = {
@@ -1470,6 +1512,18 @@ var SessionAcceptRejectButtonComponent = /** @class */ (function () {
         this.userProfileService.sendConfirmationEmail(rifterEmail);
         this.userProfileService.sendConfirmationEmail(rifteeEmail);
     };
+    SessionAcceptRejectButtonComponent.prototype.acceptRequest = function () {
+        var data = {
+            "accepted": 2,
+            "hostId": this.notification.userId,
+            "sessionId": this.notification.sessionId,
+            "rifteeId": this.notification.creatorId
+        };
+        this.userSessionService.updateSessionRequest(data);
+        this.status = 2;
+        this.sendConfirmationEmail();
+        console.log("Accepted request");
+    };
     SessionAcceptRejectButtonComponent.prototype.rejectRequest = function () {
         var data = {
             "accepted": 0,
@@ -1480,16 +1534,6 @@ var SessionAcceptRejectButtonComponent = /** @class */ (function () {
         this.userSessionService.updateSessionRequest(data);
         this.status = 0;
         console.log("Rejected request");
-    };
-    SessionAcceptRejectButtonComponent.prototype.getTransactionData = function (riftId, sessionId) {
-        var _this = this;
-        this.paymentService.getTransactionData(riftId, sessionId).subscribe(function (resBody) {
-            //noinspection TypeScriptUnresolvedVariable
-            _this.doTransaction(resBody.braintreeId, resBody.sessionCost);
-        });
-    };
-    SessionAcceptRejectButtonComponent.prototype.doTransaction = function (customerId, amount) {
-        this.paymentService.doTransaction(customerId, amount);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
@@ -1505,8 +1549,7 @@ var SessionAcceptRejectButtonComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/components/session-accept-reject-button/session-accept-reject-button.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/session-accept-reject-button/session-accept-reject-button.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_2__userprofile_payment_service__["a" /* PaymentService */],
-            __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__["a" /* UserprofileService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__["a" /* UserprofileService */]])
     ], SessionAcceptRejectButtonComponent);
     return SessionAcceptRejectButtonComponent;
 }());
@@ -1582,21 +1625,7 @@ var SessionCardComponent = /** @class */ (function () {
         this.gameAccountService = gameAccountService;
         this.gameAccounts = [];
     }
-    SessionCardComponent.prototype.getLoggedInUserId = function (riftTag) {
-        var _this = this;
-        if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-            this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
-        }
-        else {
-            this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
-                _this.loggedInUserId = resBody.id;
-            });
-        }
-    };
     SessionCardComponent.prototype.ngOnInit = function () {
-        if (this.isLoggedIn) {
-            this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
-        }
         this.sessionIcon = __WEBPACK_IMPORTED_MODULE_1__constants_session_icon_variables__["a" /* SESSION_ICONS */][this.session.gameId];
         this.consoleIcon = __WEBPACK_IMPORTED_MODULE_6__constants_console_icon_variables__["a" /* CONSOLE_ICONS */][this.session.console];
     };
@@ -1633,6 +1662,10 @@ var SessionCardComponent = /** @class */ (function () {
             }
         });
     };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Number)
+    ], SessionCardComponent.prototype, "loggedInUserId", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__models_session__["a" /* Session */])
@@ -1696,8 +1729,6 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserCardComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_userprofile__ = __webpack_require__("../../../../../src/app/models/userprofile.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1708,18 +1739,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-
-
 var UserCardComponent = /** @class */ (function () {
-    function UserCardComponent(userProfileService) {
-        this.userProfileService = userProfileService;
-        this.loggedInUser = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
+    function UserCardComponent() {
         this.profile = JSON.parse(localStorage.getItem('profile'));
     }
     UserCardComponent.prototype.ngOnInit = function () {
-        if (this.isLoggedIn) {
-            this.getCurrentLoggedInUser();
-        }
     };
     UserCardComponent.prototype.isFollowing = function (riftTag) {
         for (var i = 0; i < this.loggedInUser.followings.length; i++) {
@@ -1730,19 +1754,6 @@ var UserCardComponent = /** @class */ (function () {
         }
         return false;
     };
-    UserCardComponent.prototype.getCurrentLoggedInUser = function () {
-        var _this = this;
-        this.userProfileService.getUser(this.profile.nickname).subscribe(function (resBody) {
-            _this.loggedInUser.id = resBody.id;
-            for (var i = 0; i < resBody.followings.length; i++) {
-                var currFollowing = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
-                currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
-                currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
-                currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
-                _this.loggedInUser.followings.push(currFollowing);
-            }
-        });
-    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
@@ -1751,13 +1762,17 @@ var UserCardComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Boolean)
     ], UserCardComponent.prototype, "isLoggedIn", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], UserCardComponent.prototype, "loggedInUser", void 0);
     UserCardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-user-card',
             template: __webpack_require__("../../../../../src/app/components/user-card/user-card.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/user-card/user-card.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__["a" /* UserprofileService */]])
+        __metadata("design:paramtypes", [])
     ], UserCardComponent);
     return UserCardComponent;
 }());
@@ -1769,7 +1784,7 @@ var UserCardComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/user-review/user-review.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"col-sm-3\">\n  <img src=\"http://dummyimage.com/60x60/666/ffffff&text=No+Image\" class=\"img-rounded\">\n  <div class=\"review-block-name\">\n    <a [routerLink] = \"['../', rating.reviewerUsertable.riftTag]\">\n      {{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>\n      @{{rating.reviewerUsertable.riftTag}}\n    </a>\n  </div>\n  <div class=\"review-block-date\">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>\n</div>\n<div class=\"col-sm-9\">\n  <div class=\"review-block-rate\">\n    {{accountType}}<br>\n    <button type=\"button\" class=\"btn btn-warning btn-xs\" aria-label=\"Left Align\">\n      <span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\"></span>\n    </button>\n    <button type=\"button\" class=\"btn btn-warning btn-xs\" aria-label=\"Left Align\">\n      <span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\"></span>\n    </button>\n    <button type=\"button\" class=\"btn btn-warning btn-xs\" aria-label=\"Left Align\">\n      <span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\"></span>\n    </button>\n    <button type=\"button\" class=\"btn btn-default btn-grey btn-xs\" aria-label=\"Left Align\">\n      <span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\"></span>\n    </button>\n    <button type=\"button\" class=\"btn btn-default btn-grey btn-xs\" aria-label=\"Left Align\">\n      <span class=\"glyphicon glyphicon-star\" aria-hidden=\"true\"></span>\n    </button>\n    {{rating.rating}}\n  </div>\n  <div class=\"review-block-title\">{{rating.reviewTitle}}</div>\n  <div class=\"review-block-description\">{{rating.review}}</div>\n</div>\n\n<!---->\n"
+module.exports = "<div class=\"col-sm-3\">\n  <img src=\"{{rating.reviewerUsertable.profilePic}}\" class=\"img-rounded profilePic\">\n  <div class=\"review-block-name\">\n    <a [routerLink] = \"['../', rating.reviewerUsertable.riftTag]\">\n      {{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>\n      @{{rating.reviewerUsertable.riftTag}}\n    </a>\n  </div>\n  <div class=\"review-block-date\">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>\n</div>\n<div class=\"col-sm-9\">\n  <div class=\"review-block-rate\">\n    {{accountType}}<br>\n    <app-rating [rating]=\"rating.rating\" [readonly]=\"true\"></app-rating>\n  </div>\n  <div class=\"review-block-title\">{{rating.reviewTitle}}</div>\n  <div class=\"review-block-description\">{{rating.review}}</div>\n</div>\n\n<!---->\n"
 
 /***/ }),
 
@@ -1781,7 +1796,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".review-block-name {\n  font-size: 12px;\n  margin: 10px 0; }\n\n.review-block-date {\n  font-size: 12px; }\n\n.review-block-rate {\n  font-size: 13px;\n  margin-bottom: 15px; }\n\n.review-block-title {\n  font-size: 15px;\n  font-weight: 700;\n  margin-bottom: 10px; }\n\n.review-block-description {\n  font-size: 13px; }\n", ""]);
+exports.push([module.i, ".review-block-name {\n  font-size: 12px;\n  margin: 10px 0; }\n\n.review-block-date {\n  font-size: 12px; }\n\n.review-block-rate {\n  font-size: 13px;\n  margin-bottom: 15px; }\n\n.review-block-title {\n  font-size: 15px;\n  font-weight: 700;\n  margin-bottom: 10px; }\n\n.review-block-description {\n  font-size: 13px; }\n\n.profilePic {\n  width: 100px;\n  height: 100px; }\n", ""]);
 
 // exports
 
@@ -1825,6 +1840,10 @@ var UserReviewComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__models_userrating__["a" /* UserRating */])
     ], UserReviewComponent.prototype, "rating", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", String)
+    ], UserReviewComponent.prototype, "userProfilePic", void 0);
     UserReviewComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-user-review',
@@ -1836,21 +1855,6 @@ var UserReviewComponent = /** @class */ (function () {
     return UserReviewComponent;
 }());
 
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/constants/activity-content.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ACTIVITY_CONTENT; });
-var ACTIVITY_CONTENT = [
-    "created a new session: ",
-    "updated session: ",
-    "cancelled session: ",
-    "has joined a session: "
-];
 
 
 /***/ }),
@@ -1959,12 +1963,17 @@ var LANGUAGES = [
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NOTIFICATION_CONTENT; });
-var NOTIFICATION_CONTENT = [
-    "has accepted your request to join session: ",
-    "has rejected your request to join session: ",
-    "started following you",
-    "has requested to join your session: "
-];
+var NOTIFICATION_CONTENT = new Map([
+    ["FOL", "started following you"],
+    ["SRQ", "has requested to join your session"],
+    ["SRA", "has accepted your request to join session: "],
+    ["SRR", "has rejected your request to join session: "],
+    ["SPO", "created a new session: "],
+    ["SUP", "updated session: "],
+    ["SDE", "cancelled session: "],
+    ["SST", "is live on twitch: "],
+    ["SJO", "has joined a session: "]
+]);
 
 
 /***/ }),
@@ -2022,8 +2031,8 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_userprofile__ = __webpack_require__("../../../../../src/app/models/userprofile.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_activity__ = __webpack_require__("../../../../../src/app/models/activity.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__constants_activity_content__ = __webpack_require__("../../../../../src/app/constants/activity-content.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_session__ = __webpack_require__("../../../../../src/app/models/session.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_session__ = __webpack_require__("../../../../../src/app/models/session.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__constants_notification_content__ = __webpack_require__("../../../../../src/app/constants/notification-content.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2056,13 +2065,13 @@ var FeedComponent = /** @class */ (function () {
                 var currFeed = resBody[i];
                 var currNotification = new __WEBPACK_IMPORTED_MODULE_3__models_activity__["a" /* Activity */]();
                 currNotification.notificationType = currFeed.notificationType;
-                currNotification.notificationContent = __WEBPACK_IMPORTED_MODULE_4__constants_activity_content__["a" /* ACTIVITY_CONTENT */][currNotification.notificationType];
+                currNotification.notificationContent = __WEBPACK_IMPORTED_MODULE_5__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(currNotification.notificationType);
                 currNotification.createdTime = currFeed.createdTime;
                 currNotification.riftTag = currFeed.creatorUsertable.riftTag;
                 currNotification.firstName = currFeed.creatorUsertable.firstName;
                 currNotification.lastName = currFeed.creatorUsertable.lastName;
                 _this.getActivityProfilePicture(currNotification.riftTag, currNotification);
-                var session = new __WEBPACK_IMPORTED_MODULE_5__models_session__["a" /* Session */]();
+                var session = new __WEBPACK_IMPORTED_MODULE_4__models_session__["a" /* Session */]();
                 var currSession = currFeed.rifterSession;
                 session.id = currSession.id;
                 session.gameId = currSession.gameId;
@@ -2078,7 +2087,7 @@ var FeedComponent = /** @class */ (function () {
         return true;
     };
     FeedComponent.prototype.getActivityProfilePicture = function (riftTag, activity) {
-        console.log("Getting user's profile picture");
+        // console.log("Getting user's profile picture");
         this.userProfileService.getProfilePicture(riftTag).subscribe(function (resBody) {
             if (resBody.image == "") {
                 activity.creatorProfilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
@@ -2098,111 +2107,6 @@ var FeedComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__userprofile_userprofile_service__["a" /* UserprofileService */]])
     ], FeedComponent);
     return FeedComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/game-api/league-of-legends/league-of-legends.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<p>\n  league-of-legends works!\n</p>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/game-api/league-of-legends/league-of-legends.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/game-api/league-of-legends/league-of-legends.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LeagueOfLegendsComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var LeagueOfLegendsComponent = /** @class */ (function () {
-    function LeagueOfLegendsComponent() {
-    }
-    LeagueOfLegendsComponent.prototype.ngOnInit = function () {
-    };
-    LeagueOfLegendsComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-league-of-legends',
-            template: __webpack_require__("../../../../../src/app/game-api/league-of-legends/league-of-legends.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/game-api/league-of-legends/league-of-legends.component.scss")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], LeagueOfLegendsComponent);
-    return LeagueOfLegendsComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/game-api/league-of-legends/league-of-legends.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LeagueOfLegendsService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var LeagueOfLegendsService = /** @class */ (function () {
-    function LeagueOfLegendsService(http) {
-        this.http = http;
-        this.riotUrl = 'https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/';
-        this.apiKey = "RGAPI-279e8bf9-320f-48d9-965e-cb057d623358";
-    }
-    LeagueOfLegendsService.prototype.getSummonerInfo = function (summonerName) {
-        return this.http.get("/api/riotSummoner/" + summonerName)
-            .map(function (response) {
-            return response.json();
-        })
-            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error'); });
-    };
-    LeagueOfLegendsService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_http__["Http"]])
-    ], LeagueOfLegendsService);
-    return LeagueOfLegendsService;
 }());
 
 
@@ -2243,6 +2147,13 @@ var Globals = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/img/rift-welcome.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "rift-welcome.193d2c8aa8b9fcd2f2da.jpg";
+
+/***/ }),
+
 /***/ "../../../../../src/app/models/activity.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2269,6 +2180,21 @@ var Console = /** @class */ (function () {
         this.selected = selected;
     }
     return Console;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/models/credit-card.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreditCard; });
+var CreditCard = /** @class */ (function () {
+    function CreditCard() {
+    }
+    return CreditCard;
 }());
 
 
@@ -2433,7 +2359,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".navbar {\n  min-height: 70px !important;\n  margin-bottom: 5% !important;\n  background-color: #293e49;\n}\n\n.badge-notify{\n  background:red;\n  position:absolute;\n  top:0px;\n  color: white;\n}\n\na {\n  color: white !important;\n  cursor: pointer;\n}\n\n.container-fluid {\n  margin-top: 10px !important;\n}\n\n.btn-group {\n  margin-top: 9px !important;\n}\n\n.dropdown-toggle {\n  background-color: transparent !important;\n  border: none !important;\n}\n\n.dropdown-item {\n  color: black !important;\n  margin-left: 5px !important;\n  margin-right: 5px !important;\n}\n\napp-notification {\n  color: black !important;\n}\n\n.dropdown-menu {\n  max-height: 600px !important;\n  min-width: 500px !important;\n  overflow-y:scroll !important;\n}\n\n.media {\n  margin-left: 10px !important;\n  margin-right: 10px !important;\n}\n", ""]);
+exports.push([module.i, ".navbar {\n  min-height: 70px !important;\n  margin-bottom: 0 !important;\n  background-color: #18191b;\n  border: none;\n  border-radius: 0;\n}\n\n.navbar-right {\n  font-family: \"Raleway\", Arial, Helvetica, sans-serif;\n  font-size: 11px;\n  font-weight: 400 !important;\n  letter-spacing: 3px;\n  text-transform: uppercase;\n}\n\n.navbar-text {\n  font-family: \"Raleway\", Arial, Helvetica, sans-serif;\n  font-size: 11px;\n  font-weight: 400 !important;\n  letter-spacing: 3px;\n  text-transform: uppercase;\n  color: white !important;\n}\n\nul {\n  margin-top:0;\n  margin-bottom: 10px;\n\n}\n\nli a:after {\n  float: right;\n  position: relative;\n  font-family: \"FontAwesome\";\n  content: \"\\F111\";\n  font-size: 6px;\n  margin-left: 15px;\n  margin-right: 10px;\n  margin-top: 0px;\n  color: #FAB702;\n  display:inline-block;\n}\n\n.profile-dropdown a{\n  color: #18191b !important;\n  font-size: 13px;\n  font-weight: 500 !important;\n  letter-spacing: 0px;\n  text-transform: none;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.notifications-dropdown {\n  color: #18191b !important;\n  font-size: 13px;\n  font-weight: 500 !important;\n  letter-spacing: 0px;\n  text-transform: none;\n  font-family: \"Montserrat\", sans-serif;\n}\n\n.profile-dropdown a:after, .profileToggle a:after{\n  content: none;\n}\n\n.profilePic {\n  max-height: 25px;\n  max-width: 25px;\n  margin-right: 10%;\n}\n\n#user-profile-label {\n  margin-bottom: 10%;\n}\n\n.rift-icon {\n  height: 25px;\n  width: 25px;\n  display:inline-block;\n}\n\n.badge-notify{\n  background:red;\n  position:absolute;\n  top:0;\n  color: white;\n}\n\na {\n  color: white !important;\n  cursor: pointer;\n  width: 110%;\n}\n\n.container-fluid {\n  margin-top: 10px !important;\n}\n\n.dropdown-toggle {\n  background-color: transparent !important;\n  border: none !important;\n}\n\n#notify-icon {\n  padding: 15px 12px;\n  display: inline;\n  line-height: 20px;\n  vertical-align: middle;\n}\n\n.dropdown-item {\n  color: black !important;\n  margin-left: 5px !important;\n  margin-right: 5px !important;\n}\n\n/*app-notification {*/\n\n/*color: black !important;*/\n\n/*}*/\n\n.dropdown-menu {\n  max-height: 600px !important;\n  min-width: 200px !important;\n  overflow-y: hidden !important;\n  /*display:inline-block;*/\n  padding: 5px 10px;\n  margin-top: 10px !important;\n  animation: fadein 0.25s;\n  -moz-animation: fadein 0.25s; /* Firefox */\n  -webkit-animation: fadein 0.25s; /* Safari and Chrome */\n  -o-animation: fadein 0.25s; /* Opera */\n}\n\n.media {\n  margin-left: 10px !important;\n  margin-right: 10px !important;\n}\n\n.user-info {\n  position: relative;\n  margin-bottom: 40px;\n  margin-top: 30px;\n}\n\n.user-info img {\n  border-radius: 2px;\n  width: 40px;\n}\n\n.user-info a {\n  font-size: 1.1em;\n  line-height: 1;\n}\n\n.user-info .username {\n  font-size: 0.9em;\n  line-height: 1.5;\n}\n\n.media-body {\n  margin-left: 10%;\n  padding-left: 10%;\n}\n", ""]);
 
 // exports
 
@@ -2446,7 +2372,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default navbar-custom navbar-fixed-top\">\n  <div class=\"container-fluid\">\n    <div class=\"navbar-header page-scroll\">\n      <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        Menu <i class=\"fa fa-bars\"></i>\n      </button>\n      <app-search-bar></app-search-bar>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li>\n          <a routerLink=\"feed\" *ngIf=\"auth.isAuthenticated()\">Feed</a>\n        </li>\n        <li>\n          <a routerLink=\"sessions\" *ngIf=\"auth.isAuthenticated()\">Sessions</a>\n        </li>\n        <li>\n          <a [routerLink]=\"['user', getCurrentUser().nickname]\" *ngIf=\"auth.isAuthenticated()\">Profile</a>\n        </li>\n        <li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">\n          <div class=\"btn-group\" dropdown>\n            <button dropdownToggle type=\"button\" class=\"btn btn-primary dropdown-toggle\" (click)=\"clearUnseen();\">\n              <span class=\"glyphicon glyphicon-bell\"></span>\n              <span class=\"badge badge-notify\" *ngIf=\"globals.unseenNotifications > 0\">{{globals.unseenNotifications}}</span>\n\n            </button>\n            <ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">\n              <li class=\"media\" *ngFor=\"let notification of notificationsList\">\n                <app-notification [notification]=\"notification\"></app-notification>\n              </li>\n            </ul>\n          </div>\n        </li>\n\n        <li>\n          <a (click)=\"auth.login()\" *ngIf=\"!auth.isAuthenticated()\">Login</a>\n        </li>\n        <li>\n          <a (click)=\"auth.logout()\" *ngIf=\"auth.isAuthenticated()\">Logout</a>\n        </li>\n\n      </ul>\n    </div>\n  </div>\n</nav>\n\n"
+module.exports = "<!--<nav class=\"navbar navbar-default navbar-custom navbar-fixed-top\">-->\n  <!--<div class=\"container-fluid\">-->\n    <!--<div class=\"navbar-header page-scroll\">-->\n      <!--<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">-->\n        <!--<span class=\"sr-only\">Toggle navigation</span>-->\n        <!--Menu <i class=\"fa fa-bars\"></i>-->\n      <!--</button>-->\n      <!--<app-search-bar></app-search-bar>-->\n    <!--</div>-->\n    <!--<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">-->\n      <!--<ul class=\"nav navbar-nav navbar-right\">-->\n        <!--<li>-->\n          <!--<a routerLink=\"feed\" *ngIf=\"auth.isAuthenticated()\">Feed</a>-->\n        <!--</li>-->\n        <!--<li>-->\n          <!--<a routerLink=\"sessions\" *ngIf=\"auth.isAuthenticated()\">Sessions</a>-->\n        <!--</li>-->\n        <!--<li>-->\n          <!--<a [routerLink]=\"['user', profile.nickname]\" *ngIf=\"auth.isAuthenticated()\">{{profile.nickname}}</a>-->\n        <!--</li>-->\n        <!--<li class=\"dropdown\" *ngIf=\"auth.isAuthenticated()\">-->\n          <!--<div class=\"btn-group\" dropdown>-->\n            <!--<button dropdownToggle type=\"button\" class=\"btn btn-primary dropdown-toggle\" (click)=\"clearUnseen();\">-->\n              <!--<span class=\"glyphicon glyphicon-bell\"></span>-->\n              <!--<span class=\"badge badge-notify\" *ngIf=\"globals.unseenNotifications > 0\">{{globals.unseenNotifications}}</span>-->\n\n            <!--</button>-->\n            <!--<ul *dropdownMenu class=\"dropdown-menu\" role=\"menu\">-->\n              <!--<li class=\"media\" *ngFor=\"let notification of notificationsList\">-->\n                <!--<app-notification [notification]=\"notification\"></app-notification>-->\n              <!--</li>-->\n            <!--</ul>-->\n          <!--</div>-->\n        <!--</li>-->\n\n        <!--<li>-->\n          <!--<a (click)=\"auth.login()\" *ngIf=\"!auth.isAuthenticated()\">Login</a>-->\n        <!--</li>-->\n        <!--<li>-->\n          <!--<a (click)=\"auth.logout()\" *ngIf=\"auth.isAuthenticated()\">Logout</a>-->\n        <!--</li>-->\n\n      <!--</ul>-->\n    <!--</div>-->\n  <!--</div>-->\n<!--</nav>-->\n\n<nav class=\"navbar navbar-default\">\n  <div class=\"container-fluid\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" (click)=\"isCollapsed = !isCollapsed\" aria-expanded=\"false\">\n        <span class=\"sr-only\">Toggle navigation</span>\n        <i class=\"fa fa-bars\"></i>\n      </button>\n      <a class=\"navbar-brand\" routerLink=\"home\">\n        <img src=\"https://www.iconexperience.com/_img/o_collection_png/green_dark_grey/256x256/plain/crack.png\" class=\"rift-icon\">\n        RIFT\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse\" [collapse]=isCollapsed>\n      <app-search-bar></app-search-bar>\n\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li class=\"dropdown profileDrop\" *ngIf=\"auth.isAuthenticated()\" dropdown>\n          <a class=\"dropdown-toggle\" dropdownToggle>\n            <span><img src=\"{{loggedInUser.profilePic}}\" class=\"profilePic img-circle\">\n            {{profile.nickname}}\n            </span>\n            <!--<b class=\"caret\"></b>-->\n          </a>\n          <ul class=\"dropdown-menu\" *dropdownMenu>\n            <li class=\"profile-dropdown\">\n              <a [routerLink]=\"['user', profile.nickname]\">\n                <!--<span id=\"user-profile-label\">-->\n                  <!--<img src=\"{{loggedInUser.profilePic}}\" class=\"profilePic img-circle\" style=\"display:inline-block\">-->\n                  <!--<p>{{loggedInUser.firstName}} {{loggedInUser.lastName}}</p>-->\n                  <!--<p>@{{profile.nickname}}</p>-->\n                <!--</span>-->\n                <div class=\"user-info\">\n                  <img src=\"{{loggedInUser.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                  <div class=\"media-body\">\n                    {{loggedInUser.firstName}} {{loggedInUser.lastName}}\n                    <br><span class=\"text-muted username\">@{{profile.nickname}}</span>\n                  </div>\n                </div>\n                View Profile\n              </a>\n            </li>\n            <li class=\"divider\"></li>\n            <li class=\"profile-dropdown\">\n              <a (click)=\"auth.logout()\" *ngIf=\"auth.isAuthenticated()\">Sign Out</a>\n            </li>\n          </ul>\n        </li>\n        <li class=\"feed\">\n          <a routerLink=\"feed\" *ngIf=\"auth.isAuthenticated()\">Feed</a>\n        </li>\n        <li class=\"sessions\">\n          <a routerLink=\"sessions\" *ngIf=\"auth.isAuthenticated()\">Sessions</a>\n        </li>\n        <li class=\"notifications dropdown\" *ngIf=\"auth.isAuthenticated()\">\n          <div class=\"btn-group\" dropdown>\n            <button id=\"notify-icon\" dropdownToggle type=\"button\" class=\"btn btn-primary dropdown-toggle\" (click)=\"clearUnseen();\">\n              <span class=\"glyphicon glyphicon-bell\"></span>\n              <span class=\"badge badge-notify\" *ngIf=\"globals.unseenNotifications > 0\">{{globals.unseenNotifications}}</span>\n\n            </button>\n            <ul *dropdownMenu class=\"dropdown-menu notifications-dropdown\" role=\"menu\" style=\"min-width: 500px !important\">\n              <li class=\"media\" *ngFor=\"let notification of notificationsList\">\n                <app-notification [notification]=\"notification\"></app-notification>\n              </li>\n            </ul>\n          </div>\n        </li>\n\n        <li>\n          <a (click)=\"auth.login()\" *ngIf=\"!auth.isAuthenticated()\">Login</a>\n        </li>\n      </ul>\n    </div><!-- /.navbar-collapse -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n"
 
 /***/ }),
 
@@ -2461,6 +2387,7 @@ module.exports = "<nav class=\"navbar navbar-default navbar-custom navbar-fixed-
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__global_globals__ = __webpack_require__("../../../../../src/app/global/globals.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__userprofile_notifications_service__ = __webpack_require__("../../../../../src/app/userprofile/notifications.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2476,22 +2403,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var NavbarComponent = /** @class */ (function () {
-    function NavbarComponent(auth, userProfileService, notificationService, globals) {
+    function NavbarComponent(auth, userProfileService, notificationService, globals, sharedFunc) {
         this.auth = auth;
         this.userProfileService = userProfileService;
         this.notificationService = notificationService;
         this.globals = globals;
+        this.sharedFunc = sharedFunc;
         this.currentUser = new __WEBPACK_IMPORTED_MODULE_2__models_userprofile__["a" /* Userprofile */]();
+        this.loggedInUser = new __WEBPACK_IMPORTED_MODULE_2__models_userprofile__["a" /* Userprofile */]();
         this.profile = JSON.parse(localStorage.getItem('profile'));
+        this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
+        this.loggedInUser.lastName = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;
+        this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
     }
-    NavbarComponent.prototype.getCurrentUser = function () {
-        return JSON.parse(localStorage.getItem('profile'));
-    };
     NavbarComponent.prototype.clearUnseen = function () {
         this.globals.unseenNotifications = 0;
-        var profile = JSON.parse(localStorage.getItem('profile'));
-        this.notificationService.clearUnseen(profile.nickname);
+        this.notificationService.clearUnseen(this.profile.nickname);
     };
     NavbarComponent.prototype.ngOnInit = function () {
     };
@@ -2517,7 +2446,7 @@ var NavbarComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/navbar/navbar.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3__userprofile_userprofile_service__["a" /* UserprofileService */],
-            __WEBPACK_IMPORTED_MODULE_5__userprofile_notifications_service__["a" /* NotificationsService */], __WEBPACK_IMPORTED_MODULE_4__global_globals__["a" /* Globals */]])
+            __WEBPACK_IMPORTED_MODULE_5__userprofile_notifications_service__["a" /* NotificationsService */], __WEBPACK_IMPORTED_MODULE_4__global_globals__["a" /* Globals */], __WEBPACK_IMPORTED_MODULE_6__shared_shared_functions__["a" /* SharedFunctions */]])
     ], NavbarComponent);
     return NavbarComponent;
 }());
@@ -2712,10 +2641,66 @@ var SessionTypePipe = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/shared/shared-functions.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SharedFunctions; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SharedFunctions = /** @class */ (function () {
+    function SharedFunctions(userProfileService) {
+        this.userProfileService = userProfileService;
+    }
+    SharedFunctions.prototype.getLoggedInUserId = function (riftTag, loggedInUser) {
+        this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
+            loggedInUser.id = resBody.id;
+            console.log(loggedInUser.id);
+        });
+    };
+    SharedFunctions.prototype.getUserProfilePicture = function (riftTag, user) {
+        this.userProfileService.getProfilePicture(riftTag).subscribe(function (resBody) {
+            if (resBody.image == "") {
+                user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
+            }
+            else {
+                user.profilePic = resBody.image;
+            }
+        });
+    };
+    SharedFunctions.prototype.timeToMilliseconds = function (time) {
+        var list = time.split(":");
+        var hour = (+list[0]);
+        var minute = (+list[1]);
+        var seconds = (hour * 60 * 60) + (minute * 60);
+        return seconds * 1000;
+    };
+    SharedFunctions = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__userprofile_userprofile_service__["a" /* UserprofileService */]])
+    ], SharedFunctions);
+    return SharedFunctions;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/therift/riftsessions/riftsessions.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" style=\"width: 80%\">\n  <mat-tab-group>\n    <mat-tab label=\"users\">\n      <div class=\"user-cards\" *ngFor=\"let user of users\">\n        <app-user-card [user]=\"user\" [isLoggedIn]=\"isLoggedIn\"></app-user-card>\n      </div>\n    </mat-tab>\n    <mat-tab label=\"sessions\">\n      <div *ngFor=\"let session of sessions\">\n        <app-session-card [routerLink]=\"['../../session', session.id]\"\n          [session]=\"session\" [isLoggedIn]=\"isLoggedIn\" [request]=\"loggedInUser.sessionRequests.get(session.id)\">\n        </app-session-card>\n      </div>\n    </mat-tab>\n  </mat-tab-group>\n\n  <router-outlet></router-outlet>\n</div>\n"
+module.exports = "<div class=\"container\" style=\"width: 80%\">\n  <mat-tab-group>\n    <mat-tab label=\"users\">\n      <div class=\"user-cards\" *ngFor=\"let user of users\">\n        <app-user-card [user]=\"user\" [isLoggedIn]=\"isLoggedIn\" [loggedInUser]=\"loggedInUser\"></app-user-card>\n      </div>\n    </mat-tab>\n    <mat-tab label=\"sessions\">\n      <div *ngFor=\"let session of sessions\">\n        <app-session-card [routerLink]=\"['../../session', session.id]\"\n          [session]=\"session\" [isLoggedIn]=\"isLoggedIn\" [request]=\"loggedInUser.sessionRequests.get(session.id)\">\n        </app-session-card>\n      </div>\n    </mat-tab>\n  </mat-tab-group>\n\n  <router-outlet></router-outlet>\n</div>\n"
 
 /***/ }),
 
@@ -2750,6 +2735,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_session_request__ = __webpack_require__("../../../../../src/app/models/session-request.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_userprofile__ = __webpack_require__("../../../../../src/app/models/userprofile.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2767,12 +2753,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var RiftsessionsComponent = /** @class */ (function () {
-    function RiftsessionsComponent(searchBarService, route, userSessionsService, userProfileService) {
+    function RiftsessionsComponent(searchBarService, route, userSessionsService, userProfileService, sharedFunc) {
         this.searchBarService = searchBarService;
         this.route = route;
         this.userSessionsService = userSessionsService;
         this.userProfileService = userProfileService;
+        this.sharedFunc = sharedFunc;
         this.searchQuery = "";
         this.sessions = [];
         this.users = [];
@@ -2784,11 +2772,12 @@ var RiftsessionsComponent = /** @class */ (function () {
         var _this = this;
         this.sub = this.route.params.subscribe(function (params) {
             _this.searchQuery = params['searchQuery'];
-            if (JSON.parse(localStorage.getItem('profile')) != null) {
+            if (_this.profile) {
                 _this.isLoggedIn = true;
+                _this.getCurrentLoggedInUser();
+                _this.getUserSessionRequests(_this.profile.nickname);
             }
             _this.getUserSearchResults(_this.searchQuery);
-            _this.getUserSessionRequests(_this.profile.nickname);
         });
     };
     RiftsessionsComponent.prototype.getUserSearchResults = function (searchQuery) {
@@ -2803,7 +2792,7 @@ var RiftsessionsComponent = /** @class */ (function () {
                 currUser.lastName = users[i].lastName;
                 currUser.riftTag = users[i].riftTag;
                 currUser.id = users[i].id;
-                _this.getUserProfilePicture(currUser.riftTag, currUser);
+                _this.sharedFunc.getUserProfilePicture(currUser.riftTag, currUser);
                 _this.users.push(currUser);
             }
             for (var i = 0; i < resBody[1].length; i++) {
@@ -2827,24 +2816,10 @@ var RiftsessionsComponent = /** @class */ (function () {
             }
         });
     };
-    RiftsessionsComponent.prototype.getUserProfilePicture = function (riftTag, user) {
-        console.log("Getting user's profile picture");
-        this.userProfileService.getProfilePicture(riftTag).subscribe(function (resBody) {
-            if (resBody.image == "") {
-                user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
-            }
-            else {
-                user.profilePic = resBody.image;
-            }
-        });
-        return;
-        // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-    };
     RiftsessionsComponent.prototype.getUserSessionRequests = function (riftTag) {
         var _this = this;
         this.loggedInUser.sessionRequests = new Map();
         this.userSessionsService.getSessionRequests(riftTag).subscribe(function (resBody) {
-            //noinspection TypeScriptUnresolvedVariable
             for (var i = 0; i < resBody.length; i++) {
                 var request = new __WEBPACK_IMPORTED_MODULE_5__models_session_request__["a" /* SessionRequest */]();
                 request.accepted = resBody[i].accepted;
@@ -2855,6 +2830,19 @@ var RiftsessionsComponent = /** @class */ (function () {
             }
         });
     };
+    RiftsessionsComponent.prototype.getCurrentLoggedInUser = function () {
+        var _this = this;
+        this.userProfileService.getUser(this.profile.nickname).subscribe(function (resBody) {
+            _this.loggedInUser.id = resBody.id;
+            for (var i = 0; i < resBody.followings.length; i++) {
+                var currFollowing = new __WEBPACK_IMPORTED_MODULE_6__models_userprofile__["a" /* Userprofile */]();
+                currFollowing.firstName = resBody.followings[i].followingUsertable.firstName;
+                currFollowing.lastName = resBody.followings[i].followingUsertable.lastName;
+                currFollowing.riftTag = resBody.followings[i].followingUsertable.riftTag;
+                _this.loggedInUser.followings.push(currFollowing);
+            }
+        });
+    };
     RiftsessionsComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-riftsessions',
@@ -2862,7 +2850,7 @@ var RiftsessionsComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/therift/riftsessions/riftsessions.component.scss")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__components_search_bar_search_bar_service__["a" /* SearchBarService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */],
-            __WEBPACK_IMPORTED_MODULE_4__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_7__userprofile_userprofile_service__["a" /* UserprofileService */]])
+            __WEBPACK_IMPORTED_MODULE_4__usersessions_usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_7__userprofile_userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_8__shared_shared_functions__["a" /* SharedFunctions */]])
     ], RiftsessionsComponent);
     return RiftsessionsComponent;
 }());
@@ -2913,6 +2901,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__update_session_update_session_component__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__constants_console_icon_variables__ = __webpack_require__("../../../../../src/app/constants/console-icon-variables.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ngx_bootstrap__ = __webpack_require__("../../../../ngx-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2934,14 +2923,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var SessionPageComponent = /** @class */ (function () {
-    function SessionPageComponent(route, sessionPageService, userProfileService, userSessionsService, dialog, modalService) {
+    function SessionPageComponent(route, sessionPageService, userProfileService, userSessionsService, dialog, modalService, sharedFunc) {
         this.route = route;
         this.sessionPageService = sessionPageService;
         this.userProfileService = userProfileService;
         this.userSessionsService = userSessionsService;
         this.dialog = dialog;
         this.modalService = modalService;
+        this.sharedFunc = sharedFunc;
         this.session = new __WEBPACK_IMPORTED_MODULE_3__models_session__["a" /* Session */]();
         this.isLoggedIn = false;
         this.profile = JSON.parse(localStorage.getItem('profile'));
@@ -2964,6 +2955,7 @@ var SessionPageComponent = /** @class */ (function () {
         this.sessionPageService.getSessionById(this.id).subscribe(function (resBody) {
             _this.response = resBody;
             _this.session.id = _this.response.id;
+            _this.session.hostId = _this.response.hostId;
             _this.session.riftTag = _this.response.usertable.riftTag;
             _this.session.rifterRating = _this.response.usertable.rifterRating;
             _this.session.firstName = _this.response.usertable.firstName;
@@ -2999,7 +2991,7 @@ var SessionPageComponent = /** @class */ (function () {
             riftee.riftTag = player.riftTag;
             riftee.rifteeRating = player.rifteeRating;
             riftee.id = player.id;
-            this.getUserProfilePicture(riftee.riftTag, riftee);
+            this.sharedFunc.getUserProfilePicture(riftee.riftTag, riftee);
             this.session.riftees.push(riftee);
         }
     };
@@ -3016,32 +3008,15 @@ var SessionPageComponent = /** @class */ (function () {
     };
     SessionPageComponent.prototype.getLoggedInUserId = function (riftTag) {
         var _this = this;
-        if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-            this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
-        }
-        else {
-            this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
-                _this.loggedInUserId = resBody.id;
-            });
-        }
-    };
-    SessionPageComponent.prototype.getUserProfilePicture = function (riftTag, user) {
-        console.log("Getting user's profile picture");
-        this.userProfileService.getProfilePicture(riftTag).subscribe(function (resBody) {
-            if (resBody.image == "") {
-                user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
-            }
-            else {
-                user.profilePic = resBody.image;
-            }
+        this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
+            _this.loggedInUserId = resBody.id;
         });
     };
     SessionPageComponent.prototype.openUpdateSessionDialog = function () {
-        //noinspection TypeScriptUnresolvedFunction
         this.dialog.open(__WEBPACK_IMPORTED_MODULE_9__update_session_update_session_component__["a" /* UpdateSessionComponent */], {
             data: {
                 sessionTime: this.session.sessionTime,
-                sessionId: this.session.id
+                sessionId: this.session.id,
             }
         });
     };
@@ -3062,7 +3037,7 @@ var SessionPageComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_2__session_page_service__["a" /* SessionPageService */],
             __WEBPACK_IMPORTED_MODULE_4__userprofile_userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_5__usersessions_usersessions_service__["a" /* UsersessionsService */],
-            __WEBPACK_IMPORTED_MODULE_8__angular_material__["c" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_11_ngx_bootstrap__["c" /* BsModalService */]])
+            __WEBPACK_IMPORTED_MODULE_8__angular_material__["c" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_11_ngx_bootstrap__["c" /* BsModalService */], __WEBPACK_IMPORTED_MODULE_12__shared_shared_functions__["a" /* SharedFunctions */]])
     ], SessionPageComponent);
     return SessionPageComponent;
 }());
@@ -3298,6 +3273,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__constants_session_icon_variables__ = __webpack_require__("../../../../../src/app/constants/session-icon-variables.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__userprofile_game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3322,15 +3298,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 
 
+
 var UpdateSessionComponent = /** @class */ (function () {
     //noinspection JSAnnotator
-    function UpdateSessionComponent(updateSessionService, route, data, dialogRef, gameAccountService, userProfileService) {
+    function UpdateSessionComponent(updateSessionService, route, data, dialogRef, gameAccountService, userProfileService, sharedFunc) {
         this.updateSessionService = updateSessionService;
         this.route = route;
         this.data = data;
         this.dialogRef = dialogRef;
         this.gameAccountService = gameAccountService;
         this.userProfileService = userProfileService;
+        this.sharedFunc = sharedFunc;
         this.title = "Update this session";
         this.currentSession = new __WEBPACK_IMPORTED_MODULE_1__models_session__["a" /* Session */]();
         this.currentSessionDateTime = new __WEBPACK_IMPORTED_MODULE_2__data_sessionDateTime__["a" /* SessionDateTime */]();
@@ -3338,7 +3316,6 @@ var UpdateSessionComponent = /** @class */ (function () {
         this.games = __WEBPACK_IMPORTED_MODULE_6__constants_games__["a" /* GAMES */];
         this.consoles = __WEBPACK_IMPORTED_MODULE_7__constants_consoles__["a" /* CONSOLES */];
         this.profile = JSON.parse(localStorage.getItem("profile"));
-        this.getLoggedInUserId(this.profile.nickname);
     }
     UpdateSessionComponent.prototype.ngOnInit = function () {
         this.currentSession = this.updateSessionService.getSessionData();
@@ -3357,7 +3334,7 @@ var UpdateSessionComponent = /** @class */ (function () {
             currTime = this.updateSessionData.sessionTime;
         }
         var date = new Date(currDate);
-        var timeMS = this.timeToMilliseconds(currTime) + date.getTime();
+        var timeMS = this.sharedFunc.timeToMilliseconds(currTime) + date.getTime();
         var data = {
             "id": this.data.sessionId,
             "title": this.updateSessionData.title,
@@ -3375,24 +3352,6 @@ var UpdateSessionComponent = /** @class */ (function () {
         //noinspection TypeScriptUnresolvedFunction
         this.dialogRef.close();
         window.location.reload();
-    };
-    UpdateSessionComponent.prototype.getLoggedInUserId = function (riftTag) {
-        var _this = this;
-        if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-            this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
-        }
-        else {
-            this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
-                _this.loggedInUserId = resBody.id;
-            });
-        }
-    };
-    UpdateSessionComponent.prototype.timeToMilliseconds = function (time) {
-        var list = time.split(":");
-        var hour = (+list[0]);
-        var minute = (+list[1]);
-        var seconds = (hour * 60 * 60) + (minute * 60);
-        return seconds * 1000;
     };
     UpdateSessionComponent.prototype.cancelSession = function () {
         this.updateSessionService.cancelSession(this.data.sessionId);
@@ -3429,7 +3388,8 @@ var UpdateSessionComponent = /** @class */ (function () {
         }),
         __param(2, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MAT_DIALOG_DATA */])),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__data_update_session_service__["a" /* UpdateSessionService */], __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* ActivatedRoute */], Object, __WEBPACK_IMPORTED_MODULE_5__angular_material__["d" /* MatDialogRef */],
-            __WEBPACK_IMPORTED_MODULE_10__userprofile_game_account_game_account_service__["a" /* GameAccountService */], __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_service__["a" /* UserprofileService */]])
+            __WEBPACK_IMPORTED_MODULE_10__userprofile_game_account_game_account_service__["a" /* GameAccountService */], __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_service__["a" /* UserprofileService */],
+            __WEBPACK_IMPORTED_MODULE_12__shared_shared_functions__["a" /* SharedFunctions */]])
     ], UpdateSessionComponent);
     return UpdateSessionComponent;
 }());
@@ -3441,12 +3401,13 @@ var UpdateSessionComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/therift/therift.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
+var escape = __webpack_require__("../../../../css-loader/lib/url/escape.js");
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, "body {\n  overflow-x: hidden;\n  font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\np {\n  line-height: 1.75;\n}\n\na {\n  color: #666666;\n}\n\na:hover {\n  color: #666666;\n}\n\n.text-primary {\n  color: #fed136 !important;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-weight: 700;\n  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\nsection {\n  padding: 100px 0;\n}\n\nsection h2.section-heading {\n  font-size: 40px;\n  margin-top: 0;\n  margin-bottom: 15px;\n}\n\nsection h3.section-subheading {\n  font-size: 16px;\n  font-weight: 400;\n  font-style: italic;\n  margin-bottom: 75px;\n  text-transform: none;\n  font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\n@media (min-width: 768px) {\n  section {\n    padding: 150px 0;\n  }\n}\n\n.btn {\n  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 700;\n}\n\n.btn-xl {\n  font-size: 18px;\n  padding: 20px 40px;\n}\n\n.btn-primary {\n  background-color: #293e49;\n  border-color: transparent;\n  color: white;\n}\n\n::-moz-selection {\n  background: #293e49;;\n  text-shadow: none;\n}\n\n::selection {\n  background: #293e49;\n  text-shadow: none;\n}\n\nimg::-moz-selection {\n  background: transparent;\n}\n\nimg::selection {\n  background: transparent;\n}\n\nimg::-moz-selection {\n  background: transparent;\n}\n\nheader.masthead {\n  text-align: center;\n  color: white;\n  background-image: url(\"http://i.imgur.com/Ywcbcll.jpg\");\n  background-repeat: no-repeat;\n  background-attachment: scroll;\n  background-position: center center;\n  background-size: cover;\n}\n\nheader.masthead .intro-text {\n  padding-top: 150px;\n  padding-bottom: 100px;\n}\n\nheader.masthead .intro-text .intro-lead-in {\n  font-size: 22px;\n  font-style: italic;\n  line-height: 22px;\n  margin-bottom: 50px;\n  font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\nheader.masthead .intro-text .intro-heading {\n  font-size: 50px;\n  font-weight: 700;\n  line-height: 50px;\n  margin-bottom: 20px;\n  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n}\n\n@media (min-width: 768px) {\n  header.masthead .intro-text {\n    padding-top: 300px;\n    padding-bottom: 200px;\n  }\n  header.masthead .intro-text .intro-lead-in {\n    font-size: 40px;\n    font-style: italic;\n    line-height: 40px;\n    margin-bottom: 25px;\n    font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  }\n  header.masthead .intro-text .intro-heading {\n    font-size: 75px;\n    font-weight: 700;\n    line-height: 75px;\n    margin-bottom: 50px;\n    font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  }\n}\n\n.container /deep/ {\n  padding-left: 0;\n  padding-right: 0;\n}\n\n@media (min-width: 1999px) {\n  .container /deep/ {\n    width: 100% !important;\n  }\n}\n\n\n", ""]);
+exports.push([module.i, "* {\n  margin: 0px;\n  padding: 0px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box; }\n\nh1, h2 {\n  font-weight: 300;\n}\n\nbody {\n  padding: 0px;\n  margin: 0px;\n  font-family: \"Montserrat\", sans-serif;\n  width: 100%;\n  height: 100vh;\n}\n\nheader {\n  width: 100%;\n  height: 100%;\n  padding: 0px;\n  margin: 0px;\n  display: block;\n  background-image: url(" + escape(__webpack_require__("../../../../../src/app/img/rift-welcome.jpg")) + ");\n  background-repeat: no-repeat;\n  background-size: cover;\n  position: absolute;\n}\n\n#text-holder {\n  margin-left: 14%;\n  margin-top: 25vh;\n  display: inline-block;\n  position: relative;\n  animation: fadein 2s;\n  -moz-animation: fadein 2s; /* Firefox */\n  -webkit-animation: fadein 2s; /* Safari and Chrome */\n  -o-animation: fadein 2s; /* Opera */\n}\n\n#gradient {\n  width: 50%;\n  height: 100%;\n  background: -webkit-gradient(linear, left top, right top, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));\n  background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));\n  position: absolute;\n}\n\nh1 {\n  font-size: 70px;\n  text-transform: uppercase;\n  letter-spacing: 5px;\n  color: #f7f7f2;\n  font-weight: 300;\n  margin-bottom: 10%;\n}\n\nh2 {\n  font-size: 30px;\n  color: #f7f7f2;\n  font-weight: 300;\n  margin-bottom: 10%;\n}\n\n\n", ""]);
 
 // exports
 
@@ -3459,7 +3420,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/therift/therift.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<body id=\"page-top\">\n<div class=\"loading\">\n  <img src=\"../../assets/images/loading.svg\" alt=\"loading\">\n</div>\n<!-- Header -->\n<header class=\"masthead\" style=\"width: 100% !important\">\n    <div class=\"intro-text\">\n      <div class=\"intro-heading text-uppercase\">The Rift</div>\n      <div class=\"intro-lead-in\">Meet, Play, Win</div>\n      <a class=\"btn btn-primary btn-xl text-uppercase\" [routerLink]=\"['../therift', '']\">Search the Rift</a>\n    </div>\n</header>\n<!-- Services -->\n<section id=\"services\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col-lg-12 text-center\">\n        <!--<iframe-->\n          <!--src=\"http://player.twitch.tv/?channel=imaqtpie&muted=true\"-->\n          <!--height=\"360\"-->\n          <!--width=\"640\"-->\n          <!--frameborder=\"0\"-->\n          <!--scrolling=\"no\"-->\n          <!--allowfullscreen=\"true\">-->\n        <!--</iframe>-->\n        <!--<iframe-->\n          <!--src=\"http://player.twitch.tv/?channel=ninja&muted=true\"-->\n          <!--height=\"360\"-->\n          <!--width=\"640\"-->\n          <!--frameborder=\"0\"-->\n          <!--scrolling=\"no\"-->\n          <!--allowfullscreen=\"true\">-->\n        <!--</iframe>-->\n      </div>\n    </div>\n    <div class=\"row text-center\">\n      <div class=\"col-md-4\">\n            <span class=\"fa-stack fa-4x\">\n              <i class=\"fa fa-circle fa-stack-2x text-primary\"></i>\n              <i class=\"fa fa-shopping-cart fa-stack-1x fa-inverse\"></i>\n            </span>\n        <h4 class=\"service-heading\">E-Commerce</h4>\n        <p class=\"text-muted\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>\n      </div>\n      <div class=\"col-md-4\">\n            <span class=\"fa-stack fa-4x\">\n              <i class=\"fa fa-circle fa-stack-2x text-primary\"></i>\n              <i class=\"fa fa-laptop fa-stack-1x fa-inverse\"></i>\n            </span>\n        <h4 class=\"service-heading\">Responsive Design</h4>\n        <p class=\"text-muted\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>\n      </div>\n      <div class=\"col-md-4\">\n            <span class=\"fa-stack fa-4x\">\n              <i class=\"fa fa-circle fa-stack-2x text-primary\"></i>\n              <i class=\"fa fa-lock fa-stack-1x fa-inverse\"></i>\n            </span>\n        <h4 class=\"service-heading\">Web Security</h4>\n        <p class=\"text-muted\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>\n      </div>\n    </div>\n  </div>\n</section>\n</body>\n\n<!--temp -->\n<!--<h4 *ngIf=\"auth.isAuthenticated()\">-->\n  <!--You are logged in!-->\n<!--</h4>-->\n<!--<h4 *ngIf=\"!auth.isAuthenticated()\">-->\n  <!--You are not logged in! Please <a (click)=\"auth.login()\">Log In</a> to continue.-->\n<!--</h4>-->\n"
+module.exports = "<body id=\"page-top\">\n<!-- Header -->\n<header>\n  <div id=\"gradient\">\n  </div>\n  <div id=\"text-holder\">\n    <h2>Meet. Play. Win.</h2>\n    <h1>The Rift</h1>\n    <app-search-bar style=\"width: 100% !important\"></app-search-bar>\n  </div>\n\n</header>\n</body>\n"
 
 /***/ }),
 
@@ -3502,6 +3463,7 @@ var TheriftComponent = /** @class */ (function () {
         this.updateInfoService = updateInfoService;
         this.userProfileService = userProfileService;
         this.profile = JSON.parse(localStorage.getItem("profile"));
+        this.sessionId = localStorage.getItem("sessionId");
         if (this.profile) {
             this.userProfileService.getUserId(this.profile.nickname).subscribe(function (resBody) {
                 _this.loggedInUserId = resBody.id;
@@ -3797,7 +3759,7 @@ var AddGameAccountComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form #addGameAccountForm=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class=\"row\">\n      Current Game: {{data.account.gameName}}<br>\n      Current IGN: {{data.account.ign}}\n    </div>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"ign\">What is your ign?</label>\n              <input class=\"form-control input-md\" #complaint=\"ngModel\" [(ngModel)]=\"ign\" required id=\"ign\" name=\"ign\" type=\"text\" placeholder=\"In game name\">\n            </div>\n          </div>\n        </div>\n        <div class=\"row\">\n          <button class=\"btn-primary\" type=\"button\">Delete Account</button>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div>\n    <button [disabled]=\"!addGameAccountForm.valid\"  (click)=save() class=\"btn-primary\" type=\"button\">Update</button>\n    <button routerLink=\"../\" class=\"btn-primary\" type=\"button\">Cancel</button>\n  </div>\n</form>\n\n<!--<pre>{{ userRatingData | json }}</pre>-->\n<!--[routerLink]=\"['../', currentUser.riftTag]\"-->\n"
+module.exports = "<form #addGameAccountForm=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class=\"row\">\n      Current Game: {{data.account.gameName}}<br>\n      Current IGN: {{data.account.ign}}\n    </div>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"ign\">What is your ign?</label>\n              <input class=\"form-control input-md\" #complaint=\"ngModel\" [(ngModel)]=\"ign\" required id=\"ign\" name=\"ign\" type=\"text\" placeholder=\"In game name\">\n            </div>\n          </div>\n        </div>\n        <div class=\"row\">\n          <button class=\"btn-primary\" type=\"button\" (click)=\"changeStatus(deleteConfirm)\">Delete Account</button>\n        </div>\n        <ng-template #template style=\"margin-top:20%\">\n          <div class=\"modal-body text-center\">\n            <p>The following sessions have your account linked to it.<br>Please change the account associated before proceeding</p>\n            <div class=\"form-group\">\n              <label for=\"account\">Select an Account</label>\n              <select class=\"form-control\" id=\"account\" [(ngModel)]=\"accountId\" [ngModelOptions]=\"{standalone: true}\">\n                <option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">{{account.ign}}</option>\n              </select>\n            </div><br>\n            <button type=\"button\" class=\"btn btn-default\" (click)=\"editSessionsGameAccount()\" >Confirm</button>\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >Cancel</button>\n          </div>\n        </ng-template>\n\n        <ng-template #deleteConfirm style=\"margin-top:20%\">\n          <div class=\"modal-body text-center\">\n            <p>Are you sure you want to delete?</p>\n            <button type=\"button\" class=\"btn btn-default\" (click)=\"confirmDelete(template)\" >Confirm</button>\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >Cancel</button>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n  <div>\n    <button [disabled]=\"!addGameAccountForm.valid\"  (click)=save() class=\"btn-primary\" type=\"button\">Update</button>\n    <button routerLink=\"../\" class=\"btn-primary\" type=\"button\">Cancel</button>\n  </div>\n</form>\n\n<!--<pre>{{ userRatingData | json }}</pre>-->\n<!--[routerLink]=\"['../', currentUser.riftTag]\"-->\n"
 
 /***/ }),
 
@@ -3828,6 +3790,12 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants_games__ = __webpack_require__("../../../../../src/app/constants/games.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ngx_bootstrap__ = __webpack_require__("../../../../ngx-bootstrap/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__therift_riftsessions_session_page_update_session_data_update_session_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/update-session/data/update-session.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__constants_session_icon_variables__ = __webpack_require__("../../../../../src/app/constants/session-icon-variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__models_game_account__ = __webpack_require__("../../../../../src/app/models/game-account.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__usersessions_usersessions_service__ = __webpack_require__("../../../../../src/app/usersessions/usersessions.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3844,18 +3812,61 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 
 
+
+
+
+
+
+
 var EditGameAccountComponent = /** @class */ (function () {
-    function EditGameAccountComponent(data, gameAccountService) {
+    function EditGameAccountComponent(data, gameAccountService, modalService, http, updateSessionService, userSessionService) {
         this.data = data;
         this.gameAccountService = gameAccountService;
+        this.modalService = modalService;
+        this.http = http;
+        this.updateSessionService = updateSessionService;
+        this.userSessionService = userSessionService;
         this.title = "Add a Game Account";
+        this.sessionsToUpdate = new Map();
+        this.sessionIds = [];
+        this.gameAccounts = [];
         this.games = __WEBPACK_IMPORTED_MODULE_1__constants_games__["a" /* GAMES */];
         this.profile = JSON.parse(localStorage.getItem("profile"));
     }
     EditGameAccountComponent.prototype.ngOnInit = function () {
+        this.getUserSessionsByGameAccountId(this.data.account.id);
+    };
+    EditGameAccountComponent.prototype.confirmDelete = function (changeAccounts) {
+        var _this = this;
+        var status;
+        this.gameAccountService.deleteGameAccount(this.data.account.id).subscribe(function (resBody) {
+            status = resBody.status;
+            if (!status) {
+                _this.changeStatus(changeAccounts);
+            }
+        });
     };
     EditGameAccountComponent.prototype.editGameAccount = function (data) {
         this.gameAccountService.updateGameAccount(data);
+    };
+    EditGameAccountComponent.prototype.editSessionsGameAccount = function () {
+        console.log('in edit session');
+        console.log(this.sessionIds);
+        for (var i = 0; i < this.sessionIds.length; i++) {
+            var currSessionId = this.sessionIds[i];
+            var data = {
+                "id": currSessionId,
+                "gameAccountId": +this.accountId
+            };
+            this.sessionsToUpdate.set(currSessionId, +this.accountId);
+            console.log(data);
+        }
+        console.log(this.sessionsToUpdate);
+        this.deleteAndUpdateGameAccount(this.data.account.id, this.sessionsToUpdate);
+    };
+    EditGameAccountComponent.prototype.changeStatus = function (template) {
+        this.modalRef = this.modalService.show(template);
+        this.getUserGameAccountsByGameId(this.data.account.gameId, this.data.riftId);
     };
     EditGameAccountComponent.prototype.save = function () {
         var data = {
@@ -3866,6 +3877,35 @@ var EditGameAccountComponent = /** @class */ (function () {
         this.editGameAccount(data);
         window.location.reload();
     };
+    EditGameAccountComponent.prototype.getUserSessionsByGameAccountId = function (gameId) {
+        var _this = this;
+        this.sessionsToUpdate = new Map();
+        this.userSessionService.getUserSessionsByGameAccountId(gameId).subscribe(function (resBody) {
+            console.log(resBody);
+            for (var i = 0; i < resBody.length; i++) {
+                _this.sessionIds.push(resBody[i].id);
+            }
+        });
+    };
+    EditGameAccountComponent.prototype.getUserGameAccountsByGameId = function (gameId, riftId) {
+        var _this = this;
+        this.gameAccountService.getUserGameAccountsByGameID(gameId, riftId).subscribe(function (resBody) {
+            console.log(resBody);
+            for (var i = 0; i < resBody.length; i++) {
+                var currAccount = resBody[i];
+                var account = new __WEBPACK_IMPORTED_MODULE_8__models_game_account__["a" /* GameAccount */]();
+                account.gameName = currAccount.game.game;
+                account.gameId = currAccount.gameId;
+                account.ign = currAccount.ign;
+                account.id = currAccount.id;
+                account.gameIcon = __WEBPACK_IMPORTED_MODULE_7__constants_session_icon_variables__["a" /* SESSION_ICONS */][account.gameId];
+                _this.gameAccounts.push(account);
+            }
+        });
+    };
+    EditGameAccountComponent.prototype.deleteAndUpdateGameAccount = function (gameAccountId, data) {
+        this.gameAccountService.deleteGameAccountAndUpdateSession(gameAccountId, data);
+    };
     EditGameAccountComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-edit-game-account',
@@ -3873,7 +3913,9 @@ var EditGameAccountComponent = /** @class */ (function () {
             styles: [__webpack_require__("../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.scss")]
         }),
         __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_2__angular_material__["a" /* MAT_DIALOG_DATA */])),
-        __metadata("design:paramtypes", [Object, __WEBPACK_IMPORTED_MODULE_3__game_account_service__["a" /* GameAccountService */]])
+        __metadata("design:paramtypes", [Object, __WEBPACK_IMPORTED_MODULE_3__game_account_service__["a" /* GameAccountService */],
+            __WEBPACK_IMPORTED_MODULE_4_ngx_bootstrap__["c" /* BsModalService */], __WEBPACK_IMPORTED_MODULE_5__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_6__therift_riftsessions_session_page_update_session_data_update_session_service__["a" /* UpdateSessionService */],
+            __WEBPACK_IMPORTED_MODULE_9__usersessions_usersessions_service__["a" /* UsersessionsService */]])
     ], EditGameAccountComponent);
     return EditGameAccountComponent;
 }());
@@ -3917,8 +3959,18 @@ var GameAccountService = /** @class */ (function () {
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
             .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Added game account"); });
     };
+    GameAccountService.prototype.deleteGameAccountAndUpdateSession = function (gameAccountId, data) {
+        console.log("Deleting game account and updating sessions");
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
+        return this.http.put("/api/rifterSession/gameAccountId/" + gameAccountId + "/deleteAndUpdate", data, options)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error'); });
+    };
     GameAccountService.prototype.getUserGameAccounts = function (id) {
-        // console.log("Getting user's game accounts");
+        console.log("Getting user's game accounts");
         return this.http.get("/api/gameaccount/usertableId/" + id + "/info")
             .map(function (response) {
             return response.json();
@@ -3935,8 +3987,8 @@ var GameAccountService = /** @class */ (function () {
             .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Added game account"); });
     };
     GameAccountService.prototype.getUserGameAccountsByGameID = function (gameId, riftId) {
-        // console.log("Getting user's game accounts by game Id");
-        return this.http.get("/api/gameaccount/usertableId/" + riftId + "/gameId/" + gameId + "/info")
+        console.log("Getting user's game accounts by game Id");
+        return this.http.get("/api/gameaccount/usertableId/" + riftId + "/gameId/" + gameId)
             .map(function (response) {
             return response.json();
         })
@@ -3950,8 +4002,7 @@ var GameAccountService = /** @class */ (function () {
             .map(function (res) {
             return res.json();
         })
-            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
-            .subscribe();
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); });
     };
     GameAccountService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
@@ -4014,39 +4065,42 @@ var NotificationsService = /** @class */ (function () {
         this.pollUrl = poll;
         this.allow = true;
         this.http.get(this.startUrl + riftId + "/" + login).subscribe(function (success) {
+            var sessionId = JSON.parse(success["_body"]).result;
+            localStorage.setItem("sessionId", sessionId);
             console.log("Game on...");
             if (_this.allow) {
                 console.log("in if statemnet");
                 _this.allow = false;
-                setInterval(_this.getUpdate(notifications), 6000);
+                setInterval(_this.getUpdate(notifications, sessionId), 6000);
             }
         }, function (error) {
             console.log("error");
         });
     };
-    NotificationsService.prototype.getUpdate = function (notifications) {
+    NotificationsService.prototype.getUpdate = function (notifications, sessionId) {
         var _this = this;
         console.log("Okay let's go...");
-        this.http.get(this.pollUrl).subscribe(function (success) {
+        this.http.get(this.pollUrl + "/" + sessionId).subscribe(function (success) {
             console.log("Stop polling: " + _this.globals.stopPolling);
             console.log("Received a new notification");
+            console.log(success);
             console.log(JSON.parse(success["_body"]).data);
             var data = JSON.parse(success["_body"]).data;
             var notification = getNotification(data);
             notifications.unshift(notification);
             _this.globals.unseenNotifications += 1;
             if (!_this.globals.stopPolling) {
-                setInterval(_this.getUpdate(notifications), 6000);
+                setInterval(_this.getUpdate(notifications, sessionId), 6000);
             }
         }, function (error) {
             console.log("error, trying again");
             if (!_this.globals.stopPolling) {
-                setInterval(_this.getUpdate(notifications), 6000);
+                setInterval(_this.getUpdate(notifications, sessionId), 6000);
             }
         });
         function getNotification(notification) {
             var currNotification = new __WEBPACK_IMPORTED_MODULE_3__models_notification__["a" /* Notification */]();
-            currNotification.notificationContent = __WEBPACK_IMPORTED_MODULE_4__constants_notification_content__["a" /* NOTIFICATION_CONTENT */][notification.notification_type];
+            currNotification.notificationContent = __WEBPACK_IMPORTED_MODULE_4__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(notification.notification_type);
             currNotification.creatorId = notification.creator_id;
             currNotification.userId = notification.user_id;
             currNotification.createdTime = notification.created_time;
@@ -4057,10 +4111,11 @@ var NotificationsService = /** @class */ (function () {
     };
     NotificationsService.prototype.stopPolling = function (riftId) {
         this.globals.stopPolling = true;
-        this.http.get("/api/stop/" + riftId).subscribe(function (success) {
+        this.http.get("/api/stop/" + riftId + "/" + localStorage.getItem("sessionId")).subscribe(function (success) {
             console.log("Stopped polling");
+            console.log(success);
         }, function (error) {
-            console.log("Error when stopping polling");
+            console.log(error);
         });
     };
     NotificationsService.prototype.clearUnseen = function (riftId) {
@@ -4081,15 +4136,347 @@ var NotificationsService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/userprofile/payment.service.ts":
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h1>Custom Stripe Form</h1>\n<h3>{{data.accountId}}</h3>\n<form action=\"\" method=\"POST\" id=\"payment-form\" (submit)=\"getToken()\">\n  <span class=\"payment-message\">{{message}}</span>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Country</span>\n      <input [(ngModel)]=\"country\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Currency</span>\n      <input [(ngModel)]=\"currency\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Routing Number</span>\n      <input [(ngModel)]=\"routing_number\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Account Number</span>\n      <input [(ngModel)]=\"account_number\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Account Holder Name</span>\n      <input [(ngModel)]=\"account_holder_name\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Account Holder Type</span>\n      <input [(ngModel)]=\"account_holder_type\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <input type=\"submit\" value=\"Submit Payment\">\n</form>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PaymentService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddBankAccountComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+var AddBankAccountComponent = /** @class */ (function () {
+    function AddBankAccountComponent(_zone, data, stripeService) {
+        this._zone = _zone;
+        this.data = data;
+        this.stripeService = stripeService;
+    }
+    AddBankAccountComponent.prototype.ngOnInit = function () {
+    };
+    AddBankAccountComponent.prototype.getToken = function () {
+        var _this = this;
+        this.message = 'Loading...';
+        window.Stripe.bankAccount.createToken({
+            country: this.country,
+            currency: this.currency,
+            routing_number: this.routing_number,
+            account_number: this.account_number,
+            account_holder_name: this.account_holder_name,
+            account_holder_type: this.account_holder_type
+        }, function (status, response) {
+            // Wrapping inside the Angular zone
+            _this._zone.run(function () {
+                if (status === 200) {
+                    _this.message = "Success! Bank Account token " + response.id + ".";
+                    var data = {
+                        "accountId": _this.data.accountId,
+                        "bankAccountToken": response.id
+                    };
+                    console.log(data);
+                    _this.stripeService.storeMerchantBankAccount(data, _this.data.riftId);
+                }
+                else {
+                    _this.message = response.error.message;
+                }
+            });
+        });
+        console.log("hello got token");
+    };
+    AddBankAccountComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-add-bank-account',
+            template: __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.scss")]
+        }),
+        __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MAT_DIALOG_DATA */])),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"], Object, __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__["a" /* StripePaymentService */]])
+    ], AddBankAccountComponent);
+    return AddBankAccountComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h1>Custom Stripe Form</h1>\n\n<form action=\"\" method=\"POST\" id=\"payment-form\" (submit)=\"getToken()\">\n  <span class=\"payment-message\">{{message}}</span>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Country</span>\n      <input [(ngModel)]=\"country\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>City</span>\n      <input [(ngModel)]=\"city\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Address Line 1</span>\n      <input [(ngModel)]=\"addressLine1\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Address Line 2</span>\n      <input [(ngModel)]=\"addressLine2\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Postal Code</span>\n      <input [(ngModel)]=\"zipCode\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Postal State</span>\n      <input [(ngModel)]=\"state\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Date of Birth</span>\n      <input [(ngModel)]=\"dobDay\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Month of Birth</span>\n      <input [(ngModel)]=\"dobMonth\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Year of Birth</span>\n      <input [(ngModel)]=\"dobYear\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>First Name</span>\n      <input [(ngModel)]=\"firstName\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Last Name</span>\n      <input [(ngModel)]=\"lastName\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Legal Entity Type</span>\n      <input [(ngModel)]=\"type\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <input type=\"submit\" value=\"Submit Payment\">\n</form>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LegalBankAccountInfoComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__add_bank_account_add_bank_account_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+
+
+var LegalBankAccountInfoComponent = /** @class */ (function () {
+    function LegalBankAccountInfoComponent(data, stripeService, userProfileService, dialog) {
+        this.data = data;
+        this.stripeService = stripeService;
+        this.userProfileService = userProfileService;
+        this.dialog = dialog;
+        this.profile = JSON.parse(localStorage.getItem("profile"));
+    }
+    LegalBankAccountInfoComponent.prototype.ngOnInit = function () {
+        console.log(this.profile.nickname);
+        console.log(this.data.riftId);
+    };
+    LegalBankAccountInfoComponent.prototype.getToken = function () {
+        var _this = this;
+        if (this.addressLine2 == "") {
+            this.addressLine2 = null;
+        }
+        var data = {
+            "country": this.country,
+            "city": this.city,
+            "addressLine1": this.addressLine1,
+            "addressLine2": this.addressLine2,
+            "zipCode": this.zipCode,
+            "state": this.state,
+            "dobDay": this.dobDay,
+            "dobMonth": this.dobMonth,
+            "dobYear": this.dobYear,
+            "firstName": this.firstName,
+            "lastName": this.lastName,
+            "type": this.type
+        };
+        this.stripeService.getAccountId(data, this.data.riftId).subscribe(function (resBody) {
+            var accountId = resBody.accountId;
+            console.log(accountId);
+            _this.dialog.open(__WEBPACK_IMPORTED_MODULE_4__add_bank_account_add_bank_account_component__["a" /* AddBankAccountComponent */], {
+                height: '450px',
+                width: '600px',
+                data: {
+                    "accountId": accountId,
+                    "riftId": _this.data.riftId
+                }
+            });
+        });
+    };
+    LegalBankAccountInfoComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-legal-bank-account-info',
+            template: __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.scss")]
+        }),
+        __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MAT_DIALOG_DATA */])),
+        __metadata("design:paramtypes", [Object, __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__["a" /* StripePaymentService */],
+            __WEBPACK_IMPORTED_MODULE_3__userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MatDialog */]])
+    ], LegalBankAccountInfoComponent);
+    return LegalBankAccountInfoComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h1>Add a Credit Card</h1>\n<h3>Customer ID: {{data.customerId}}</h3>\n<form action=\"\" method=\"POST\" id=\"payment-form\" (submit)=\"getToken()\">\n  <span class=\"payment-message\">{{message}}</span>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Card Number</span>\n      <input [(ngModel)]=\"cardNumber\" name=\"card-number\" type=\"text\" size=\"20\" data-stripe=\"number\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>Expiration (MM/YY)</span>\n      <input [(ngModel)]=\"expiryMonth\" name=\"expiry-month\" type=\"text\" size=\"2\" data-stripe=\"exp_month\">\n    </label>\n    <span> / </span>\n    <input [(ngModel)]=\"expiryYear\" name=\"expiry-year\" type=\"text\" size=\"2\" data-stripe=\"exp_year\">\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      <span>CVC</span>\n      <input [(ngModel)]=\"cvc\" name=\"cvc\" type=\"text\" size=\"4\" data-stripe=\"cvc\">\n    </label>\n  </div>\n\n  <div class=\"form-row\">\n    <label>\n      Set as Default Credit Card?\n    </label>\n    <input type=\"checkbox\" (change)=\"setDefault()\">\n  </div>\n\n  <input type=\"submit\" value=\"Submit Payment\">\n</form>\n\n<button class=\"btn btn-primary\" (click)=\"viewCards()\"> View Cards </button>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StripePaymentComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__view_cards_view_cards_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+
+var StripePaymentComponent = /** @class */ (function () {
+    function StripePaymentComponent(_zone, data, stripeService, dialog) {
+        this._zone = _zone;
+        this.data = data;
+        this.stripeService = stripeService;
+        this.dialog = dialog;
+        this.isDefault = false;
+    }
+    StripePaymentComponent.prototype.ngOnInit = function () {
+    };
+    StripePaymentComponent.prototype.getToken = function () {
+        var _this = this;
+        this.message = 'Loading...';
+        window.Stripe.card.createToken({
+            number: this.cardNumber,
+            exp_month: this.expiryMonth,
+            exp_year: this.expiryYear,
+            cvc: this.cvc
+        }, function (status, response) {
+            // Wrapping inside the Angular zone
+            _this._zone.run(function () {
+                if (status === 200) {
+                    _this.message = "Success! Card token " + response.card.id + ".";
+                    console.log(response);
+                    var data = {
+                        "customerId": _this.data.customerId,
+                        // "token": "tok_visa"
+                        "token": response.id
+                    };
+                    console.log(data);
+                    _this.stripeService.storeCustomerCard(data, _this.isDefault);
+                }
+                else {
+                    _this.message = response.error.message;
+                }
+            });
+        });
+        console.log("hello got token");
+    };
+    StripePaymentComponent.prototype.viewCards = function () {
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_3__view_cards_view_cards_component__["a" /* ViewCardsComponent */], {
+            height: '450px',
+            width: '600px',
+            data: {
+                "customerId": this.data.customerId
+            }
+        });
+    };
+    StripePaymentComponent.prototype.setDefault = function () {
+        this.isDefault = !this.isDefault;
+        console.log(this.isDefault);
+    };
+    StripePaymentComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-stripe-payment',
+            template: __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.scss")]
+        }),
+        __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MAT_DIALOG_DATA */])),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgZone"], Object, __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__["a" /* StripePaymentService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MatDialog */]])
+    ], StripePaymentComponent);
+    return StripePaymentComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return StripePaymentService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4102,55 +4489,182 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-var PaymentService = /** @class */ (function () {
-    function PaymentService(http) {
+var StripePaymentService = /** @class */ (function () {
+    function StripePaymentService(http) {
         this.http = http;
-        this.createBraintreeUserURL = "/api/braintree/createCustomer";
-        this.updateBraintreeUserURL = "/api/braintree/updateCustomer";
+        this.storeCustomerCardURL = "/api/stripe/storeCustomerCard/setDefault=";
     }
-    PaymentService.prototype.getTransactionData = function (riftId, sessionId) {
-        console.log("running getTransactionData");
-        return this.http.get("/api/user/" + riftId + "/session/" + sessionId)
+    StripePaymentService.prototype.storeCustomerCard = function (data, isDefault) {
+        console.log("storing customer credit card");
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
+        this.http.put(this.storeCustomerCardURL + isDefault, data, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
+            .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Stored credit card"); });
+    };
+    StripePaymentService.prototype.getAccountId = function (data, id) {
+        console.log("getting account token");
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
+        return this.http.put("/api/stripe/user/" + id + "/getMerchantAccountToken", data, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); });
+    };
+    StripePaymentService.prototype.storeMerchantBankAccount = function (data, id) {
+        console.log("storing merchant bank account");
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
+        this.http.put("/api/stripe/user/" + id + "/storeMerchantBankAccount", data, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
+            .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Stored bank account"); });
+    };
+    StripePaymentService.prototype.getCustomerDefaultCard = function (accountId) {
+        return this.http.get("/api/stripe/getDefaultCard/" + accountId)
             .map(function (response) {
             return response.json();
         })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error'); });
     };
-    PaymentService.prototype.doTransaction = function (customerId, amount) {
-        console.log("running doTransaction");
+    StripePaymentService.prototype.getAllCustomerCards = function (accountId) {
+        return this.http.get("/api/stripe/getCustomerCards/" + accountId)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error'); });
+    };
+    StripePaymentService.prototype.setCardAsDefault = function (cardId, customerId) {
+        console.log("Changing card to default card");
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
-        this.http.put("/api/braintree/transaction/" + customerId + "/" + amount, headers)
+        this.http.put("/api/stripe/setDefaultCard/" + cardId + "/cardOwner/" + customerId, options)
             .map(function (res) { return res.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
-            .subscribe();
+            .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Set new default card"); });
     };
-    PaymentService.prototype.createBraintreeUser = function (data) {
-        console.log("running createBraintreeUser");
+    StripePaymentService.prototype.deleteCustomerCreditCard = function (cardId, customerId) {
+        console.log("Deleting credit card for customer");
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
-        return this.http.put(this.createBraintreeUserURL, data, options)
-            .map(function (response) {
-            return response.json();
-        })
-            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); });
+        this.http.delete("/api/stripe/deleteCard/" + cardId + "/customer/" + customerId, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
+            .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Deleted customer credit card"); });
     };
-    PaymentService.prototype.updateBraintreeUser = function (data) {
-        console.log("running createBraintreeUser");
+    StripePaymentService.prototype.createTransaction = function (data, customerId, accountId) {
+        console.log("Creating transaction");
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({ 'Content-Type': 'application/json' });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["RequestOptions"]({ headers: headers });
-        return this.http.put(this.updateBraintreeUserURL, data, options)
-            .map(function (response) {
-            return response.json();
-        })
-            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); });
+        this.http.put("/api/stripe/createTransaction/bankAccount/" + accountId + "/customerId/" + customerId, data, options)
+            .map(function (res) { return res.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Serve error'); })
+            .subscribe(function (data) { console.log(data); }, function (err) { return console.log(err); }, function () { return console.log("Transaction completed"); });
     };
-    PaymentService = __decorate([
+    StripePaymentService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]])
-    ], PaymentService);
-    return PaymentService;
+    ], StripePaymentService);
+    return StripePaymentService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\" id=\"tourpackages-carousel\">\n  <div class=\"row\">\n    <div *ngFor=\"let card of creditCards\">\n      <app-credit-card [creditCard]=\"card\" [customerId]=\"data.customerId\"></app-credit-card>\n    </div>\n\n  </div>\n</div><!-- End container -->\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewCardsComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_credit_card__ = __webpack_require__("../../../../../src/app/models/credit-card.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+
+
+var ViewCardsComponent = /** @class */ (function () {
+    function ViewCardsComponent(data, stripeService) {
+        this.data = data;
+        this.stripeService = stripeService;
+        this.creditCards = [];
+    }
+    ViewCardsComponent.prototype.ngOnInit = function () {
+        this.getAllCustomerCards();
+        this.getDefaultCustomerCard();
+    };
+    ViewCardsComponent.prototype.getAllCustomerCards = function () {
+        var _this = this;
+        this.stripeService.getAllCustomerCards(this.data.customerId).subscribe(function (resBody) {
+            console.log(resBody);
+            for (var i = 0; i < resBody.length; i++) {
+                var currentCard = new __WEBPACK_IMPORTED_MODULE_3__models_credit_card__["a" /* CreditCard */]();
+                currentCard.id = resBody[i].id;
+                currentCard.brand = resBody[i].brand;
+                currentCard.country = resBody[i].country;
+                currentCard.expMonth = resBody[i].expMonth;
+                currentCard.expYear = resBody[i].expYear;
+                currentCard.last4 = resBody[i].last4;
+                _this.creditCards.push(currentCard);
+            }
+            console.log(_this.creditCards);
+        });
+    };
+    ViewCardsComponent.prototype.getDefaultCustomerCard = function () {
+        this.stripeService.getCustomerDefaultCard(this.data.customerId).subscribe(function (resBody) {
+            console.log("Default credit card");
+            console.log(resBody);
+        });
+    };
+    ViewCardsComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-view-cards',
+            template: __webpack_require__("../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.scss")]
+        }),
+        __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MAT_DIALOG_DATA */])),
+        __metadata("design:paramtypes", [Object, __WEBPACK_IMPORTED_MODULE_2__stripe_payment_service__["a" /* StripePaymentService */]])
+    ], ViewCardsComponent);
+    return ViewCardsComponent;
 }());
 
 
@@ -4319,7 +4833,7 @@ var UpdateInfoService = /** @class */ (function () {
 /***/ "../../../../../src/app/userprofile/update-info/update-info.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form #updateInfo=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"riftTag\">Update your Rift Tag</label>\n              <input class=\"form-control input-md\" #riftTag=\"ngModel\" id=\"riftTag\" name=\"riftTag\" type=\"text\" placeholder=\"Change your Rift Tag\" [(ngModel)]=\"currentUser.riftTag\">\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"firstName\">Update your First Name</label>\n              <input class=\"form-control input-md\" #firstName=\"ngModel\" id=\"firstName\" name=\"firstName\" type=\"text\" placeholder=\"Change your first name\" [(ngModel)]=\"currentUser.firstName\">\n            </div>\n          </div>\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"lastName\">Update your Last name</label>\n          <input class=\"form-control input-md\" #lastName=\"ngModel\" id=\"lastName\" name=\"lastName\" type=\"text\" placeholder=\"Change your last name\" [(ngModel)]=\"currentUser.lastName\">\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"email\">Update your Email</label>\n          <input class=\"form-control input-md\" #email=\"ngModel\" id=\"email\" name=\"email\" type=\"text\" placeholder=\"Change your email\" [(ngModel)]=\"currentUser.email\">\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"email\">Update your Bio</label>\n          <input class=\"form-control input-md\" #email=\"ngModel\" id=\"bio\" name=\"bio\" type=\"text\" placeholder=\"Change your bio\" [(ngModel)]=\"currentUser.bio\">\n        </div>\n        <div class=\"form-group\">\n          <app-file-upload name=\"profilePic\"ngDefaultControl [showFileNameInput]=\"true\" allowedTypes=\"image/*\" [uploadButtonText]=\"'Upload File'\" [(ngModel)]=\"profilePic\"></app-file-upload>\n          <img src={{profilePic}} alt=\"\" class=\"profilePicPreview\"/>\n        </div>\n        <div class=\"form-group\">\n          <app-file-upload name=\"coverPhoto\"ngDefaultControl [showFileNameInput]=\"true\" allowedTypes=\"image/*\" [uploadButtonText]=\"'Upload File'\" [(ngModel)]=\"coverPhoto\"></app-file-upload>\n          <img src={{coverPhoto}} alt=\"\" class=\"profilePicPreview\"/>\n        </div>\n        <div *ngIf=\"!data.currentUser.twitchAccount\">\n          <button (click)=\"verifyWithTwitch()\" type=\"button\" class=\"btn-primary\">Verify With Twitch</button>\n        </div><br>\n        <div *ngIf=\"!data.currentUser.youtubeAccount\">\n          <button (click)=\"verifyWithYouTube()\" type=\"button\" class=\"btn-primary\">Verify With YouTube</button>\n        </div><br>\n        <div>\n          <button (click)=\"addGameAccount()\" type=\"button\" class=\"btn-primary\">Add a Game Account</button>\n        </div><br>\n\n        <div class=\"form-group\">\n          <ngx-braintree\n            [clientTokenURL]=\"'/api/braintree/getclienttoken'\"\n            [createPurchaseURL]=\"data.updateBraintreeUserURL\"\n            [chargeAmount]=\"0\"\n            [allowChoose] = \"true\"\n            [buttonText]=\"'Save Payment Method'\"\n            (paymentStatus)=\"onPaymentStatus($event)\">\n          </ngx-braintree>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div>\n    <button [disabled]=\"!updateInfo.valid\" (click)=\"save()\" class=\"btn-primary\" type=\"button\">Update</button>\n    <button (click)=\"cancel()\" class=\"btn-primary\" type=\"button\">Cancel</button>\n\n  </div>\n</form>\n\n<!--<pre>{{ updateInfoData | json }}</pre>-->\n<!--[routerLink]=\"['../', currentUser.riftTag]\"-->\n"
+module.exports = "<form #updateInfo=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"riftTag\">Update your Rift Tag</label>\n              <input class=\"form-control input-md\" #riftTag=\"ngModel\" id=\"riftTag\" name=\"riftTag\" type=\"text\" placeholder=\"Change your Rift Tag\" [(ngModel)]=\"currentUser.riftTag\">\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"firstName\">Update your First Name</label>\n              <input class=\"form-control input-md\" #firstName=\"ngModel\" id=\"firstName\" name=\"firstName\" type=\"text\" placeholder=\"Change your first name\" [(ngModel)]=\"currentUser.firstName\">\n            </div>\n          </div>\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"lastName\">Update your Last name</label>\n          <input class=\"form-control input-md\" #lastName=\"ngModel\" id=\"lastName\" name=\"lastName\" type=\"text\" placeholder=\"Change your last name\" [(ngModel)]=\"currentUser.lastName\">\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"email\">Update your Email</label>\n          <input class=\"form-control input-md\" #email=\"ngModel\" id=\"email\" name=\"email\" type=\"text\" placeholder=\"Change your email\" [(ngModel)]=\"currentUser.email\">\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"email\">Update your Bio</label>\n          <input class=\"form-control input-md\" #email=\"ngModel\" id=\"bio\" name=\"bio\" type=\"text\" placeholder=\"Change your bio\" [(ngModel)]=\"currentUser.bio\">\n        </div>\n        <div class=\"form-group\">\n          <!--<app-file-upload name=\"profilePic\"ngDefaultControl [showFileNameInput]=\"true\" allowedTypes=\"image/*\" [uploadButtonText]=\"'Upload File'\" [(ngModel)]=\"profilePic\"></app-file-upload>-->\n          <app-file-upload [(ngModel)]=\"profilePic\"></app-file-upload>\n          <img src={{profilePic}} alt=\"\" class=\"profilePicPreview\"/>\n        </div>\n        <div class=\"form-group\">\n          <!--<app-file-upload name=\"coverPhoto\"ngDefaultControl [showFileNameInput]=\"true\" allowedTypes=\"image/*\" [uploadButtonText]=\"'Upload File'\" [(ngModel)]=\"coverPhoto\"></app-file-upload>-->\n          <img src={{coverPhoto}} alt=\"\" class=\"profilePicPreview\"/>\n        </div>\n        <div *ngIf=\"!data.currentUser.twitchAccount\">\n          <button (click)=\"verifyWithTwitch()\" type=\"button\" class=\"btn-primary\">Verify With Twitch</button>\n        </div><br>\n        <div *ngIf=\"!data.currentUser.youtubeAccount\">\n          <button (click)=\"verifyWithYouTube()\" type=\"button\" class=\"btn-primary\">Verify With YouTube</button>\n        </div><br>\n        <div>\n          <button (click)=\"addGameAccount()\" type=\"button\" class=\"btn-primary\">Add a Game Account</button>\n        </div><br>\n      </div>\n    </div>\n  </div>\n  <div>\n    <button [disabled]=\"!updateInfo.valid\" (click)=\"save()\" class=\"btn-primary\" type=\"button\">Update</button>\n    <button (click)=\"cancel()\" class=\"btn-primary\" type=\"button\">Cancel</button>\n\n  </div>\n</form>\n\n<!--<pre>{{ updateInfoData | json }}</pre>-->\n<!--[routerLink]=\"['../', currentUser.riftTag]\"-->\n"
 
 /***/ }),
 
@@ -4380,32 +4894,21 @@ var UpdateInfoComponent = /** @class */ (function () {
         this.dialog = dialog;
         this.title = "Update your Profile Information";
         this.currentUser = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
-        this.loggedInUser = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
         this.profile = JSON.parse(localStorage.getItem('profile'));
     }
     UpdateInfoComponent.prototype.ngOnInit = function () {
-        this.getCurrentLoggedInUser();
         this.currentUser = this.updateInfoService.getUserData();
         this.updateInfoData = this.updateInfoService.getFormData();
         console.log("Current user info loaded to Update Profile");
     };
-    UpdateInfoComponent.prototype.getCurrentLoggedInUser = function () {
-        var _this = this;
-        this.userProfileService.getUser(this.profile.nickname).subscribe(function (resBody) {
-            _this.loggedInUser.firstName = resBody.firstName;
-            _this.loggedInUser.lastName = resBody.lastName;
-            _this.loggedInUser.riftTag = resBody.riftTag;
-            _this.loggedInUser.id = resBody.id;
-        });
-    };
     UpdateInfoComponent.prototype.uploadProfilePic = function () {
         var base64 = this.profilePic;
-        var riftTag = this.loggedInUser.riftTag;
+        var riftTag = this.data.loggedInUser.riftTag;
         this.userProfileService.uploadProfilePicture(riftTag, base64);
     };
     UpdateInfoComponent.prototype.uploadCoverPhoto = function () {
         var base64 = this.profilePic;
-        var riftTag = this.loggedInUser.riftTag;
+        var riftTag = this.data.loggedInUser.riftTag;
         this.userProfileService.uploadCoverPhoto(riftTag, base64);
     };
     UpdateInfoComponent.prototype.save = function () {
@@ -4414,7 +4917,7 @@ var UpdateInfoComponent = /** @class */ (function () {
             "firstName": this.updateInfoData.firstName,
             "lastName": this.updateInfoData.lastName,
             "riftTag": this.updateInfoData.riftTag,
-            "id": this.loggedInUser.id,
+            "id": this.data.loggedInUser.id,
             "bio": this.updateInfoData.bio,
             "email": this.updateInfoData.email
         };
@@ -4445,7 +4948,7 @@ var UpdateInfoComponent = /** @class */ (function () {
             'scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly' +
             '&access_type=offline' +
             '&include_granted_scopes=true' +
-            '&redirect_uri=http://localhost:4200/youtube' +
+            '&redirect_uri=https://localhost:4200/youtube' +
             '&response_type=code&client_id=196736615110-2n7j9c9helma43g2779m66f50p2i6kij.apps.googleusercontent.com';
     };
     UpdateInfoComponent.prototype.addGameAccount = function () {
@@ -4453,7 +4956,7 @@ var UpdateInfoComponent = /** @class */ (function () {
             height: '450px',
             width: '600px',
             data: {
-                "loggedInUserId": this.loggedInUser.id
+                "loggedInUserId": this.data.loggedInUser.id
             }
         });
     };
@@ -4720,7 +5223,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".review-block{\n  background-color:#FAFAFA;\n  border:1px solid #EFEFEF;\n  padding:15px;\n  border-radius:3px;\n  margin-bottom:15px;\n}\n\nbody {\n  min-height: 1585px;\n}\n\n.row {\n  margin-top: 5%;\n}\n\n/*------------------------------------------------*/\n\n/*    Profile Page\n/*------------------------------------------------*/\n\n.user-profile {\n  padding-bottom: 30px;\n}\n\n.profile-header-background {\n  margin: -30px -30px 0 -30px;\n}\n\n.profile-header-background img {\n  width: 100%;\n  height: 310px;\n}\n\n.profile-info-left {\n  position: relative;\n  top: -92px;\n}\n\n.profile-info-left img.avatar {\n  border: 2px solid #fff;\n  overflow: hidden;\n  width: 250px;\n  height: 250px;\n}\n\n#profile-pic {\n\n\n}\n\n.profile-info-left h2 {\n  font-family: \"josefinslab-semibold\";\n  margin-bottom: 30px;\n\n}\n\n.profile-info-left .section {\n  margin-top: 50px;\n}\n\n.profile-info-left .section h3 {\n  font-size: 1.1em;\n  font-weight: 700;\n  border-bottom: 1px solid #ccc;\n  padding-bottom: 10px;\n}\n\n.profile-info-left ul.list-social > li {\n  line-height: 2.3;\n}\n\n/*noinspection CssInvalidPropertyValue*/\n\n.profile-info-left ul.list-social > li i {\n  display: inline-block;\n  vertical-align: middle;\n  *vertical-align: auto;\n  *zoom: 1;\n  *display: inline;\n  position: relative;\n  top: 1px;\n  font-size: 16px;\n  min-width: 16px;\n  line-height: 1;\n}\n\n.profile-info-left ul.list-social > li a {\n  color: #696565;\n}\n\n.profile-info-right {\n  margin-top: 5%;\n}\n\n.profile-info-right .tab-content {\n  padding: 30px 0;\n  background-color: transparent;\n}\n\n@media screen and (max-width: 768px) {\n  .profile-info-right {\n    position: relative;\n    top: -70px;\n  }\n}\n\n.user-follower,\n.user-following {\n  position: relative;\n  margin-bottom: 40px;\n  margin-top: 30px;\n}\n\n.user-follower img,\n.user-following img {\n  border-radius: 2px;\n  width: 40px;\n}\n\n.user-follower a,\n.user-following a {\n  font-size: 1.1em;\n  line-height: 1;\n}\n\n.user-follower .username,\n.user-following .username {\n  font-size: 0.9em;\n  line-height: 1.5;\n}\n\n.user-follower .btn,\n.user-following .btn {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 92px;\n}\n\n.userbtn {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n/* list icons */\n\n.list-icons-demo li {\n  margin-bottom: 20px;\n  text-align: center;\n}\n\n.list-icons-demo li i {\n  font-size: 24px;\n}\n\n.list-icons-demo2 li {\n  margin-bottom: 10px;\n}\n\n.activity-item {\n  overflow: visible;\n  position: relative;\n  margin: 15px 0;\n  border-top: 1px dashed #ccc;\n  padding-top: 15px;\n}\n\n.activity-item:first-child {\n  border-top: none;\n}\n\n.activity-item .avatar {\n  border-radius: 2px;\n  width: 32px;\n}\n\n.activity-item > i {\n  font-size: 18px;\n  line-height: 1;\n}\n\n.activity-item .media-body {\n  position: relative;\n}\n\n.activity-item .activity-title {\n  margin-bottom: 0;\n  line-height: 1.3;\n}\n\n.activity-item .activity-attachment {\n  padding-top: 20px;\n}\n\n.activity-item .well {\n  border-radius: 0;\n  -webkit-box-shadow: none;\n  box-shadow: none;\n  border: none;\n  border-left: 2px solid #cfcfcf;\n  background: #fff;\n  margin-left: 20px;\n  font-size: 0.85em;\n}\n\n.activity-item .thumbnail {\n  display: inline;\n  border: none;\n  padding: 0;\n}\n\n.activity-item .thumbnail img {\n  border-radius: 2px;\n  width: auto;\n  margin: 0;\n}\n\n.activity-item .activity-actions {\n  position: absolute;\n  top: 15px;\n  right: 0;\n}\n\n.activity-item .activity-actions .btn i {\n  margin: 0;\n}\n\n.activity-item .activity-actions .dropdown-menu > li > a {\n  font-size: 0.9em;\n  padding: 3px 10px;\n}\n\n.activity-item + .btn {\n  margin-bottom: 15px;\n}\n\n.profile-info-right /deep/.mat-tab-label, .profile-info-right /deep/.mat-tab-label-active{\n  min-width: 0!important;\n  padding: 10px!important;\n  margin-left: 10px!important;\n  margin-right: 10px!important;\n  background-color: transparent!important;\n}\n\n.userbtn /deep/ button {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n", ""]);
+exports.push([module.i, ".review-block{\n  background-color:#FAFAFA;\n  border:1px solid #EFEFEF;\n  padding:15px;\n  border-radius:3px;\n  margin-bottom:15px;\n}\n\nbody {\n  min-height: 1585px;\n}\n\n/*------------------------------------------------*/\n\n/*    Profile Page\n/*------------------------------------------------*/\n\n.user-profile {\n  padding-bottom: 30px;\n}\n\n.profile-header-background {\n  margin: -30px -30px 0 -30px;\n}\n\n.profile-header-background img {\n  width: 100%;\n  height: 310px;\n}\n\n.profile-info-left {\n  position: relative;\n  top: -92px;\n}\n\n.profile-info-left img.avatar {\n  border: 2px solid #fff;\n  overflow: hidden;\n  width: 250px;\n  height: 250px;\n}\n\n#profile-pic {\n\n\n}\n\n.profile-info-left h2 {\n  font-family: \"josefinslab-semibold\";\n  margin-bottom: 30px;\n\n}\n\n.profile-info-left .section {\n  margin-top: 50px;\n}\n\n.profile-info-left .section h3 {\n  font-size: 1.1em;\n  font-weight: 700;\n  border-bottom: 1px solid #ccc;\n  padding-bottom: 10px;\n}\n\n.profile-info-left ul.list-social > li {\n  line-height: 2.3;\n}\n\n/*noinspection CssInvalidPropertyValue*/\n\n.profile-info-left ul.list-social > li i {\n  display: inline-block;\n  vertical-align: middle;\n  *vertical-align: auto;\n  *zoom: 1;\n  *display: inline;\n  position: relative;\n  top: 1px;\n  font-size: 16px;\n  min-width: 16px;\n  line-height: 1;\n}\n\n.profile-info-left ul.list-social > li a {\n  color: #696565;\n}\n\n.profile-info-right {\n  margin-top: 5%;\n}\n\n.profile-info-right .tab-content {\n  padding: 30px 0;\n  background-color: transparent;\n}\n\n@media screen and (max-width: 768px) {\n  .profile-info-right {\n    position: relative;\n    top: -70px;\n  }\n}\n\n.user-follower,\n.user-info {\n  position: relative;\n  margin-bottom: 40px;\n  margin-top: 30px;\n}\n\n.user-follower img,\n.user-info img {\n  border-radius: 2px;\n  width: 40px;\n}\n\n.user-follower a,\n.user-info a {\n  font-size: 1.1em;\n  line-height: 1;\n}\n\n.user-follower .username,\n.user-info .username {\n  font-size: 0.9em;\n  line-height: 1.5;\n}\n\n.user-follower .btn,\n.user-info .btn {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 92px;\n}\n\n.userbtn {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n/* list icons */\n\n.list-icons-demo li {\n  margin-bottom: 20px;\n  text-align: center;\n}\n\n.list-icons-demo li i {\n  font-size: 24px;\n}\n\n.list-icons-demo2 li {\n  margin-bottom: 10px;\n}\n\n.activity-item {\n  overflow: visible;\n  position: relative;\n  margin: 15px 0;\n  border-top: 1px dashed #ccc;\n  padding-top: 15px;\n}\n\n.activity-item:first-child {\n  border-top: none;\n}\n\n.activity-item .avatar {\n  border-radius: 2px;\n  width: 32px;\n}\n\n.activity-item > i {\n  font-size: 18px;\n  line-height: 1;\n}\n\n.activity-item .media-body {\n  position: relative;\n}\n\n.activity-item .activity-title {\n  margin-bottom: 0;\n  line-height: 1.3;\n}\n\n.activity-item .activity-attachment {\n  padding-top: 20px;\n}\n\n.activity-item .well {\n  border-radius: 0;\n  -webkit-box-shadow: none;\n  box-shadow: none;\n  border: none;\n  border-left: 2px solid #cfcfcf;\n  background: #fff;\n  margin-left: 20px;\n  font-size: 0.85em;\n}\n\n.activity-item .thumbnail {\n  display: inline;\n  border: none;\n  padding: 0;\n}\n\n.activity-item .thumbnail img {\n  border-radius: 2px;\n  width: auto;\n  margin: 0;\n}\n\n.activity-item .activity-actions {\n  position: absolute;\n  top: 15px;\n  right: 0;\n}\n\n.activity-item .activity-actions .btn i {\n  margin: 0;\n}\n\n.activity-item .activity-actions .dropdown-menu > li > a {\n  font-size: 0.9em;\n  padding: 3px 10px;\n}\n\n.activity-item + .btn {\n  margin-bottom: 15px;\n}\n\n.profile-info-right /deep/.mat-tab-label, .profile-info-right /deep/.mat-tab-label-active{\n  min-width: 0!important;\n  padding: 10px!important;\n  margin-left: 10px!important;\n  margin-right: 10px!important;\n  background-color: transparent!important;\n}\n\n.userbtn /deep/ button {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n", ""]);
 
 // exports
 
@@ -4733,7 +5236,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/userprofile/userprofile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n\n<div class=\"container\" style=\"width: 80%\" *ngIf=\"isDataAvailable\">\n  <base href=\"/\">\n  <div class=\"user-profile\">\n    <div class=\"row\">\n      <div class=\"profile-header-background\"><img src=\"{{currentUser.coverPhoto}}\" alt=\"Profile Header Background\"></div>\n      <div class=\"col-md-4\">\n        <div class=\"profile-info-left\">\n          <div class=\"text-center\">\n            <div id=\"profile-pic\">\n              <img src=\"{{currentUser.profilePic}}\" class=\"avatar img-circle\" alt=\"\">\n            </div>\n            <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>\n            <h3>@{{currentUser.riftTag}}</h3>\n            <h3>{{currentUser.email}}</h3>\n            <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n            <div id=\"following_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <app-follow-button [following]=\"isFollowing(currentUser.riftTag)\" [id]=\"currentUser.id\"\n              [riftTag]=\"profile.nickname\" class=\"userbtn\">\n              </app-follow-button>\n            </div>\n            <div id=\"update_info_button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">\n              <button (click)=\"updateInfoModal()\" type=\"button\" class=\"btn-primary\">Update your Info</button>\n            </div>\n            <div id=\"rate_user_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"openRatingDialog()\" type=\"button\" class=\"btn-primary\">Rate this User</button>\n            </div>\n            <br>\n            <div id=\"file_a_complaint\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"fileAComplaint()\" type=\"button\" class=\"btn-primary\">File A Complaint</button>\n            </div>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 0\">\n              Haven't played with {{currentUser.riftTag}} in past 30 days\n            </alert>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 1\">\n              Already rated {{currentUser.riftTag}} in past 30 days\n            </alert>\n          </div>\n          <div class=\"section about\">\n            <h3>About Me</h3>\n            <p> {{currentUser.bio}} </p>\n          </div>\n          <div class=\"section statistics\">\n            <h3>Statistics</h3>\n            <p><span class=\"badge\">{{currentUser.followings?.length}}</span> Following</p>\n            <p><span class=\"badge\">{{currentUser.followers?.length}}</span> Followers</p>\n            <p><span class=\"badge\">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>\n          </div>\n          <div class=\"section socialmedia\">\n            <h3>Social</h3>\n            <ul class=\"list-unstyled list-social\">\n              <li><i class=\"fa fa-youtube\"></i> {{currentUser.youtubeAccount}}</li>\n              <li><i class=\"fa fa-twitch\"></i> <a href=\"https://twitch.tv/{{currentUser.twitchAccount}}\">twitch.tv/{{currentUser.twitchAccount}}</a></li>\n            </ul>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-md-8\">\n        <div class=\"profile-info-right\">\n          <mat-tab-group>\n            <mat-tab label=\"activity\">\n              <div class=\"media activity-item\" *ngFor=\"let activity of currentUser.activities\">\n                <a href=\"#\" class=\"pull-left\">\n                  <img src=\"{{currentUser.profilePic}}\" alt=\"Avatar\" class=\"media-object avatar\">\n                </a>\n                <div class=\"media-body\">\n                  <p class=\"activity-title\">\n                    <a href=\"#\">{{currentUser.riftTag}}</a>\n                    {{activity.notificationContent}} <a [routerLink]=\"['../../session', activity.sessionId]\">{{activity.title}}</a>\n                  </p>\n                  <small class=\"text-muted\">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>\n                </div>\n                <div class=\"btn-group pull-right activity-actions\">\n                  <button type=\"button\" class=\"btn btn-xs btn-default dropdown-toggle\" data-toggle=\"dropdown\">\n                    <i class=\"fa fa-th\"></i>\n                    <span class=\"sr-only\">Toggle Dropdown</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"sessions\">\n              <div class=\"media\" *ngFor=\"let session of currentUser.rifterSessions\">\n                <app-session-card\n                                  [session]=\"session\" [isLoggedIn]=\"isLoggedIn\"\n                                  [type]=\"session.type\" [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n                ></app-session-card>\n                <!--[routerLink]=\"['../../session', session.id]\"-->\n              </div>\n            </mat-tab>\n            <mat-tab label=\"followers\">\n              <div class=\"media user-follower\" *ngFor=\"let follower of currentUser.followers\">\n                <img src=\"{{follower.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  <a [routerLink]=\"['../../user', follower.riftTag]\">{{follower.firstName}} {{follower.lastName}} {{follower.id}}\n                    <br><span class=\"text-muted username\">@{{follower.riftTag}}</span></a>\n                  <app-follow-button class=\"pull-right\" [following]=\"isFollowing(follower.riftTag)\" [id]=\"follower.id\"\n                                     [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != follower.riftTag\">\n                  </app-follow-button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"following\">\n              <div class=\"media *ngFor=\"let following of currentUser.followings\">\n                  <img src=\"{{following.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                  <div class=\"media-body\">\n                    <a [routerLink]=\"['../../user', following.riftTag]\">{{following.firstName}} {{following.lastName}}\n                      <br><span class=\"text-muted username\">@{{following.riftTag}}</span></a>\n                    <app-follow-button class=\"pull-right\" [following]=\"isFollowing(following.riftTag)\" [id]=\"following.id\"\n                                       [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != following.riftTag\">\n\n                    </app-follow-button>\n                  </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"reviews\" style=\"width: 100%;\">\n              <div class=\"row\" style=\"text-align:center\">\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Rifter Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifterRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Riftee Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifteeRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n\n              </div>\n              <div class=\"row\">\n                <div class=\"col-sm-7\" *ngFor=\"let rating of currentUser.ratings\">\n                    <app-user-review [rating]=\"rating\" ></app-user-review>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"game accounts\">\n              <div class=\"media *ngFor=\"let account of currentUser.gameAccounts\">\n                <img src=\"{{account.gameIcon}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  {{account.gameName}}\n                    <br><span class=\"text-muted username\">@{{account.ign}}</span>\n                  <button type=\"button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\" class=\"btn btn-sm btn-primary\"\n                          (click)=\"editGameAccount(account)\">\n                    <span>Edit Game Account</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n          </mat-tab-group>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<router-outlet></router-outlet>\n\n<!--<mat-tab label=\"notifications\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n<!--<div class=\"media\" *ngFor=\"let notification of currentUser.notifications\">-->\n<!--<app-notification [notification]=\"notification\"></app-notification>-->\n<!--</div>-->\n<!--</mat-tab>-->\n\n\n<!--<mat-tab label=\"feed\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n  <!--<div class=\"media activity-item\" *ngFor=\"let notification of currentUser.feed\">-->\n    <!--<a href=\"#\" class=\"pull-left\">-->\n      <!--<img src=\"https://bootdey.com/img/Content/avatar/avatar1.png\" alt=\"Avatar\" class=\"media-object avatar\">-->\n    <!--</a>-->\n    <!--<div class=\"media-body\">-->\n      <!--<p class=\"activity-title\"><a [routerLink]=\"['../../user',notification.rifttag]\">{{notification.riftTag}}</a>-->\n        <!--{{notification.notificationContent}} </p>-->\n      <!--<small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>-->\n    <!--</div>-->\n  <!--</div>-->\n<!--</mat-tab>-->\n"
+module.exports = "<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n\n<div class=\"container\" style=\"width: 80%\" *ngIf=\"isDataAvailable\">\n  <base href=\"/\">\n  <div class=\"user-profile\">\n    <div class=\"row\">\n      <div class=\"profile-header-background\"><img src=\"{{currentUser.coverPhoto}}\" alt=\"Profile Header Background\"></div>\n      <div class=\"col-md-4\">\n        <div class=\"profile-info-left\">\n          <div class=\"text-center\">\n            <div id=\"profile-pic\">\n              <img src=\"{{currentUser.profilePic}}\" class=\"avatar img-circle\" alt=\"\">\n            </div>\n            <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>\n            <h3>@{{currentUser.riftTag}}</h3>\n            <h3>{{currentUser.email}}</h3>\n            <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n            <div id=\"following_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <app-follow-button [following]=\"isFollowing(currentUser.riftTag)\" [id]=\"currentUser.id\"\n              [riftTag]=\"profile.nickname\" class=\"userbtn\">\n              </app-follow-button>\n            </div>\n            <div id=\"update_info_button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">\n              <button (click)=\"updateInfoModal()\" type=\"button\" class=\"btn-primary\">Update your Info</button>\n            </div><br>\n            <div class=\"stripe-payment\">\n              <button (click)=\"updatePaymentModal()\" type=\"button\" class=\"btn-primary\">Update Payment</button>\n            </div><br>\n            <div class=\"stripe-payment\">\n              <button *ngIf=\"!currentUser.accountId\" (click)=\"updateBankAccountModal()\" type=\"button\" class=\"btn-primary\">Update Bank Account</button>\n            </div>\n            <div id=\"rate_user_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"openRatingDialog()\" type=\"button\" class=\"btn-primary\">Rate this User</button>\n            </div>\n            <br>\n            <div id=\"file_a_complaint\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"fileAComplaint()\" type=\"button\" class=\"btn-primary\">File A Complaint</button>\n            </div>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 0\">\n              Haven't played with {{currentUser.riftTag}} in past 30 days\n            </alert>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 1\">\n              Already rated {{currentUser.riftTag}} in past 30 days\n            </alert>\n          </div>\n          <div class=\"section about\">\n            <h3>About Me</h3>\n            <p> {{currentUser.bio}} </p>\n          </div>\n          <div class=\"section statistics\">\n            <h3>Statistics</h3>\n            <p><span class=\"badge\">{{currentUser.followings?.length}}</span> Following</p>\n            <p><span class=\"badge\">{{currentUser.followers?.length}}</span> Followers</p>\n            <p><span class=\"badge\">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>\n          </div>\n          <div class=\"section socialmedia\">\n            <h3>Social</h3>\n            <ul class=\"list-unstyled list-social\">\n              <li><i class=\"fa fa-youtube\"></i> {{currentUser.youtubeAccount}}</li>\n              <li><i class=\"fa fa-twitch\"></i> <a href=\"https://twitch.tv/{{currentUser.twitchAccount}}\">twitch.tv/{{currentUser.twitchAccount}}</a></li>\n            </ul>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-md-8\">\n        <div class=\"profile-info-right\">\n          <mat-tab-group>\n            <mat-tab label=\"activity\">\n              <div class=\"media activity-item\" *ngFor=\"let activity of currentUser.activities\">\n                <a href=\"#\" class=\"pull-left\">\n                  <img src=\"{{currentUser.profilePic}}\" alt=\"Avatar\" class=\"media-object avatar\">\n                </a>\n                <div class=\"media-body\">\n                  <p class=\"activity-title\">\n                    <a href=\"#\">{{currentUser.riftTag}}</a>\n                    {{activity.notificationContent}} <a [routerLink]=\"['../../session', activity.sessionId]\">{{activity.title}}</a>\n                  </p>\n                  <small class=\"text-muted\">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>\n                </div>\n                <div class=\"btn-group pull-right activity-actions\">\n                  <button type=\"button\" class=\"btn btn-xs btn-default dropdown-toggle\" data-toggle=\"dropdown\">\n                    <i class=\"fa fa-th\"></i>\n                    <span class=\"sr-only\">Toggle Dropdown</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"sessions\">\n              <div class=\"media\" *ngFor=\"let session of currentUser.rifterSessions\">\n                <app-session-card\n                                  [session]=\"session\" [isLoggedIn]=\"isLoggedIn\"\n                                  [type]=\"session.type\" [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n                ></app-session-card>\n                <!--[routerLink]=\"['../../session', session.id]\"-->\n              </div>\n            </mat-tab>\n            <mat-tab label=\"followers\">\n              <div class=\"media user-follower\" *ngFor=\"let follower of currentUser.followers\">\n                <img src=\"{{follower.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  <a [routerLink]=\"['../../user', follower.riftTag]\">{{follower.firstName}} {{follower.lastName}} {{follower.id}}\n                    <br><span class=\"text-muted username\">@{{follower.riftTag}}</span></a>\n                  <app-follow-button class=\"pull-right\" [following]=\"isFollowing(follower.riftTag)\" [id]=\"follower.id\"\n                                     [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != follower.riftTag\">\n                  </app-follow-button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"following\">\n              <div class=\"media user-info\" *ngFor=\"let following of currentUser.followings\">\n                  <img src=\"{{following.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                  <div class=\"media-body\">\n                    <a [routerLink]=\"['../../user', following.riftTag]\">{{following.firstName}} {{following.lastName}}\n                      <br><span class=\"text-muted username\">@{{following.riftTag}}</span></a>\n                    <app-follow-button class=\"pull-right\" [following]=\"isFollowing(following.riftTag)\" [id]=\"following.id\"\n                                       [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != following.riftTag\">\n\n                    </app-follow-button>\n                  </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"reviews\" style=\"width: 100%;\">\n              <div class=\"row\" style=\"text-align:center\">\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Rifter Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifterRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Riftee Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifteeRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n\n              </div>\n              <div class=\"row\">\n                <div class=\"col-sm-7\" *ngFor=\"let rating of currentUser.ratings\">\n                    <app-user-review [rating]=\"rating\" ></app-user-review>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"game accounts\">\n              <div class=\"media user-info\" *ngFor=\"let account of currentUser.gameAccounts\">\n                <img src=\"{{account.gameIcon}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  {{account.gameName}}\n                    <br><span class=\"text-muted username\">@{{account.ign}}</span>\n                  <button type=\"button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\" class=\"btn btn-sm btn-primary\"\n                          (click)=\"editGameAccount(account)\">\n                    <span>Edit Game Account</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n          </mat-tab-group>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<router-outlet></router-outlet>\n\n<!--<mat-tab label=\"notifications\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n<!--<div class=\"media\" *ngFor=\"let notification of currentUser.notifications\">-->\n<!--<app-notification [notification]=\"notification\"></app-notification>-->\n<!--</div>-->\n<!--</mat-tab>-->\n\n\n<!--<mat-tab label=\"feed\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n  <!--<div class=\"media activity-item\" *ngFor=\"let notification of currentUser.feed\">-->\n    <!--<a href=\"#\" class=\"pull-left\">-->\n      <!--<img src=\"https://bootdey.com/img/Content/avatar/avatar1.png\" alt=\"Avatar\" class=\"media-object avatar\">-->\n    <!--</a>-->\n    <!--<div class=\"media-body\">-->\n      <!--<p class=\"activity-title\"><a [routerLink]=\"['../../user',notification.rifttag]\">{{notification.riftTag}}</a>-->\n        <!--{{notification.notificationContent}} </p>-->\n      <!--<small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>-->\n    <!--</div>-->\n  <!--</div>-->\n<!--</mat-tab>-->\n"
 
 /***/ }),
 
@@ -4756,12 +5259,15 @@ module.exports = "<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__update_info_update_info_component__ = __webpack_require__("../../../../../src/app/userprofile/update-info/update-info.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__user_rating_user_rating_component__ = __webpack_require__("../../../../../src/app/userprofile/user-rating/user-rating.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__constants_activity_content__ = __webpack_require__("../../../../../src/app/constants/activity-content.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__file_a_complaint_file_a_complaint_component__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/file-a-complaint.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__models_game_account__ = __webpack_require__("../../../../../src/app/models/game-account.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__constants_session_icon_variables__ = __webpack_require__("../../../../../src/app/constants/session-icon-variables.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__game_account_edit_game_account_edit_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__file_a_complaint_file_a_complaint_component__ = __webpack_require__("../../../../../src/app/userprofile/file-a-complaint/file-a-complaint.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__models_game_account__ = __webpack_require__("../../../../../src/app/models/game-account.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__constants_session_icon_variables__ = __webpack_require__("../../../../../src/app/constants/session-icon-variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__game_account_edit_game_account_edit_game_account_component__ = __webpack_require__("../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__constants_notification_content__ = __webpack_require__("../../../../../src/app/constants/notification-content.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__stripe_payment_stripe_payment_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__stripe_payment_legal_bank_account_info_legal_bank_account_info_component__ = __webpack_require__("../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4791,8 +5297,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 var UserprofileComponent = /** @class */ (function () {
-    function UserprofileComponent(userProfileService, auth, route, userRatingService, dialog, gameAccountService, userSessionsService) {
+    function UserprofileComponent(userProfileService, auth, route, userRatingService, dialog, gameAccountService, userSessionsService, sharedFunc) {
         this.userProfileService = userProfileService;
         this.auth = auth;
         this.route = route;
@@ -4800,12 +5309,12 @@ var UserprofileComponent = /** @class */ (function () {
         this.dialog = dialog;
         this.gameAccountService = gameAccountService;
         this.userSessionsService = userSessionsService;
+        this.sharedFunc = sharedFunc;
         this.currentUser = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
         this.loggedInUser = new __WEBPACK_IMPORTED_MODULE_1__models_userprofile__["a" /* Userprofile */]();
         this.following = false;
         this.isDataAvailable = false;
         this.isLoggedIn = false;
-        this.updateBraintreeUserURL = '/api/braintree/updateCustomer/';
         this.profile = JSON.parse(localStorage.getItem('profile'));
         if (this.profile != null) {
             this.isLoggedIn = true;
@@ -4816,7 +5325,6 @@ var UserprofileComponent = /** @class */ (function () {
         this.sub = this.route.params.subscribe(function (params) {
             _this.currUser = params['rifttag'];
             _this.isDataAvailable = true;
-            // this.getLeagueInfo("ZeroSweg");
             _this.getUserProfileInformation(params['rifttag']);
         });
     };
@@ -4839,7 +5347,7 @@ var UserprofileComponent = /** @class */ (function () {
     };
     UserprofileComponent.prototype.getUserProfileInformation = function (riftTag) {
         var _this = this;
-        console.log("Getting " + riftTag + "'s profile information");
+        // console.log("Getting " + riftTag+ "'s profile information");
         this.userProfileService.getUser(riftTag).subscribe(function (resBody) {
             _this.currentUser.firstName = resBody.firstName;
             _this.currentUser.lastName = resBody.lastName;
@@ -4848,13 +5356,13 @@ var UserprofileComponent = /** @class */ (function () {
             _this.currentUser.bio = resBody.bio;
             _this.currentUser.email = resBody.email;
             _this.currentUser.id = resBody.id;
+            _this.currentUser.customerId = resBody.customerId;
+            _this.currentUser.accountId = resBody.accountId;
             _this.currentUser.rifterRating = resBody.rifterRating;
             _this.currentUser.rifteeRating = resBody.rifteeRating;
-            _this.currentUser.braintreeId = resBody.braintreeId;
             _this.currentUser.twitchAccount = resBody.twitchAccount;
             _this.currentUser.youtubeAccount = resBody.youtubeAccount;
-            _this.updateBraintreeUserURL = _this.updateBraintreeUserURL + resBody.braintreeId;
-            _this.getUserProfilePicture(_this.currentUser.riftTag, _this.currentUser);
+            _this.sharedFunc.getUserProfilePicture(_this.currentUser.riftTag, _this.currentUser);
             _this.getUserCoverPhoto(riftTag);
             _this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
             _this.getUserRatings(_this.currentUser.id);
@@ -4876,7 +5384,7 @@ var UserprofileComponent = /** @class */ (function () {
             currFollower.lastName = followers[i].followerUsertable.lastName;
             currFollower.riftTag = followers[i].followerUsertable.riftTag;
             currFollower.id = followers[i].followerUsertable.id;
-            this.getUserProfilePicture(currFollower.riftTag, currFollower);
+            this.sharedFunc.getUserProfilePicture(currFollower.riftTag, currFollower);
             this.currentUser.followers.push(currFollower);
         }
         for (var i = 0; i < followings.length; i++) {
@@ -4885,7 +5393,7 @@ var UserprofileComponent = /** @class */ (function () {
             currFollowing.lastName = followings[i].followingUsertable.lastName;
             currFollowing.riftTag = followings[i].followingUsertable.riftTag;
             currFollowing.id = followings[i].followingUsertable.id;
-            this.getUserProfilePicture(currFollowing.riftTag, currFollowing);
+            this.sharedFunc.getUserProfilePicture(currFollowing.riftTag, currFollowing);
             this.currentUser.followings.push(currFollowing);
         }
     };
@@ -4905,6 +5413,7 @@ var UserprofileComponent = /** @class */ (function () {
                 reviewer.firstName = resBody[i].reviewerUsertable.firstName;
                 reviewer.lastName = resBody[i].reviewerUsertable.lastName;
                 reviewer.riftTag = resBody[i].reviewerUsertable.riftTag;
+                _this.sharedFunc.getUserProfilePicture(reviewer.riftTag, reviewer);
                 userRating.reviewerUsertable = reviewer;
                 _this.currentUser.ratings.push(userRating);
             }
@@ -4917,7 +5426,7 @@ var UserprofileComponent = /** @class */ (function () {
         for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
             var currActivity = new __WEBPACK_IMPORTED_MODULE_3__models_activity__["a" /* Activity */]();
             currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
-            currActivity.notificationContent = __WEBPACK_IMPORTED_MODULE_14__constants_activity_content__["a" /* ACTIVITY_CONTENT */][parseInt(currActivity.notificationType)];
+            currActivity.notificationContent = __WEBPACK_IMPORTED_MODULE_19__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(currActivity.notificationType);
             currActivity.title = this.currentUser.creatorActivityList[i].rifterSession.title;
             currActivity.sessionId = this.currentUser.creatorActivityList[i].sessionId;
             currActivity.createdTime = this.currentUser.creatorActivityList[i].createdTime;
@@ -4970,19 +5479,6 @@ var UserprofileComponent = /** @class */ (function () {
             }
         });
     };
-    UserprofileComponent.prototype.getUserProfilePicture = function (riftTag, user) {
-        // console.log("Getting user's profile picture");
-        this.userProfileService.getProfilePicture(riftTag).subscribe(function (resBody) {
-            if (resBody.image == "") {
-                user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png";
-            }
-            else {
-                user.profilePic = resBody.image;
-            }
-        });
-        return;
-        // this.currentUser.profilePic = "https://s3.us-east-2.amazonaws.com/rift-profilepictures/" + riftTag +"profile-picture"
-    };
     UserprofileComponent.prototype.getUserCoverPhoto = function (riftTag) {
         var _this = this;
         // console.log("Getting user's cover photo");
@@ -5001,12 +5497,12 @@ var UserprofileComponent = /** @class */ (function () {
         this.gameAccountService.getUserGameAccounts(id).subscribe(function (resBody) {
             for (var i = 0; i < resBody.length; i++) {
                 var currAccount = resBody[i];
-                var account = new __WEBPACK_IMPORTED_MODULE_16__models_game_account__["a" /* GameAccount */]();
+                var account = new __WEBPACK_IMPORTED_MODULE_15__models_game_account__["a" /* GameAccount */]();
                 account.gameName = currAccount.game.game;
                 account.gameId = currAccount.gameId;
                 account.ign = currAccount.ign;
                 account.id = currAccount.id;
-                account.gameIcon = __WEBPACK_IMPORTED_MODULE_18__constants_session_icon_variables__["a" /* SESSION_ICONS */][account.gameId];
+                account.gameIcon = __WEBPACK_IMPORTED_MODULE_17__constants_session_icon_variables__["a" /* SESSION_ICONS */][account.gameId];
                 _this.currentUser.gameAccounts.push(account);
             }
         });
@@ -5028,17 +5524,37 @@ var UserprofileComponent = /** @class */ (function () {
             height: '450px',
             width: '600px',
             data: {
-                "updateBraintreeUserURL": this.updateBraintreeUserURL,
-                "currentUser": this.currentUser
+                currentUser: this.currentUser,
+                loggedInUser: this.loggedInUser
+            }
+        });
+    };
+    UserprofileComponent.prototype.updatePaymentModal = function () {
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_20__stripe_payment_stripe_payment_component__["a" /* StripePaymentComponent */], {
+            height: '450px',
+            width: '600px',
+            data: {
+                customerId: this.currentUser.customerId
+            }
+        });
+    };
+    UserprofileComponent.prototype.updateBankAccountModal = function () {
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_21__stripe_payment_legal_bank_account_info_legal_bank_account_info_component__["a" /* LegalBankAccountInfoComponent */], {
+            height: '450px',
+            width: '600px',
+            data: {
+                "riftId": this.loggedInUser.id,
+                "riftTag": this.profile.nickname
             }
         });
     };
     UserprofileComponent.prototype.editGameAccount = function (account) {
-        this.dialog.open(__WEBPACK_IMPORTED_MODULE_19__game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */], {
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_18__game_account_edit_game_account_edit_game_account_component__["a" /* EditGameAccountComponent */], {
             height: '450px',
             width: '600px',
             data: {
                 "account": account,
+                "riftId": this.currentUser.id
             }
         });
     };
@@ -5071,7 +5587,7 @@ var UserprofileComponent = /** @class */ (function () {
         });
     };
     UserprofileComponent.prototype.fileAComplaint = function () {
-        this.dialog.open(__WEBPACK_IMPORTED_MODULE_15__file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */], {
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_14__file_a_complaint_file_a_complaint_component__["a" /* FileAComplaintComponent */], {
             height: '450px',
             width: '600px',
             data: {
@@ -5088,7 +5604,8 @@ var UserprofileComponent = /** @class */ (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__userprofile_service__["a" /* UserprofileService */],
             __WEBPACK_IMPORTED_MODULE_5__auth_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_6__angular_router__["a" /* ActivatedRoute */], __WEBPACK_IMPORTED_MODULE_7__user_rating_data_user_rating_service__["a" /* UserRatingService */],
-            __WEBPACK_IMPORTED_MODULE_11__angular_material__["c" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_17__game_account_game_account_service__["a" /* GameAccountService */], __WEBPACK_IMPORTED_MODULE_9__usersessions_usersessions_service__["a" /* UsersessionsService */]])
+            __WEBPACK_IMPORTED_MODULE_11__angular_material__["c" /* MatDialog */], __WEBPACK_IMPORTED_MODULE_16__game_account_game_account_service__["a" /* GameAccountService */], __WEBPACK_IMPORTED_MODULE_9__usersessions_usersessions_service__["a" /* UsersessionsService */],
+            __WEBPACK_IMPORTED_MODULE_22__shared_shared_functions__["a" /* SharedFunctions */]])
     ], UserprofileComponent);
     return UserprofileComponent;
 }());
@@ -5294,7 +5811,7 @@ var YoutubeService = /** @class */ (function () {
 /***/ "../../../../../src/app/usersessions/create-session/create-session.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mat-dialog-content>\n  <form #createSession=\"ngForm\" class=\"editForm\" novalidate>\n    <div class=\"tab-pane fade in active\">\n      <h4 class=\"head text-center\">{{title}}</h4>\n      <br/>\n      <div class='row'>\n        <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiontitle\">Give your session a title</label>\n                <input class=\"form-control input-md\" #sessiontitle=\"ngModel\"  id=\"sessiontitle\" name=\"sessiontitle\" type=\"text\" placeholder=\"Session Title\" [(ngModel)]=\"currentSession.title\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiongame\">What game will you be playing?</label>\n                <!--<input class=\"form-control input-md\" #sessiongame=\"ngModel\"  id=\"sessiongame\" name=\"sessiongame\" type=\"text\" placeholder=\"Session Game\" [(ngModel)]=\"currentSession.game\">-->\n                <mat-form-field>\n                  <mat-select placeholder=\"Select a Game\" [(value)]=\"gameId\" (selectionChange)=\"getUserGameAccountsByGameId(gameId, loggedInUserId)\">\n                    <mat-option *ngFor=\"let game of games\" [value]=\"game.id\">\n                      {{ game.name }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n                <mat-form-field>\n                  <mat-select placeholder=\"Select an Account\" [(value)]=\"accountId\">\n                    <mat-option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">\n                      {{ account.ign }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiondesc\">Give your session a description</label>\n                <div class=\"input-group\">\n                  <textarea name=\"sessiondesc\" #sessiondesc = \"ngModel\" id =\"sessiondesc\" class=\"form-control\" [(ngModel)]=\"currentSession.description\"></textarea>\n                </div>\n              </div>\n            </div>\n          </div>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessionplatform\">What platform will you be playing on?</label>\n            <mat-form-field>\n              <mat-select placeholder=\"Select a Platform\" [(value)]=\"platform\">\n                <mat-option *ngFor=\"let console of consoles\" [value]=\"console\">\n                  {{ console.name }}\n                </mat-option>\n              </mat-select>\n            </mat-form-field>\n          </div>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionslots\">How many slots in your session</label>\n                <input class=\"form-control input-md\" #sessionslots=\"ngModel\"  id=\"sessionslots\" name=\"sessionslots\" type=\"number\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"currentSession.numSlots\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessioncost\">Cost per slot</label>\n                <input class=\"form-control input-md\" #sessioncost=\"ngModel\"  id=\"sessioncost\" name=\"sessioncost\" type=\"number\" placeholder=\"Cost per slot\" [(ngModel)]=\"currentSession.sessionCost\">\n              </div>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiondate\">What date</label>\n                <!--<input class=\"form-control input-md\" #sessiondate=\"ngModel\"  id=\"sessiondate\" name=\"sessiondate\" type=\"text\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"step3.sessionDate\">-->\n                <input matInput [matDatepicker]=\"picker\" placeholder=\"Choose a date\" #sessiondate=\"ngModel\"  id=\"sessiondate\" name=\"sessiondate\" [(ngModel)]=\"currentSessionDateTime.sessionDate\">\n                <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n                <mat-datepicker #picker></mat-datepicker>\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiontime\">What time</label>\n                <input matInput type=\"time\" placeholder=\"Pick a time\" #sessiontime=\"ngModel\"  id=\"sessiontime\" name=\"sessiontime\" [(ngModel)]=\"currentSessionDateTime.sessionTime\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionduration\">Select a Duration</label>\n                <input matInput type=\"number\" placeholder=\"Select a duration\" #sessionduration=\"ngModel\"  id=\"sessionduration\" name=\"sessionduration\" [(ngModel)]=\"currentSessionDateTime.sessionDuration\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionlanguage\">Select a Language</label>\n                <mat-form-field>\n                  <mat-select placeholder=\"Select a Language\" [(value)]=\"language\">\n                    <mat-option *ngFor=\"let language of languages\" [value]=\"language.language\">\n                      {{ language.language }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div>\n      <button [disabled]=\"!createSession.valid\" (click)=\"save()\" class=\"btn btn-lg btn-update\" type=\"button\">Create</button>\n      <button (click)=\"cancel()\" class=\"btn btn-lg btn-cancel\" type=\"button\">Cancel</button>\n    </div>\n  </form>\n</mat-dialog-content>\n\n"
+module.exports = "<mat-dialog-content>\n  <form #createSession=\"ngForm\" class=\"editForm\" novalidate>\n    <div class=\"tab-pane fade in active\">\n      <h4 class=\"head text-center\">{{title}}</h4>\n      <br/>\n      <div class='row'>\n        <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiontitle\">Give your session a title</label>\n                <input class=\"form-control input-md\" #sessiontitle=\"ngModel\"  id=\"sessiontitle\" name=\"sessiontitle\" type=\"text\" placeholder=\"Session Title\" [(ngModel)]=\"currentSession.title\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiongame\">What game will you be playing?</label>\n                <!--<input class=\"form-control input-md\" #sessiongame=\"ngModel\"  id=\"sessiongame\" name=\"sessiongame\" type=\"text\" placeholder=\"Session Game\" [(ngModel)]=\"currentSession.game\">-->\n                <mat-form-field>\n                  <mat-select placeholder=\"Select a Game\" [(value)]=\"gameId\" (selectionChange)=\"getUserGameAccountsByGameId(gameId, data.loggedInUserId)\">\n                    <mat-option *ngFor=\"let game of games\" [value]=\"game.id\">\n                      {{ game.name }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n                <mat-form-field>\n                  <mat-select placeholder=\"Select an Account\" [(value)]=\"accountId\">\n                    <mat-option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">\n                      {{ account.ign }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiondesc\">Give your session a description</label>\n                <div class=\"input-group\">\n                  <textarea name=\"sessiondesc\" #sessiondesc = \"ngModel\" id =\"sessiondesc\" class=\"form-control\" [(ngModel)]=\"currentSession.description\"></textarea>\n                </div>\n              </div>\n            </div>\n          </div>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessionplatform\">What platform will you be playing on?</label>\n            <mat-form-field>\n              <mat-select placeholder=\"Select a Platform\" [(value)]=\"platform\">\n                <mat-option *ngFor=\"let console of consoles\" [value]=\"console\">\n                  {{ console.name }}\n                </mat-option>\n              </mat-select>\n            </mat-form-field>\n          </div>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionslots\">How many slots in your session</label>\n                <input class=\"form-control input-md\" #sessionslots=\"ngModel\"  id=\"sessionslots\" name=\"sessionslots\" type=\"number\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"currentSession.numSlots\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessioncost\">Cost per slot</label>\n                <input class=\"form-control input-md\" #sessioncost=\"ngModel\"  id=\"sessioncost\" name=\"sessioncost\" type=\"number\" placeholder=\"Cost per slot\" [(ngModel)]=\"currentSession.sessionCost\">\n              </div>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiondate\">What date</label>\n                <!--<input class=\"form-control input-md\" #sessiondate=\"ngModel\"  id=\"sessiondate\" name=\"sessiondate\" type=\"text\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"step3.sessionDate\">-->\n                <input matInput [matDatepicker]=\"picker\" placeholder=\"Choose a date\" #sessiondate=\"ngModel\"  id=\"sessiondate\" name=\"sessiondate\" [(ngModel)]=\"currentSessionDateTime.sessionDate\">\n                <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n                <mat-datepicker #picker></mat-datepicker>\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessiontime\">What time</label>\n                <input matInput type=\"time\" placeholder=\"Pick a time\" #sessiontime=\"ngModel\"  id=\"sessiontime\" name=\"sessiontime\" [(ngModel)]=\"currentSessionDateTime.sessionTime\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionduration\">Select a Duration</label>\n                <input matInput type=\"number\" placeholder=\"Select a duration\" #sessionduration=\"ngModel\"  id=\"sessionduration\" name=\"sessionduration\" [(ngModel)]=\"currentSessionDateTime.sessionDuration\">\n              </div>\n            </div>\n            <div class='col-xs-12 col-sm-6'>\n              <div class=\"form-group\">\n                <label class=\"control-label\" for=\"sessionlanguage\">Select a Language</label>\n                <mat-form-field>\n                  <mat-select placeholder=\"Select a Language\" [(value)]=\"language\">\n                    <mat-option *ngFor=\"let language of languages\" [value]=\"language.language\">\n                      {{ language.language }}\n                    </mat-option>\n                  </mat-select>\n                </mat-form-field>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div>\n      <button [disabled]=\"!createSession.valid\" (click)=\"save()\" class=\"btn btn-lg btn-update\" type=\"button\">Create</button>\n      <button (click)=\"cancel()\" class=\"btn btn-lg btn-cancel\" type=\"button\">Cancel</button>\n    </div>\n  </form>\n</mat-dialog-content>\n\n"
 
 /***/ }),
 
@@ -5336,6 +5853,7 @@ module.exports = module.exports.toString();
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__userprofile_game_account_game_account_service__ = __webpack_require__("../../../../../src/app/userprofile/game-account/game-account.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__models_game_account__ = __webpack_require__("../../../../../src/app/models/game-account.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__constants_session_icon_variables__ = __webpack_require__("../../../../../src/app/constants/session-icon-variables.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5363,9 +5881,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 
 
+
 var CreateSessionComponent = /** @class */ (function () {
-    //noinspection JSAnnotator
-    function CreateSessionComponent(createSessionService, route, userSessionService, globals, userProfileService, gameAccountService, dialogRef, data) {
+    function CreateSessionComponent(createSessionService, route, userSessionService, globals, userProfileService, gameAccountService, dialogRef, data, sharedFunc) {
         this.createSessionService = createSessionService;
         this.route = route;
         this.userSessionService = userSessionService;
@@ -5374,6 +5892,7 @@ var CreateSessionComponent = /** @class */ (function () {
         this.gameAccountService = gameAccountService;
         this.dialogRef = dialogRef;
         this.data = data;
+        this.sharedFunc = sharedFunc;
         this.title = "Create this session";
         this.currentSession = new __WEBPACK_IMPORTED_MODULE_5__models_session__["a" /* Session */]();
         this.currentSessionDateTime = new __WEBPACK_IMPORTED_MODULE_1__data_sessionDateTime__["a" /* SessionDateTime */]();
@@ -5381,30 +5900,17 @@ var CreateSessionComponent = /** @class */ (function () {
         this.games = __WEBPACK_IMPORTED_MODULE_7__constants_games__["a" /* GAMES */];
         this.consoles = __WEBPACK_IMPORTED_MODULE_6__constants_consoles__["a" /* CONSOLES */];
         this.languages = __WEBPACK_IMPORTED_MODULE_8__constants_languages__["a" /* LANGUAGES */];
-        this.profile = JSON.parse(localStorage.getItem('profile'));
     }
-    CreateSessionComponent_1 = CreateSessionComponent;
     CreateSessionComponent.prototype.ngOnInit = function () {
-        this.getLoggedInUserId(this.profile.nickname);
+        console.log(this.data.loggedInUserId);
         this.currentSession = this.createSessionService.getSessionData();
         this.createSessionData = this.createSessionService.getFormData();
     };
-    CreateSessionComponent.prototype.getLoggedInUserId = function (riftTag) {
-        var _this = this;
-        if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-            this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
-        }
-        else {
-            this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
-                _this.loggedInUserId = resBody.id;
-            });
-        }
-    };
     CreateSessionComponent.prototype.save = function () {
         this.createSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-        var timeMS = CreateSessionComponent_1.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
+        var timeMS = this.sharedFunc.timeToMilliseconds(this.currentSessionDateTime.sessionTime) + this.currentSessionDateTime.sessionDate.getTime();
         var data = {
-            "hostId": this.loggedInUserId,
+            "hostId": this.data.loggedInUserId,
             "title": this.createSessionData.title,
             "description": this.createSessionData.description,
             "gameId": this.gameId,
@@ -5423,13 +5929,6 @@ var CreateSessionComponent = /** @class */ (function () {
     CreateSessionComponent.prototype.cancel = function () {
         //noinspection TypeScriptUnresolvedFunction
         this.dialogRef.close();
-    };
-    CreateSessionComponent.timeToMilliseconds = function (time) {
-        var list = time.split(":");
-        var hour = (+list[0]);
-        var minute = (+list[1]);
-        var seconds = (hour * 60 * 60) + (minute * 60);
-        return seconds * 1000;
     };
     CreateSessionComponent.prototype.getUserGameAccountsByGameId = function (gameId, riftId) {
         var _this = this;
@@ -5451,7 +5950,7 @@ var CreateSessionComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
     ], CreateSessionComponent.prototype, "createSessionData", void 0);
-    CreateSessionComponent = CreateSessionComponent_1 = __decorate([
+    CreateSessionComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-create-session',
             template: __webpack_require__("../../../../../src/app/usersessions/create-session/create-session.component.html"),
@@ -5461,10 +5960,9 @@ var CreateSessionComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__data_create_session_service__["a" /* CreateSessionService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */],
             __WEBPACK_IMPORTED_MODULE_9__usersessions_service__["a" /* UsersessionsService */], __WEBPACK_IMPORTED_MODULE_10__global_globals__["a" /* Globals */],
             __WEBPACK_IMPORTED_MODULE_11__userprofile_userprofile_service__["a" /* UserprofileService */], __WEBPACK_IMPORTED_MODULE_12__userprofile_game_account_game_account_service__["a" /* GameAccountService */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_material__["d" /* MatDialogRef */], Object])
+            __WEBPACK_IMPORTED_MODULE_3__angular_material__["d" /* MatDialogRef */], Object, __WEBPACK_IMPORTED_MODULE_15__shared_shared_functions__["a" /* SharedFunctions */]])
     ], CreateSessionComponent);
     return CreateSessionComponent;
-    var CreateSessionComponent_1;
 }());
 
 // this.sub = this.route.parent.params.subscribe(params => {
@@ -5572,748 +6070,6 @@ var SessionDateTime = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/usersessions/sessionform/data/formData.model.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FormData; });
-/* unused harmony export Step1 */
-/* unused harmony export Step2 */
-/* unused harmony export Step3 */
-var FormData = /** @class */ (function () {
-    function FormData() {
-        this.sessionCreatorId = "";
-        this.sessionCreatorRiftTag = "";
-        this.title = "";
-        this.console = "";
-        this.numSlots = "";
-        this.sessionCost = "";
-    }
-    FormData.prototype.clear = function () {
-        this.sessionCreatorId = "";
-        this.sessionCreatorRiftTag = "";
-        this.sessionCreationTime = "";
-        this.title = "";
-        this.gameId = -1;
-        this.console = "";
-        this.numSlots = "";
-        this.sessionCost = "";
-        this.sessionDate = "";
-        this.sessionTimes = "";
-        this.sessionDuration = "";
-    };
-    return FormData;
-}());
-
-var Step1 = /** @class */ (function () {
-    function Step1() {
-        this.title = "";
-        this.console = "";
-    }
-    return Step1;
-}());
-
-var Step2 = /** @class */ (function () {
-    function Step2() {
-    }
-    return Step2;
-}());
-
-var Step3 = /** @class */ (function () {
-    function Step3() {
-    }
-    return Step3;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/data/formData.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FormDataService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__formData_model__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__workflow_workflow_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/workflow/workflow.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__workflow_workflow_model__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/workflow/workflow.model.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var FormDataService = /** @class */ (function () {
-    function FormDataService(workflowService) {
-        this.workflowService = workflowService;
-        this.formData = new __WEBPACK_IMPORTED_MODULE_1__formData_model__["a" /* FormData */]();
-        this.isStep1Valid = false;
-        this.isStep2Valid = false;
-        this.isStep3Valid = false;
-    }
-    FormDataService.prototype.getStep1Info = function () {
-        var step1 = {
-            title: this.formData.title,
-            gameId: this.formData.gameId,
-            console: this.formData.console
-        };
-        return step1;
-    };
-    FormDataService.prototype.setStep1Info = function (data) {
-        this.isStep1Valid = true;
-        this.formData.title = data.title;
-        this.formData.gameId = data.gameId;
-        this.formData.console = data.console;
-        this.workflowService.validateStep(__WEBPACK_IMPORTED_MODULE_3__workflow_workflow_model__["a" /* STEPS */].step1);
-    };
-    FormDataService.prototype.getStep2Info = function () {
-        var step2 = {
-            numSlots: this.formData.numSlots,
-            sessionCost: this.formData.sessionCost
-        };
-        return step2;
-    };
-    FormDataService.prototype.setStep2Info = function (data) {
-        // Update the work type only when the Work Form had been validated successfully
-        this.isStep2Valid = true;
-        this.formData.numSlots = data.numSlots;
-        this.formData.sessionCost = data.sessionCost;
-        this.workflowService.validateStep(__WEBPACK_IMPORTED_MODULE_3__workflow_workflow_model__["a" /* STEPS */].step2);
-    };
-    FormDataService.prototype.getStep3Info = function () {
-        var step3 = {
-            sessionDate: this.formData.sessionDate,
-            sessionTimes: this.formData.sessionTimes,
-            sessionDuration: this.formData.sessionDuration
-        };
-        return step3;
-    };
-    FormDataService.prototype.setStep3Info = function (data) {
-        this.isStep3Valid = true;
-        this.formData.sessionDate = data.sessionDate;
-        this.formData.sessionTimes = data.sessionTimes;
-        this.formData.sessionDuration = data.sessionDuration;
-        this.workflowService.validateStep(__WEBPACK_IMPORTED_MODULE_3__workflow_workflow_model__["a" /* STEPS */].step3);
-    };
-    FormDataService.prototype.getFormData = function () {
-        // Return the entire Form Data
-        return this.formData;
-    };
-    FormDataService.prototype.resetFormData = function () {
-        // Reset the workflow
-        this.workflowService.resetSteps();
-        // Return the form data after all this.* members had been reset
-        this.formData.clear();
-        this.isStep1Valid = this.isStep2Valid = this.isStep3Valid = false;
-        return this.formData;
-    };
-    FormDataService.prototype.isFormValid = function () {
-        // Return true if all forms had been validated successfully; otherwise, return false
-        return this.isStep1Valid &&
-            this.isStep2Valid &&
-            this.isStep3Valid;
-    };
-    FormDataService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__workflow_workflow_service__["a" /* WorkflowService */]])
-    ], FormDataService);
-    return FormDataService;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/formnav/formnav.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"board-inner\" id=\"status-buttons\">\n  <ul class=\"nav nav-tabs\" id=\"myTab\">\n    <div class=\"liner\"></div>\n\n    <!-- circular user icon -->\n    <li>\n      <a uiSrefActive=\"active\" uiSref=\"step1\" data-toggle=\"tab\" title=\"step1\">\n                <span class=\"round-tabs one\">\n                    <i class=\"glyphicon glyphicon-user\"></i>\n                </span>\n      </a>\n    </li>\n\n    <!-- circular tasks icon -->\n    <li>\n      <a uiSrefActive=\"active\" uiSref=\"step2\" data-toggle=\"tab\" title=\"step2\">\n                <span class=\"round-tabs two\">\n                    <i class=\"glyphicon glyphicon-tasks\"></i>\n                </span>\n      </a>\n    </li>\n\n    <!-- circular home icon -->\n    <li>\n      <a uiSrefActive=\"active\" uiSref=\"step3\" data-toggle=\"tab\" title=\"step3\">\n                <span class=\"round-tabs three\">\n                    <i class=\"glyphicon glyphicon-home\"></i>\n                </span>\n      </a>\n    </li>\n\n    <!-- circular ok icon -->\n    <li>\n      <a uiSrefActive=\"active\" uiSref=\"result\" data-toggle=\"tab\" title=\"completed\">\n                <span class=\"round-tabs four\">\n                    <i class=\"glyphicon glyphicon-ok\"></i>\n                </span>\n      </a>\n    </li>\n\n  </ul>\n  <div class=\"clearfix\"></div>\n</div>\n\n<!-- Close the Splash screen -->\n<script src=\"content/js/loading-bars.js\"></script>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/formnav/formnav.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/formnav/formnav.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FormnavComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var FormnavComponent = /** @class */ (function () {
-    function FormnavComponent() {
-    }
-    FormnavComponent.prototype.ngOnInit = function () {
-    };
-    FormnavComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-formnav',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/formnav/formnav.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/formnav/formnav.component.scss")]
-        }),
-        __metadata("design:paramtypes", [])
-    ], FormnavComponent);
-    return FormnavComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/result/result.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"tab-pane fade in active\">\n  <h3 class=\"head text-center\">{{title}}</h3>\n  <p class=\"narrow text-center\">\n    Here is a copy of the information you have entered:\n  </p>\n  <div class='row'>\n    <div class='col-xs-offset-1 col-xs-10 col-sm-offset-3 col-sm-8 col-md-offset-4 col-md-8'>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"title\">Session Title: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.title}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"game\">Game: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.gameId}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"console\">Platform: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.console}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"numSlots\">Number of slots: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.numSlots}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessionCost\">Cost per slot: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.sessionCost}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessiondate\">Session Date: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.sessionDate}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessiontime\">Session Time: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{formData.sessionTimes}}\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class='col-xs-3 col-sm-2'>\n          <div class=\"form-group\">\n            <label class=\"control-label\" for=\"sessiontimeMS\">Session Time in MS: </label>\n          </div>\n        </div>\n        <div class='col-xs-9 col-sm-10'>\n          {{timeMS}}\n        </div>\n      </div>\n\n    </div>\n  </div>\n  <div class=\"text-center\">\n    <button class=\"btn btn-success btn-outline-rounded\" (click)=\"submit()\" routerLink=\"../\"> Submit <span style=\"margin-left:10px;\" class=\"glyphicon glyphicon-arrow-right\"></span></button>\n    <button class=\"btn btn-success btn-outline-rounded\" (click)=\"clear()\" routerLink=\"../\"> Cancel  </button>\n\n  </div>\n</div>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/result/result.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/result/result.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_formData_model__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.model.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__usersessions_service__ = __webpack_require__("../../../../../src/app/usersessions/usersessions.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__userprofile_userprofile_service__ = __webpack_require__("../../../../../src/app/userprofile/userprofile.service.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-var ResultComponent = /** @class */ (function () {
-    function ResultComponent(formDataService, userSessionService, userProfileService) {
-        this.formDataService = formDataService;
-        this.userSessionService = userSessionService;
-        this.userProfileService = userProfileService;
-        this.title = "Review your Submission";
-        this.isFormValid = false;
-        this.profile = JSON.parse(localStorage.getItem('profile'));
-    }
-    ResultComponent.prototype.ngOnInit = function () {
-        this.getLoggedInUserId(this.profile.nickname);
-        this.formData = this.formDataService.getFormData();
-        this.isFormValid = this.formDataService.isFormValid();
-        console.log('Result feature loaded!');
-    };
-    ResultComponent.prototype.submit = function () {
-        alert('Session Created');
-        console.log(this.formData);
-        this.formData.sessionCreatorId = JSON.parse(localStorage.getItem("profile"));
-        this.timeMS = this.timeToMilliseconds(this.formData.sessionTimes) + this.formData.sessionDate.getTime();
-        // var costNoDollar = this.formatCost(this.formData.sessionCost);
-        var data = {
-            "hostId": this.loggedInUserId,
-            "title": this.formData.title,
-            "game_id": this.formData.gameId,
-            "console": this.formData.console,
-            "numSlots": this.formData.numSlots,
-            "sessionCost": this.formData.sessionCost,
-            "sessionTime": this.timeMS,
-            "sessionDuration": '1:00:00'
-        };
-        this.userSessionService.createUserSession(data);
-        console.log(data);
-        // window.location.reload();
-        this.formData = this.formDataService.resetFormData();
-        this.isFormValid = false;
-    };
-    ResultComponent.prototype.getLoggedInUserId = function (riftTag) {
-        var _this = this;
-        if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-            this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
-        }
-        else {
-            this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
-                _this.loggedInUserId = resBody.id;
-            });
-        }
-    };
-    ResultComponent.prototype.timeToMilliseconds = function (time) {
-        var list = time.split(":");
-        var hour = (+list[0]);
-        var minute = (+list[1]);
-        var seconds = (hour * 60 * 60) + (minute * 60);
-        return seconds * 1000;
-    };
-    // formatCost(cost): string {
-    //
-    //   if (cost.charAt(0) == "$") {
-    //     return cost.substr(1);
-    //   }
-    //   return cost;
-    // }
-    ResultComponent.prototype.clear = function () {
-        this.formData = this.formDataService.resetFormData();
-        this.isFormValid = false;
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__data_formData_model__["a" /* FormData */])
-    ], ResultComponent.prototype, "formData", void 0);
-    ResultComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-result',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/result/result.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/result/result.component.scss")]
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__data_formData_service__["a" /* FormDataService */], __WEBPACK_IMPORTED_MODULE_3__usersessions_service__["a" /* UsersessionsService */],
-            __WEBPACK_IMPORTED_MODULE_4__userprofile_userprofile_service__["a" /* UserprofileService */]])
-    ], ResultComponent);
-    return ResultComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/sessionform.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"container\" style=\"width: 80%\">\n  <mat-horizontal-stepper [linear]=\"isLinear\">\n    <mat-step>\n      <ng-template matStepLabel></ng-template>\n      <app-step1></app-step1>\n    </mat-step>\n    <mat-step>\n      <app-step2></app-step2>\n    </mat-step>\n    <mat-step>\n      <app-step3></app-step3>\n    </mat-step>\n    <mat-step>\n      <app-result></app-result>\n    </mat-step>\n  </mat-horizontal-stepper>\n\n  <!-- For Debugging: show our valid formData -->\n  <pre>{{ formData | json }}</pre>\n</div>\n\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/sessionform.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/sessionform.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SessionformComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var SessionformComponent = /** @class */ (function () {
-    function SessionformComponent(formDataService) {
-        this.formDataService = formDataService;
-    }
-    SessionformComponent.prototype.ngOnInit = function () {
-        this.step1 = this.formDataService.getStep1Info();
-        this.step2 = this.formDataService.getStep2Info();
-        this.step3 = this.formDataService.getStep3Info();
-        this.formData = this.formDataService.getFormData();
-    };
-    SessionformComponent.prototype.save = function (form) {
-        if (!form.valid) {
-            return;
-        }
-        this.formDataService.setStep1Info(this.step1);
-        this.formDataService.setStep2Info(this.step2);
-        this.formDataService.setStep3Info(this.step3);
-        console.log(this.step3.sessionDate);
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", Object)
-    ], SessionformComponent.prototype, "formData", void 0);
-    SessionformComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-sessionform',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/sessionform.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/sessionform.component.scss")]
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_formData_service__["a" /* FormDataService */]])
-    ], SessionformComponent);
-    return SessionformComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step1/step1.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<form #step1Form=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessiontitle\">Give your session a title</label>\n              <input class=\"form-control input-md\" #sessiontitle=\"ngModel\" required id=\"sessiontitle\" name=\"sessiontitle\" type=\"text\" placeholder=\"Session Title\" [(ngModel)]=\"step1.title\">\n              <div class=\"alert alert-danger\" [hidden]=\"sessiontitle.valid\">Session title is required</div>\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessiongame\">What game will you be playing?</label>\n              <!--<input class=\"form-control input-md\" #sessiongame=\"ngModel\"  id=\"sessiongame\" name=\"sessiongame\" type=\"text\" placeholder=\"Session Game\" [(ngModel)]=\"currentSession.game\">-->\n              <mat-form-field>\n                <mat-select placeholder=\"Select a Game\" [(value)]=\"gameId\">\n                  <mat-option *ngFor=\"let game of games\" [value]=\"game.id\">\n                    {{ game.name }}\n                  </mat-option>\n                </mat-select>\n              </mat-form-field>\n            </div>\n          </div>\n        </div>\n        <div class=\"form-group\">\n          <label class=\"control-label\" for=\"sessionplatform\">What platform will you be playing on?</label>\n          <input class=\"form-control input-md\" #sessionplatform=\"ngModel\" required id=\"sessionplatform\" name=\"sessinplatform\" type=\"text\" placeholder=\"Session Platform\" [(ngModel)]=\"step1.console\">\n          <div class=\"alert alert-danger\" [hidden]=\"sessionplatform.valid\">Email is required and must be valid</div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div>\n    <button mat-button matStepperNext [disabled]=\"!step1Form.valid\" (click)=\"save(step1Form)\" class=\"btn-primary\" type=\"button\">Next</button>\n  </div>\n</form>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step1/step1.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step1/step1.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Step1Component; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__constants_games__ = __webpack_require__("../../../../../src/app/constants/games.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var Step1Component = /** @class */ (function () {
-    function Step1Component(formDataService) {
-        this.formDataService = formDataService;
-        this.title = 'Step 1';
-    }
-    Step1Component.prototype.ngOnInit = function () {
-        this.games = __WEBPACK_IMPORTED_MODULE_2__constants_games__["a" /* GAMES */];
-        this.step1 = this.formDataService.getStep1Info();
-        console.log("Step 1 information loaded");
-    };
-    Step1Component.prototype.save = function (form) {
-        if (!form.valid) {
-            return;
-        }
-        this.formDataService.setStep1Info(this.step1);
-    };
-    Step1Component = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-step1',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/step1/step1.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/step1/step1.component.scss")]
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_formData_service__["a" /* FormDataService */]])
-    ], Step1Component);
-    return Step1Component;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step2/step2.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<form #step2Form=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessionslots\">How many slots in your session</label>\n              <input class=\"form-control input-md\" #sessionslots=\"ngModel\" required id=\"sessionslots\" name=\"sessionslots\" type=\"number\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"step2.numSlots\">\n              <div class=\"alert alert-danger\" [hidden]=\"sessionslots.valid\">Number of slots required</div>\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessioncost\">Cost per slot</label>\n              <input class=\"form-control input-md\" #sessioncost=\"ngModel\" required id=\"sessioncost\" name=\"sessioncost\" type=\"number\" placeholder=\"Cost per slot\" [(ngModel)]=\"step2.sessionCost\">\n              <div class=\"alert alert-danger\" [hidden]=\"sessioncost.valid\">Cost per slot required</div>\n            </div>\n          </div>\n        </div>\n        <div class=\"form-group text-center\">\n          <button mat-button matStepperPrevious class=\"btn-primary\" type=\"button\" (click)=\"save(step2Form)\">Back</button>\n          <button mat-button matStepperNext type=\"button\" [disabled]=\"!step2Form.valid\" (click)=\"save(step2Form)\">Next</button>\n        </div>\n      </div>\n    </div>\n  </div>\n</form>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step2/step2.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step2/step2.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Step2Component; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var Step2Component = /** @class */ (function () {
-    function Step2Component(formDataService) {
-        this.formDataService = formDataService;
-        this.title = 'Step 2';
-    }
-    Step2Component.prototype.ngOnInit = function () {
-        this.step2 = this.formDataService.getStep2Info();
-        console.log("Step 2 information loaded");
-    };
-    Step2Component.prototype.save = function (form) {
-        if (!form.valid) {
-            return;
-        }
-        this.formDataService.setStep2Info(this.step2);
-    };
-    Step2Component = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-step2',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/step2/step2.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/step2/step2.component.scss")]
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_formData_service__["a" /* FormDataService */]])
-    ], Step2Component);
-    return Step2Component;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step3/step3.component.html":
-/***/ (function(module, exports) {
-
-module.exports = "<form #step3Form=\"ngForm\" class=\"editForm\" novalidate>\n  <div class=\"tab-pane fade in active\">\n    <h4 class=\"head text-center\">{{title}}</h4>\n    <br/>\n    <div class='row'>\n      <div class='col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8'>\n        <div class=\"row\">\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessiondate\">What date</label>\n              <!--<input class=\"form-control input-md\" #sessiondate=\"ngModel\" required id=\"sessiondate\" name=\"sessiondate\" type=\"text\" placeholder=\"Number of slots for your session\" [(ngModel)]=\"step3.sessionDate\">-->\n              <input matInput [matDatepicker]=\"picker\" placeholder=\"Choose a date\" #sessiondate=\"ngModel\" required id=\"sessiondate\" name=\"sessiondate\" [(ngModel)]=\"step3.sessionDate\">\n              <mat-datepicker-toggle matSuffix [for]=\"picker\"></mat-datepicker-toggle>\n              <mat-datepicker #picker></mat-datepicker>\n              <div class=\"alert alert-danger\" [hidden]=\"sessiondate.valid\">Date is required</div>\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessiontime\">What time</label>\n              <input matInput type=\"time\" placeholder=\"Pick a time\" #sessiontime=\"ngModel\" required id=\"sessiontime\" name=\"sessiontime\" [(ngModel)]=\"step3.sessionTimes\">\n              <div class=\"alert alert-danger\" [hidden]=\"sessiontime.valid\">Time is required</div>\n            </div>\n          </div>\n          <div class='col-xs-12 col-sm-6'>\n            <div class=\"form-group\">\n              <label class=\"control-label\" for=\"sessionduration\">Select a Duration</label>\n              <input matInput type=\"number\" placeholder=\"Select a duration\" #sessionduration=\"ngModel\" required id=\"sessionduration\" name=\"sessionduration\" [(ngModel)]=\"step3.sessionDuration\">\n              <div class=\"alert alert-danger\" [hidden]=\"sessionduration.valid\">Duration required</div>\n            </div>\n          </div>\n        </div>\n        <div class=\"form-group text-center\">\n          <button mat-button matStepperPrevious class=\"btn-primary\" type=\"button\" (click)=\"save(step3Form)\">Back</button>\n          <button mat-button matStepperNext type=\"button\" [disabled]=\"!step3Form.valid\" (click)=\"save(step3Form)\">Next</button>\n        </div>\n      </div>\n    </div>\n  </div>\n</form>\n"
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step3/step3.component.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/*** EXPORTS FROM exports-loader ***/
-module.exports = module.exports.toString();
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/step3/step3.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Step3Component; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_formData_service__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/data/formData.service.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var Step3Component = /** @class */ (function () {
-    function Step3Component(formDataService) {
-        this.formDataService = formDataService;
-        this.title = 'Step 3';
-    }
-    Step3Component.prototype.ngOnInit = function () {
-        this.step3 = this.formDataService.getStep3Info();
-        console.log("Step 3 information loaded");
-    };
-    Step3Component.prototype.save = function (form) {
-        if (!form.valid) {
-            return;
-        }
-        this.formDataService.setStep3Info(this.step3);
-    };
-    Step3Component = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'app-step3',
-            template: __webpack_require__("../../../../../src/app/usersessions/sessionform/step3/step3.component.html"),
-            styles: [__webpack_require__("../../../../../src/app/usersessions/sessionform/step3/step3.component.scss")],
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_formData_service__["a" /* FormDataService */]])
-    ], Step3Component);
-    return Step3Component;
-}());
-
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/workflow/workflow.model.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return STEPS; });
-var STEPS = {
-    step1: 'step1',
-    step2: 'step2',
-    step3: 'step3',
-    result: 'result'
-};
-
-
-/***/ }),
-
-/***/ "../../../../../src/app/usersessions/sessionform/workflow/workflow.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return WorkflowService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__workflow_model__ = __webpack_require__("../../../../../src/app/usersessions/sessionform/workflow/workflow.model.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-var WorkflowService = /** @class */ (function () {
-    function WorkflowService() {
-        this.workflow = [
-            { step: __WEBPACK_IMPORTED_MODULE_1__workflow_model__["a" /* STEPS */].step1, valid: false },
-            { step: __WEBPACK_IMPORTED_MODULE_1__workflow_model__["a" /* STEPS */].step2, valid: false },
-            { step: __WEBPACK_IMPORTED_MODULE_1__workflow_model__["a" /* STEPS */].step3, valid: false },
-            { step: __WEBPACK_IMPORTED_MODULE_1__workflow_model__["a" /* STEPS */].result, valid: false }
-        ];
-    }
-    WorkflowService.prototype.validateStep = function (step) {
-        // If the state is found, set the valid field to true
-        var found = false;
-        for (var i = 0; i < this.workflow.length && !found; i++) {
-            if (this.workflow[i].step === step) {
-                found = this.workflow[i].valid = true;
-            }
-        }
-    };
-    WorkflowService.prototype.resetSteps = function () {
-        // Reset all the steps in the Workflow to be invalid
-        this.workflow.forEach(function (element) {
-            element.valid = false;
-        });
-    };
-    WorkflowService.prototype.getFirstInvalidStep = function (step) {
-        // If all the previous steps are validated, return blank
-        // Otherwise, return the first invalid step
-        var found = false;
-        var valid = true;
-        var redirectToStep = '';
-        for (var i = 0; i < this.workflow.length && !found && valid; i++) {
-            var item = this.workflow[i];
-            if (item.step === step) {
-                found = true;
-                redirectToStep = '';
-            }
-            else {
-                valid = item.valid;
-                redirectToStep = item.step;
-            }
-        }
-        return redirectToStep;
-    };
-    WorkflowService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
-    ], WorkflowService);
-    return WorkflowService;
-}());
-
-
-
-/***/ }),
-
 /***/ "../../../../../src/app/usersessions/usersessions.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6335,7 +6091,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/usersessions/usersessions.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" style=\"width: 95%\">\n\n  <div class=\"filters\">\n    <button (click)=\"openUpdateSessionDialog()\" type=\"button\" class=\"btn btn-primary createASession\" >\n      Create a Session\n    </button>\n    <h5>Filter by Session Type</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <label class=\"fake-checkbox\">\n          <mat-checkbox [(ngModel)]=\"rifter\"> Rifter </mat-checkbox>\n          <mat-checkbox [(ngModel)]=\"riftee\"> Riftee </mat-checkbox>\n        </label>\n      </div>\n    </div>\n    <h5>Filter by Session Time</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n          <mat-checkbox [(ngModel)]=\"upcoming\"> Upcoming </mat-checkbox>\n          <mat-checkbox [(ngModel)]=\"past\"> Past </mat-checkbox>\n      </div>\n    </div>\n    <h5>Filter by Game</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <div *ngFor=\"let game of games\">\n          <mat-checkbox [(ngModel)]=\"game.selected\"> {{game.name}} </mat-checkbox>\n        </div>\n      </div>\n    </div>\n    <h5>Filter by Console</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <div *ngFor=\"let console of consoles\">\n          <mat-checkbox [(ngModel)]=\"console.selected\"> {{console.name}} </mat-checkbox>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"session-view\">\n    <tabset>\n      <tab heading=\"card view\" id=\"tab1\" (select)=\"card = true\" [ngClass]=\"{'display-calendar': !card, 'hide-calendar':card}\">\n        <div class=\"sessions\">\n          <div *ngFor=\"let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |\n            gameFilter: selectedGames | consoleFilter: selectedConsoles\">\n            <app-session-card [routerLink]=\"['../session', session.id]\"\n                              [session]=\"session\" [type]=\"session.type\" [isLoggedIn]=\"true\"\n                              [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n            ></app-session-card>\n          </div>\n        </div>\n      </tab>\n      <tab heading=\"calendar view\" (select)=\"renderCalendar()\" [ngClass]=\"{'display-calendar': !card, 'hide-calendar':card}\">\n        <angular2-fullcalendar [options]=\"calendarOptions\"></angular2-fullcalendar>\n      </tab>\n\n    </tabset>\n\n  </div>\n\n  <router-outlet></router-outlet>\n\n</div>\n\n<!--<mat-tab-group>-->\n<!--<mat-tab label=\"card view\">-->\n<!--<div class=\"sessions\">-->\n<!--<div *ngFor=\"let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |-->\n<!--gameFilter: selectedGames | consoleFilter: selectedConsoles\">-->\n<!--<app-session-card [routerLink]=\"['../session', session.id]\"-->\n<!--[session]=\"session\" [type]=\"session.type\" [isLoggedIn]=\"true\"-->\n<!--[request]=\"loggedInUser.sessionRequests.get(session.id)\"-->\n<!--&gt;</app-session-card>-->\n<!--</div>-->\n<!--</div>-->\n\n<!--</mat-tab>-->\n<!--<mat-tab label=\"calendar\" style=\"display: block\">-->\n<!--<angular2-fullcalendar [options]=\"calendarOptions\"></angular2-fullcalendar>-->\n\n<!--</mat-tab>-->\n<!--</mat-tab-group>-->\n"
+module.exports = "<div class=\"container\" style=\"width: 95%\">\n\n  <div class=\"filters\">\n    <button (click)=\"openCreateSessionDialog()\" type=\"button\" class=\"btn btn-primary createASession\" >\n      Create a Session\n    </button>\n    <h5>Filter by Session Type</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <label class=\"fake-checkbox\">\n          <mat-checkbox [(ngModel)]=\"rifter\"> Rifter </mat-checkbox>\n          <mat-checkbox [(ngModel)]=\"riftee\"> Riftee </mat-checkbox>\n        </label>\n      </div>\n    </div>\n    <h5>Filter by Session Time</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n          <mat-checkbox [(ngModel)]=\"upcoming\"> Upcoming </mat-checkbox>\n          <mat-checkbox [(ngModel)]=\"past\"> Past </mat-checkbox>\n      </div>\n    </div>\n    <h5>Filter by Game</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <div *ngFor=\"let game of games\">\n          <mat-checkbox [(ngModel)]=\"game.selected\"> {{game.name}} </mat-checkbox>\n        </div>\n      </div>\n    </div>\n    <h5>Filter by Console</h5>\n    <div>\n      <div class=\"category-filter filter-wrapper\">\n        <div *ngFor=\"let console of consoles\">\n          <mat-checkbox [(ngModel)]=\"console.selected\"> {{console.name}} </mat-checkbox>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"session-view\">\n    <tabset>\n      <tab heading=\"card view\" id=\"tab1\" (select)=\"card = true\" [ngClass]=\"{'display-calendar': !card, 'hide-calendar':card}\">\n        <div class=\"sessions\">\n          <div *ngFor=\"let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |\n            gameFilter: selectedGames | consoleFilter: selectedConsoles\">\n            <app-session-card [routerLink]=\"['../session', session.id]\"\n                              [session]=\"session\" [type]=\"session.type\" [isLoggedIn]=\"true\"\n                              [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n                              [loggedInUserId]=\"loggedInUser.id\"\n            ></app-session-card>\n          </div>\n        </div>\n      </tab>\n      <tab heading=\"calendar view\" (select)=\"renderCalendar()\" [ngClass]=\"{'display-calendar': !card, 'hide-calendar':card}\">\n        <angular2-fullcalendar [options]=\"calendarOptions\"></angular2-fullcalendar>\n      </tab>\n\n    </tabset>\n\n  </div>\n\n  <router-outlet></router-outlet>\n\n</div>\n\n<!--<mat-tab-group>-->\n<!--<mat-tab label=\"card view\">-->\n<!--<div class=\"sessions\">-->\n<!--<div *ngFor=\"let session of currentUser.sessions | sessionType: rifter:riftee | sessionTime: upcoming:past |-->\n<!--gameFilter: selectedGames | consoleFilter: selectedConsoles\">-->\n<!--<app-session-card [routerLink]=\"['../session', session.id]\"-->\n<!--[session]=\"session\" [type]=\"session.type\" [isLoggedIn]=\"true\"-->\n<!--[request]=\"loggedInUser.sessionRequests.get(session.id)\"-->\n<!--&gt;</app-session-card>-->\n<!--</div>-->\n<!--</div>-->\n\n<!--</mat-tab>-->\n<!--<mat-tab label=\"calendar\" style=\"display: block\">-->\n<!--<angular2-fullcalendar [options]=\"calendarOptions\"></angular2-fullcalendar>-->\n\n<!--</mat-tab>-->\n<!--</mat-tab-group>-->\n"
 
 /***/ }),
 
@@ -6402,9 +6158,9 @@ var UsersessionsComponent = /** @class */ (function () {
     UsersessionsComponent.prototype.ngOnInit = function () {
         this.games = __WEBPACK_IMPORTED_MODULE_8__constants_games__["a" /* GAMES */];
         this.consoles = __WEBPACK_IMPORTED_MODULE_9__constants_consoles__["a" /* CONSOLES */];
-        var riftTag = this.profile.nickname;
-        this.getUserRifterAndRifteeSessions(riftTag);
-        this.getUserSessionRequests(riftTag);
+        this.getLoggedInUserId(this.profile.nickname);
+        this.getUserRifterAndRifteeSessions(this.profile.nickname);
+        this.getUserSessionRequests(this.profile.nickname);
     };
     UsersessionsComponent.prototype.getUserRifterAndRifteeSessions = function (riftTag) {
         var _this = this;
@@ -6454,9 +6210,19 @@ var UsersessionsComponent = /** @class */ (function () {
             }
         });
     };
-    UsersessionsComponent.prototype.openDialog = function () {
+    UsersessionsComponent.prototype.getLoggedInUserId = function (riftTag) {
+        var _this = this;
+        this.userProfileService.getUserId(riftTag).subscribe(function (resBody) {
+            _this.loggedInUser.id = resBody.id;
+        });
+    };
+    UsersessionsComponent.prototype.openCreateSessionDialog = function () {
         //noinspection TypeScriptUnresolvedFunction
-        this.dialog.open(__WEBPACK_IMPORTED_MODULE_7__create_session_create_session_component__["a" /* CreateSessionComponent */], {});
+        this.dialog.open(__WEBPACK_IMPORTED_MODULE_7__create_session_create_session_component__["a" /* CreateSessionComponent */], {
+            data: {
+                loggedInUserId: this.loggedInUser.id
+            }
+        });
     };
     Object.defineProperty(UsersessionsComponent.prototype, "selectedGames", {
         get: function () {
@@ -6486,8 +6252,9 @@ var UsersessionsComponent = /** @class */ (function () {
         this.myCalendar.fullCalendar("removeEvents");
         for (var i = 0; i < this.currentUser.sessions.length; i++) {
             var currSession = this.currentUser.sessions[i];
+            var newSession = {};
             if (currSession.type) {
-                var newSession = {
+                newSession = {
                     title: currSession.title,
                     sessionId: currSession.id,
                     start: new Date(currSession.sessionTime).toISOString(),
@@ -6495,7 +6262,7 @@ var UsersessionsComponent = /** @class */ (function () {
                 };
             }
             else {
-                var newSession = {
+                newSession = {
                     title: currSession.title,
                     sessionId: currSession.id,
                     start: new Date(currSession.sessionTime).toISOString(),
@@ -6563,6 +6330,14 @@ var UsersessionsService = /** @class */ (function () {
     UsersessionsService.prototype.getUserRifterAndRifteeSessions = function (riftTag) {
         console.log("running getUserRifterAndRifteeSessions");
         return this.http.get("/api/rifterSession/" + riftTag + "/rifterAndRifteeSessions")
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error'); });
+    };
+    UsersessionsService.prototype.getUserSessionsByGameAccountId = function (id) {
+        console.log("Getting user's game accounts");
+        return this.http.get("/api/rifterSession/" + id + "/gameAccountId")
             .map(function (response) {
             return response.json();
         })
@@ -6689,6 +6464,8 @@ var map = {
 	"./be.js": "../../../../moment/locale/be.js",
 	"./bg": "../../../../moment/locale/bg.js",
 	"./bg.js": "../../../../moment/locale/bg.js",
+	"./bm": "../../../../moment/locale/bm.js",
+	"./bm.js": "../../../../moment/locale/bm.js",
 	"./bn": "../../../../moment/locale/bn.js",
 	"./bn.js": "../../../../moment/locale/bn.js",
 	"./bo": "../../../../moment/locale/bo.js",
@@ -6725,6 +6502,8 @@ var map = {
 	"./en-gb.js": "../../../../moment/locale/en-gb.js",
 	"./en-ie": "../../../../moment/locale/en-ie.js",
 	"./en-ie.js": "../../../../moment/locale/en-ie.js",
+	"./en-il": "../../../../moment/locale/en-il.js",
+	"./en-il.js": "../../../../moment/locale/en-il.js",
 	"./en-nz": "../../../../moment/locale/en-nz.js",
 	"./en-nz.js": "../../../../moment/locale/en-nz.js",
 	"./eo": "../../../../moment/locale/eo.js",
@@ -6732,6 +6511,8 @@ var map = {
 	"./es": "../../../../moment/locale/es.js",
 	"./es-do": "../../../../moment/locale/es-do.js",
 	"./es-do.js": "../../../../moment/locale/es-do.js",
+	"./es-us": "../../../../moment/locale/es-us.js",
+	"./es-us.js": "../../../../moment/locale/es-us.js",
 	"./es.js": "../../../../moment/locale/es.js",
 	"./et": "../../../../moment/locale/et.js",
 	"./et.js": "../../../../moment/locale/et.js",
@@ -6757,6 +6538,8 @@ var map = {
 	"./gl.js": "../../../../moment/locale/gl.js",
 	"./gom-latn": "../../../../moment/locale/gom-latn.js",
 	"./gom-latn.js": "../../../../moment/locale/gom-latn.js",
+	"./gu": "../../../../moment/locale/gu.js",
+	"./gu.js": "../../../../moment/locale/gu.js",
 	"./he": "../../../../moment/locale/he.js",
 	"./he.js": "../../../../moment/locale/he.js",
 	"./hi": "../../../../moment/locale/hi.js",
@@ -6805,12 +6588,16 @@ var map = {
 	"./mk.js": "../../../../moment/locale/mk.js",
 	"./ml": "../../../../moment/locale/ml.js",
 	"./ml.js": "../../../../moment/locale/ml.js",
+	"./mn": "../../../../moment/locale/mn.js",
+	"./mn.js": "../../../../moment/locale/mn.js",
 	"./mr": "../../../../moment/locale/mr.js",
 	"./mr.js": "../../../../moment/locale/mr.js",
 	"./ms": "../../../../moment/locale/ms.js",
 	"./ms-my": "../../../../moment/locale/ms-my.js",
 	"./ms-my.js": "../../../../moment/locale/ms-my.js",
 	"./ms.js": "../../../../moment/locale/ms.js",
+	"./mt": "../../../../moment/locale/mt.js",
+	"./mt.js": "../../../../moment/locale/mt.js",
 	"./my": "../../../../moment/locale/my.js",
 	"./my.js": "../../../../moment/locale/my.js",
 	"./nb": "../../../../moment/locale/nb.js",
@@ -6863,6 +6650,8 @@ var map = {
 	"./te.js": "../../../../moment/locale/te.js",
 	"./tet": "../../../../moment/locale/tet.js",
 	"./tet.js": "../../../../moment/locale/tet.js",
+	"./tg": "../../../../moment/locale/tg.js",
+	"./tg.js": "../../../../moment/locale/tg.js",
 	"./th": "../../../../moment/locale/th.js",
 	"./th.js": "../../../../moment/locale/th.js",
 	"./tl-ph": "../../../../moment/locale/tl-ph.js",
@@ -6877,6 +6666,8 @@ var map = {
 	"./tzm-latn": "../../../../moment/locale/tzm-latn.js",
 	"./tzm-latn.js": "../../../../moment/locale/tzm-latn.js",
 	"./tzm.js": "../../../../moment/locale/tzm.js",
+	"./ug-cn": "../../../../moment/locale/ug-cn.js",
+	"./ug-cn.js": "../../../../moment/locale/ug-cn.js",
 	"./uk": "../../../../moment/locale/uk.js",
 	"./uk.js": "../../../../moment/locale/uk.js",
 	"./ur": "../../../../moment/locale/ur.js",
