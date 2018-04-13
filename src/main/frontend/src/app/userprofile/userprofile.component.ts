@@ -53,7 +53,6 @@ export class UserprofileComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.currUser = params['rifttag'];
-      this.isDataAvailable = true;
       this.getUserProfileInformation(params['rifttag']);
     });
     }
@@ -78,7 +77,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string) {
-    // console.log("Getting " + riftTag+ "'s profile information");
+    console.log("Getting " + riftTag+ "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
         resBody => {
           this.currentUser.firstName = resBody.firstName;
@@ -102,6 +101,7 @@ export class UserprofileComponent implements OnInit {
           this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
           this.getCurrentLoggedInUser(this.profile.nickname);
           this.getUserGameAccounts(this.currentUser.id);
+          this.isDataAvailable = true;
         },
       error => {
           console.log(error.message);
@@ -344,5 +344,19 @@ export class UserprofileComponent implements OnInit {
         riftId: this.currentUser.id
       }
     })
+  }
+
+  currSection = "details";
+
+  menuShow(event) {
+    console.log(event.target.id);
+    let btnId = event.target.id;
+    let id = btnId.substring(0, btnId.length-4);
+    console.log(id);
+    document.getElementById(this.currSection).classList.add("hide");
+    document.getElementById(this.currSection + "-btn").classList.remove("menu-active");
+    document.getElementById(id).classList.remove("hide");
+    document.getElementById(btnId).classList.add("menu-active");
+    this.currSection = id;
   }
 }

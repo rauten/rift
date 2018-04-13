@@ -58,12 +58,11 @@ public class DeferredNotificationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/stop/{id}/{sessionId}")
-    public boolean stop(@PathVariable Integer id, @PathVariable String sessionId) {
+    public void stop(@PathVariable Integer id, @PathVariable String sessionId) {
         System.out.println("Running stop");
         usertableService.logout(id);
         resultService.shutdown(sessionId);
         postgresListenService.closePGConnection(sessionId);
-        return true;
     }
 
 }

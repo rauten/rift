@@ -14,7 +14,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatNativeDateModule,
-  MatStepperModule
+  MatStepperModule,
+  MatSidenavModule
 } from "@angular/material";
 
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -162,6 +163,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatSelectModule,
     MatSliderModule,
     MatCheckboxModule,
+    MatSidenavModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
     BsDropdownModule.forRoot(),
