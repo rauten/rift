@@ -222,24 +222,12 @@
 </div><br>
 
 <div class="section">
-  <div class="session-card">
-    <div class="date-area">
-      <span class="month">Feb</span>
-      <span class="day">26</span>
-    </div>
-    <div class="main-area">
-      <span class="title">Quick Scope sniping tutorial</span><br>
-      <span class="user">by Borja Vicinay</span>
-      <div class="rating"></div>
-      <div class="bottom-details">
-        <img src="fortnite" alt="">
-        <div class="time"><img src="clock" alt=""> 12pm - 1pm</div>
-      </div>
-    </div>
-    <div class="join-area">
-      <img src="xbox" alt="">
-      <button>Join</button>
-    </div>
+  <div *ngFor="let session of currentUser.rifterSessions">
+    <app-session-card
+      [session]="session" [isLoggedIn]="isLoggedIn"
+      [type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"
+    ></app-session-card><br>
+    <!--[routerLink]="['../../session', session.id]"-->
   </div>
 </div>
 <div class="section" id="info">

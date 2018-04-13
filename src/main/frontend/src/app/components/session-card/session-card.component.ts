@@ -21,6 +21,7 @@ export class SessionCardComponent implements OnInit {
   modalRef: BsModalRef;
   gameAccounts: GameAccount[] = [];
   accountId: number;
+  clockIcon = require("../../img/clock.svg");
 
   @Input() loggedInUserId: number;
   @Input() session: Session;
@@ -30,12 +31,13 @@ export class SessionCardComponent implements OnInit {
   profile: any;
 
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
-              private modalService: BsModalService, private gameAccountService: GameAccountService) {
+              private modalService: BsModalService, private gameAccountService: GameAccountService,
+              private CONSOLE_ICONS: CONSOLE_ICONS, private SESSION_ICONS: SESSION_ICONS) {
   }
 
   ngOnInit() {
-    this.sessionIcon=SESSION_ICONS[this.session.gameId];
-    this.consoleIcon=CONSOLE_ICONS[this.session.console];
+    this.sessionIcon=this.SESSION_ICONS.icons[this.session.gameId];
+    this.consoleIcon=this.CONSOLE_ICONS.icons[this.session.console];
   }
 
   changeStatus(template: TemplateRef<any>) {

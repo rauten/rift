@@ -1,43 +1,62 @@
-<div class="event-list">
-  <div>
-    <time datetime="2014-07-20" [ngClass]="{'rifter': type, 'riftee':!type}">
-      <span class="day">{{session.sessionTime | date:'dd'}}</span>
-      <span class="month">{{session.sessionTime | date:'MMM'}}</span>
-    </time>
-    <img src="{{sessionIcon}}" />
-    <div class="info">
-      <h2 class="title">{{session.title}}</h2>
-      <p class="desc">@{{session.riftTag}}</p>
-      <div *ngIf="!type">
-      <app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>
-      </div>
-      <p class="desc">{{session.sessionTime | date:'shortTime'}} </p>
-    </div>
-    <div class="otherstuff">
-      <div class="statusButtons" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">
-        <button class="btn-primary" *ngIf="!request" (click)="changeStatus(template)">Join</button>
-        <button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>
-        <button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>
-        <button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>
-      </div>
-      <div>
-        <img alt="{{session.console}}" class="consoleIcon" src="{{consoleIcon}}" />
-      </div>
-    </div>
-    <ng-template #template style="margin-top:20%">
-      <div class="modal-body text-center">
-        <p>What game account do you want to use?</p>
-        <div class="form-group">
-          <label for="account">Select an Account</label>
-          <select class="form-control" id="account" [(ngModel)]="accountId">
-            <option *ngFor="let account of gameAccounts" [value]="account.id">{{account.ign}}</option>
-          </select>
-        </div><br>
-        <button type="button" class="btn btn-default" (click)="joinUserSession()" >Yes</button>
-        <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
-      </div>
-    </ng-template>
+<!--<div class="event-list">-->
+  <!--<div>-->
+    <!--<time datetime="2014-07-20" [ngClass]="{'rifter': type, 'riftee':!type}">-->
+      <!--<span class="day">{{session.sessionTime | date:'dd'}}</span>-->
+      <!--<span class="month">{{session.sessionTime | date:'MMM'}}</span>-->
+    <!--</time>-->
+    <!--<img src="{{sessionIcon}}" />-->
+    <!--<div class="info">-->
+      <!--<h2 class="title">{{session.title}}</h2>-->
+      <!--<p class="desc">@{{session.riftTag}}</p>-->
+      <!--<div *ngIf="!type">-->
+      <!--<app-rating [rating]="session.rifterRating" [readonly]="true"></app-rating>-->
+      <!--</div>-->
+      <!--<p class="desc">{{session.sessionTime | date:'shortTime'}} </p>-->
+    <!--</div>-->
+    <!--<div class="otherstuff">-->
+      <!--<div class="statusButtons" *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">-->
+        <!--<button class="btn-primary" *ngIf="!request" (click)="changeStatus(template)">Join</button>-->
+        <!--<button class="btn-primary" *ngIf="request && request.accepted==1">Pending</button>-->
+        <!--<button class="btn-primary" *ngIf="request && request.accepted==0">Rejected</button>-->
+        <!--<button class="btn-primary" *ngIf="request && request.accepted==2">Accepted</button>-->
+      <!--</div>-->
+      <!--<div>-->
+        <!--<img alt="{{session.console}}" class="consoleIcon" src="{{consoleIcon}}" />-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<ng-template #template style="margin-top:20%">-->
+      <!--<div class="modal-body text-center">-->
+        <!--<p>What game account do you want to use?</p>-->
+        <!--<div class="form-group">-->
+          <!--<label for="account">Select an Account</label>-->
+          <!--<select class="form-control" id="account" [(ngModel)]="accountId">-->
+            <!--<option *ngFor="let account of gameAccounts" [value]="account.id">{{account.ign}}</option>-->
+          <!--</select>-->
+        <!--</div><br>-->
+        <!--<button type="button" class="btn btn-default" (click)="joinUserSession()" >Yes</button>-->
+        <!--<button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>-->
+      <!--</div>-->
+    <!--</ng-template>-->
 
+  <!--</div>-->
+<!--</div>-->
+
+<div class="session-card">
+  <div class="date-area">
+    <span class="month">{{session.sessionTime | date:'MMM'}}</span>
+    <span class="day">{{session.sessionTime | date:'dd'}}</span>
+  </div>
+  <div class="main-area">
+    <span class="title">{{session.title}}</span><br>
+    <span class="user">by {{session.riftTag}}</span>
+    <div class="rating"></div>
+    <div class="bottom-details">
+      <img src="{{sessionIcon}}" alt=""><div class="time"><img [src]="clockIcon" alt=""><span>{{session.sessionTime | date:'shortTime'}}</span> </div>
+    </div>
+  </div>
+  <div class="join-area">
+    <img src="{{consoleIcon}}" alt="">
+    <button>Join</button>
   </div>
 </div>
 
