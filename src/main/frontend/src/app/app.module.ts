@@ -184,7 +184,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ViewCardsComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
-    YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions, CONSOLE_ICONS, SESSION_ICONS,
+    YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions,
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
     {provide: MAT_DIALOG_DATA, useValue: {}},
     Globals

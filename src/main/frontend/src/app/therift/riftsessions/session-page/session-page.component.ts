@@ -35,8 +35,7 @@ export class SessionPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private sessionPageService: SessionPageService,
               private userProfileService: UserprofileService, private userSessionsService: UsersessionsService,
-              public dialog: MatDialog, private modalService: BsModalService, private sharedFunc: SharedFunctions,
-              private CONSOLE_ICONS: CONSOLE_ICONS, private SESSION_ICONS: SESSION_ICONS) {
+              public dialog: MatDialog, private modalService: BsModalService, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if (this.profile != null) {
       this.isLoggedIn = true;
@@ -72,8 +71,8 @@ export class SessionPageComponent implements OnInit {
         this.session.numSlots = this.response.numSlots;
         this.session.gameId = this.response.gameId;
         this.session.console = this.response.console;
-        this.sessionIcon = this.SESSION_ICONS.icons[this.session.gameId];
-        this.consoleIcon = this.CONSOLE_ICONS.icons[this.session.console];
+        this.sessionIcon = SESSION_ICONS[this.session.gameId];
+        this.consoleIcon = CONSOLE_ICONS[this.session.console];
         this.getSessionRiftees(this.response.players);
         this.checkRifteeStatus(this.session.id);
       }
