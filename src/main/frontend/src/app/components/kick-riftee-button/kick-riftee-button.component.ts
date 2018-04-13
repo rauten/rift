@@ -17,8 +17,7 @@ export class KickRifteeButtonComponent implements OnInit {
   @Output() deleteRiftee = new EventEmitter<Userprofile>();
   modalRef: BsModalRef;
 
-  constructor(private sessionService: UsersessionsService, private modalService: BsModalService,
-              private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private sessionService: UsersessionsService, private modalService: BsModalService) { }
 
   ngOnInit() {
   }
@@ -34,7 +33,6 @@ export class KickRifteeButtonComponent implements OnInit {
       "sessionId": parseInt(this.sessionId),
       "rifteeId": this.rifteeId
     };
-    console.log(data);
     this.sessionService.updateSessionRequest(data);
     console.log("Kicked riftee from session");
     this.deleteRiftee.emit(this.riftee);

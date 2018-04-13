@@ -10,6 +10,7 @@ import {MatDialog} from "@angular/material";
 import {UpdateSessionComponent} from "./update-session/update-session.component";
 import {CONSOLE_ICONS} from "../../../constants/console-icon-variables";
 import {BsModalService, BsModalRef} from "ngx-bootstrap";
+import {SharedFunctions} from "../../../shared/shared-functions";
 
 
 
@@ -34,7 +35,7 @@ export class SessionPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private sessionPageService: SessionPageService,
               private userProfileService: UserprofileService, private userSessionsService: UsersessionsService,
-              public dialog: MatDialog, private modalService: BsModalService) {
+              public dialog: MatDialog, private modalService: BsModalService, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
     if (this.profile != null) {
       this.isLoggedIn = true;
@@ -56,6 +57,7 @@ export class SessionPageComponent implements OnInit {
       resBody => {
         this.response = resBody;
         this.session.id = this.response.id;
+        this.session.hostId = this.response.hostId;
         this.session.riftTag = this.response.usertable.riftTag;
         this.session.rifterRating = this.response.usertable.rifterRating;
         this.session.firstName = this.response.usertable.firstName;
@@ -69,7 +71,7 @@ export class SessionPageComponent implements OnInit {
         this.session.numSlots = this.response.numSlots;
         this.session.gameId = this.response.gameId;
         this.session.console = this.response.console;
-        this.sessionIcon=SESSION_ICONS[this.session.gameId];
+        this.sessionIcon = SESSION_ICONS[this.session.gameId];
         this.consoleIcon = CONSOLE_ICONS[this.session.console];
         this.getSessionRiftees(this.response.players);
         this.checkRifteeStatus(this.session.id);
@@ -95,7 +97,7 @@ export class SessionPageComponent implements OnInit {
       riftee.riftTag = player.riftTag;
       riftee.rifteeRating = player.rifteeRating;
       riftee.id = player.id;
-      this.getUserProfilePicture(riftee.riftTag, riftee);
+      this.sharedFunc.getUserProfilePicture(riftee.riftTag, riftee);
       this.session.riftees.push(riftee);
     }
   }
@@ -113,36 +115,18 @@ export class SessionPageComponent implements OnInit {
   }
 
   getLoggedInUserId(riftTag: string) {
-    if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-      this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
-    } else {
-      this.userProfileService.getUserId(riftTag).subscribe(
-        resBody => {
-          this.loggedInUserId = resBody.id;
-        }
-      )
-    }
-  }
-
-  getUserProfilePicture(riftTag: string, user: Userprofile) {
-    console.log("Getting user's profile picture");
-    this.userProfileService.getProfilePicture(riftTag).subscribe(
+    this.userProfileService.getUserId(riftTag).subscribe(
       resBody => {
-        if (resBody.image == "") {
-          user.profilePic = "https://www.vccircle.com/wp-content/uploads/2017/03/default-profile.png"
-        } else {
-          user.profilePic = resBody.image;
-        }
+        this.loggedInUserId = resBody.id;
       }
-    );
+    )
   }
 
-  openDialog() {
-    //noinspection TypeScriptUnresolvedFunction
+  openUpdateSessionDialog() {
     this.dialog.open(UpdateSessionComponent, {
       data: {
         sessionTime: this.session.sessionTime,
-        sessionId: this.session.id
+        sessionId: this.session.id,
       }
     });
 

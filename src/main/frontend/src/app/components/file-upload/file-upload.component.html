@@ -1,5 +1,19 @@
-<input *ngIf="showFileNameInput" id="uploadFile" class="upload-file form-control" placeholder="Choose File" [(ngModel)]="selectedFileName" disabled="disabled" />
-<div class="fileUpload btn btn-primary">
-  <span>{{uploadButtonText}}</span>
-  <input type="file" class="upload" accept="*" (change)="changeListener($event)">
+<!--<input *ngIf="showFileNameInput" id="uploadFile" class="upload-file form-control" placeholder="Choose File" [(ngModel)]="selectedFileName" disabled="disabled" />-->
+<!--<div class="fileUpload btn btn-primary">-->
+  <!--<span>{{uploadButtonText}}</span>-->
+  <!--<input type="file" class="upload" accept="*" (change)="changeListener($event)">-->
+<!--</div>-->
+
+
+<div>
+
+  <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+  <span class="result" *ngIf="data1.image" >
+        <img [src]="data1.image"
+             [width]="croppedWidth"
+             [height]="croppedHeight">
+        {{data1.image}}
+    </span>
+
+
 </div>

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material";
 import {StripePaymentService} from "../stripe-payment.service";
 import {UserprofileService} from "../../userprofile.service";
 import {AddBankAccountComponent} from "./add-bank-account/add-bank-account.component";
+import {SharedFunctions} from "../../../shared/shared-functions";
 
 @Component({
   selector: 'app-legal-bank-account-info',
@@ -23,19 +24,17 @@ export class LegalBankAccountInfoComponent implements OnInit {
   dobYear: string;
   firstName: string;
   lastName: string;
-  loggedInUserId: number;
   profile: any;
   type: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, private stripeService: StripePaymentService,
               private userProfileService: UserprofileService, private dialog: MatDialog) {
     this.profile = JSON.parse(localStorage.getItem("profile"));
-    this.getLoggedInUserId(this.profile.nickname);
   }
 
   ngOnInit() {
     console.log(this.profile.nickname);
-    console.log(this.loggedInUserId);
+    console.log(this.data.riftId);
 
   }
 
@@ -57,37 +56,19 @@ export class LegalBankAccountInfoComponent implements OnInit {
       "lastName": this.lastName,
       "type": this.type
     };
-    this.userProfileService.getUserId(this.profile.nickname).subscribe(
+    this.stripeService.getAccountId(data, this.data.riftId).subscribe(
       resBody => {
-        this.loggedInUserId = resBody.id;
-        this.stripeService.getAccountId(data, this.loggedInUserId).subscribe(
-          resBody => {
-            let accountId = resBody.accountId;
-            console.log(accountId);
-            this.dialog.open(AddBankAccountComponent, {
-              height: '450px',
-              width: '600px',
-              data: {
-                "accountId": accountId,
-                "riftId": this.loggedInUserId
-              }
-            });
+        let accountId = resBody.accountId;
+        console.log(accountId);
+        this.dialog.open(AddBankAccountComponent, {
+          height: '450px',
+          width: '600px',
+          data: {
+            "accountId": accountId,
+            "riftId": this.data.riftId
           }
-        )
+        });
       }
-    );
+    )
   }
-
-  getLoggedInUserId(riftTag: string) {
-    if (JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-      this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
-    } else {
-      this.userProfileService.getUserId(riftTag).subscribe(
-        resBody => {
-          this.loggedInUserId = resBody.id;
-        }
-      )
-    }
-  }
-
 }

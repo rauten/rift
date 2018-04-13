@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {Userprofile} from "../models/userprofile";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Activity} from "../models/activity";
-import {ACTIVITY_CONTENT} from "../constants/activity-content";
 import {Session} from "../models/session";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 
@@ -56,7 +55,7 @@ export class FeedComponent implements OnInit {
   }
 
   getActivityProfilePicture(riftTag: string, activity: Activity): string {
-    console.log("Getting user's profile picture");
+    // console.log("Getting user's profile picture");
     this.userProfileService.getProfilePicture(riftTag).subscribe(
       resBody => {
         if (resBody.image == "") {

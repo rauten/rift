@@ -19,7 +19,6 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getRiftTagById(this.notification.creatorId);
     this.getNotificationProfilePicture(this.creatorRiftTag, this.notification);
     if(this.notification.notificationType-2 != 0) {
       this.getSessionStatus(this.notification.creatorId, this.notification.sessionId);
@@ -32,18 +31,9 @@ export class NotificationComponent implements OnInit {
   getSessionStatus(rifteeId: number, sessionId: number) {
     this.userSessionService.getSessionStatus(rifteeId, sessionId).subscribe(
       resBody => {
-        //noinspection TypeScriptUnresolvedVariable
         this.status = resBody.status;
       }
     )
-  }
-
-  getRiftTagById(id) {
-    this.userProfileService.getUserRiftTag(this.notification.creatorId).subscribe(
-      resBody => {
-        //noinspection TypeScriptUnresolvedVariable
-        this.creatorRiftTag = resBody.riftTag;
-      })
   }
 
   getNotificationProfilePicture(riftTag: string, notification: Notification) {

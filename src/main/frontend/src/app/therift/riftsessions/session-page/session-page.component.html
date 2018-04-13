@@ -24,7 +24,7 @@
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==0">Rejected</button>
                 <button class="btn btn-lg btn-add-to-cart" *ngIf="request && request.status==2" (click)="changeStatus(template)">Accepted</button>
               </div>
-              <button class="btn btn-lg btn-add-to-cart" mat-button (click)="openDialog()" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
+              <button class="btn btn-lg btn-add-to-cart" mat-button (click)="openUpdateSessionDialog()" *ngIf="isLoggedIn && (profile.nickname == session.riftTag)">Edit Session</button><br>
               <ng-template #template style="margin-top:20%">
                 <div class="modal-body text-center">
                   <p>Are you sure you want to cancel your request?</p>
@@ -89,7 +89,7 @@
   sessionDescription: {{session.description}}<br>
   <br><br><br>
 
-  <button mat-button (click)="openDialog()">Open dialog</button>
+  <button mat-button (click)="openUpdateSessionDialog()">Open dialog</button>
 
 </div>
 

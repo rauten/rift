@@ -130,6 +130,7 @@ public class PostgresListenService {
         PGConnection connection = pgConnectionMap.get(sessionId);
         try {
             connection.close();
+            System.out.println(connection);
             pgConnectionMap.remove(sessionId);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -193,6 +193,7 @@ public class DeferredResultService {
         try {
             Hook hook = hooks.get(sessionId);
             hook.setKeepRunning(false);
+            System.out.println("Hook: " + hook);
             hooks.remove(sessionId);
 
             //Thread thread = threads.get(sessionId);

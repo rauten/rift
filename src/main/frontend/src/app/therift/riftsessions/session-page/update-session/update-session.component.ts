@@ -10,6 +10,7 @@ import {GameAccount} from "../../../../models/game-account";
 import {SESSION_ICONS} from "../../../../constants/session-icon-variables";
 import {GameAccountService} from "../../../../userprofile/game-account/game-account.service";
 import {UserprofileService} from "../../../../userprofile/userprofile.service";
+import {SharedFunctions} from "../../../../shared/shared-functions";
 
 @Component({
   selector: 'app-update-session',
@@ -28,18 +29,16 @@ export class UpdateSessionComponent implements OnInit {
   platform: any;
   gameAccounts: GameAccount[] = [];
   accountId: any;
-  loggedInUserId: any;
   profile: any;
 
   //noinspection JSAnnotator
   constructor(private updateSessionService: UpdateSessionService, private route: ActivatedRoute,
   @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateSessionComponent>,
-  private gameAccountService: GameAccountService, private userProfileService: UserprofileService) {
+  private gameAccountService: GameAccountService, private userProfileService: UserprofileService,
+              private sharedFunc: SharedFunctions) {
     this.games = GAMES;
     this.consoles = CONSOLES;
     this.profile = JSON.parse(localStorage.getItem("profile"));
-    this.getLoggedInUserId(this.profile.nickname);
-
   }
 
   ngOnInit() {
@@ -49,18 +48,18 @@ export class UpdateSessionComponent implements OnInit {
 
   save() {
     this.updateSessionService.setSessionData(this.currentSession, this.currentSessionDateTime);
-    var d = new Date(this.data.sessionTime);
-    var currDate = d.toLocaleDateString();
-    var currTime = d.toLocaleTimeString("en-Us", {hour12: false, hour: '2-digit', minute:'2-digit'});
+    let d = new Date(this.data.sessionTime);
+    let currDate = d.toLocaleDateString();
+    let currTime = d.toLocaleTimeString("en-Us", {hour12: false, hour: '2-digit', minute:'2-digit'});
     if (this.updateSessionData.sessionDate) {
-      var newD = this.updateSessionData.sessionDate;
+      let newD = this.updateSessionData.sessionDate;
       currDate = newD.toLocaleDateString();
     }
     if (this.updateSessionData.sessionTime) {
       currTime = this.updateSessionData.sessionTime;
     }
-    var date = new Date(currDate);
-    var timeMS = this.timeToMilliseconds(currTime) + date.getTime();
+    let date = new Date(currDate);
+    let timeMS = this.sharedFunc.timeToMilliseconds(currTime) + date.getTime();
     let data = {
       "id": this.data.sessionId,
       "title": this.updateSessionData.title,
@@ -78,26 +77,6 @@ export class UpdateSessionComponent implements OnInit {
     //noinspection TypeScriptUnresolvedFunction
     this.dialogRef.close();
     window.location.reload();
-  }
-
-  getLoggedInUserId(riftTag: string) {
-    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-      this.loggedInUserId = parseInt(JSON.parse(localStorage.getItem("loggedInUserID")));
-    } else {
-      this.userProfileService.getUserId(riftTag).subscribe(
-        resBody => {
-          this.loggedInUserId = resBody.id;
-        }
-      )
-    }
-  }
-
-  timeToMilliseconds(time: string) {
-    var list = time.split(":");
-    var hour = (+list[0]);
-    var minute = (+list[1]);
-    var seconds = (hour * 60 * 60) + (minute * 60);
-    return seconds * 1000;
   }
 
   cancelSession() {

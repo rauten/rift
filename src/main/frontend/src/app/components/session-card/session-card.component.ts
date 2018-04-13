@@ -8,6 +8,7 @@ import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {GameAccount} from "../../models/game-account";
 import {GameAccountService} from "../../userprofile/game-account/game-account.service";
+import {SharedFunctions} from "../../shared/shared-functions";
 
 @Component({
   selector: 'app-session-card',
@@ -21,34 +22,18 @@ export class SessionCardComponent implements OnInit {
   gameAccounts: GameAccount[] = [];
   accountId: number;
 
-
+  @Input() loggedInUserId: number;
   @Input() session: Session;
   @Input() request: SessionRequest;
   @Input() isLoggedIn: boolean;
   @Input() type: boolean;
   profile: any;
-  loggedInUserId: number;
 
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
               private modalService: BsModalService, private gameAccountService: GameAccountService) {
   }
 
-  getLoggedInUserId(riftTag: string) {
-    if(JSON.parse(localStorage.getItem("loggedInUserID")) != null) {
-      this.loggedInUserId = JSON.parse(localStorage.getItem("loggedInUserID"));
-    } else {
-      this.userProfileService.getUserId(riftTag).subscribe(
-        resBody => {
-          this.loggedInUserId = resBody.id;
-        }
-      )
-    }
-  }
-
   ngOnInit() {
-    if(this.isLoggedIn) {
-      this.getLoggedInUserId(JSON.parse(localStorage.getItem("profile")).nickname);
-    }
     this.sessionIcon=SESSION_ICONS[this.session.gameId];
     this.consoleIcon=CONSOLE_ICONS[this.session.console];
   }
@@ -56,7 +41,7 @@ export class SessionCardComponent implements OnInit {
   changeStatus(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
     this.getUserGameAccountsByGameId(this.session.gameId, this.loggedInUserId);
-    }
+  }
 
   joinUserSession() {
     console.log(this.gameAccounts);

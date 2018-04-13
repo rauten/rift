@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-
 @Service
 public class StripeService {
 
@@ -488,6 +487,24 @@ public class StripeService {
 
     }
     */
+//    public void handleChargeFailed(Request request, Response response) {
+//
+//        String payload = request.body();
+//        String sigHeader = request.headers("Stripe-Signature");
+//        Event event = null;
+//
+//        try {
+//            event = Webhook.constructEvent(payload, sigHeader, "whsec_fjRJIo2VVVMMd7y4M0XxZMTPd8xk0pGK");
+//        } catch (JsonSyntaxException e) {
+//            // Invalid payload
+//            response.status(400);
+//        } catch (SignatureVerificationException e) {
+//            // Invalid signature
+//            response.status(400);
+//        }
+//        event = APIResource.GSON.fromJson(request.body(), Event.class);
+//
+//    }
 
 
 

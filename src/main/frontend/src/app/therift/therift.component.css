@@ -1,158 +1,60 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box; }
+
+h1, h2 {
+  font-weight: 300;
+}
+
 body {
-  overflow-x: hidden;
-  font-family: 'Roboto Slab', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 0px;
+  margin: 0px;
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  height: 100vh;
 }
-
-p {
-  line-height: 1.75;
-}
-
-a {
-  color: #666666;
-}
-
-a:hover {
-  color: #666666;
-}
-
-.text-primary {
-  color: #fed136 !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 700;
-  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-section {
-  padding: 100px 0;
-}
-
-section h2.section-heading {
-  font-size: 40px;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-section h3.section-subheading {
-  font-size: 16px;
-  font-weight: 400;
-  font-style: italic;
-  margin-bottom: 75px;
-  text-transform: none;
-  font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-@media (min-width: 768px) {
-  section {
-    padding: 150px 0;
-  }
-}
-
-.btn {
-  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 700;
-}
-
-.btn-xl {
-  font-size: 18px;
-  padding: 20px 40px;
-}
-
-.btn-primary {
-  background-color: #293e49;
-  border-color: transparent;
-  color: white;
-}
-
-
-::-moz-selection {
-  background: #293e49;;
-  text-shadow: none;
-}
-
-::selection {
-  background: #293e49;
-  text-shadow: none;
-}
-
-img::selection {
-  background: transparent;
-}
-
-img::-moz-selection {
-  background: transparent;
-}
-
-header.masthead {
-  text-align: center;
-  color: white;
-  background-image: url("http://i.imgur.com/Ywcbcll.jpg");
+header {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  display: block;
+  background-image: url(../img/rift-welcome.jpg);
   background-repeat: no-repeat;
-  background-attachment: scroll;
-  background-position: center center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
+  position: absolute;
 }
 
-header.masthead .intro-text {
-  padding-top: 150px;
-  padding-bottom: 100px;
+#text-holder {
+  margin-left: 14%;
+  margin-top: 25vh;
+  display: inline-block;
+  position: relative;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
 }
-
-header.masthead .intro-text .intro-lead-in {
-  font-size: 22px;
-  font-style: italic;
-  line-height: 22px;
-  margin-bottom: 50px;
-  font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+#gradient {
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+  position: absolute;
 }
-
-header.masthead .intro-text .intro-heading {
-  font-size: 50px;
-  font-weight: 700;
-  line-height: 50px;
-  margin-bottom: 20px;
-  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+h1 {
+  font-size: 70px;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #f7f7f2;
+  font-weight: 300;
+  margin-bottom: 10%;
 }
-
-@media (min-width: 768px) {
-  header.masthead .intro-text {
-    padding-top: 300px;
-    padding-bottom: 200px;
-  }
-  header.masthead .intro-text .intro-lead-in {
-    font-size: 40px;
-    font-style: italic;
-    line-height: 40px;
-    margin-bottom: 25px;
-    font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-  header.masthead .intro-text .intro-heading {
-    font-size: 75px;
-    font-weight: 700;
-    line-height: 75px;
-    margin-bottom: 50px;
-    font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  }
-}
-
-.container /deep/ {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-@media (min-width: 1999px) {
-  .container /deep/ {
-    width: 100% !important;
-  }
+h2 {
+  font-size: 30px;
+  color: #f7f7f2;
+  font-weight: 300;
+  margin-bottom: 10%;
 }
 
 

@@ -5,7 +5,6 @@ import {Session} from "../models/session";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {SessionRequest} from "../models/session-request";
 import {MatDialog} from "@angular/material";
-import {SessionformComponent} from "./sessionform/sessionform.component";
 import {CreateSessionComponent} from "./create-session/create-session.component";
 import {GAMES} from "../constants/games";
 import {CONSOLES} from "../constants/consoles";
@@ -46,19 +45,19 @@ export class UsersessionsComponent implements OnInit {
   ngOnInit() {
     this.games = GAMES;
     this.consoles = CONSOLES;
-    var riftTag = this.profile.nickname;
-    this.getUserRifterAndRifteeSessions(riftTag);
-    this.getUserSessionRequests(riftTag);
+    this.getLoggedInUserId(this.profile.nickname);
+    this.getUserRifterAndRifteeSessions(this.profile.nickname);
+    this.getUserSessionRequests(this.profile.nickname);
   }
 
   getUserRifterAndRifteeSessions(riftTag: string) {
     this.currentUser.sessions = [];
     this.userSessionsService.getUserRifterAndRifteeSessions(riftTag).subscribe(
       resBody => {
-        var sessions = resBody;
-        for (var i = 0; i < sessions.length; i++) {
-          var currSession = new Session();
-          var session = sessions[i];
+        let sessions = resBody;
+        for (let i = 0; i < sessions.length; i++) {
+          let currSession = new Session();
+          let session = sessions[i];
           currSession.hostId = session.hostId;
           currSession.id = session.id;
           currSession.sessionCost = session.sessionCost;
@@ -90,8 +89,8 @@ export class UsersessionsComponent implements OnInit {
     this.userSessionsService.getSessionRequests(riftTag).subscribe(
       resBody => {
         //noinspection TypeScriptUnresolvedVariable
-        for (var i = 0; i < resBody.length; i++) {
-          var request = new SessionRequest();
+        for (let i = 0; i < resBody.length; i++) {
+          let request = new SessionRequest();
           request.accepted = resBody[i].accepted;
           request.hostId = resBody[i].hostId;
           request.rifteeId = resBody[i].rifteeId;
@@ -102,10 +101,20 @@ export class UsersessionsComponent implements OnInit {
     )
   }
 
-  openDialog() {
+  getLoggedInUserId(riftTag){
+    this.userProfileService.getUserId(riftTag).subscribe(
+      resBody => {
+        this.loggedInUser.id = resBody.id;
+      }
+    )
+  }
+
+  openCreateSessionDialog() {
     //noinspection TypeScriptUnresolvedFunction
     this.dialog.open(CreateSessionComponent, {
-
+      data: {
+        loggedInUserId: this.loggedInUser.id
+      }
     });
 
   }
@@ -130,17 +139,18 @@ export class UsersessionsComponent implements OnInit {
 
   renderCalendar() {
     this.myCalendar.fullCalendar("removeEvents");
-    for (var i = 0; i < this.currentUser.sessions.length; i++) {
-      var currSession = this.currentUser.sessions[i];
+    for (let i = 0; i < this.currentUser.sessions.length; i++) {
+      let currSession = this.currentUser.sessions[i];
+      let newSession ={};
       if (currSession.type) {
-        var newSession = {
+        newSession = {
           title: currSession.title,
           sessionId: currSession.id,
           start: new Date(currSession.sessionTime).toISOString(),
           color: '#293e49'
         };
       } else {
-        var newSession = {
+        newSession = {
           title: currSession.title,
           sessionId: currSession.id,
           start: new Date(currSession.sessionTime).toISOString(),

@@ -18,20 +18,6 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
   ngOnInit() {
   }
 
-  acceptRequest() {
-    let data = {
-      "accepted": 2,
-      "hostId": this.notification.userId,
-      "sessionId": this.notification.sessionId,
-      "rifteeId": this.notification.creatorId
-    };
-    // this.getTransactionData(data.rifteeId, data.sessionId);
-    this.userSessionService.updateSessionRequest(data);
-    this.status = 2;
-    this.sendConfirmationEmail();
-    console.log("Accepted request");
-  }
-
   sendConfirmationEmail() {
     let rifterEmail = {
       "to": this.profile.email,
@@ -49,6 +35,19 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.userProfileService.sendConfirmationEmail(rifteeEmail);
   }
 
+  acceptRequest() {
+    let data = {
+      "accepted": 2,
+      "hostId": this.notification.userId,
+      "sessionId": this.notification.sessionId,
+      "rifteeId": this.notification.creatorId
+    };
+    this.userSessionService.updateSessionRequest(data);
+    this.status = 2;
+    this.sendConfirmationEmail();
+    console.log("Accepted request");
+  }
+
   rejectRequest() {
     let data = {
       "accepted": 0,
@@ -60,8 +59,4 @@ export class SessionAcceptRejectButtonComponent implements OnInit {
     this.status = 0;
     console.log("Rejected request");
   }
-
-  // sendConfirmationEmail(riftEmail) {
-  //   this.userSessionService.sendConfirmationEmail(riftEmail, "hello there");
-  // }
 }

@@ -1,12 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {SearchBarService} from "../components/search-bar/search-bar.service";
 import {Userprofile} from "../models/userprofile";
 import {UserprofileService} from "../userprofile/userprofile.service";
 import {Notification} from "../models/notification";
-import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {Globals} from "../global/globals";
 import {NotificationsService} from "../userprofile/notifications.service";
+import {SharedFunctions} from "../shared/shared-functions";
 
 @Component({
   selector: 'app-navbar',
@@ -17,22 +16,23 @@ export class NavbarComponent implements OnInit {
   currentUser: Userprofile = new Userprofile();
   loggedInUserId: number;
   profile: any;
+  loggedInUser: Userprofile = new Userprofile();
   @Input() notificationsList;
 
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
-  private notificationService: NotificationsService, private globals: Globals) {
+  private notificationService: NotificationsService, private globals: Globals, private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-  }
-
-  getCurrentUser() {
-    return JSON.parse(localStorage.getItem('profile'));
+    if(this.profile) {
+      this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
+      this.loggedInUser.lastName  = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;
+      this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
+    }
   }
 
   clearUnseen() {
     this.globals.unseenNotifications = 0;
-    let profile = JSON.parse(localStorage.getItem('profile'));
-    this.notificationService.clearUnseen(profile.nickname);
+    this.notificationService.clearUnseen(this.profile.nickname);
   }
 
   ngOnInit() {
