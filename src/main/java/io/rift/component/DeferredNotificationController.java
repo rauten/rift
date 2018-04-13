@@ -38,16 +38,16 @@ public class DeferredNotificationController {
     public Map<String, String> start(@PathVariable Integer id, @PathVariable boolean login, HttpServletRequest request) {
         HttpSession session = request.getSession();
         System.out.println(session.getId());
+        Long currentTimeMillis = System.currentTimeMillis();
+        resultService.subscribe(id, Long.toString(currentTimeMillis));
         if (login) {
-            postgresListenService.init(id, session.getId());
+            postgresListenService.init(id);
         }
-        resultService.subscribe(session.getId());
         //postgresListenService.init(id);
         Map<String, String> res = new HashMap<>();
-        res.put("result", session.getId());
+        res.put("result", Long.toString(currentTimeMillis));
         return res;
     }
-
 
     @RequestMapping("/matchupdate/deferred/{sessionId}")
     @ResponseBody
@@ -60,9 +60,9 @@ public class DeferredNotificationController {
     @RequestMapping(method = RequestMethod.GET, value = "/stop/{id}/{sessionId}")
     public void stop(@PathVariable Integer id, @PathVariable String sessionId) {
         System.out.println("Running stop");
-        usertableService.logout(id);
-        resultService.shutdown(sessionId);
-        postgresListenService.closePGConnection(sessionId);
+        //usertableService.logout(id);
+        //resultService.shutdown(sessionId, id.toString());
+        //postgresListenService.closePGConnection(sessionId);
     }
 
 }

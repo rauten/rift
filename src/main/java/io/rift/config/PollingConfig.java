@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PollingConfig {
 
     @Bean
-    public Map<String, LinkedBlockingQueue<Map<String, String>>> theQueues() {
+    public Map<String, BlockingQueue<Map<String, String>>> theQueues() {
         return new HashMap<>();
     }
 
