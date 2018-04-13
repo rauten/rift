@@ -52,6 +52,9 @@ public class StripeService {
     @Autowired
     private FuturePayments futurePayments;
 
+    @Autowired
+    private ScheduledExecutorService scheduledExecutorService;
+
 
     /**
      * Stores all the legal information of a Rifter into a new Stripe Account object.
@@ -391,8 +394,8 @@ public class StripeService {
          * TRUE DELAY VALUE FOR TRANSFER: timeToEnd - System.currentTimeMillis() + 86400000L
          * TRUE AMOUNT VALUE FOR TRANSFER: rifterSession.sessionCost (*.85 is handled in createTransfer method)
          */
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        Future<?> future = executorService.schedule(new Runnable() {
+        //ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        Future<?> future = scheduledExecutorService.schedule(new Runnable() {
             @Override
             public void run() {
                 createTransfer((int) (0 * partialCharge), "usd", executorRifter.getAccountId(), rifteeId, sessionId, sessionRifteeVal);
@@ -400,6 +403,9 @@ public class StripeService {
             }
         }, 45000, TimeUnit.MILLISECONDS);
 
+        /**
+         * THIS SHOULD PROBABLY BE A DATABASE TABLE
+         */
         futurePayments.futurePaymentMap().put(sessionRifteeVal, future);
         return "Success";
     }
