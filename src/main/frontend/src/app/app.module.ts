@@ -94,6 +94,8 @@ import {ViewCardsComponent} from './userprofile/stripe-payment/view-cards/view-c
 import {CreditCardComponent} from './components/credit-card/credit-card.component';
 import {SharedFunctions} from "./shared/shared-functions";
 import {ImageCropperComponent} from "ngx-img-cropper";
+import {CONSOLE_ICONS} from './constants/console-icon-variables';
+import {SESSION_ICONS} from "./constants/session-icon-variables";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -141,7 +143,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     LegalBankAccountInfoComponent,
     ViewCardsComponent,
     CreditCardComponent,
-    ImageCropperComponent
+    ImageCropperComponent,
   ],
   imports: [
     BrowserModule,
@@ -182,7 +184,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ViewCardsComponent],
   providers: [UserprofileService, UsersessionsService, AuthService, UpdateInfoService, SearchBarService, SessionPageService,
     UserRatingService, UpdateSessionService, CreateSessionService, NotificationsService, FileAComplaintService,
-    YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions,
+    YoutubeService, TwitchService, GameAccountService, StripePaymentService, SharedFunctions, CONSOLE_ICONS, SESSION_ICONS,
     {provide: AuthHttp, useFactory: authHttpServiceFactory, deps: [Http, RequestOptions]},
     {provide: MAT_DIALOG_DATA, useValue: {}},
     Globals
