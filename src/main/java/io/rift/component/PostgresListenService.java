@@ -79,7 +79,9 @@ public class PostgresListenService {
         //PGDataSource pgDataSource = pgConnectionConfig.pgDataSource();
         try {
             String queryBuilder = "LISTEN q_event" + id;
-            pgConnectionService.pgConnection.createStatement().execute(queryBuilder);
+            Statement statement = pgConnectionService.pgConnection.createStatement();
+            statement.execute(queryBuilder);
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -136,11 +138,4 @@ public class PostgresListenService {
     */
 
 
-
-/**
- *
- * main entry point
- *
- * @param args
- */
 }
