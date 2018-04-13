@@ -90,7 +90,7 @@ var AppComponent = /** @class */ (function () {
             var profile = JSON.parse(localStorage.getItem("profile"));
             userprofileService.getUser(profile.nickname).subscribe(function (resBody) {
                 var id = resBody.id;
-                // pollNotifications(id);
+                pollNotifications(id);
                 getUserNotifications(profile.nickname);
             });
             if (createUser) {
@@ -160,7 +160,7 @@ var AppComponent = /** @class */ (function () {
         if (this.profile) {
             this.userprofileService.getUser(this.profile.nickname).subscribe(function (resBody) {
                 var id = resBody.id;
-                // this.notificationsService.pollNotifications(id, this.notificationList, false);
+                this.notificationsService.pollNotifications(id, this.notificationList, false);
             });
             this.getUserNotifications(this.profile.nickname);
         }
@@ -168,7 +168,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.beforeUnloadHandler = function (event) {
         this.userprofileService.getUser(this.profile.nickname).subscribe(function (resBody) {
             var id = resBody.id;
-            // this.notificationsService.stopPolling(id);
+            this.notificationsService.stopPolling(id);
         });
     };
     AppComponent.prototype.getUserNotifications = function (riftTag) {
