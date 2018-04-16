@@ -41,6 +41,11 @@ export class UserprofileComponent implements OnInit {
   isLoggedIn: boolean = false;
   ratingStatus: number;
 
+  rifterRatingPercentage: number;
+  numRifterRatings: number = 0;
+  rifteeRatingPercentage: number;
+  numRifteeRatings: number = 0;
+
   constructor(private userProfileService: UserprofileService,
               public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
               public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService,
@@ -92,6 +97,12 @@ export class UserprofileComponent implements OnInit {
         this.currentUser.accountId = resBody.accountId;
         this.currentUser.rifterRating = resBody.rifterRating;
         this.currentUser.rifteeRating = resBody.rifteeRating;
+
+        this.rifteeRatingPercentage = (this.currentUser.rifteeRating/5)*100;
+        this.numRifteeRatings++;
+        this.rifterRatingPercentage = (this.currentUser.rifterRating/5)*100;
+        this.numRifterRatings++;
+
         this.currentUser.twitchAccount = resBody.twitchAccount;
         this.currentUser.youtubeAccount = resBody.youtubeAccount;
         this.sharedFunc.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
@@ -146,6 +157,7 @@ export class UserprofileComponent implements OnInit {
           userRating.createdTime = resBody[i].createdTime;
           userRating.rating = resBody[i].rating;
           userRating.account_type = resBody[i].accountType;
+
           let reviewer = new Userprofile();
           reviewer.firstName = resBody[i].reviewerUsertable.firstName;
           reviewer.lastName = resBody[i].reviewerUsertable.lastName;
@@ -153,6 +165,11 @@ export class UserprofileComponent implements OnInit {
           this.sharedFunc.getUserProfilePicture(reviewer.riftTag, reviewer);
           userRating.reviewerUsertable = reviewer;
           this.currentUser.ratings.push(userRating);
+          if(userRating.account_type) {
+            this.currentUser.userRifterRatings.push(userRating);
+          } else {
+            this.currentUser.userRifteeRatings.push(userRating);
+          }
         }
       }
     );
@@ -359,6 +376,19 @@ export class UserprofileComponent implements OnInit {
     document.getElementById(btnId).classList.add("menu-active");
     document.getElementById(id).classList.add("text-fadein");
     this.currSection = id;
+  }
+
+  currRatingSection = "overview-ratings";
+
+  ratingMenuShow(event) {
+    let btnId = event.target.id;
+    let id = btnId.substring(0, btnId.length - 4);
+    document.getElementById(this.currRatingSection).classList.add("hide");
+    document.getElementById(this.currRatingSection + "-btn").classList.remove("menu-active");
+    document.getElementById(id).classList.remove("hide");
+    document.getElementById(btnId).classList.add("menu-active");
+    document.getElementById(id).classList.add("text-fadein");
+    this.currRatingSection = id;
   }
 
   currTab = "activity";
