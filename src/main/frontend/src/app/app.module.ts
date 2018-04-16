@@ -96,6 +96,7 @@ import {SharedFunctions} from "./shared/shared-functions";
 import {ImageCropperComponent} from "ngx-img-cropper";
 import {CONSOLE_ICONS} from './constants/console-icon-variables';
 import {SESSION_ICONS} from "./constants/session-icon-variables";
+import { ActivityCardComponent } from './components/activity-card/activity-card.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -144,6 +145,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ViewCardsComponent,
     CreditCardComponent,
     ImageCropperComponent,
+    ActivityCardComponent,
   ],
   imports: [
     BrowserModule,

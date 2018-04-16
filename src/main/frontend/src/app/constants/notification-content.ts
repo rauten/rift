@@ -1,6 +1,6 @@
 export const NOTIFICATION_CONTENT = new Map<string, string>([
   ["FOL", "started following you"],
-  ["SRQ", "has requested to join your session"],
+  ["SRQ", "has requested to join session"],
   ["SRA", "has accepted your request to join session: "],
   ["SRR", "has rejected your request to join session: "],
   ["SPO", "created a new session: "],

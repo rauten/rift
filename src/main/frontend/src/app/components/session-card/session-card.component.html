@@ -54,10 +54,29 @@
       <img src="{{sessionIcon}}" alt=""><div class="time"><img [src]="clockIcon" alt=""><span>{{session.sessionTime | date:'shortTime'}}</span> </div>
     </div>
   </div>
-  <div class="join-area">
+  <div class="join-area" >
     <img src="{{consoleIcon}}" alt="">
-    <button>Join</button>
+    <!--<button *ngIf="isLoggedIn && !(loggedInUserId == session.hostId)">Join</button>-->
+    <div id="join_buttons" *ngIf="isLoggedIn && loggedInUserId != session.hostId">
+      <button *ngIf="!request" (click)="changeStatus(template)">Join</button>
+      <button *ngIf="request && request.accepted==1">Pending</button>
+      <button *ngIf="request && request.accepted==0">Rejected</button>
+      <button *ngIf="request && request.accepted==2">Accepted</button>
+    </div>
   </div>
+  <ng-template #template style="margin-top:20%">
+    <div class="modal-body text-center">
+      <p>What game account do you want to use?</p>
+      <div class="form-group">
+        <label for="account">Select an Account</label>
+        <select class="form-control" id="account" [(ngModel)]="accountId">
+          <option *ngFor="let account of gameAccounts" [value]="account.id">{{account.ign}}</option>
+        </select>
+      </div><br>
+      <button type="button" class="btn btn-default" (click)="joinUserSession()" >Yes</button>
+      <button type="button" class="btn btn-primary" (click)="modalRef.hide()" >No</button>
+    </div>
+  </ng-template>
 </div>
 
 
