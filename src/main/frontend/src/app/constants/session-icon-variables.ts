@@ -8,7 +8,7 @@ export const SESSION_ICONS = {
     1: 'https://i.imgur.com/ArCdMwGr.png',
     2: "https://theverticalslice.files.wordpress.com/2017/06/fortnite_white_logo.png",
     3: 'https://www.nba2k.com/img/logo_NBA2K18.png'
-}
+};
 
 
 
