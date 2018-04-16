@@ -485,7 +485,7 @@ public class StripeService {
         System.out.println("Got it");
         try {
             BufferedReader bufferedReader = request.getReader();
-            APIResource.GSON.fromJson(bufferedReader, Event.class);
+            Event event = APIResource.GSON.fromJson(bufferedReader, Event.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

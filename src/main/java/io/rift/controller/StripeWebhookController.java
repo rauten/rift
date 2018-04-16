@@ -19,7 +19,7 @@ public class StripeWebhookController {
             produces="application/json",
             method=RequestMethod.POST, value = "/webhook")
     public String handleCustomerCreated(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("Got it 5/we");
+        System.out.println("Got it!");
         stripeService.handleChargeFailed(request, response);
         return null;
     }
