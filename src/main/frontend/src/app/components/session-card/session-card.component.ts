@@ -8,6 +8,7 @@ import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {GameAccount} from "../../models/game-account";
 import {GameAccountService} from "../../userprofile/game-account/game-account.service";
+import {SessionPageService} from "../../therift/riftsessions/session-page/session-page.service";
 
 @Component({
   selector: 'app-session-card',
@@ -30,11 +31,10 @@ export class SessionCardComponent implements OnInit {
   profile: any;
 
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
-              private modalService: BsModalService, private gameAccountService: GameAccountService) {
+              private modalService: BsModalService, private gameAccountService: GameAccountService,) {
   }
 
   ngOnInit() {
-    console.log(this.session.gameId);
     this.sessionIcon = SESSION_ICONS[this.session.gameId];
     this.consoleIcon = CONSOLE_ICONS[this.session.console];
   }

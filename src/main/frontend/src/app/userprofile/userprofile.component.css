@@ -5,6 +5,11 @@
   border: 0px red solid;
 }
 
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
 body {
   background-color: #1B2531;
   color: #F7F7F2;
@@ -111,6 +116,7 @@ body {
   text-align: center;
   line-height: 45px;
   vertical-align: middle;
+  cursor: pointer;
 }
 .tab-active {
   /**outline: 5px #1DA1F2 solid;
@@ -189,3 +195,11 @@ table td:nth-child(2) {
 .hide {
   display: none;
 }
+
+.text-fadein {
+  animation: fadein 0.25s;
+  -moz-animation: fadein 0.25s; /* Firefox */
+  -webkit-animation: fadein 0.25s; /* Safari and Chrome */
+  -o-animation: fadein 0.25s; /* Opera */
+}
+

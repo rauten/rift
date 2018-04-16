@@ -64,26 +64,26 @@
       <!--<div class="col-md-8">-->
         <!--<div class="profile-info-right">-->
           <!--<mat-tab-group>-->
-            <!--<mat-tab label="activity">-->
-              <!--<div class="media activity-item" *ngFor="let activity of currentUser.activities">-->
-                <!--<a href="#" class="pull-left">-->
-                  <!--<img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">-->
-                <!--</a>-->
-                <!--<div class="media-body">-->
-                  <!--<p class="activity-title">-->
-                    <!--<a href="#">{{currentUser.riftTag}}</a>-->
-                    <!--{{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>-->
-                  <!--</p>-->
-                  <!--<small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>-->
-                <!--</div>-->
-                <!--<div class="btn-group pull-right activity-actions">-->
-                  <!--<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">-->
-                    <!--<i class="fa fa-th"></i>-->
-                    <!--<span class="sr-only">Toggle Dropdown</span>-->
-                  <!--</button>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</mat-tab>-->
+            <mat-tab label="activity">
+              <div class="media activity-item" *ngFor="let activity of currentUser.activities">
+                <a href="#" class="pull-left">
+                  <img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">
+                </a>
+                <div class="media-body">
+                  <p class="activity-title">
+                    <a href="#">{{currentUser.riftTag}}</a>
+                    {{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>
+                  </p>
+                  <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
+                </div>
+                <div class="btn-group pull-right activity-actions">
+                  <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-th"></i>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                </div>
+              </div>
+            </mat-tab>
             <!--<mat-tab label="sessions">-->
               <!--<div class="media" *ngFor="let session of currentUser.rifterSessions">-->
                 <!--<app-session-card-->
@@ -210,27 +210,41 @@
     </div>
   </div>
   <div id="tabs">
-    <div class="tab tab-active">Activity</div>
-    <div class="tab">Sessions</div>
-    <div class="tab">Ratings</div>
-    <div class="tab">Info</div>
+    <div class="tab tab-active" id="activity-btn" (click)="tabShow($event)">Activity</div>
+    <div class="tab" id="sessions-btn" (click)="tabShow($event)">Sessions</div>
+    <div class="tab" id="ratings-btn" (click)="tabShow($event)">Ratings</div>
+    <div class="tab" id="info-btn" (click)="tabShow($event)">Info</div>
   </div>
 </div>
 <br><br>
-<div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
-  <button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>
-</div><br>
+<!--<div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
+  <!--<button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>-->
+<!--</div><br>-->
 
-<div class="section">
+<div class="section" id="activity">
+  <div *ngFor="let activity of currentUser.activities">
+    <app-activity-card [activity]="activity" [currentUser]="currentUser" [loggedInUserId]="loggedInUser.id"
+    [request]="loggedInUser.sessionRequests.get(activity.sessionId)" [isLoggedIn]="isLoggedIn">
+    </app-activity-card>
+  </div>
+</div>
+
+<div class="section hide" id="sessions" >
   <div *ngFor="let session of currentUser.rifterSessions">
     <app-session-card
       [session]="session" [isLoggedIn]="isLoggedIn"
       [type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"
+      [loggedInUserId]="loggedInUser.id"
     ></app-session-card><br>
     <!--[routerLink]="['../../session', session.id]"-->
   </div>
 </div>
-<div class="section" id="info">
+
+<div class="section hide" id="ratings">
+  blah
+</div>
+
+<div class="section hide" id="info">
   <div class="sidemenu">
     <a id="details-btn" class="menu-active" (click)="menuShow($event)">Details about you</a>
     <a id="contact-info-btn" (click)="menuShow($event)">Contact Info</a>

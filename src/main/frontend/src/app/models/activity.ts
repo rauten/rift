@@ -10,6 +10,7 @@ export class Activity {
   creatorProfilePic: string;
   firstName;
   lastName;
+  session: Session = new Session();
 
   constructor() {
 

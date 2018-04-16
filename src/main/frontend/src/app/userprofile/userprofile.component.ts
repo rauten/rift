@@ -23,6 +23,7 @@ import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {StripePaymentComponent} from "./stripe-payment/stripe-payment.component";
 import {LegalBankAccountInfoComponent} from "./stripe-payment/legal-bank-account-info/legal-bank-account-info.component";
 import {SharedFunctions} from "../shared/shared-functions";
+import {SessionPageService} from "../therift/riftsessions/session-page/session-page.service";
 
 @Component({
   selector: 'app-userprofile',
@@ -36,16 +37,16 @@ export class UserprofileComponent implements OnInit {
   sub: any;
   currUser: any;
   following = false;
-  isDataAvailable:boolean = false;
+  isDataAvailable: boolean = false;
   isLoggedIn: boolean = false;
   ratingStatus: number;
 
   constructor(private userProfileService: UserprofileService,
-  public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
-  public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService,
+              public auth: AuthService, private route: ActivatedRoute, private userRatingService: UserRatingService,
+              public dialog: MatDialog, private gameAccountService: GameAccountService, private userSessionsService: UsersessionsService,
               private sharedFunc: SharedFunctions) {
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    if(this.profile != null) {
+    if (this.profile != null) {
       this.isLoggedIn = true;
     }
   }
@@ -55,9 +56,9 @@ export class UserprofileComponent implements OnInit {
       this.currUser = params['rifttag'];
       this.getUserProfileInformation(params['rifttag']);
     });
-    }
+  }
 
-  getCurrentLoggedInUser(riftTag):any {
+  getCurrentLoggedInUser(riftTag): any {
     // console.log("Getting currently logged in user");
     this.userProfileService.getUser(riftTag).subscribe(
       resBody => {
@@ -77,34 +78,34 @@ export class UserprofileComponent implements OnInit {
   }
 
   getUserProfileInformation(riftTag: string) {
-    console.log("Getting " + riftTag+ "'s profile information");
+    console.log("Getting " + riftTag + "'s profile information");
     this.userProfileService.getUser(riftTag).subscribe(
-        resBody => {
-          this.currentUser.firstName = resBody.firstName;
-          this.currentUser.lastName = resBody.lastName;
-          this.currentUser.riftTag = resBody.riftTag;
-          this.currentUser.gender = resBody.gender;
-          this.currentUser.bio = resBody.bio;
-          this.currentUser.email = resBody.email;
-          this.currentUser.id = resBody.id;
-          this.currentUser.customerId = resBody.customerId;
-          this.currentUser.accountId = resBody.accountId;
-          this.currentUser.rifterRating = resBody.rifterRating;
-          this.currentUser.rifteeRating = resBody.rifteeRating;
-          this.currentUser.twitchAccount = resBody.twitchAccount;
-          this.currentUser.youtubeAccount = resBody.youtubeAccount;
-          this.sharedFunc.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
-          this.getUserCoverPhoto(riftTag);
-          this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
-          this.getUserRatings(this.currentUser.id);
-          this.getUserActivities(resBody.creatorActivityList);
-          this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
-          this.getCurrentLoggedInUser(this.profile.nickname);
-          this.getUserGameAccounts(this.currentUser.id);
-          this.isDataAvailable = true;
-        },
+      resBody => {
+        this.currentUser.firstName = resBody.firstName;
+        this.currentUser.lastName = resBody.lastName;
+        this.currentUser.riftTag = resBody.riftTag;
+        this.currentUser.gender = resBody.gender;
+        this.currentUser.bio = resBody.bio;
+        this.currentUser.email = resBody.email;
+        this.currentUser.id = resBody.id;
+        this.currentUser.customerId = resBody.customerId;
+        this.currentUser.accountId = resBody.accountId;
+        this.currentUser.rifterRating = resBody.rifterRating;
+        this.currentUser.rifteeRating = resBody.rifteeRating;
+        this.currentUser.twitchAccount = resBody.twitchAccount;
+        this.currentUser.youtubeAccount = resBody.youtubeAccount;
+        this.sharedFunc.getUserProfilePicture(this.currentUser.riftTag, this.currentUser);
+        this.getUserCoverPhoto(riftTag);
+        this.getUserFollowersAndFollowing(resBody.followers, resBody.followings);
+        this.getUserRatings(this.currentUser.id);
+        this.getUserActivities(resBody.creatorActivityList);
+        this.getUserRifterSessions(resBody.rifterSessions, this.currentUser);
+        this.getCurrentLoggedInUser(this.profile.nickname);
+        this.getUserGameAccounts(this.currentUser.id);
+        this.isDataAvailable = true;
+      },
       error => {
-          console.log(error.message);
+        console.log(error.message);
       }
     );
   }
@@ -161,7 +162,7 @@ export class UserprofileComponent implements OnInit {
     // console.log("Getting user's activities");
     this.currentUser.activities = [];
     this.currentUser.creatorActivityList = creatorActivityList;
-    for (let i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+    for (let i = 0; i < 10; i++) {
       let currActivity = new Activity();
       currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
       currActivity.notificationContent = NOTIFICATION_CONTENT.get(currActivity.notificationType);
@@ -193,7 +194,7 @@ export class UserprofileComponent implements OnInit {
       currSession.numSlots = rifterSessions[i].numSlots;
       currSession.gameId = rifterSessions[i].gameId;
       currSession.console = rifterSessions[i].console;
-      if(currSession.hostId == currSession.hostId) {
+      if (currSession.hostId == currSession.hostId) {
         currSession.type = true;
       } else {
         currSession.type = false;
@@ -237,7 +238,7 @@ export class UserprofileComponent implements OnInit {
   getUserGameAccounts(id) {
     this.gameAccountService.getUserGameAccounts(id).subscribe(
       resBody => {
-        for(let i = 0; i < resBody.length; i++) {
+        for (let i = 0; i < resBody.length; i++) {
           let currAccount = resBody[i];
           let account: GameAccount = new GameAccount();
           account.gameName = currAccount.game.game;
@@ -248,7 +249,8 @@ export class UserprofileComponent implements OnInit {
           this.currentUser.gameAccounts.push(account);
         }
       }
-    )};
+    )
+  };
 
   isFollowing(riftTag: string) {
     for (let i = 0; i < this.loggedInUser.followings.length; i++) {
@@ -349,14 +351,26 @@ export class UserprofileComponent implements OnInit {
   currSection = "details";
 
   menuShow(event) {
-    console.log(event.target.id);
     let btnId = event.target.id;
-    let id = btnId.substring(0, btnId.length-4);
-    console.log(id);
+    let id = btnId.substring(0, btnId.length - 4);
     document.getElementById(this.currSection).classList.add("hide");
     document.getElementById(this.currSection + "-btn").classList.remove("menu-active");
     document.getElementById(id).classList.remove("hide");
     document.getElementById(btnId).classList.add("menu-active");
+    document.getElementById(id).classList.add("text-fadein");
     this.currSection = id;
+  }
+
+  currTab = "activity";
+
+  tabShow(event) {
+    let btnId = event.target.id;
+    let id = btnId.substring(0, btnId.length - 4);
+    document.getElementById(this.currTab).classList.add("hide");
+    document.getElementById(this.currTab + "-btn").classList.remove("tab-active");
+    document.getElementById(id).classList.remove("hide");
+    document.getElementById(id).classList.add("text-fadein");
+    document.getElementById(btnId).classList.add("tab-active");
+    this.currTab = id;
   }
 }
