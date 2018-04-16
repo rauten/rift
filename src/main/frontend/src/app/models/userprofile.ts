@@ -25,6 +25,9 @@ export class Userprofile {
   followings: Userprofile[] = [];
   email: string;
   ratings: UserRating[] = [];
+  userRifterRatings: UserRating[] = [];
+  userRifteeRatings: UserRating[] = [];
+
   notifications: Notification[] = [];
   sessionRequests: any;
   profilePic: string;

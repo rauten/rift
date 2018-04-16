@@ -1,7 +1,9 @@
 package io.rift.controller;
 
 import io.rift.model.Notification;
+import io.rift.model.Usertable;
 import io.rift.service.*;
+import io.rift.service.notifications.ActivityNotificationService;
 import io.rift.service.notifications.BroadcastNotificationService;
 import io.rift.service.notifications.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class NotificationController {
     @Autowired
     private UserNotificationService userNotificationService;
 
+    @Autowired
+    private ActivityNotificationService activityNotificationService;
+
     @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/notifications")
     public List<Notification> getNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
@@ -40,6 +45,13 @@ public class NotificationController {
     public List<Notification> getBroadcastNotifications(@PathVariable String riftTag) throws SQLException {
         Integer riftId = usertableService.getRiftIdByRiftTag(riftTag);
         return broadcastNotificationService.getNotifications(riftId, "Followers");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/notification/{riftTag}/paginatedActivities/{counter}")
+    public List<Notification> getPaginatedUserActivities(@PathVariable String riftTag, @PathVariable Integer counter) throws SQLException {
+        Usertable usertable = usertableService.getUserByRiftTag(riftTag);
+        int id = usertable.getId();
+        return activityNotificationService.getPaginatedActivities(id, counter);
     }
 
     /*

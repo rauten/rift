@@ -1,24 +1,106 @@
-.review-block-name{
-  font-size:12px;
-  margin:10px 0;
+.rating-card {
+  border: 0px gray solid;
+  padding: 10px 0px;
 }
-.review-block-date{
-  font-size:12px;
+.rating-card .card-header {
+  font-weight: 500;
+  font-size: 18px;
 }
-.review-block-rate{
-  font-size:13px;
-  margin-bottom:15px;
+.rating-card .card-header .username {
+  color: #F6511D;
+
 }
-.review-block-title{
-  font-size:15px;
-  font-weight:700;
-  margin-bottom:10px;
+.rating-card p {
+  padding-top: 5px;
 }
-.review-block-description{
-  font-size:13px;
+.rating-bar {
+  width: 230px;
+  height: 12px;
+  margin: 7px 0px;
 }
 
-.profilePic {
-  width: 100px;
-  height: 100px;
+.rating-bar .shadow {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.06);
 }
+.rating-bar .fill {
+  max-width: 100%;
+  min-width: 0%;
+  height: 100%;
+  background-color: #1DA1F2;
+  position: relative;
+  top: -100%;
+
+}
+.rating-bar table {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: -200%;
+}
+.rating-bar table td {
+  border: 2px #2E3E4F solid;
+}
+.rating-bar .score {
+  display: inline-block;
+  float: right;
+  height: 100%;
+  overflow: visible;
+  text-align: right;
+  font-size: 21px;
+  line-height: 100%;
+  vertical-align: middle;
+  font-weight: 500;
+  transform: translate(46px,-3px);
+}
+#overall-ratings {
+  display: flex;
+  justify-content: space-around;
+}
+.rating-feature {
+  width: 50%;
+  padding: 0px 15px;
+
+}
+.orange {
+  color: #F6511D
+}
+.green {
+  color: #29C016;
+}
+.green-bck {
+  background-color: #29C016 !important;
+}
+.orange-bck {
+  background-color: #F6511D !important;
+}
+.rating-feature>* {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+
+}
+.rating-feature .rating-bar .score {
+  display: none; /*Use big score instead*/
+
+}
+.rating-feature .big-score {
+  font-size: 45px;
+  font-weight: 500;
+}
+.rating-feature .rating-bar {
+  height: 20px !important;
+}
+.rating-feature .reviews-shortcut {
+  color: #F7F7F2;
+  opacity: 0.58;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+
+
+

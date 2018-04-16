@@ -25,7 +25,7 @@ export class AppComponent {
           let id = resBody.id;
           this.notificationsService.pollNotifications(id, this.notificationList, false);
         });
-      this.getUserNotifications(this.profile.nickname);
+      // this.getUserNotifications(this.profile.nickname);
     }
   }
 

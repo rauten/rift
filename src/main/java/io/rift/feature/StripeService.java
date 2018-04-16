@@ -15,10 +15,16 @@ import io.rift.repository.RiftRepository;
 import io.rift.service.RifterSessionService;
 import io.rift.service.SessionRequestService;
 import io.rift.service.UsertableService;
+import org.apache.http.HttpResponse;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -28,13 +34,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import spark.Response;
-import spark.Request;
-
 @Service
 public class StripeService {
 
-    public static final String STRIPE_APIKEY = "sk_live_1dYvYLmdp3maH1wTG8Ibgxb8";
+    public static final String STRIPE_APIKEY = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
 
     private final String getUserById = "getUserById";
     private final String getRifterGameById = "getRifterGameById";
@@ -54,6 +57,9 @@ public class StripeService {
 
     @Autowired
     private FuturePayments futurePayments;
+
+    @Autowired
+    private ScheduledExecutorService scheduledExecutorService;
 
 
     /**
@@ -394,8 +400,8 @@ public class StripeService {
          * TRUE DELAY VALUE FOR TRANSFER: timeToEnd - System.currentTimeMillis() + 86400000L
          * TRUE AMOUNT VALUE FOR TRANSFER: rifterSession.sessionCost (*.85 is handled in createTransfer method)
          */
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        Future<?> future = executorService.schedule(new Runnable() {
+        //ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        Future<?> future = scheduledExecutorService.schedule(new Runnable() {
             @Override
             public void run() {
                 createTransfer((int) (0 * partialCharge), "usd", executorRifter.getAccountId(), rifteeId, sessionId, sessionRifteeVal);
@@ -403,6 +409,9 @@ public class StripeService {
             }
         }, 45000, TimeUnit.MILLISECONDS);
 
+        /**
+         * THIS SHOULD PROBABLY BE A DATABASE TABLE
+         */
         futurePayments.futurePaymentMap().put(sessionRifteeVal, future);
         return "Success";
     }
@@ -470,12 +479,20 @@ public class StripeService {
     }
 
 
-    public void handleChargeFailed(Request request, Response response) {
 
-        String payload = request.body();
-        String sigHeader = request.headers("Stripe-Signature");
-        Event event = null;
 
+    public Object handleChargeFailed(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Got it");
+        try {
+            BufferedReader bufferedReader = request.getReader();
+            APIResource.GSON.fromJson(bufferedReader, Event.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        response.setStatus(200);
+        return "";
+
+        /*
         try {
             event = Webhook.constructEvent(payload, sigHeader, "whsec_fjRJIo2VVVMMd7y4M0XxZMTPd8xk0pGK");
         } catch (JsonSyntaxException e) {
@@ -486,8 +503,28 @@ public class StripeService {
             response.status(400);
         }
         event = APIResource.GSON.fromJson(request.body(), Event.class);
+        */
 
     }
+
+//    public void handleChargeFailed(Request request, Response response) {
+//
+//        String payload = request.body();
+//        String sigHeader = request.headers("Stripe-Signature");
+//        Event event = null;
+//
+//        try {
+//            event = Webhook.constructEvent(payload, sigHeader, "whsec_fjRJIo2VVVMMd7y4M0XxZMTPd8xk0pGK");
+//        } catch (JsonSyntaxException e) {
+//            // Invalid payload
+//            response.status(400);
+//        } catch (SignatureVerificationException e) {
+//            // Invalid signature
+//            response.status(400);
+//        }
+//        event = APIResource.GSON.fromJson(request.body(), Event.class);
+//
+//    }
 
 
 

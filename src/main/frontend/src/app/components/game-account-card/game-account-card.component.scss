@@ -1,0 +1,37 @@
+.game-account-card {
+  padding: 10px 10px;
+  margin: 3px 0px;
+  cursor: pointer;
+}
+.game-account-card:hover {
+  background-color: red;
+  opacity: 1;
+}
+.game-account-card .game-title {
+  display: inline-block;
+  margin-top: 2px;
+  font-weight: 500;
+  font-size: 17px;
+}
+.game-account-card .username {
+  display: inline-block;
+  margin-top: 1px;
+  font-weight: 400;
+  font-size: 14px;
+  opacity: 0.7;
+}
+.game-account-card .game-icon{
+  height: 47px;
+  width: 47px;
+  display: block;
+  float: left;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+.edit-btn {
+  float: right;
+  transform: translateY(-50%);
+  color: #1DA1F2;
+  text-decoration: none;
+
+}

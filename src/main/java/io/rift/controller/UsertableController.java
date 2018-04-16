@@ -259,13 +259,15 @@ public class UsertableController {
     @JsonView(Views.ProfilePageView.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
     public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
+        System.out.println("At the top: " + System.currentTimeMillis());
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
+        return usertable;
+        /*
         try {
             int id = usertable.getId();
             usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
             usertable.setFollowers(followingService.getFollowersAndInfoById(id));
             usertable.setFollowings(followingService.getFollowingsAndInfoById(id));
-            usertable.setBroadcastNotificationList(broadcastNotificationService.getNotifications(id, "Followers"));
             usertable.setCreatorActivityList(activityNotificationService.getNotifications(id, "session"));
             usertable.setNumberFollowing(usertableService.getNumberFollowing(id));
             usertable.setNumberFollowers(usertableService.getNumberFollowers(id));
@@ -275,7 +277,10 @@ public class UsertableController {
             e.printStackTrace();
         }
         return usertable;
+        */
     }
+
+
 
 
     /**
@@ -323,10 +328,11 @@ public class UsertableController {
         return imageMap;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/httprequest")
-    public void myMethod (HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        System.out.println(session.getId());
-    }
 
+    /**
+     * It took three seconds to get session requests (bad)
+     * It took three seconds to get broadcast notifications
+     * It took ten seconds to get the activity list (!!)
+     *
+     */
 }

@@ -14,7 +14,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatNativeDateModule,
-  MatStepperModule
+  MatStepperModule,
+  MatSidenavModule
 } from "@angular/material";
 
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -93,6 +94,10 @@ import {ViewCardsComponent} from './userprofile/stripe-payment/view-cards/view-c
 import {CreditCardComponent} from './components/credit-card/credit-card.component';
 import {SharedFunctions} from "./shared/shared-functions";
 import {ImageCropperComponent} from "ngx-img-cropper";
+import {CONSOLE_ICONS} from './constants/console-icon-variables';
+import {SESSION_ICONS} from "./constants/session-icon-variables";
+import { ActivityCardComponent } from './components/activity-card/activity-card.component';
+import { GameAccountCardComponent } from './components/game-account-card/game-account-card.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -140,7 +145,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     LegalBankAccountInfoComponent,
     ViewCardsComponent,
     CreditCardComponent,
-    ImageCropperComponent
+    ImageCropperComponent,
+    ActivityCardComponent,
+    GameAccountCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -162,6 +169,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     MatSelectModule,
     MatSliderModule,
     MatCheckboxModule,
+    MatSidenavModule,
     CalendarModule.forRoot(),
     NgbModule.forRoot(),
     BsDropdownModule.forRoot(),

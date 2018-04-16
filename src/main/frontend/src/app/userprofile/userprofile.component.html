@@ -1,185 +1,440 @@
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-<div class="container" style="width: 80%" *ngIf="isDataAvailable">
-  <base href="/">
-  <div class="user-profile">
-    <div class="row">
-      <div class="profile-header-background"><img src="{{currentUser.coverPhoto}}" alt="Profile Header Background"></div>
-      <div class="col-md-4">
-        <div class="profile-info-left">
-          <div class="text-center">
-            <div id="profile-pic">
-              <img src="{{currentUser.profilePic}}" class="avatar img-circle" alt="">
-            </div>
-            <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>
-            <h3>@{{currentUser.riftTag}}</h3>
-            <h3>{{currentUser.email}}</h3>
-            <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
-            <div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
-              <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
-              [riftTag]="profile.nickname" class="userbtn">
-              </app-follow-button>
-            </div>
-            <div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">
-              <button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>
-            </div><br>
-            <div class="stripe-payment">
-              <button (click)="updatePaymentModal()" type="button" class="btn-primary">Update Payment</button>
-            </div><br>
-            <div class="stripe-payment">
-              <button *ngIf="!currentUser.accountId" (click)="updateBankAccountModal()" type="button" class="btn-primary">Update Bank Account</button>
-            </div>
-            <div id="rate_user_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
-              <button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>
-            </div>
-            <br>
-            <div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
-              <button (click)="fileAComplaint()" type="button" class="btn-primary">File A Complaint</button>
-            </div>
-            <alert type="danger" *ngIf="ratingStatus == 0">
-              Haven't played with {{currentUser.riftTag}} in past 30 days
-            </alert>
-            <alert type="danger" *ngIf="ratingStatus == 1">
-              Already rated {{currentUser.riftTag}} in past 30 days
-            </alert>
-          </div>
-          <div class="section about">
-            <h3>About Me</h3>
-            <p> {{currentUser.bio}} </p>
-          </div>
-          <div class="section statistics">
-            <h3>Statistics</h3>
-            <p><span class="badge">{{currentUser.followings?.length}}</span> Following</p>
-            <p><span class="badge">{{currentUser.followers?.length}}</span> Followers</p>
-            <p><span class="badge">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>
-          </div>
-          <div class="section socialmedia">
-            <h3>Social</h3>
-            <ul class="list-unstyled list-social">
-              <li><i class="fa fa-youtube"></i> {{currentUser.youtubeAccount}}</li>
-              <li><i class="fa fa-twitch"></i> <a href="https://twitch.tv/{{currentUser.twitchAccount}}">twitch.tv/{{currentUser.twitchAccount}}</a></li>
-            </ul>
-          </div>
+<!--<div class="container" style="width: 80%" *ngIf="isDataAvailable">-->
+  <!--<base href="/">-->
+  <!--<div class="user-profile">-->
+    <!--<div class="row">-->
+      <!--<div class="profile-header-background"><img src="{{currentUser.coverPhoto}}" alt="Profile Header Background"></div>-->
+      <!--<div class="col-md-4">-->
+        <!--<div class="profile-info-left">-->
+          <!--<div class="text-center">-->
+            <!--<div id="profile-pic">-->
+              <!--<img src="{{currentUser.profilePic}}" class="avatar img-circle" alt="">-->
+            <!--</div>-->
+            <!--<h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>-->
+            <!--<h3>@{{currentUser.riftTag}}</h3>-->
+            <!--<h3>{{currentUser.email}}</h3>-->
+            <!--<app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>-->
+            <!--<div id="following_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">-->
+              <!--<app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"-->
+              <!--[riftTag]="profile.nickname" class="userbtn">-->
+              <!--</app-follow-button>-->
+            <!--</div>-->
+            <!--<div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
+              <!--<button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>-->
+            <!--</div><br>-->
+            <!--<div class="stripe-payment">-->
+              <!--<button (click)="updatePaymentModal()" type="button" class="btn-primary">Update Payment</button>-->
+            <!--</div><br>-->
+            <!--<div class="stripe-payment">-->
+              <!--<button *ngIf="!currentUser.accountId" (click)="updateBankAccountModal()" type="button" class="btn-primary">Update Bank Account</button>-->
+            <!--</div>-->
+            <!--<div id="rate_user_button" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">-->
+              <!--<button (click)="openRatingDialog()" type="button" class="btn-primary">Rate this User</button>-->
+            <!--</div>-->
+            <!--<br>-->
+            <!--<div id="file_a_complaint" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">-->
+              <!--<button (click)="fileAComplaint()" type="button" class="btn-primary">File A Complaint</button>-->
+            <!--</div>-->
+            <!--<alert type="danger" *ngIf="ratingStatus == 0">-->
+              <!--Haven't played with {{currentUser.riftTag}} in past 30 days-->
+            <!--</alert>-->
+            <!--<alert type="danger" *ngIf="ratingStatus == 1">-->
+              <!--Already rated {{currentUser.riftTag}} in past 30 days-->
+            <!--</alert>-->
+          <!--</div>-->
+          <!--<div class="section about">-->
+            <!--<h3>About Me</h3>-->
+            <!--<p> {{currentUser.bio}} </p>-->
+          <!--</div>-->
+          <!--<div class="section statistics">-->
+            <!--<h3>Statistics</h3>-->
+            <!--<p><span class="badge">{{currentUser.followings?.length}}</span> Following</p>-->
+            <!--<p><span class="badge">{{currentUser.followers?.length}}</span> Followers</p>-->
+            <!--<p><span class="badge">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>-->
+          <!--</div>-->
+          <!--<div class="section socialmedia">-->
+            <!--<h3>Social</h3>-->
+            <!--<ul class="list-unstyled list-social">-->
+              <!--<li><i class="fa fa-youtube"></i> {{currentUser.youtubeAccount}}</li>-->
+              <!--<li><i class="fa fa-twitch"></i> <a href="https://twitch.tv/{{currentUser.twitchAccount}}">twitch.tv/{{currentUser.twitchAccount}}</a></li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-8">-->
+        <!--<div class="profile-info-right">-->
+          <!--<mat-tab-group>-->
+            <!--<mat-tab label="activity">-->
+              <!--<div class="media activity-item" *ngFor="let activity of currentUser.activities">-->
+                <!--<a href="#" class="pull-left">-->
+                  <!--<img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">-->
+                <!--</a>-->
+                <!--<div class="media-body">-->
+                  <!--<p class="activity-title">-->
+                    <!--<a href="#">{{currentUser.riftTag}}</a>-->
+                    <!--{{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>-->
+                  <!--</p>-->
+                  <!--<small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>-->
+                <!--</div>-->
+                <!--<div class="btn-group pull-right activity-actions">-->
+                  <!--<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">-->
+                    <!--<i class="fa fa-th"></i>-->
+                    <!--<span class="sr-only">Toggle Dropdown</span>-->
+                  <!--</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+            <!--<mat-tab label="sessions">-->
+              <!--<div class="media" *ngFor="let session of currentUser.rifterSessions">-->
+                <!--<app-session-card-->
+                                  <!--[session]="session" [isLoggedIn]="isLoggedIn"-->
+                                  <!--[type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"-->
+                <!--&gt;</app-session-card>-->
+                <!--&lt;!&ndash;[routerLink]="['../../session', session.id]"&ndash;&gt;-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+            <!--<mat-tab label="followers">-->
+              <!--<div class="media user-follower" *ngFor="let follower of currentUser.followers">-->
+                <!--<img src="{{follower.profilePic}}" alt="User Avatar" class="media-object pull-left">-->
+                <!--<div class="media-body">-->
+                  <!--<a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}-->
+                    <!--<br><span class="text-muted username">@{{follower.riftTag}}</span></a>-->
+                  <!--<app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"-->
+                                     <!--[riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">-->
+                  <!--</app-follow-button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+            <!--<mat-tab label="following">-->
+              <!--<div class="media user-info" *ngFor="let following of currentUser.followings">-->
+                  <!--<img src="{{following.profilePic}}" alt="User Avatar" class="media-object pull-left">-->
+                  <!--<div class="media-body">-->
+                    <!--<a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}-->
+                      <!--<br><span class="text-muted username">@{{following.riftTag}}</span></a>-->
+                    <!--<app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"-->
+                                       <!--[riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != following.riftTag">-->
+
+                    <!--</app-follow-button>-->
+                  <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+            <!--<mat-tab label="reviews" style="width: 100%;">-->
+              <!--<div class="row" style="text-align:center">-->
+                <!--<div class="col-lg-5">-->
+                  <!--<div class="rating-block">-->
+                    <!--<h4>Average Rifter Rating</h4>-->
+                    <!--<h2 class="bold padding-bottom-7"> {{currentUser.rifterRating}} <small>/ 5</small></h2>-->
+                    <!--<app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-lg-5">-->
+                  <!--<div class="rating-block">-->
+                    <!--<h4>Average Riftee Rating</h4>-->
+                    <!--<h2 class="bold padding-bottom-7"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>-->
+                    <!--<app-rating [rating]="currentUser.rifteeRating" [readonly]="true"></app-rating>-->
+                  <!--</div>-->
+                <!--</div>-->
+
+              <!--</div>-->
+              <!--<div class="row">-->
+                <!--<div class="col-sm-7" *ngFor="let rating of currentUser.ratings">-->
+                    <!--<app-user-review [rating]="rating" ></app-user-review>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+            <!--<mat-tab label="game accounts">-->
+              <!--<div class="media user-info" *ngFor="let account of currentUser.gameAccounts">-->
+                <!--<img src="{{account.gameIcon}}" alt="User Avatar" class="media-object pull-left">-->
+                <!--<div class="media-body">-->
+                  <!--{{account.gameName}}-->
+                    <!--<br><span class="text-muted username">@{{account.ign}}</span>-->
+                  <!--<button type="button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag" class="btn btn-sm btn-primary"-->
+                          <!--(click)="editGameAccount(account)">-->
+                    <!--<span>Edit Game Account</span>-->
+                  <!--</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
+          <!--</mat-tab-group>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<!--<router-outlet></router-outlet>-->
+
+<!--&lt;!&ndash;<mat-tab label="notifications" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="media" *ngFor="let notification of currentUser.notifications">&ndash;&gt;-->
+<!--&lt;!&ndash;<app-notification [notification]="notification"></app-notification>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</mat-tab>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;<mat-tab label="feed" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">&ndash;&gt;-->
+  <!--&lt;!&ndash;<div class="media activity-item" *ngFor="let notification of currentUser.feed">&ndash;&gt;-->
+    <!--&lt;!&ndash;<a href="#" class="pull-left">&ndash;&gt;-->
+      <!--&lt;!&ndash;<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">&ndash;&gt;-->
+    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+    <!--&lt;!&ndash;<div class="media-body">&ndash;&gt;-->
+      <!--&lt;!&ndash;<p class="activity-title"><a [routerLink]="['../../user',notification.rifttag]">{{notification.riftTag}}</a>&ndash;&gt;-->
+        <!--&lt;!&ndash;{{notification.notificationContent}} </p>&ndash;&gt;-->
+      <!--&lt;!&ndash;<small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</mat-tab>&ndash;&gt;-->
+
+<body id="profile-header" class="container" *ngIf="isDataAvailable">
+<div id="header" >
+  <div id="overview">
+    <img src="{{currentUser.profilePic}}" class="headshot">
+    <div id="basic-details">
+      <span class="name">{{currentUser.firstName}} {{currentUser.lastName}}</span>
+      <!--<div class="following-btn">Following</div>-->
+      <div class="following-btn" *ngIf="isLoggedIn && profile.nickname != currentUser.riftTag">
+        <app-follow-button [following]="isFollowing(currentUser.riftTag)" [id]="currentUser.id"
+                           [riftTag]="profile.nickname" class="userbtn">
+        </app-follow-button>
+      </div>
+      <br>
+      <span class="username">@{{currentUser.riftTag}}</span> </div>
+    <div id="user-stats">
+      <div class="stat-item"><span id="following" class="stat">{{currentUser.followings?.length}}</span><br>
+        <label>following</label>
+      </div>
+      <div class="stat-item"><span id="followers" class="stat">{{currentUser.followers?.length}}</span><br>
+        <label>followers</label>
+      </div>
+      <div class="stat-item"><span id="rating" class="stat">346</span><br>
+        <label>rating</label>
+      </div>
+    </div>
+  </div>
+  <div id="tabs">
+    <div class="tab tab-active" id="activity-btn" (click)="tabShow($event)">Activity</div>
+    <div class="tab" id="sessions-btn" (click)="tabShow($event)">Sessions</div>
+    <div class="tab" id="ratings-btn" (click)="tabShow($event)">Ratings</div>
+    <div class="tab" id="info-btn" (click)="tabShow($event)">Info</div>
+  </div>
+</div>
+<br><br>
+<!--<div id="update_info_button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
+  <!--<button (click)="updateInfoModal()" type="button" class="btn-primary">Update your Info</button>-->
+<!--</div><br>-->
+
+<div class="section" id="activity">
+  <div *ngFor="let activity of currentUser.activities">
+    <app-activity-card [activity]="activity" [currentUser]="currentUser" [loggedInUserId]="loggedInUser.id"
+    [request]="loggedInUser.sessionRequests.get(activity.sessionId)" [isLoggedIn]="isLoggedIn">
+    </app-activity-card>
+  </div>
+</div>
+
+<div class="section hide" id="sessions" >
+  <div *ngFor="let session of currentUser.rifterSessions">
+    <app-session-card
+      [session]="session" [isLoggedIn]="isLoggedIn"
+      [type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"
+      [loggedInUserId]="loggedInUser.id"
+    ></app-session-card><br>
+    <!--[routerLink]="['../../session', session.id]"-->
+  </div>
+</div>
+
+<div class="section hide" id="ratings">
+  <div class="sidemenu">
+    <a id="overview-ratings-btn" class="menu-active" (click)="ratingMenuShow($event)">Overview</a>
+    <a id="rifter-ratings-btn" (click)="ratingMenuShow($event)">Rifter Rating</a>
+    <a id="riftee-ratings-btn" (click)="ratingMenuShow($event)">Riftee Rating</a> </div>
+  <div class="content-card" id="overview-ratings">
+    <div class="segment" id="overall-ratings">
+      <div class="rating-feature"> <span class="title">Rifter Rating</span>
+        <span class="big-score green">{{currentUser.rifterRating}}</span>
+        <div class="rating-bar"> <span class="score green" >3.7</span>
+          <div class="shadow"></div>
+          <div class="fill green-bck" [style.width]="rifterRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifterRatings}} Reviews »</a> </div>
+      <div class="rating-feature"> <span class="title">Riftee Rating</span>
+        <span class="big-score orange">{{currentUser.rifteeRating}}</span>
+        <div class="rating-bar"> <span class="score">3.7</span>
+          <div class="shadow"></div>
+          <div class="fill orange-bck" [style.width]="rifteeRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifteeRatings}} Reviews »</a> </div>
+    </div>
+    <div class="segment"><span class="title">Featured</span>
+      <div *ngFor="let rating of currentUser.ratings">
+        <app-user-review [rating]="rating"></app-user-review>
+      </div>
+    </div>
+  </div>
+  <div class="content-card hide" id="rifter-ratings">
+    <div class="segment">
+      <div class="rating-feature"> <span class="title">Rifter Rating</span>
+        <span class="big-score green">{{currentUser.rifterRating}}</span>
+        <div class="rating-bar"> <span class="score green" >3.7</span>
+          <div class="shadow"></div>
+          <div class="fill green-bck" [style.width]="rifterRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifterRatings}} Reviews »</a>
+      </div>
+      <div class="segment"><span class="title">What other Riftees have said about {{currentUser.riftTag}}</span>
+        <div *ngFor="let rating of currentUser.userRifterRatings">
+          <app-user-review [rating]="rating"></app-user-review>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="profile-info-right">
-          <mat-tab-group>
-            <mat-tab label="activity">
-              <div class="media activity-item" *ngFor="let activity of currentUser.activities">
-                <a href="#" class="pull-left">
-                  <img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">
-                </a>
-                <div class="media-body">
-                  <p class="activity-title">
-                    <a href="#">{{currentUser.riftTag}}</a>
-                    {{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>
-                  </p>
-                  <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
-                </div>
-                <div class="btn-group pull-right activity-actions">
-                  <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-th"></i>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                </div>
-              </div>
-            </mat-tab>
-            <mat-tab label="sessions">
-              <div class="media" *ngFor="let session of currentUser.rifterSessions">
-                <app-session-card
-                                  [session]="session" [isLoggedIn]="isLoggedIn"
-                                  [type]="session.type" [request]="loggedInUser.sessionRequests.get(session.id)"
-                ></app-session-card>
-                <!--[routerLink]="['../../session', session.id]"-->
-              </div>
-            </mat-tab>
-            <mat-tab label="followers">
-              <div class="media user-follower" *ngFor="let follower of currentUser.followers">
-                <img src="{{follower.profilePic}}" alt="User Avatar" class="media-object pull-left">
-                <div class="media-body">
-                  <a [routerLink]="['../../user', follower.riftTag]">{{follower.firstName}} {{follower.lastName}} {{follower.id}}
-                    <br><span class="text-muted username">@{{follower.riftTag}}</span></a>
-                  <app-follow-button class="pull-right" [following]="isFollowing(follower.riftTag)" [id]="follower.id"
-                                     [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != follower.riftTag">
-                  </app-follow-button>
-                </div>
-              </div>
-            </mat-tab>
-            <mat-tab label="following">
-              <div class="media user-info" *ngFor="let following of currentUser.followings">
-                  <img src="{{following.profilePic}}" alt="User Avatar" class="media-object pull-left">
-                  <div class="media-body">
-                    <a [routerLink]="['../../user', following.riftTag]">{{following.firstName}} {{following.lastName}}
-                      <br><span class="text-muted username">@{{following.riftTag}}</span></a>
-                    <app-follow-button class="pull-right" [following]="isFollowing(following.riftTag)" [id]="following.id"
-                                       [riftTag]="profile.nickname" *ngIf="isLoggedIn && profile.nickname != following.riftTag">
+    </div>
 
-                    </app-follow-button>
-                  </div>
-              </div>
-            </mat-tab>
-            <mat-tab label="reviews" style="width: 100%;">
-              <div class="row" style="text-align:center">
-                <div class="col-lg-5">
-                  <div class="rating-block">
-                    <h4>Average Rifter Rating</h4>
-                    <h2 class="bold padding-bottom-7"> {{currentUser.rifterRating}} <small>/ 5</small></h2>
-                    <app-rating [rating]="currentUser.rifterRating" [readonly]="true"></app-rating>
-                  </div>
-                </div>
-                <div class="col-lg-5">
-                  <div class="rating-block">
-                    <h4>Average Riftee Rating</h4>
-                    <h2 class="bold padding-bottom-7"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>
-                    <app-rating [rating]="currentUser.rifteeRating" [readonly]="true"></app-rating>
-                  </div>
-                </div>
-
-              </div>
-              <div class="row">
-                <div class="col-sm-7" *ngFor="let rating of currentUser.ratings">
-                    <app-user-review [rating]="rating" ></app-user-review>
-                </div>
-              </div>
-            </mat-tab>
-            <mat-tab label="game accounts">
-              <div class="media user-info" *ngFor="let account of currentUser.gameAccounts">
-                <img src="{{account.gameIcon}}" alt="User Avatar" class="media-object pull-left">
-                <div class="media-body">
-                  {{account.gameName}}
-                    <br><span class="text-muted username">@{{account.ign}}</span>
-                  <button type="button" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag" class="btn btn-sm btn-primary"
-                          (click)="editGameAccount(account)">
-                    <span>Edit Game Account</span>
-                  </button>
-                </div>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
+  </div>
+  <div class="content-card hide" id="riftee-ratings">
+    <div class="segment">
+      <div class="rating-feature"> <span class="title">Riftee Rating</span>
+        <span class="big-score orange">{{currentUser.rifteeRating}}</span>
+        <div class="rating-bar"> <span class="score">3.7</span>
+          <div class="shadow"></div>
+          <div class="fill orange-bck" [style.width]="rifteeRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
+        <a href="" class="reviews-shortcut">{{numRifteeRatings}} Reviews »</a>
+      </div>
+      <div class="segment"><span class="title">What other Rifters have said about {{currentUser.riftTag}}</span>
+        <div *ngFor="let rating of currentUser.userRifteeRatings">
+          <app-user-review [rating]="rating"></app-user-review>
+        </div>
+      </div>
+    </div>
+    </div>
+
+</div>
+
+<div class="section hide" id="info">
+  <div class="sidemenu">
+    <a id="details-btn" class="menu-active" (click)="menuShow($event)">Details about you</a>
+    <a id="contact-info-btn" (click)="menuShow($event)">Contact Info</a>
+    <a id="game-accounts-btn" (click)="menuShow($event)">Game Accounts</a>
+  </div>
+  <div class="content-card" id="details">
+    <div class="segment">
+      <span class="title">About Me</span>
+      <p>{{currentUser.bio}}</p>
+    </div>
+    <div class="segment">
+      <span class="title">Basic Information</span>
+      <table>
+        <tbody>
+        <tr>
+          <td>Email</td>
+          <td>{{currentUser.email}}</td>
+        </tr>
+        <tr>
+          <td>PO Box</td>
+          <td>159 5th St NW</td>
+        </tr>
+        <tr>
+          <td>Business Email</td>
+          <td>ninja@twitch.com</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="content-card hide" id="contact-info">
+    <div class="segment">
+      <span class="title">Contact</span>
+      <table>
+        <tbody>
+        <tr>
+          <td>Date of Birth</td>
+          <td>04/16/1998</td>
+        </tr>
+        <tr>
+          <td>Age</td>
+          <td>19</td>
+        </tr>
+        <tr>
+          <td>Gender</td>
+          <td>Male</td>
+        </tr>
+        <tr>
+          <td>Time Zone</td>
+          <td>US East (EST)</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="segment">
+      <span class="title">Social</span>
+      <table>
+        <tbody>
+        <tr>
+          <td>Twitch</td>
+          <td>{{currentUser.twitchAccount}}</td>
+        </tr>
+        <tr>
+          <td>Youtube</td>
+          <td>{{currentUser.youtubeAccount}}</td>
+        </tr>
+        <tr>
+          <td>Twitter</td>
+          <td>@bvicinay</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="content-card hide" id="game-accounts">
+    <div class="segment">
+      <span class="title">Accounts</span>
+      <div *ngFor="let account of currentUser.gameAccounts">
+        <app-game-account-card [account]="account" [isLoggedIn]="isLoggedIn"
+                               [currentUserRiftTag]="currentUser.riftTag" [loggedInUserRiftTag]="profile.nickname"></app-game-account-card>
       </div>
     </div>
   </div>
 </div>
-<router-outlet></router-outlet>
 
-<!--<mat-tab label="notifications" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
-<!--<div class="media" *ngFor="let notification of currentUser.notifications">-->
-<!--<app-notification [notification]="notification"></app-notification>-->
-<!--</div>-->
-<!--</mat-tab>-->
+</body>
 
-
-<!--<mat-tab label="feed" *ngIf="isLoggedIn && profile.nickname == currentUser.riftTag">-->
-  <!--<div class="media activity-item" *ngFor="let notification of currentUser.feed">-->
-    <!--<a href="#" class="pull-left">-->
-      <!--<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Avatar" class="media-object avatar">-->
-    <!--</a>-->
-    <!--<div class="media-body">-->
-      <!--<p class="activity-title"><a [routerLink]="['../../user',notification.rifttag]">{{notification.riftTag}}</a>-->
-        <!--{{notification.notificationContent}} </p>-->
-      <!--<small class="text-muted">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</mat-tab>-->

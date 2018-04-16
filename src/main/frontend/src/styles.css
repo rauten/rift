@@ -9,6 +9,10 @@
   }
 }
 
+body {
+  background-color: #1B2531;
+}
+
 /*Webkit Animations*/
 @keyframes fadein {
   from {

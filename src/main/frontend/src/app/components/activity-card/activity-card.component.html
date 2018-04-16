@@ -1,0 +1,15 @@
+<div class="activity-card" *ngIf="isDataAvailable">
+  <div class="card-header">
+    <img src="{{currentUser.profilePic}}" class="headshot" alt="">
+    <span class="title">
+      <a class="username">{{currentUser.riftTag}}</a>
+      {{activity.notificationContent}}
+    </span>
+    <br>
+    <span class="timestamp">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</span> </div>
+    <app-session-card
+      [session]="session" [isLoggedIn]="isLoggedIn"
+      [type]="session.type" [request]="request" [loggedInUserId]="loggedInUserId"
+    ></app-session-card>
+</div>
+

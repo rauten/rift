@@ -8,7 +8,7 @@ import {CONSOLE_ICONS} from "../../constants/console-icon-variables";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {GameAccount} from "../../models/game-account";
 import {GameAccountService} from "../../userprofile/game-account/game-account.service";
-import {SharedFunctions} from "../../shared/shared-functions";
+import {SessionPageService} from "../../therift/riftsessions/session-page/session-page.service";
 
 @Component({
   selector: 'app-session-card',
@@ -21,6 +21,7 @@ export class SessionCardComponent implements OnInit {
   modalRef: BsModalRef;
   gameAccounts: GameAccount[] = [];
   accountId: number;
+  clockIcon = "https://cms.bsu.edu/-/media/www/images/common/icons/clockiconwhite.png?h=250&la=en&w=250&hash=230DC7880F07ECED39ADE5B6649523BE395F9147";
 
   @Input() loggedInUserId: number;
   @Input() session: Session;
@@ -30,12 +31,12 @@ export class SessionCardComponent implements OnInit {
   profile: any;
 
   constructor(private userSessionsService: UsersessionsService, private userProfileService: UserprofileService,
-              private modalService: BsModalService, private gameAccountService: GameAccountService) {
+              private modalService: BsModalService, private gameAccountService: GameAccountService,) {
   }
 
   ngOnInit() {
-    this.sessionIcon=SESSION_ICONS[this.session.gameId];
-    this.consoleIcon=CONSOLE_ICONS[this.session.console];
+    this.sessionIcon = SESSION_ICONS[this.session.gameId];
+    this.consoleIcon = CONSOLE_ICONS[this.session.console];
   }
 
   changeStatus(template: TemplateRef<any>) {

@@ -1,0 +1,6 @@
+<div class="game-account-card">
+  <img src="{{account.gameIcon}}" alt="" class="game-icon">
+  <span class="game-title">{{account.gameName}}</span><br>
+  <span class="username">@{{account.ign}}</span>
+  <a *ngIf="isLoggedIn && loggedInUserRiftTag == currentUserRiftTag" (click)="editGameAccount(account)" class="edit-btn">edit</a>
+</div>

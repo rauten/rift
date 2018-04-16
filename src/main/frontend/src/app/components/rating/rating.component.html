@@ -1,8 +1,15 @@
-<ng-template #t let-fill="fill">
-  <span *ngIf="fill === 100" class="star full">&#9733;</span>
-  <span *ngIf="fill === 0" class="star">&#9733;</span>
-  <span *ngIf="fill < 100 && fill > 0" class="star">
-                <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
-              </span>
-</ng-template>
-<ngb-rating [(rate)]="rating" [starTemplate]="t" [readonly]="readonly" max="5"></ngb-rating>
+<div class="rating-bar"> <span class="score">{{rating}}</span>
+  <div class="shadow"></div>
+  <div class="fill" [style.width]="ratingPercent+'%'"></div>
+  <table border="1">
+    <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

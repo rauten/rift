@@ -20,7 +20,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 /***/ "../../../../../src/app/app.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -152,7 +152,7 @@ var AppComponent = /** @class */ (function () {
                 var id = resBody.id;
                 _this.notificationsService.pollNotifications(id, _this.notificationList, false);
             });
-            this.getUserNotifications(this.profile.nickname);
+            // this.getUserNotifications(this.profile.nickname);
         }
     };
     AppComponent.prototype.beforeUnloadHandler = function (event) {
@@ -303,12 +303,16 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_72__components_credit_card_credit_card_component__ = __webpack_require__("../../../../../src/app/components/credit-card/credit-card.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_73__shared_shared_functions__ = __webpack_require__("../../../../../src/app/shared/shared-functions.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_74_ngx_img_cropper__ = __webpack_require__("../../../../ngx-img-cropper/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_75__components_activity_card_activity_card_component__ = __webpack_require__("../../../../../src/app/components/activity-card/activity-card.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_76__components_game_account_card_game_account_card_component__ = __webpack_require__("../../../../../src/app/components/game-account-card/game-account-card.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -433,7 +437,9 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_70__userprofile_stripe_payment_legal_bank_account_info_legal_bank_account_info_component__["a" /* LegalBankAccountInfoComponent */],
                 __WEBPACK_IMPORTED_MODULE_71__userprofile_stripe_payment_view_cards_view_cards_component__["a" /* ViewCardsComponent */],
                 __WEBPACK_IMPORTED_MODULE_72__components_credit_card_credit_card_component__["a" /* CreditCardComponent */],
-                __WEBPACK_IMPORTED_MODULE_74_ngx_img_cropper__["b" /* ImageCropperComponent */]
+                __WEBPACK_IMPORTED_MODULE_74_ngx_img_cropper__["b" /* ImageCropperComponent */],
+                __WEBPACK_IMPORTED_MODULE_75__components_activity_card_activity_card_component__["a" /* ActivityCardComponent */],
+                __WEBPACK_IMPORTED_MODULE_76__components_game_account_card_game_account_card_component__["a" /* GameAccountCardComponent */],
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -442,7 +448,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_5__app_router__["a" /* routes */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_forms__["c" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_7__angular_material_tabs__["a" /* MatTabsModule */],
-                __WEBPACK_IMPORTED_MODULE_8__angular_material__["h" /* MatStepperModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_material__["i" /* MatStepperModule */],
                 __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
                 __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
                 __WEBPACK_IMPORTED_MODULE_4__angular_forms__["h" /* ReactiveFormsModule */],
@@ -455,6 +461,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_33__angular_material_select__["a" /* MatSelectModule */],
                 __WEBPACK_IMPORTED_MODULE_34__angular_material_slider__["a" /* MatSliderModule */],
                 __WEBPACK_IMPORTED_MODULE_44__angular_material_checkbox__["a" /* MatCheckboxModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_material__["h" /* MatSidenavModule */],
                 __WEBPACK_IMPORTED_MODULE_37_angular_calendar__["a" /* CalendarModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_38__ng_bootstrap_ng_bootstrap__["a" /* NgbModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_45_ngx_bootstrap__["b" /* BsDropdownModule */].forRoot(),
@@ -708,6 +715,124 @@ var AUTH_CONFIG = {
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/activity-card/activity-card.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"activity-card\" *ngIf=\"isDataAvailable\">\n  <div class=\"card-header\">\n    <img src=\"{{currentUser.profilePic}}\" class=\"headshot\" alt=\"\">\n    <span class=\"title\">\n      <a class=\"username\">{{currentUser.riftTag}}</a>\n      {{activity.notificationContent}}\n    </span>\n    <br>\n    <span class=\"timestamp\">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</span> </div>\n    <app-session-card\n      [session]=\"session\" [isLoggedIn]=\"isLoggedIn\"\n      [type]=\"session.type\" [request]=\"request\" [loggedInUserId]=\"loggedInUserId\"\n    ></app-session-card>\n</div>\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/activity-card/activity-card.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".activity-card {\n  background-color: #22303F;\n  border: 1px #18202A solid;\n  padding: 10px 15px; }\n\n.activity-card .card-header {\n  margin: 10px 0px;\n  height: 47px; }\n\n.activity-card .title {\n  font-weight: 400;\n  font-size: 18px;\n  display: inline-block;\n  margin-top: 3px; }\n\n.activity-card .username {\n  color: #F6511D;\n  font-weight: 500; }\n\n.activity-card .timestamp {\n  font-size: 11px;\n  font-weight: 400;\n  opacity: 0.8;\n  -webkit-transform: translateY(-1px);\n          transform: translateY(-1px);\n  display: inline-block; }\n\n.activity-card .headshot {\n  height: 47px;\n  width: 47px;\n  display: block;\n  float: left;\n  margin-right: 8px; }\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/activity-card/activity-card.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActivityCardComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_activity__ = __webpack_require__("../../../../../src/app/models/activity.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_userprofile__ = __webpack_require__("../../../../../src/app/models/userprofile.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__therift_riftsessions_session_page_session_page_service__ = __webpack_require__("../../../../../src/app/therift/riftsessions/session-page/session-page.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_session__ = __webpack_require__("../../../../../src/app/models/session.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_session_request__ = __webpack_require__("../../../../../src/app/models/session-request.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var ActivityCardComponent = /** @class */ (function () {
+    function ActivityCardComponent(sessionPageService) {
+        this.sessionPageService = sessionPageService;
+        this.session = new __WEBPACK_IMPORTED_MODULE_4__models_session__["a" /* Session */]();
+        this.isDataAvailable = false;
+    }
+    ActivityCardComponent.prototype.ngOnInit = function () {
+        this.getSessionById();
+    };
+    ActivityCardComponent.prototype.getSessionById = function () {
+        var _this = this;
+        this.sessionPageService.getSessionById(this.activity.sessionId).subscribe(function (resBody) {
+            _this.response = resBody;
+            _this.session.id = _this.response.id;
+            _this.session.hostId = _this.response.hostId;
+            _this.session.riftTag = _this.response.usertable.riftTag;
+            _this.session.rifterRating = _this.response.usertable.rifterRating;
+            _this.session.firstName = _this.response.usertable.firstName;
+            _this.session.lastName = _this.response.usertable.lastName;
+            _this.session.title = _this.response.title;
+            _this.session.sessionTime = _this.response.sessionTime;
+            _this.session.gameId = _this.response.gameId;
+            _this.session.console = _this.response.console;
+            if (_this.session.hostId == _this.loggedInUserId) {
+                _this.session.type = true;
+            }
+            else {
+                _this.session.type = false;
+            }
+            _this.isDataAvailable = true;
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__models_activity__["a" /* Activity */])
+    ], ActivityCardComponent.prototype, "activity", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__models_userprofile__["a" /* Userprofile */])
+    ], ActivityCardComponent.prototype, "currentUser", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_5__models_session_request__["a" /* SessionRequest */])
+    ], ActivityCardComponent.prototype, "request", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Boolean)
+    ], ActivityCardComponent.prototype, "isLoggedIn", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Number)
+    ], ActivityCardComponent.prototype, "loggedInUserId", void 0);
+    ActivityCardComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-activity-card',
+            template: __webpack_require__("../../../../../src/app/components/activity-card/activity-card.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/activity-card/activity-card.component.scss")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__therift_riftsessions_session_page_session_page_service__["a" /* SessionPageService */]])
+    ], ActivityCardComponent);
+    return ActivityCardComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/credit-card/credit-card.component.html":
 /***/ (function(module, exports) {
 
@@ -718,7 +843,7 @@ module.exports = "<div class=\"col-xs-12 col-sm-4 col-md-4 col-lg-4\">\n  <div c
 /***/ "../../../../../src/app/components/credit-card/credit-card.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -804,7 +929,7 @@ module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div ng-
 /***/ "../../../../../src/app/components/feed-card/feed-card.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -869,7 +994,7 @@ module.exports = "<!--<input *ngIf=\"showFileNameInput\" id=\"uploadFile\" class
 /***/ "../../../../../src/app/components/file-upload/file-upload.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -981,12 +1106,12 @@ module.exports = "<h3 *ngIf=\"following\">\n  <button type=\"button\" class=\"bt
 /***/ "../../../../../src/app/components/follow-button/follow-button.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, ".btn-toggle-following {\n  background-color: #293e49;\n  color: #fff; }\n\n.btn-toggle-following:hover {\n  background-color: #ef2020;\n  color: #fff; }\n\n.btn-toggle-following:hover span {\n  display: none; }\n\n.btn-toggle-following:hover:after {\n  content: 'Unfollow';\n  display: inline; }\n\n.btn-toggle-following:hover i:before {\n  content: '\\F129'; }\n\n.btn {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 92px; }\n", ""]);
+exports.push([module.i, ".btn-toggle-following {\n  background-color: #293e49;\n  color: #fff; }\n\n.btn-toggle-following:hover {\n  background-color: #ef2020;\n  color: #fff; }\n\n.btn-toggle-following:hover span {\n  display: none; }\n\n.btn-toggle-following:hover:after {\n  content: 'Unfollow';\n  display: inline; }\n\n.btn-toggle-following:hover i:before {\n  content: '\\F129'; }\n\n.btn {\n  top: 0;\n  right: 0;\n  min-width: 92px; }\n", ""]);
 
 // exports
 
@@ -1059,6 +1184,83 @@ var FollowButtonComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/game-account-card/game-account-card.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"game-account-card\">\n  <img src=\"{{account.gameIcon}}\" alt=\"\" class=\"game-icon\">\n  <span class=\"game-title\">{{account.gameName}}</span><br>\n  <span class=\"username\">@{{account.ign}}</span>\n  <a *ngIf=\"isLoggedIn && loggedInUserRiftTag == currentUserRiftTag\" (click)=\"editGameAccount(account)\" class=\"edit-btn\">edit</a>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/game-account-card/game-account-card.component.scss":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".game-account-card {\n  padding: 10px 10px;\n  margin: 3px 0px;\n  cursor: pointer; }\n\n.game-account-card:hover {\n  background-color: red;\n  opacity: 1; }\n\n.game-account-card .game-title {\n  display: inline-block;\n  margin-top: 2px;\n  font-weight: 500;\n  font-size: 17px; }\n\n.game-account-card .username {\n  display: inline-block;\n  margin-top: 1px;\n  font-weight: 400;\n  font-size: 14px;\n  opacity: 0.7; }\n\n.game-account-card .game-icon {\n  height: 47px;\n  width: 47px;\n  display: block;\n  float: left;\n  margin-right: 8px;\n  border-radius: 50%; }\n\n.edit-btn {\n  float: right;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n  color: #1DA1F2;\n  text-decoration: none; }\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/game-account-card/game-account-card.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GameAccountCardComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var GameAccountCardComponent = /** @class */ (function () {
+    function GameAccountCardComponent() {
+    }
+    GameAccountCardComponent.prototype.ngOnInit = function () {
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], GameAccountCardComponent.prototype, "account", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], GameAccountCardComponent.prototype, "loggedInUserRiftTag", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], GameAccountCardComponent.prototype, "currentUserRiftTag", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], GameAccountCardComponent.prototype, "isLoggedIn", void 0);
+    GameAccountCardComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app-game-account-card',
+            template: __webpack_require__("../../../../../src/app/components/game-account-card/game-account-card.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/game-account-card/game-account-card.component.scss")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], GameAccountCardComponent);
+    return GameAccountCardComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.html":
 /***/ (function(module, exports) {
 
@@ -1069,7 +1271,7 @@ module.exports = "<h3>\n  <button type=\"button\" class=\"btn btn-sm btn-primary
 /***/ "../../../../../src/app/components/kick-riftee-button/kick-riftee-button.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1172,7 +1374,7 @@ module.exports = "<div class=\"media activity-item\">\n  <a href=\"#\" class=\"p
 /***/ "../../../../../src/app/components/notification/notification.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1260,19 +1462,19 @@ var NotificationComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/rating/rating.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ng-template #t let-fill=\"fill\">\n  <span *ngIf=\"fill === 100\" class=\"star full\">&#9733;</span>\n  <span *ngIf=\"fill === 0\" class=\"star\">&#9733;</span>\n  <span *ngIf=\"fill < 100 && fill > 0\" class=\"star\">\n                <span class=\"half\" [style.width.%]=\"fill\">&#9733;</span>&#9733;\n              </span>\n</ng-template>\n<ngb-rating [(rate)]=\"rating\" [starTemplate]=\"t\" [readonly]=\"readonly\" max=\"5\"></ngb-rating>\n"
+module.exports = "<div class=\"rating-bar\"> <span class=\"score\">{{rating}}</span>\n  <div class=\"shadow\"></div>\n  <div class=\"fill\" [style.width]=\"ratingPercent+'%'\"></div>\n  <table border=\"1\">\n    <tbody>\n    <tr>\n      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n      <td></td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
 /***/ "../../../../../src/app/components/rating/rating.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, ".star {\n  position: relative;\n  display: inline-block;\n  font-size: 3rem;\n  color: #d3d3d3; }\n\n.full {\n  color: red; }\n\n.half {\n  position: absolute;\n  display: inline-block;\n  overflow: hidden;\n  color: red; }\n", ""]);
+exports.push([module.i, ".rating-card {\n  border: 0px gray solid;\n  padding: 10px 0px; }\n\n.rating-card .card-header {\n  font-weight: 500;\n  font-size: 18px; }\n\n.rating-card .card-header .username {\n  color: #F6511D; }\n\n.rating-card p {\n  padding-top: 5px; }\n\n.rating-bar {\n  width: 230px;\n  height: 12px;\n  margin: 7px 0px; }\n\n.rating-bar .shadow {\n  width: 100%;\n  height: 100%;\n  background-color: rgba(255, 255, 255, 0.06); }\n\n.rating-bar .fill {\n  max-width: 100%;\n  min-width: 0%;\n  height: 100%;\n  background-color: #1DA1F2;\n  position: relative;\n  top: -100%; }\n\n.rating-bar table {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  top: -200%; }\n\n.rating-bar table td {\n  border: 2px #2E3E4F solid; }\n\n.rating-bar .score {\n  display: inline-block;\n  float: right;\n  height: 100%;\n  overflow: visible;\n  text-align: right;\n  font-size: 21px;\n  line-height: 100%;\n  vertical-align: middle;\n  font-weight: 500;\n  -webkit-transform: translate(46px, -3px);\n          transform: translate(46px, -3px); }\n\n#overall-ratings {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: distribute;\n      justify-content: space-around; }\n\n.rating-feature {\n  width: 50%;\n  padding: 0px 15px; }\n\n.orange {\n  color: #F6511D; }\n\n.green {\n  color: #29C016; }\n\n.green-bck {\n  background-color: #29C016 !important; }\n\n.orange-bck {\n  background-color: #F6511D !important; }\n\n.rating-feature > * {\n  text-align: center;\n  display: inline-block;\n  width: 100%;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box; }\n\n.rating-feature .rating-bar .score {\n  display: none;\n  /*Use big score instead*/ }\n\n.rating-feature .big-score {\n  font-size: 45px;\n  font-weight: 500; }\n\n.rating-feature .rating-bar {\n  height: 20px !important; }\n\n.rating-feature .reviews-shortcut {\n  color: #F7F7F2;\n  opacity: 0.58;\n  font-weight: 500;\n  text-decoration: none;\n  margin-top: 10px; }\n", ""]);
 
 // exports
 
@@ -1302,6 +1504,7 @@ var RatingComponent = /** @class */ (function () {
     function RatingComponent() {
     }
     RatingComponent.prototype.ngOnInit = function () {
+        this.ratingPercent = (this.rating / 5) * 100;
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
@@ -1336,7 +1539,7 @@ module.exports = "<div class=\"navbar-form navbar-left\">\n  <div class=\"input-
 /***/ "../../../../../src/app/components/search-bar/search-bar.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1453,7 +1656,7 @@ module.exports = "<!--<button (click)=\"sendConfirmationEmail(rifteeEmail)\">-->
 /***/ "../../../../../src/app/components/session-accept-reject-button/session-accept-reject-button.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1561,19 +1764,19 @@ var SessionAcceptRejectButtonComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/session-card/session-card.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"event-list\">\n  <div>\n    <time datetime=\"2014-07-20\" [ngClass]=\"{'rifter': type, 'riftee':!type}\">\n      <span class=\"day\">{{session.sessionTime | date:'dd'}}</span>\n      <span class=\"month\">{{session.sessionTime | date:'MMM'}}</span>\n    </time>\n    <img src=\"{{sessionIcon}}\" />\n    <div class=\"info\">\n      <h2 class=\"title\">{{session.title}}</h2>\n      <p class=\"desc\">@{{session.riftTag}}</p>\n      <div *ngIf=\"!type\">\n      <app-rating [rating]=\"session.rifterRating\" [readonly]=\"true\"></app-rating>\n      </div>\n      <p class=\"desc\">{{session.sessionTime | date:'shortTime'}} </p>\n    </div>\n    <div class=\"otherstuff\">\n      <div class=\"statusButtons\" *ngIf=\"isLoggedIn && !(loggedInUserId == session.hostId)\">\n        <button class=\"btn-primary\" *ngIf=\"!request\" (click)=\"changeStatus(template)\">Join</button>\n        <button class=\"btn-primary\" *ngIf=\"request && request.accepted==1\">Pending</button>\n        <button class=\"btn-primary\" *ngIf=\"request && request.accepted==0\">Rejected</button>\n        <button class=\"btn-primary\" *ngIf=\"request && request.accepted==2\">Accepted</button>\n      </div>\n      <div>\n        <img alt=\"{{session.console}}\" class=\"consoleIcon\" src=\"{{consoleIcon}}\" />\n      </div>\n    </div>\n    <ng-template #template style=\"margin-top:20%\">\n      <div class=\"modal-body text-center\">\n        <p>What game account do you want to use?</p>\n        <div class=\"form-group\">\n          <label for=\"account\">Select an Account</label>\n          <select class=\"form-control\" id=\"account\" [(ngModel)]=\"accountId\">\n            <option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">{{account.ign}}</option>\n          </select>\n        </div><br>\n        <button type=\"button\" class=\"btn btn-default\" (click)=\"joinUserSession()\" >Yes</button>\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >No</button>\n      </div>\n    </ng-template>\n\n  </div>\n</div>\n\n\n"
+module.exports = "<!--<div class=\"event-list\">-->\n  <!--<div>-->\n    <!--<time datetime=\"2014-07-20\" [ngClass]=\"{'rifter': type, 'riftee':!type}\">-->\n      <!--<span class=\"day\">{{session.sessionTime | date:'dd'}}</span>-->\n      <!--<span class=\"month\">{{session.sessionTime | date:'MMM'}}</span>-->\n    <!--</time>-->\n    <!--<img src=\"{{sessionIcon}}\" />-->\n    <!--<div class=\"info\">-->\n      <!--<h2 class=\"title\">{{session.title}}</h2>-->\n      <!--<p class=\"desc\">@{{session.riftTag}}</p>-->\n      <!--<div *ngIf=\"!type\">-->\n      <!--<app-rating [rating]=\"session.rifterRating\" [readonly]=\"true\"></app-rating>-->\n      <!--</div>-->\n      <!--<p class=\"desc\">{{session.sessionTime | date:'shortTime'}} </p>-->\n    <!--</div>-->\n    <!--<div class=\"otherstuff\">-->\n      <!--<div class=\"statusButtons\" *ngIf=\"isLoggedIn && !(loggedInUserId == session.hostId)\">-->\n        <!--<button class=\"btn-primary\" *ngIf=\"!request\" (click)=\"changeStatus(template)\">Join</button>-->\n        <!--<button class=\"btn-primary\" *ngIf=\"request && request.accepted==1\">Pending</button>-->\n        <!--<button class=\"btn-primary\" *ngIf=\"request && request.accepted==0\">Rejected</button>-->\n        <!--<button class=\"btn-primary\" *ngIf=\"request && request.accepted==2\">Accepted</button>-->\n      <!--</div>-->\n      <!--<div>-->\n        <!--<img alt=\"{{session.console}}\" class=\"consoleIcon\" src=\"{{consoleIcon}}\" />-->\n      <!--</div>-->\n    <!--</div>-->\n    <!--<ng-template #template style=\"margin-top:20%\">-->\n      <!--<div class=\"modal-body text-center\">-->\n        <!--<p>What game account do you want to use?</p>-->\n        <!--<div class=\"form-group\">-->\n          <!--<label for=\"account\">Select an Account</label>-->\n          <!--<select class=\"form-control\" id=\"account\" [(ngModel)]=\"accountId\">-->\n            <!--<option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">{{account.ign}}</option>-->\n          <!--</select>-->\n        <!--</div><br>-->\n        <!--<button type=\"button\" class=\"btn btn-default\" (click)=\"joinUserSession()\" >Yes</button>-->\n        <!--<button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >No</button>-->\n      <!--</div>-->\n    <!--</ng-template>-->\n\n  <!--</div>-->\n<!--</div>-->\n\n<div class=\"session-card\">\n  <div class=\"date-area\">\n    <span class=\"month\">{{session.sessionTime | date:'MMM'}}</span>\n    <span class=\"day\">{{session.sessionTime | date:'dd'}}</span>\n  </div>\n  <div class=\"main-area\">\n    <span class=\"title\">{{session.title}}</span><br>\n    <span class=\"user\">by {{session.riftTag}}</span>\n    <div class=\"rating\"></div>\n    <div class=\"bottom-details\">\n      <img src=\"{{sessionIcon}}\" alt=\"\"><div class=\"time\"><img [src]=\"clockIcon\" alt=\"\"><span>{{session.sessionTime | date:'shortTime'}}</span> </div>\n    </div>\n  </div>\n  <div class=\"join-area\" >\n    <img src=\"{{consoleIcon}}\" alt=\"\">\n    <!--<button *ngIf=\"isLoggedIn && !(loggedInUserId == session.hostId)\">Join</button>-->\n    <div id=\"join_buttons\" *ngIf=\"isLoggedIn && loggedInUserId != session.hostId\">\n      <button *ngIf=\"!request\" (click)=\"changeStatus(template)\">Join</button>\n      <button *ngIf=\"request && request.accepted==1\">Pending</button>\n      <button *ngIf=\"request && request.accepted==0\">Rejected</button>\n      <button *ngIf=\"request && request.accepted==2\">Accepted</button>\n    </div>\n  </div>\n  <ng-template #template style=\"margin-top:20%\">\n    <div class=\"modal-body text-center\">\n      <p>What game account do you want to use?</p>\n      <div class=\"form-group\">\n        <label for=\"account\">Select an Account</label>\n        <select class=\"form-control\" id=\"account\" [(ngModel)]=\"accountId\">\n          <option *ngFor=\"let account of gameAccounts\" [value]=\"account.id\">{{account.ign}}</option>\n        </select>\n      </div><br>\n      <button type=\"button\" class=\"btn btn-default\" (click)=\"joinUserSession()\" >Yes</button>\n      <button type=\"button\" class=\"btn btn-primary\" (click)=\"modalRef.hide()\" >No</button>\n    </div>\n  </ng-template>\n</div>\n\n\n"
 
 /***/ }),
 
 /***/ "../../../../../src/app/components/session-card/session-card.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, "@import url(\"http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,400italic\");\n@import url(\"//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css\");\n.info {\n  width: 60%;\n  display: inline-block; }\n.consoleIcon {\n  max-height: 25px;\n  max-width: 25px; }\n.riftee {\n  display: inline-block;\n  width: 100%;\n  color: white;\n  background-color: #c52c66;\n  padding: 5px;\n  text-align: center;\n  text-transform: uppercase; }\n.rifter {\n  display: inline-block;\n  width: 100%;\n  color: white;\n  padding: 5px;\n  text-align: center;\n  text-transform: uppercase;\n  background-color: #293e49; }\n.otherstuff {\n  display: inline-block;\n  position: absolute;\n  top: 10px;\n  right: 20px; }\n.event-list {\n  list-style: none;\n  font-family: 'Lato', sans-serif;\n  margin: 0px;\n  padding: 0px; }\n.event-list > div {\n  background-color: white;\n  -webkit-box-shadow: 0px 0px 5px #333333;\n          box-shadow: 0px 0px 5px #333333;\n  -webkit-box-shadow: 0px 0px 5px rgba(51, 51, 51, 0.7);\n          box-shadow: 0px 0px 5px rgba(51, 51, 51, 0.7);\n  padding: 0px;\n  margin: 0px 0px 20px; }\n.event-list > div:nth-child(even) > time {\n  background-color: #a552a7; }\n.event-list > div > time > span {\n  display: none; }\n.event-list > div > time > .day {\n  display: block;\n  font-size: 56pt;\n  font-weight: 100;\n  line-height: 1; }\n.event-list > div time > .month {\n  display: block;\n  font-size: 24pt;\n  font-weight: 900;\n  line-height: 1; }\n.event-list > div > img {\n  width: 100%; }\n.event-list > div > .info {\n  padding-top: 5px;\n  text-align: center; }\n.event-list > div > .info > .title {\n  font-size: 17pt;\n  font-weight: 700;\n  margin: 0px; }\n.event-list > div > .info > .desc {\n  font-size: 13pt;\n  font-weight: 300;\n  margin: 0px; }\n@media (min-width: 768px) {\n  .event-list > div {\n    position: relative;\n    display: block;\n    width: 100%;\n    height: 120px;\n    padding: 0px; }\n  .event-list > div > time,\n  .event-list > div > img {\n    display: inline-block; }\n  .event-list > div > time,\n  .event-list > div > img {\n    width: 120px;\n    float: left; }\n  .event-list > div > .info {\n    background-color: whitesmoke;\n    overflow: hidden; }\n  .event-list > div > time,\n  .event-list > div > img {\n    width: 120px;\n    height: 120px;\n    padding: 0px;\n    margin: 0px; }\n  .event-list > div > .info {\n    position: relative;\n    height: 120px;\n    text-align: left;\n    padding-right: 40px; }\n  .event-list > div > .info > .title,\n  .event-list > div > .info > .desc {\n    padding: 0px 10px; }\n  .event-list > div > .info > ul {\n    position: absolute;\n    left: 0px;\n    bottom: 0px; }\n  .event-list > div > .social {\n    position: absolute;\n    top: 0px;\n    right: 0px;\n    display: block;\n    width: 40px; }\n  .event-list > div > .social > ul {\n    border-left: 1px solid #e6e6e6; }\n  .event-list > div > .social > ul > div {\n    display: block;\n    padding: 0px; }\n  .event-list > div > .social > ul > div > a {\n    display: block;\n    width: 40px;\n    padding: 10px 0px 9px; } }\n", ""]);
+exports.push([module.i, ".session-card {\n  height: auto;\n  width: 100%;\n  background-color: #2E3E4F;\n  border: #2E3E4F;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  padding: 20px;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  margin: 5px 0px;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box; }\n\n.session-card > div {\n  border: 0px red solid; }\n\n.date-area {\n  width: 60px;\n  margin-right: 10px;\n  height: 58px; }\n\n.date-area .month {\n  text-transform: uppercase;\n  font-size: 20px;\n  display: block;\n  text-align: center; }\n\n.date-area .day {\n  display: block;\n  font-size: 29px;\n  text-align: center; }\n\n.session-card .title {\n  font-size: 23px;\n  font-weight: 500; }\n\n.session-card .user {\n  font-size: 16px;\n  opacity: 0.8; }\n\n.session-card .main-area {\n  width: 67%; }\n\n.session-card button {\n  border: 3px #1DA1F2 solid;\n  padding: 10px 15px;\n  text-transform: uppercase;\n  background-color: transparent;\n  color: #1DA1F2;\n  font-weight: 500;\n  font-size: 17px; }\n\n.session-card .bottom-details {\n  margin-top: 20px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center; }\n\n.session-card .bottom-details img {\n  height: 26px;\n  display: inline-block;\n  opacity: 1; }\n\n.session-card .bottom-details .time {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  margin-left: 20px; }\n\n.session-card .bottom-details .time img {\n  float: left;\n  height: 16px;\n  margin-right: 6px; }\n\n.session-card .bottom-details .time span {\n  float: left; }\n\n.session-card .join-area {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n  height: 94px; }\n\n.session-card .join-area img {\n  width: 100px; }\n\n.activity-card .title {\n  font-weight: 300; }\n\n.username {\n  color: #F6511D;\n  font-weight: 500; }\n", ""]);
 
 // exports
 
@@ -1624,6 +1827,7 @@ var SessionCardComponent = /** @class */ (function () {
         this.modalService = modalService;
         this.gameAccountService = gameAccountService;
         this.gameAccounts = [];
+        this.clockIcon = "https://cms.bsu.edu/-/media/www/images/common/icons/clockiconwhite.png?h=250&la=en&w=250&hash=230DC7880F07ECED39ADE5B6649523BE395F9147";
     }
     SessionCardComponent.prototype.ngOnInit = function () {
         this.sessionIcon = __WEBPACK_IMPORTED_MODULE_1__constants_session_icon_variables__["a" /* SESSION_ICONS */][this.session.gameId];
@@ -1708,7 +1912,7 @@ module.exports = "<div class=\"card\">\n  <img src=\"{{user.profilePic}}\" alt=\
 /***/ "../../../../../src/app/components/user-card/user-card.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -1784,19 +1988,19 @@ var UserCardComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/components/user-review/user-review.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"col-sm-3\">\n  <img src=\"{{rating.reviewerUsertable.profilePic}}\" class=\"img-rounded profilePic\">\n  <div class=\"review-block-name\">\n    <a [routerLink] = \"['../', rating.reviewerUsertable.riftTag]\">\n      {{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>\n      @{{rating.reviewerUsertable.riftTag}}\n    </a>\n  </div>\n  <div class=\"review-block-date\">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>\n</div>\n<div class=\"col-sm-9\">\n  <div class=\"review-block-rate\">\n    {{accountType}}<br>\n    <app-rating [rating]=\"rating.rating\" [readonly]=\"true\"></app-rating>\n  </div>\n  <div class=\"review-block-title\">{{rating.reviewTitle}}</div>\n  <div class=\"review-block-description\">{{rating.review}}</div>\n</div>\n\n<!---->\n"
+module.exports = "<!--<div class=\"col-sm-3\">-->\n  <!--<img src=\"{{rating.reviewerUsertable.profilePic}}\" class=\"img-rounded profilePic\">-->\n  <!--<div class=\"review-block-name\">-->\n    <!--<a [routerLink] = \"['../', rating.reviewerUsertable.riftTag]\">-->\n      <!--{{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>-->\n      <!--@{{rating.reviewerUsertable.riftTag}}-->\n    <!--</a>-->\n  <!--</div>-->\n  <!--<div class=\"review-block-date\">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>-->\n<!--</div>-->\n<!--<div class=\"col-sm-9\">-->\n  <!--<div class=\"review-block-rate\">-->\n    <!--{{accountType}}<br>-->\n    <!--<app-rating [rating]=\"rating.rating\" [readonly]=\"true\"></app-rating>-->\n  <!--</div>-->\n  <!--<div class=\"review-block-title\">{{rating.reviewTitle}}</div>-->\n  <!--<div class=\"review-block-description\">{{rating.review}}</div>-->\n<!--</div>-->\n\n<!---->\n\n<div class=\"rating-card\">\n  <div class=\"card-header\"><a class=\"username\">@{{rating.reviewerUsertable.riftTag}}</a> on <span class=\"timestamp\">{{rating.createdTime | date: \"longDate\"}}</span></div>\n  <p>{{rating.review}}</p>\n  <app-rating [rating]=\"rating.rating\"></app-rating>\n</div>\n"
 
 /***/ }),
 
 /***/ "../../../../../src/app/components/user-review/user-review.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, ".review-block-name {\n  font-size: 12px;\n  margin: 10px 0; }\n\n.review-block-date {\n  font-size: 12px; }\n\n.review-block-rate {\n  font-size: 13px;\n  margin-bottom: 15px; }\n\n.review-block-title {\n  font-size: 15px;\n  font-weight: 700;\n  margin-bottom: 10px; }\n\n.review-block-description {\n  font-size: 13px; }\n\n.profilePic {\n  width: 100px;\n  height: 100px; }\n", ""]);
+exports.push([module.i, ".rating-card {\n  border: 0px gray solid;\n  padding: 10px 0px; }\n\n.rating-card .card-header {\n  font-weight: 500;\n  font-size: 18px; }\n\n.rating-card .card-header .username {\n  color: #F6511D; }\n\n.rating-card p {\n  padding-top: 5px; }\n\n.rating-bar {\n  width: 230px;\n  height: 12px;\n  margin: 7px 0px; }\n\n.rating-bar .shadow {\n  width: 100%;\n  height: 100%;\n  background-color: rgba(255, 255, 255, 0.06); }\n\n.rating-bar .fill {\n  max-width: 100%;\n  min-width: 0%;\n  height: 100%;\n  background-color: #1DA1F2;\n  position: relative;\n  top: -100%; }\n\n.rating-bar table {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  top: -200%; }\n\n.rating-bar table td {\n  border: 2px #2E3E4F solid; }\n\n.rating-bar .score {\n  display: inline-block;\n  float: right;\n  height: 100%;\n  overflow: visible;\n  text-align: right;\n  font-size: 21px;\n  line-height: 100%;\n  vertical-align: middle;\n  font-weight: 500;\n  -webkit-transform: translate(46px, -3px);\n          transform: translate(46px, -3px); }\n\n#overall-ratings {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: distribute;\n      justify-content: space-around; }\n\n.rating-feature {\n  width: 50%;\n  padding: 0px 15px; }\n\n.orange {\n  color: #F6511D; }\n\n.green {\n  color: #29C016; }\n\n.green-bck {\n  background-color: #29C016 !important; }\n\n.orange-bck {\n  background-color: #F6511D !important; }\n\n.rating-feature > * {\n  text-align: center;\n  display: inline-block;\n  width: 100%;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box; }\n\n.rating-feature .rating-bar .score {\n  display: none;\n  /*Use big score instead*/ }\n\n.rating-feature .big-score {\n  font-size: 45px;\n  font-weight: 500; }\n\n.rating-feature .rating-bar {\n  height: 20px !important; }\n\n.rating-feature .reviews-shortcut {\n  color: #F7F7F2;\n  opacity: 0.58;\n  font-weight: 500;\n  text-decoration: none;\n  margin-top: 10px; }\n", ""]);
 
 // exports
 
@@ -1840,10 +2044,6 @@ var UserReviewComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__models_userrating__["a" /* UserRating */])
     ], UserReviewComponent.prototype, "rating", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-        __metadata("design:type", String)
-    ], UserReviewComponent.prototype, "userProfilePic", void 0);
     UserReviewComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'app-user-review',
@@ -1880,7 +2080,7 @@ var COMPLAINT_TYPE = [
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CONSOLE_ICONS; });
 var CONSOLE_ICONS = {
-    "XBox One": "http://images.thisisxbox.com/2013/05/XboxOne_RGB_stacked.png",
+    "XBox One": "http://www.workatplay.com/assets/img/case/xbox-one-logo.png",
     "PC": "https://cdn3.iconfinder.com/data/icons/computer-system-and-data/512/1-512.png",
     "Playstation 4": "https://cdn6.aptoide.com/imgs/5/8/d/58db080f17e85105d530e66ad3edb7fa_icon.png?w=256",
     "Wii U": "https://image.flaticon.com/icons/svg/39/39462.svg"
@@ -1965,7 +2165,7 @@ var LANGUAGES = [
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NOTIFICATION_CONTENT; });
 var NOTIFICATION_CONTENT = new Map([
     ["FOL", "started following you"],
-    ["SRQ", "has requested to join your session"],
+    ["SRQ", "has requested to join session"],
     ["SRA", "has accepted your request to join session: "],
     ["SRR", "has rejected your request to join session: "],
     ["SPO", "created a new session: "],
@@ -1988,10 +2188,10 @@ var NOTIFICATION_CONTENT = new Map([
 //   fortnite: 'https://t00.deviantart.net/pzi0PG9h1nqLy7LzAQcSq18kQ1I=/fit-in/150x150/filters:no_upscale():origin()/pre00/9f4f/th/pre/f/2017/261/9/f/fortnite___icon_by_blagoicons-dbnu8a0.png'
 // };
 var SESSION_ICONS = {
-    0: 'https://yt3.ggpht.com/a-/AJLlDp2tN8kN8LY4yIbOOr38BjneYXpM3LsfVCxrzg=s900-mo-c-c0xffffffff-rj-k-no',
-    1: 'https://orig00.deviantart.net/4a6d/f/2016/137/b/d/overwatch_tracer_icon_by_troublem4ker-da2twls.png',
-    2: 'https://t00.deviantart.net/pzi0PG9h1nqLy7LzAQcSq18kQ1I=/fit-in/150x150/filters:no_upscale():origin()/pre00/9f4f/th/pre/f/2017/261/9/f/fortnite___icon_by_blagoicons-dbnu8a0.png',
-    3: 'https://orig00.deviantart.net/a418/f/2017/260/8/6/nba_2k18___icon_by_blagoicons-dbnptmr.png'
+    0: 'https://nip.gl/wp-content/uploads/2017/08/league-of-legends-logo-700x262.png',
+    1: 'https://i.imgur.com/ArCdMwGr.png',
+    2: "https://theverticalslice.files.wordpress.com/2017/06/fortnite_white_logo.png",
+    3: 'https://www.nba2k.com/img/logo_NBA2K18.png'
 };
 
 
@@ -2007,7 +2207,7 @@ module.exports = "<div class=\"container\" style=\"margin-top: 5%; width: 80%; t
 /***/ "../../../../../src/app/feed/feed.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -2159,8 +2359,11 @@ module.exports = __webpack_require__.p + "rift-welcome.193d2c8aa8b9fcd2f2da.jpg"
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Activity; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__session__ = __webpack_require__("../../../../../src/app/models/session.ts");
+
 var Activity = /** @class */ (function () {
     function Activity() {
+        this.session = new __WEBPACK_IMPORTED_MODULE_0__session__["a" /* Session */]();
     }
     return Activity;
 }());
@@ -2322,6 +2525,8 @@ var Userprofile = /** @class */ (function () {
         this.followers = [];
         this.followings = [];
         this.ratings = [];
+        this.userRifterRatings = [];
+        this.userRifteeRatings = [];
         this.notifications = [];
         this.gameAccounts = [];
         this.activities = [];
@@ -2354,7 +2559,7 @@ var UserRating = /** @class */ (function () {
 /***/ "../../../../../src/app/navbar/navbar.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -2414,9 +2619,11 @@ var NavbarComponent = /** @class */ (function () {
         this.currentUser = new __WEBPACK_IMPORTED_MODULE_2__models_userprofile__["a" /* Userprofile */]();
         this.loggedInUser = new __WEBPACK_IMPORTED_MODULE_2__models_userprofile__["a" /* Userprofile */]();
         this.profile = JSON.parse(localStorage.getItem('profile'));
-        this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
-        this.loggedInUser.lastName = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;
-        this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
+        if (this.profile) {
+            this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
+            this.loggedInUser.lastName = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;
+            this.sharedFunc.getUserProfilePicture(this.profile.nickname, this.loggedInUser);
+        }
     }
     NavbarComponent.prototype.clearUnseen = function () {
         this.globals.unseenNotifications = 0;
@@ -2707,7 +2914,7 @@ module.exports = "<div class=\"container\" style=\"width: 80%\">\n  <mat-tab-gro
 /***/ "../../../../../src/app/therift/riftsessions/riftsessions.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -2869,7 +3076,7 @@ module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div cla
 /***/ "../../../../../src/app/therift/riftsessions/session-page/session-page.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -3241,7 +3448,7 @@ module.exports = "<mat-dialog-content>\n<form #updateSession=\"ngForm\" class=\"
 /***/ "../../../../../src/app/therift/riftsessions/session-page/update-session/update-session.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -3401,8 +3608,8 @@ var UpdateSessionComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/therift/therift.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-var escape = __webpack_require__("../../../../css-loader/lib/url/escape.js");
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+var escape = __webpack_require__("../../node_modules/css-loader/lib/url/escape.js");
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -3579,7 +3786,7 @@ module.exports = "<form #fileAComplaintForm=\"ngForm\" class=\"editForm\" novali
 /***/ "../../../../../src/app/userprofile/file-a-complaint/file-a-complaint.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -3677,7 +3884,7 @@ module.exports = "<form #addGameAccountForm=\"ngForm\" class=\"editForm\" novali
 /***/ "../../../../../src/app/userprofile/game-account/add-game-account/add-game-account.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -3766,7 +3973,7 @@ module.exports = "<form #addGameAccountForm=\"ngForm\" class=\"editForm\" novali
 /***/ "../../../../../src/app/userprofile/game-account/edit-game-account/edit-game-account.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -4146,7 +4353,7 @@ module.exports = "<h1>Custom Stripe Form</h1>\n<h3>{{data.accountId}}</h3>\n<for
 /***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/add-bank-account/add-bank-account.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -4247,7 +4454,7 @@ module.exports = "<h1>Custom Stripe Form</h1>\n\n<form action=\"\" method=\"POST
 /***/ "../../../../../src/app/userprofile/stripe-payment/legal-bank-account-info/legal-bank-account-info.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -4360,7 +4567,7 @@ module.exports = "<h1>Add a Credit Card</h1>\n<h3>Customer ID: {{data.customerId
 /***/ "../../../../../src/app/userprofile/stripe-payment/stripe-payment.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -4582,7 +4789,7 @@ module.exports = "<div class=\"container\" id=\"tourpackages-carousel\">\n  <div
 /***/ "../../../../../src/app/userprofile/stripe-payment/view-cards/view-cards.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -4840,7 +5047,7 @@ module.exports = "<form #updateInfo=\"ngForm\" class=\"editForm\" novalidate>\n 
 /***/ "../../../../../src/app/userprofile/update-info/update-info.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -5100,7 +5307,7 @@ module.exports = "<form #userRatingForm=\"ngForm\" class=\"editForm\" novalidate
 /***/ "../../../../../src/app/userprofile/user-rating/user-rating.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -5218,12 +5425,12 @@ var UserRatingComponent = /** @class */ (function () {
 /***/ "../../../../../src/app/userprofile/userprofile.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
 // module
-exports.push([module.i, ".review-block{\n  background-color:#FAFAFA;\n  border:1px solid #EFEFEF;\n  padding:15px;\n  border-radius:3px;\n  margin-bottom:15px;\n}\n\nbody {\n  min-height: 1585px;\n}\n\n/*------------------------------------------------*/\n\n/*    Profile Page\n/*------------------------------------------------*/\n\n.user-profile {\n  padding-bottom: 30px;\n}\n\n.profile-header-background {\n  margin: -30px -30px 0 -30px;\n}\n\n.profile-header-background img {\n  width: 100%;\n  height: 310px;\n}\n\n.profile-info-left {\n  position: relative;\n  top: -92px;\n}\n\n.profile-info-left img.avatar {\n  border: 2px solid #fff;\n  overflow: hidden;\n  width: 250px;\n  height: 250px;\n}\n\n#profile-pic {\n\n\n}\n\n.profile-info-left h2 {\n  font-family: \"josefinslab-semibold\";\n  margin-bottom: 30px;\n\n}\n\n.profile-info-left .section {\n  margin-top: 50px;\n}\n\n.profile-info-left .section h3 {\n  font-size: 1.1em;\n  font-weight: 700;\n  border-bottom: 1px solid #ccc;\n  padding-bottom: 10px;\n}\n\n.profile-info-left ul.list-social > li {\n  line-height: 2.3;\n}\n\n/*noinspection CssInvalidPropertyValue*/\n\n.profile-info-left ul.list-social > li i {\n  display: inline-block;\n  vertical-align: middle;\n  *vertical-align: auto;\n  *zoom: 1;\n  *display: inline;\n  position: relative;\n  top: 1px;\n  font-size: 16px;\n  min-width: 16px;\n  line-height: 1;\n}\n\n.profile-info-left ul.list-social > li a {\n  color: #696565;\n}\n\n.profile-info-right {\n  margin-top: 5%;\n}\n\n.profile-info-right .tab-content {\n  padding: 30px 0;\n  background-color: transparent;\n}\n\n@media screen and (max-width: 768px) {\n  .profile-info-right {\n    position: relative;\n    top: -70px;\n  }\n}\n\n.user-follower,\n.user-info {\n  position: relative;\n  margin-bottom: 40px;\n  margin-top: 30px;\n}\n\n.user-follower img,\n.user-info img {\n  border-radius: 2px;\n  width: 40px;\n}\n\n.user-follower a,\n.user-info a {\n  font-size: 1.1em;\n  line-height: 1;\n}\n\n.user-follower .username,\n.user-info .username {\n  font-size: 0.9em;\n  line-height: 1.5;\n}\n\n.user-follower .btn,\n.user-info .btn {\n  position: absolute;\n  top: 0;\n  right: 0;\n  min-width: 92px;\n}\n\n.userbtn {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n/* list icons */\n\n.list-icons-demo li {\n  margin-bottom: 20px;\n  text-align: center;\n}\n\n.list-icons-demo li i {\n  font-size: 24px;\n}\n\n.list-icons-demo2 li {\n  margin-bottom: 10px;\n}\n\n.activity-item {\n  overflow: visible;\n  position: relative;\n  margin: 15px 0;\n  border-top: 1px dashed #ccc;\n  padding-top: 15px;\n}\n\n.activity-item:first-child {\n  border-top: none;\n}\n\n.activity-item .avatar {\n  border-radius: 2px;\n  width: 32px;\n}\n\n.activity-item > i {\n  font-size: 18px;\n  line-height: 1;\n}\n\n.activity-item .media-body {\n  position: relative;\n}\n\n.activity-item .activity-title {\n  margin-bottom: 0;\n  line-height: 1.3;\n}\n\n.activity-item .activity-attachment {\n  padding-top: 20px;\n}\n\n.activity-item .well {\n  border-radius: 0;\n  -webkit-box-shadow: none;\n  box-shadow: none;\n  border: none;\n  border-left: 2px solid #cfcfcf;\n  background: #fff;\n  margin-left: 20px;\n  font-size: 0.85em;\n}\n\n.activity-item .thumbnail {\n  display: inline;\n  border: none;\n  padding: 0;\n}\n\n.activity-item .thumbnail img {\n  border-radius: 2px;\n  width: auto;\n  margin: 0;\n}\n\n.activity-item .activity-actions {\n  position: absolute;\n  top: 15px;\n  right: 0;\n}\n\n.activity-item .activity-actions .btn i {\n  margin: 0;\n}\n\n.activity-item .activity-actions .dropdown-menu > li > a {\n  font-size: 0.9em;\n  padding: 3px 10px;\n}\n\n.activity-item + .btn {\n  margin-bottom: 15px;\n}\n\n.profile-info-right /deep/.mat-tab-label, .profile-info-right /deep/.mat-tab-label-active{\n  min-width: 0!important;\n  padding: 10px!important;\n  margin-left: 10px!important;\n  margin-right: 10px!important;\n  background-color: transparent!important;\n}\n\n.userbtn /deep/ button {\n  position: relative!important;\n  min-width: 92px!important;\n}\n\n", ""]);
+exports.push([module.i, "@charset \"utf-8\";\n/* CSS Document */\n* {\n  border: 0px red solid;\n}\nbody {\n  background-color: #1B2531;\n  color: #F7F7F2;\n  font-family: \"Montserrat\", sans-serif;\n}\n#header {\n  margin: 0px auto;\n  width: 840px;\n\n}\n#header #overview {\n  width: 100%;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n  -ms-flex-wrap: nowrap;\n      flex-wrap: nowrap;\n  -webkit-box-pack: start;\n      -ms-flex-pack: start;\n          justify-content: flex-start;\n  background-color: #2E3E4F;\n  border: 1px #18202A solid;\n\n}\n#header #overview .headshot {\n  margin: 42px 15px 35px 40px;\n  display: inline-block;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n  width: 106px;\n  height: 106px;\n\n}\n#header #overview #basic-details{\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n  margin-top: 52px;\n}\n#header #overview #user-stats {\n  -webkit-box-ordinal-group: 3;\n      -ms-flex-order: 2;\n          order: 2;\n  display: inline-block;\n  -ms-flex-item-align: center;\n      -ms-grid-row-align: center;\n      align-self: center;\n  padding: 0px 20px;\n  margin-left: 30px;\n}\n.stat-item {\n  display: inline-block;\n  margin: 0px 10px;\n  width: 70px;\n  height: auto;\n}\n.stat-item .stat {\n  font-size: 35px;\n  color: #F6511D;\n  text-align: center;\n  width: 100%;\n  display: inline-block;\n\n}\n.stat-item label {\n  font-size: 13px;\n  text-align: center;\n  position: relative;\n  top: -7px;\n  width: 100%;\n  display: inline-block;\n}\n.name {\n  font-size: 27px;\n  margin-right: 10px;\n}\n#header .username {\n  font-size: 17px;\n  font-weight: 500;\n  opacity: 0.7;\n}\n.headshot {\n  border-radius: 50%;\n}\n.following-btn {\n  padding: 5px;\n  color: #F7F7F2;\n  font-weight: 500;\n  display: inline-block;\n  background-color: #1DA1F2;\n  margin: 0px 5px;\n  zoom: 0.8;\n  -webkit-transform: translateY(-3px);\n          transform: translateY(-3px);\n}\n#profile-header #tabs {\n  width: 100%;\n  height: 45px;\n  background-color: #22303F;\n  border: 1px #18202A solid;\n  border-top: 0px black solid;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.tab {\n  display: block;\n  text-transform: uppercase;\n  width: 210px;\n  height: 45px;\n  text-align: center;\n  line-height: 45px;\n  vertical-align: middle;\n}\n.tab-active {\n  /**outline: 5px #1DA1F2 solid;\n  outline-offset: -5px;*/\n  -webkit-box-shadow: inset 0px -5px 0px 0px #1DA1F2;\n          box-shadow: inset 0px -5px 0px 0px #1DA1F2;\n}\n.section {\n  margin: 20px auto 0px auto;\n  background-color: transparent;\n  width: 840px;\n  border: 0px #18202A solid;\n  overflow: hidden;\n  display: block\n}\n.section .active {\n  display: block;\n}\n#info, #ratings {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  background-color: #2E3E4F;\n}\n.sidemenu {\n  width: 240px;\n  background-color: #22303F;\n  border-right: 1px #18202A solid;\n  padding: 17px 0px;\n  -webkit-box-ordinal-group: 1;\n      -ms-flex-order: 0;\n          order: 0;\n}\n.sidemenu a {\n  display: block;\n  padding: 5px 25px;\n  cursor: pointer;\n  margin: 15px 0px;\n\n}\n.menu-active {\n  font-weight: 600;\n\n}\n.content-card {\n  padding: 33px;\n  width: 533px;\n  display: inline-block;\n  -webkit-box-ordinal-group: 2;\n      -ms-flex-order: 1;\n          order: 1;\n}\n.segment {\n  padding: 0px 0px 35px 0px;\n\n}\n.segment .title {\n  text-transform: uppercase;\n  font-size: 17px;\n  display: block;\n  margin-bottom: 12px;\n  font-weight: 500;\n}\n.segment p {\n  font-size:15px;\n  opacity: 0.8;\n  margin: 0px 0px;\n  line-height: 20px;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  font-size: 15px;\n}\ntable td {\n  border-top: 0.2px rgba(255,255,255, 0.2) solid;\n  border-bottom: 0.2px rgba(255,255,255, 0.2) solid;\n  padding: 9px 6px;\n}\ntable td:first-child {\n  font-weight: 300;\n}\ntable td:nth-child(2) {\n  font-weight:500;\n}\n.hide {\n  display: none;\n}\n.rating-card {\n  border: 0px gray solid;\n  padding: 10px 0px;\n}\n.rating-card .card-header {\n  font-weight: 500;\n  font-size: 18px;\n}\n.rating-card .card-header .username {\n  color: #F6511D;\n\n}\n.rating-card p {\n  padding-top: 5px;\n}\n.rating-bar {\n  width: 230px;\n  height: 12px;\n  margin: 7px 0px;\n}\n.rating-bar .shadow {\n  width: 100%;\n  height: 100%;\n  background-color: rgba(255, 255, 255, 0.06);\n}\n.rating-bar .fill {\n  max-width: 100%;\n  min-width: 0%;\n  height: 100%;\n  background-color: #1DA1F2;\n  position: relative;\n  top: -100%;\n\n}\n.rating-bar table {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  top: -200%;\n}\n.rating-bar table td {\n  border: 2px #2E3E4F solid;\n}\n.rating-bar .score {\n  display: inline-block;\n  float: right;\n  height: 100%;\n  overflow: visible;\n  text-align: right;\n  font-size: 21px;\n  line-height: 100%;\n  vertical-align: middle;\n  font-weight: 500;\n  -webkit-transform: translate(46px,-3px);\n          transform: translate(46px,-3px);\n}\n#overall-ratings {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.rating-feature {\n  width: 50%;\n  padding: 0px 15px;\n\n}\n.orange {\n  color: #F6511D\n}\n.green {\n  color: #29C016;\n}\n.green-bck {\n  background-color: #29C016 !important;\n}\n.orange-bck {\n  background-color: #F6511D !important;\n}\n.rating-feature>* {\n  text-align: center;\n  display: inline-block;\n  width: 100%;\n  -webkit-box-sizing: border-box;\n          box-sizing: border-box;\n\n}\n.rating-feature .rating-bar .score {\n  display: none; /*Use big score instead*/\n\n}\n.rating-feature .big-score {\n  font-size: 45px;\n  font-weight: 500;\n}\n.rating-feature .rating-bar {\n  height: 20px !important;\n}\n.rating-feature .reviews-shortcut {\n  color: #F7F7F2;\n  opacity: 0.58;\n  font-weight: 500;\n  text-decoration: none;\n  margin-top: 10px;\n}\na {\n  cursor: pointer;\n  text-decoration: none;\n}\n.text-fadein {\n  animation: fadein 0.25s;\n  -moz-animation: fadein 0.25s; /* Firefox */\n  -webkit-animation: fadein 0.25s; /* Safari and Chrome */\n  -o-animation: fadein 0.25s; /* Opera */\n}\n\n", ""]);
 
 // exports
 
@@ -5236,7 +5443,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/userprofile/userprofile.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<link href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css\" rel=\"stylesheet\">\n\n<div class=\"container\" style=\"width: 80%\" *ngIf=\"isDataAvailable\">\n  <base href=\"/\">\n  <div class=\"user-profile\">\n    <div class=\"row\">\n      <div class=\"profile-header-background\"><img src=\"{{currentUser.coverPhoto}}\" alt=\"Profile Header Background\"></div>\n      <div class=\"col-md-4\">\n        <div class=\"profile-info-left\">\n          <div class=\"text-center\">\n            <div id=\"profile-pic\">\n              <img src=\"{{currentUser.profilePic}}\" class=\"avatar img-circle\" alt=\"\">\n            </div>\n            <h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>\n            <h3>@{{currentUser.riftTag}}</h3>\n            <h3>{{currentUser.email}}</h3>\n            <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n            <div id=\"following_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <app-follow-button [following]=\"isFollowing(currentUser.riftTag)\" [id]=\"currentUser.id\"\n              [riftTag]=\"profile.nickname\" class=\"userbtn\">\n              </app-follow-button>\n            </div>\n            <div id=\"update_info_button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">\n              <button (click)=\"updateInfoModal()\" type=\"button\" class=\"btn-primary\">Update your Info</button>\n            </div><br>\n            <div class=\"stripe-payment\">\n              <button (click)=\"updatePaymentModal()\" type=\"button\" class=\"btn-primary\">Update Payment</button>\n            </div><br>\n            <div class=\"stripe-payment\">\n              <button *ngIf=\"!currentUser.accountId\" (click)=\"updateBankAccountModal()\" type=\"button\" class=\"btn-primary\">Update Bank Account</button>\n            </div>\n            <div id=\"rate_user_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"openRatingDialog()\" type=\"button\" class=\"btn-primary\">Rate this User</button>\n            </div>\n            <br>\n            <div id=\"file_a_complaint\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n              <button (click)=\"fileAComplaint()\" type=\"button\" class=\"btn-primary\">File A Complaint</button>\n            </div>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 0\">\n              Haven't played with {{currentUser.riftTag}} in past 30 days\n            </alert>\n            <alert type=\"danger\" *ngIf=\"ratingStatus == 1\">\n              Already rated {{currentUser.riftTag}} in past 30 days\n            </alert>\n          </div>\n          <div class=\"section about\">\n            <h3>About Me</h3>\n            <p> {{currentUser.bio}} </p>\n          </div>\n          <div class=\"section statistics\">\n            <h3>Statistics</h3>\n            <p><span class=\"badge\">{{currentUser.followings?.length}}</span> Following</p>\n            <p><span class=\"badge\">{{currentUser.followers?.length}}</span> Followers</p>\n            <p><span class=\"badge\">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>\n          </div>\n          <div class=\"section socialmedia\">\n            <h3>Social</h3>\n            <ul class=\"list-unstyled list-social\">\n              <li><i class=\"fa fa-youtube\"></i> {{currentUser.youtubeAccount}}</li>\n              <li><i class=\"fa fa-twitch\"></i> <a href=\"https://twitch.tv/{{currentUser.twitchAccount}}\">twitch.tv/{{currentUser.twitchAccount}}</a></li>\n            </ul>\n          </div>\n        </div>\n      </div>\n      <div class=\"col-md-8\">\n        <div class=\"profile-info-right\">\n          <mat-tab-group>\n            <mat-tab label=\"activity\">\n              <div class=\"media activity-item\" *ngFor=\"let activity of currentUser.activities\">\n                <a href=\"#\" class=\"pull-left\">\n                  <img src=\"{{currentUser.profilePic}}\" alt=\"Avatar\" class=\"media-object avatar\">\n                </a>\n                <div class=\"media-body\">\n                  <p class=\"activity-title\">\n                    <a href=\"#\">{{currentUser.riftTag}}</a>\n                    {{activity.notificationContent}} <a [routerLink]=\"['../../session', activity.sessionId]\">{{activity.title}}</a>\n                  </p>\n                  <small class=\"text-muted\">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>\n                </div>\n                <div class=\"btn-group pull-right activity-actions\">\n                  <button type=\"button\" class=\"btn btn-xs btn-default dropdown-toggle\" data-toggle=\"dropdown\">\n                    <i class=\"fa fa-th\"></i>\n                    <span class=\"sr-only\">Toggle Dropdown</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"sessions\">\n              <div class=\"media\" *ngFor=\"let session of currentUser.rifterSessions\">\n                <app-session-card\n                                  [session]=\"session\" [isLoggedIn]=\"isLoggedIn\"\n                                  [type]=\"session.type\" [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n                ></app-session-card>\n                <!--[routerLink]=\"['../../session', session.id]\"-->\n              </div>\n            </mat-tab>\n            <mat-tab label=\"followers\">\n              <div class=\"media user-follower\" *ngFor=\"let follower of currentUser.followers\">\n                <img src=\"{{follower.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  <a [routerLink]=\"['../../user', follower.riftTag]\">{{follower.firstName}} {{follower.lastName}} {{follower.id}}\n                    <br><span class=\"text-muted username\">@{{follower.riftTag}}</span></a>\n                  <app-follow-button class=\"pull-right\" [following]=\"isFollowing(follower.riftTag)\" [id]=\"follower.id\"\n                                     [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != follower.riftTag\">\n                  </app-follow-button>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"following\">\n              <div class=\"media user-info\" *ngFor=\"let following of currentUser.followings\">\n                  <img src=\"{{following.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                  <div class=\"media-body\">\n                    <a [routerLink]=\"['../../user', following.riftTag]\">{{following.firstName}} {{following.lastName}}\n                      <br><span class=\"text-muted username\">@{{following.riftTag}}</span></a>\n                    <app-follow-button class=\"pull-right\" [following]=\"isFollowing(following.riftTag)\" [id]=\"following.id\"\n                                       [riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != following.riftTag\">\n\n                    </app-follow-button>\n                  </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"reviews\" style=\"width: 100%;\">\n              <div class=\"row\" style=\"text-align:center\">\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Rifter Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifterRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n                <div class=\"col-lg-5\">\n                  <div class=\"rating-block\">\n                    <h4>Average Riftee Rating</h4>\n                    <h2 class=\"bold padding-bottom-7\"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>\n                    <app-rating [rating]=\"currentUser.rifteeRating\" [readonly]=\"true\"></app-rating>\n                  </div>\n                </div>\n\n              </div>\n              <div class=\"row\">\n                <div class=\"col-sm-7\" *ngFor=\"let rating of currentUser.ratings\">\n                    <app-user-review [rating]=\"rating\" ></app-user-review>\n                </div>\n              </div>\n            </mat-tab>\n            <mat-tab label=\"game accounts\">\n              <div class=\"media user-info\" *ngFor=\"let account of currentUser.gameAccounts\">\n                <img src=\"{{account.gameIcon}}\" alt=\"User Avatar\" class=\"media-object pull-left\">\n                <div class=\"media-body\">\n                  {{account.gameName}}\n                    <br><span class=\"text-muted username\">@{{account.ign}}</span>\n                  <button type=\"button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\" class=\"btn btn-sm btn-primary\"\n                          (click)=\"editGameAccount(account)\">\n                    <span>Edit Game Account</span>\n                  </button>\n                </div>\n              </div>\n            </mat-tab>\n          </mat-tab-group>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n<router-outlet></router-outlet>\n\n<!--<mat-tab label=\"notifications\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n<!--<div class=\"media\" *ngFor=\"let notification of currentUser.notifications\">-->\n<!--<app-notification [notification]=\"notification\"></app-notification>-->\n<!--</div>-->\n<!--</mat-tab>-->\n\n\n<!--<mat-tab label=\"feed\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n  <!--<div class=\"media activity-item\" *ngFor=\"let notification of currentUser.feed\">-->\n    <!--<a href=\"#\" class=\"pull-left\">-->\n      <!--<img src=\"https://bootdey.com/img/Content/avatar/avatar1.png\" alt=\"Avatar\" class=\"media-object avatar\">-->\n    <!--</a>-->\n    <!--<div class=\"media-body\">-->\n      <!--<p class=\"activity-title\"><a [routerLink]=\"['../../user',notification.rifttag]\">{{notification.riftTag}}</a>-->\n        <!--{{notification.notificationContent}} </p>-->\n      <!--<small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>-->\n    <!--</div>-->\n  <!--</div>-->\n<!--</mat-tab>-->\n"
+module.exports = "\n<!--<div class=\"container\" style=\"width: 80%\" *ngIf=\"isDataAvailable\">-->\n  <!--<base href=\"/\">-->\n  <!--<div class=\"user-profile\">-->\n    <!--<div class=\"row\">-->\n      <!--<div class=\"profile-header-background\"><img src=\"{{currentUser.coverPhoto}}\" alt=\"Profile Header Background\"></div>-->\n      <!--<div class=\"col-md-4\">-->\n        <!--<div class=\"profile-info-left\">-->\n          <!--<div class=\"text-center\">-->\n            <!--<div id=\"profile-pic\">-->\n              <!--<img src=\"{{currentUser.profilePic}}\" class=\"avatar img-circle\" alt=\"\">-->\n            <!--</div>-->\n            <!--<h3>{{currentUser.firstName | capitalize}} {{currentUser.lastName | capitalize}} </h3>-->\n            <!--<h3>@{{currentUser.riftTag}}</h3>-->\n            <!--<h3>{{currentUser.email}}</h3>-->\n            <!--<app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>-->\n            <!--<div id=\"following_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">-->\n              <!--<app-follow-button [following]=\"isFollowing(currentUser.riftTag)\" [id]=\"currentUser.id\"-->\n              <!--[riftTag]=\"profile.nickname\" class=\"userbtn\">-->\n              <!--</app-follow-button>-->\n            <!--</div>-->\n            <!--<div id=\"update_info_button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n              <!--<button (click)=\"updateInfoModal()\" type=\"button\" class=\"btn-primary\">Update your Info</button>-->\n            <!--</div><br>-->\n            <!--<div class=\"stripe-payment\">-->\n              <!--<button (click)=\"updatePaymentModal()\" type=\"button\" class=\"btn-primary\">Update Payment</button>-->\n            <!--</div><br>-->\n            <!--<div class=\"stripe-payment\">-->\n              <!--<button *ngIf=\"!currentUser.accountId\" (click)=\"updateBankAccountModal()\" type=\"button\" class=\"btn-primary\">Update Bank Account</button>-->\n            <!--</div>-->\n            <!--<div id=\"rate_user_button\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">-->\n              <!--<button (click)=\"openRatingDialog()\" type=\"button\" class=\"btn-primary\">Rate this User</button>-->\n            <!--</div>-->\n            <!--<br>-->\n            <!--<div id=\"file_a_complaint\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">-->\n              <!--<button (click)=\"fileAComplaint()\" type=\"button\" class=\"btn-primary\">File A Complaint</button>-->\n            <!--</div>-->\n            <!--<alert type=\"danger\" *ngIf=\"ratingStatus == 0\">-->\n              <!--Haven't played with {{currentUser.riftTag}} in past 30 days-->\n            <!--</alert>-->\n            <!--<alert type=\"danger\" *ngIf=\"ratingStatus == 1\">-->\n              <!--Already rated {{currentUser.riftTag}} in past 30 days-->\n            <!--</alert>-->\n          <!--</div>-->\n          <!--<div class=\"section about\">-->\n            <!--<h3>About Me</h3>-->\n            <!--<p> {{currentUser.bio}} </p>-->\n          <!--</div>-->\n          <!--<div class=\"section statistics\">-->\n            <!--<h3>Statistics</h3>-->\n            <!--<p><span class=\"badge\">{{currentUser.followings?.length}}</span> Following</p>-->\n            <!--<p><span class=\"badge\">{{currentUser.followers?.length}}</span> Followers</p>-->\n            <!--<p><span class=\"badge\">{{currentUser.rifterSessions?.length}}</span> Sessions Played</p>-->\n          <!--</div>-->\n          <!--<div class=\"section socialmedia\">-->\n            <!--<h3>Social</h3>-->\n            <!--<ul class=\"list-unstyled list-social\">-->\n              <!--<li><i class=\"fa fa-youtube\"></i> {{currentUser.youtubeAccount}}</li>-->\n              <!--<li><i class=\"fa fa-twitch\"></i> <a href=\"https://twitch.tv/{{currentUser.twitchAccount}}\">twitch.tv/{{currentUser.twitchAccount}}</a></li>-->\n            <!--</ul>-->\n          <!--</div>-->\n        <!--</div>-->\n      <!--</div>-->\n      <!--<div class=\"col-md-8\">-->\n        <!--<div class=\"profile-info-right\">-->\n          <!--<mat-tab-group>-->\n            <!--<mat-tab label=\"activity\">-->\n              <!--<div class=\"media activity-item\" *ngFor=\"let activity of currentUser.activities\">-->\n                <!--<a href=\"#\" class=\"pull-left\">-->\n                  <!--<img src=\"{{currentUser.profilePic}}\" alt=\"Avatar\" class=\"media-object avatar\">-->\n                <!--</a>-->\n                <!--<div class=\"media-body\">-->\n                  <!--<p class=\"activity-title\">-->\n                    <!--<a href=\"#\">{{currentUser.riftTag}}</a>-->\n                    <!--{{activity.notificationContent}} <a [routerLink]=\"['../../session', activity.sessionId]\">{{activity.title}}</a>-->\n                  <!--</p>-->\n                  <!--<small class=\"text-muted\">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>-->\n                <!--</div>-->\n                <!--<div class=\"btn-group pull-right activity-actions\">-->\n                  <!--<button type=\"button\" class=\"btn btn-xs btn-default dropdown-toggle\" data-toggle=\"dropdown\">-->\n                    <!--<i class=\"fa fa-th\"></i>-->\n                    <!--<span class=\"sr-only\">Toggle Dropdown</span>-->\n                  <!--</button>-->\n                <!--</div>-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n            <!--<mat-tab label=\"sessions\">-->\n              <!--<div class=\"media\" *ngFor=\"let session of currentUser.rifterSessions\">-->\n                <!--<app-session-card-->\n                                  <!--[session]=\"session\" [isLoggedIn]=\"isLoggedIn\"-->\n                                  <!--[type]=\"session.type\" [request]=\"loggedInUser.sessionRequests.get(session.id)\"-->\n                <!--&gt;</app-session-card>-->\n                <!--&lt;!&ndash;[routerLink]=\"['../../session', session.id]\"&ndash;&gt;-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n            <!--<mat-tab label=\"followers\">-->\n              <!--<div class=\"media user-follower\" *ngFor=\"let follower of currentUser.followers\">-->\n                <!--<img src=\"{{follower.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">-->\n                <!--<div class=\"media-body\">-->\n                  <!--<a [routerLink]=\"['../../user', follower.riftTag]\">{{follower.firstName}} {{follower.lastName}} {{follower.id}}-->\n                    <!--<br><span class=\"text-muted username\">@{{follower.riftTag}}</span></a>-->\n                  <!--<app-follow-button class=\"pull-right\" [following]=\"isFollowing(follower.riftTag)\" [id]=\"follower.id\"-->\n                                     <!--[riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != follower.riftTag\">-->\n                  <!--</app-follow-button>-->\n                <!--</div>-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n            <!--<mat-tab label=\"following\">-->\n              <!--<div class=\"media user-info\" *ngFor=\"let following of currentUser.followings\">-->\n                  <!--<img src=\"{{following.profilePic}}\" alt=\"User Avatar\" class=\"media-object pull-left\">-->\n                  <!--<div class=\"media-body\">-->\n                    <!--<a [routerLink]=\"['../../user', following.riftTag]\">{{following.firstName}} {{following.lastName}}-->\n                      <!--<br><span class=\"text-muted username\">@{{following.riftTag}}</span></a>-->\n                    <!--<app-follow-button class=\"pull-right\" [following]=\"isFollowing(following.riftTag)\" [id]=\"following.id\"-->\n                                       <!--[riftTag]=\"profile.nickname\" *ngIf=\"isLoggedIn && profile.nickname != following.riftTag\">-->\n\n                    <!--</app-follow-button>-->\n                  <!--</div>-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n            <!--<mat-tab label=\"reviews\" style=\"width: 100%;\">-->\n              <!--<div class=\"row\" style=\"text-align:center\">-->\n                <!--<div class=\"col-lg-5\">-->\n                  <!--<div class=\"rating-block\">-->\n                    <!--<h4>Average Rifter Rating</h4>-->\n                    <!--<h2 class=\"bold padding-bottom-7\"> {{currentUser.rifterRating}} <small>/ 5</small></h2>-->\n                    <!--<app-rating [rating]=\"currentUser.rifterRating\" [readonly]=\"true\"></app-rating>-->\n                  <!--</div>-->\n                <!--</div>-->\n                <!--<div class=\"col-lg-5\">-->\n                  <!--<div class=\"rating-block\">-->\n                    <!--<h4>Average Riftee Rating</h4>-->\n                    <!--<h2 class=\"bold padding-bottom-7\"> {{currentUser.rifteeRating}} <small>/ 5</small></h2>-->\n                    <!--<app-rating [rating]=\"currentUser.rifteeRating\" [readonly]=\"true\"></app-rating>-->\n                  <!--</div>-->\n                <!--</div>-->\n\n              <!--</div>-->\n              <!--<div class=\"row\">-->\n                <!--<div class=\"col-sm-7\" *ngFor=\"let rating of currentUser.ratings\">-->\n                    <!--<app-user-review [rating]=\"rating\" ></app-user-review>-->\n                <!--</div>-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n            <!--<mat-tab label=\"game accounts\">-->\n              <!--<div class=\"media user-info\" *ngFor=\"let account of currentUser.gameAccounts\">-->\n                <!--<img src=\"{{account.gameIcon}}\" alt=\"User Avatar\" class=\"media-object pull-left\">-->\n                <!--<div class=\"media-body\">-->\n                  <!--{{account.gameName}}-->\n                    <!--<br><span class=\"text-muted username\">@{{account.ign}}</span>-->\n                  <!--<button type=\"button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\" class=\"btn btn-sm btn-primary\"-->\n                          <!--(click)=\"editGameAccount(account)\">-->\n                    <!--<span>Edit Game Account</span>-->\n                  <!--</button>-->\n                <!--</div>-->\n              <!--</div>-->\n            <!--</mat-tab>-->\n          <!--</mat-tab-group>-->\n        <!--</div>-->\n      <!--</div>-->\n    <!--</div>-->\n  <!--</div>-->\n<!--</div>-->\n<!--<router-outlet></router-outlet>-->\n\n<!--&lt;!&ndash;<mat-tab label=\"notifications\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">&ndash;&gt;-->\n<!--&lt;!&ndash;<div class=\"media\" *ngFor=\"let notification of currentUser.notifications\">&ndash;&gt;-->\n<!--&lt;!&ndash;<app-notification [notification]=\"notification\"></app-notification>&ndash;&gt;-->\n<!--&lt;!&ndash;</div>&ndash;&gt;-->\n<!--&lt;!&ndash;</mat-tab>&ndash;&gt;-->\n\n\n<!--&lt;!&ndash;<mat-tab label=\"feed\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">&ndash;&gt;-->\n  <!--&lt;!&ndash;<div class=\"media activity-item\" *ngFor=\"let notification of currentUser.feed\">&ndash;&gt;-->\n    <!--&lt;!&ndash;<a href=\"#\" class=\"pull-left\">&ndash;&gt;-->\n      <!--&lt;!&ndash;<img src=\"https://bootdey.com/img/Content/avatar/avatar1.png\" alt=\"Avatar\" class=\"media-object avatar\">&ndash;&gt;-->\n    <!--&lt;!&ndash;</a>&ndash;&gt;-->\n    <!--&lt;!&ndash;<div class=\"media-body\">&ndash;&gt;-->\n      <!--&lt;!&ndash;<p class=\"activity-title\"><a [routerLink]=\"['../../user',notification.rifttag]\">{{notification.riftTag}}</a>&ndash;&gt;-->\n        <!--&lt;!&ndash;{{notification.notificationContent}} </p>&ndash;&gt;-->\n      <!--&lt;!&ndash;<small class=\"text-muted\">{{notification.createdTime | date:'fullDate'}} at {{notification.createdTime | date:'shortTime'}}</small>&ndash;&gt;-->\n    <!--&lt;!&ndash;</div>&ndash;&gt;-->\n  <!--&lt;!&ndash;</div>&ndash;&gt;-->\n<!--&lt;!&ndash;</mat-tab>&ndash;&gt;-->\n\n<body id=\"profile-header\" class=\"container\" *ngIf=\"isDataAvailable\">\n<div id=\"header\" >\n  <div id=\"overview\">\n    <img src=\"{{currentUser.profilePic}}\" class=\"headshot\">\n    <div id=\"basic-details\">\n      <span class=\"name\">{{currentUser.firstName}} {{currentUser.lastName}}</span>\n      <!--<div class=\"following-btn\">Following</div>-->\n      <div class=\"following-btn\" *ngIf=\"isLoggedIn && profile.nickname != currentUser.riftTag\">\n        <app-follow-button [following]=\"isFollowing(currentUser.riftTag)\" [id]=\"currentUser.id\"\n                           [riftTag]=\"profile.nickname\" class=\"userbtn\">\n        </app-follow-button>\n      </div>\n      <br>\n      <span class=\"username\">@{{currentUser.riftTag}}</span> </div>\n    <div id=\"user-stats\">\n      <div class=\"stat-item\"><span id=\"following\" class=\"stat\">{{currentUser.followings?.length}}</span><br>\n        <label>following</label>\n      </div>\n      <div class=\"stat-item\"><span id=\"followers\" class=\"stat\">{{currentUser.followers?.length}}</span><br>\n        <label>followers</label>\n      </div>\n      <div class=\"stat-item\"><span id=\"rating\" class=\"stat\">346</span><br>\n        <label>rating</label>\n      </div>\n    </div>\n  </div>\n  <div id=\"tabs\">\n    <div class=\"tab tab-active\" id=\"activity-btn\" (click)=\"tabShow($event)\">Activity</div>\n    <div class=\"tab\" id=\"sessions-btn\" (click)=\"tabShow($event)\">Sessions</div>\n    <div class=\"tab\" id=\"ratings-btn\" (click)=\"tabShow($event)\">Ratings</div>\n    <div class=\"tab\" id=\"info-btn\" (click)=\"tabShow($event)\">Info</div>\n  </div>\n</div>\n<br><br>\n<!--<div id=\"update_info_button\" *ngIf=\"isLoggedIn && profile.nickname == currentUser.riftTag\">-->\n  <!--<button (click)=\"updateInfoModal()\" type=\"button\" class=\"btn-primary\">Update your Info</button>-->\n<!--</div><br>-->\n\n<div class=\"section\" id=\"activity\">\n  <div *ngFor=\"let activity of currentUser.activities\">\n    <app-activity-card [activity]=\"activity\" [currentUser]=\"currentUser\" [loggedInUserId]=\"loggedInUser.id\"\n    [request]=\"loggedInUser.sessionRequests.get(activity.sessionId)\" [isLoggedIn]=\"isLoggedIn\">\n    </app-activity-card>\n  </div>\n</div>\n\n<div class=\"section hide\" id=\"sessions\" >\n  <div *ngFor=\"let session of currentUser.rifterSessions\">\n    <app-session-card\n      [session]=\"session\" [isLoggedIn]=\"isLoggedIn\"\n      [type]=\"session.type\" [request]=\"loggedInUser.sessionRequests.get(session.id)\"\n      [loggedInUserId]=\"loggedInUser.id\"\n    ></app-session-card><br>\n    <!--[routerLink]=\"['../../session', session.id]\"-->\n  </div>\n</div>\n\n<div class=\"section hide\" id=\"ratings\">\n  <div class=\"sidemenu\">\n    <a id=\"overview-ratings-btn\" class=\"menu-active\" (click)=\"ratingMenuShow($event)\">Overview</a>\n    <a id=\"rifter-ratings-btn\" (click)=\"ratingMenuShow($event)\">Rifter Rating</a>\n    <a id=\"riftee-ratings-btn\" (click)=\"ratingMenuShow($event)\">Riftee Rating</a> </div>\n  <div class=\"content-card\" id=\"overview-ratings\">\n    <div class=\"segment\" id=\"overall-ratings\">\n      <div class=\"rating-feature\"> <span class=\"title\">Rifter Rating</span>\n        <span class=\"big-score green\">{{currentUser.rifterRating}}</span>\n        <div class=\"rating-bar\"> <span class=\"score green\" >3.7</span>\n          <div class=\"shadow\"></div>\n          <div class=\"fill green-bck\" [style.width]=\"rifterRatingPercentage+'%'\"></div>\n          <table border=\"1\">\n            <tbody>\n            <tr>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n            </tr>\n            </tbody>\n          </table>\n        </div>\n        <a href=\"\" class=\"reviews-shortcut\">{{numRifterRatings}} Reviews »</a> </div>\n      <div class=\"rating-feature\"> <span class=\"title\">Riftee Rating</span>\n        <span class=\"big-score orange\">{{currentUser.rifteeRating}}</span>\n        <div class=\"rating-bar\"> <span class=\"score\">3.7</span>\n          <div class=\"shadow\"></div>\n          <div class=\"fill orange-bck\" [style.width]=\"rifteeRatingPercentage+'%'\"></div>\n          <table border=\"1\">\n            <tbody>\n            <tr>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n            </tr>\n            </tbody>\n          </table>\n        </div>\n        <a href=\"\" class=\"reviews-shortcut\">{{numRifteeRatings}} Reviews »</a> </div>\n    </div>\n    <div class=\"segment\"><span class=\"title\">Featured</span>\n      <div *ngFor=\"let rating of currentUser.ratings\">\n        <app-user-review [rating]=\"rating\"></app-user-review>\n      </div>\n    </div>\n  </div>\n  <div class=\"content-card hide\" id=\"rifter-ratings\">\n    <div class=\"segment\">\n      <div class=\"rating-feature\"> <span class=\"title\">Rifter Rating</span>\n        <span class=\"big-score green\">{{currentUser.rifterRating}}</span>\n        <div class=\"rating-bar\"> <span class=\"score green\" >3.7</span>\n          <div class=\"shadow\"></div>\n          <div class=\"fill green-bck\" [style.width]=\"rifterRatingPercentage+'%'\"></div>\n          <table border=\"1\">\n            <tbody>\n            <tr>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n            </tr>\n            </tbody>\n          </table>\n        </div>\n        <a href=\"\" class=\"reviews-shortcut\">{{numRifterRatings}} Reviews »</a>\n      </div>\n      <div class=\"segment\"><span class=\"title\">What other Riftees have said about {{currentUser.riftTag}}</span>\n        <div *ngFor=\"let rating of currentUser.userRifterRatings\">\n          <app-user-review [rating]=\"rating\"></app-user-review>\n        </div>\n      </div>\n    </div>\n\n  </div>\n  <div class=\"content-card hide\" id=\"riftee-ratings\">\n    <div class=\"segment\">\n      <div class=\"rating-feature\"> <span class=\"title\">Riftee Rating</span>\n        <span class=\"big-score orange\">{{currentUser.rifteeRating}}</span>\n        <div class=\"rating-bar\"> <span class=\"score\">3.7</span>\n          <div class=\"shadow\"></div>\n          <div class=\"fill orange-bck\" [style.width]=\"rifteeRatingPercentage+'%'\"></div>\n          <table border=\"1\">\n            <tbody>\n            <tr>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n              <td></td>\n            </tr>\n            </tbody>\n          </table>\n        </div>\n        <a href=\"\" class=\"reviews-shortcut\">{{numRifteeRatings}} Reviews »</a>\n      </div>\n      <div class=\"segment\"><span class=\"title\">What other Rifters have said about {{currentUser.riftTag}}</span>\n        <div *ngFor=\"let rating of currentUser.userRifteeRatings\">\n          <app-user-review [rating]=\"rating\"></app-user-review>\n        </div>\n      </div>\n    </div>\n    </div>\n\n</div>\n\n<div class=\"section hide\" id=\"info\">\n  <div class=\"sidemenu\">\n    <a id=\"details-btn\" class=\"menu-active\" (click)=\"menuShow($event)\">Details about you</a>\n    <a id=\"contact-info-btn\" (click)=\"menuShow($event)\">Contact Info</a>\n    <a id=\"game-accounts-btn\" (click)=\"menuShow($event)\">Game Accounts</a>\n  </div>\n  <div class=\"content-card\" id=\"details\">\n    <div class=\"segment\">\n      <span class=\"title\">About Me</span>\n      <p>{{currentUser.bio}}</p>\n    </div>\n    <div class=\"segment\">\n      <span class=\"title\">Basic Information</span>\n      <table>\n        <tbody>\n        <tr>\n          <td>Email</td>\n          <td>{{currentUser.email}}</td>\n        </tr>\n        <tr>\n          <td>PO Box</td>\n          <td>159 5th St NW</td>\n        </tr>\n        <tr>\n          <td>Business Email</td>\n          <td>ninja@twitch.com</td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"content-card hide\" id=\"contact-info\">\n    <div class=\"segment\">\n      <span class=\"title\">Contact</span>\n      <table>\n        <tbody>\n        <tr>\n          <td>Date of Birth</td>\n          <td>04/16/1998</td>\n        </tr>\n        <tr>\n          <td>Age</td>\n          <td>19</td>\n        </tr>\n        <tr>\n          <td>Gender</td>\n          <td>Male</td>\n        </tr>\n        <tr>\n          <td>Time Zone</td>\n          <td>US East (EST)</td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n    <div class=\"segment\">\n      <span class=\"title\">Social</span>\n      <table>\n        <tbody>\n        <tr>\n          <td>Twitch</td>\n          <td>{{currentUser.twitchAccount}}</td>\n        </tr>\n        <tr>\n          <td>Youtube</td>\n          <td>{{currentUser.youtubeAccount}}</td>\n        </tr>\n        <tr>\n          <td>Twitter</td>\n          <td>@bvicinay</td>\n        </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"content-card hide\" id=\"game-accounts\">\n    <div class=\"segment\">\n      <span class=\"title\">Accounts</span>\n      <div *ngFor=\"let account of currentUser.gameAccounts\">\n        <app-game-account-card [account]=\"account\" [isLoggedIn]=\"isLoggedIn\"\n                               [currentUserRiftTag]=\"currentUser.riftTag\" [loggedInUserRiftTag]=\"profile.nickname\"></app-game-account-card>\n      </div>\n    </div>\n  </div>\n</div>\n\n</body>\n\n"
 
 /***/ }),
 
@@ -5315,6 +5522,11 @@ var UserprofileComponent = /** @class */ (function () {
         this.following = false;
         this.isDataAvailable = false;
         this.isLoggedIn = false;
+        this.numRifterRatings = 0;
+        this.numRifteeRatings = 0;
+        this.currSection = "details";
+        this.currRatingSection = "overview-ratings";
+        this.currTab = "activity";
         this.profile = JSON.parse(localStorage.getItem('profile'));
         if (this.profile != null) {
             this.isLoggedIn = true;
@@ -5324,7 +5536,6 @@ var UserprofileComponent = /** @class */ (function () {
         var _this = this;
         this.sub = this.route.params.subscribe(function (params) {
             _this.currUser = params['rifttag'];
-            _this.isDataAvailable = true;
             _this.getUserProfileInformation(params['rifttag']);
         });
     };
@@ -5347,7 +5558,7 @@ var UserprofileComponent = /** @class */ (function () {
     };
     UserprofileComponent.prototype.getUserProfileInformation = function (riftTag) {
         var _this = this;
-        // console.log("Getting " + riftTag+ "'s profile information");
+        console.log("Getting " + riftTag + "'s profile information");
         this.userProfileService.getUser(riftTag).subscribe(function (resBody) {
             _this.currentUser.firstName = resBody.firstName;
             _this.currentUser.lastName = resBody.lastName;
@@ -5360,6 +5571,10 @@ var UserprofileComponent = /** @class */ (function () {
             _this.currentUser.accountId = resBody.accountId;
             _this.currentUser.rifterRating = resBody.rifterRating;
             _this.currentUser.rifteeRating = resBody.rifteeRating;
+            _this.rifteeRatingPercentage = (_this.currentUser.rifteeRating / 5) * 100;
+            _this.numRifteeRatings++;
+            _this.rifterRatingPercentage = (_this.currentUser.rifterRating / 5) * 100;
+            _this.numRifterRatings++;
             _this.currentUser.twitchAccount = resBody.twitchAccount;
             _this.currentUser.youtubeAccount = resBody.youtubeAccount;
             _this.sharedFunc.getUserProfilePicture(_this.currentUser.riftTag, _this.currentUser);
@@ -5370,6 +5585,7 @@ var UserprofileComponent = /** @class */ (function () {
             _this.getUserRifterSessions(resBody.rifterSessions, _this.currentUser);
             _this.getCurrentLoggedInUser(_this.profile.nickname);
             _this.getUserGameAccounts(_this.currentUser.id);
+            _this.isDataAvailable = true;
         }, function (error) {
             console.log(error.message);
         });
@@ -5416,6 +5632,12 @@ var UserprofileComponent = /** @class */ (function () {
                 _this.sharedFunc.getUserProfilePicture(reviewer.riftTag, reviewer);
                 userRating.reviewerUsertable = reviewer;
                 _this.currentUser.ratings.push(userRating);
+                if (userRating.account_type) {
+                    _this.currentUser.userRifterRatings.push(userRating);
+                }
+                else {
+                    _this.currentUser.userRifteeRatings.push(userRating);
+                }
             }
         });
     };
@@ -5423,7 +5645,7 @@ var UserprofileComponent = /** @class */ (function () {
         // console.log("Getting user's activities");
         this.currentUser.activities = [];
         this.currentUser.creatorActivityList = creatorActivityList;
-        for (var i = 0; i < this.currentUser.creatorActivityList.length; i++) {
+        for (var i = 0; i < 10; i++) {
             var currActivity = new __WEBPACK_IMPORTED_MODULE_3__models_activity__["a" /* Activity */]();
             currActivity.notificationType = this.currentUser.creatorActivityList[i].notificationType;
             currActivity.notificationContent = __WEBPACK_IMPORTED_MODULE_19__constants_notification_content__["a" /* NOTIFICATION_CONTENT */].get(currActivity.notificationType);
@@ -5595,6 +5817,36 @@ var UserprofileComponent = /** @class */ (function () {
                 riftId: this.currentUser.id
             }
         });
+    };
+    UserprofileComponent.prototype.menuShow = function (event) {
+        var btnId = event.target.id;
+        var id = btnId.substring(0, btnId.length - 4);
+        document.getElementById(this.currSection).classList.add("hide");
+        document.getElementById(this.currSection + "-btn").classList.remove("menu-active");
+        document.getElementById(id).classList.remove("hide");
+        document.getElementById(btnId).classList.add("menu-active");
+        document.getElementById(id).classList.add("text-fadein");
+        this.currSection = id;
+    };
+    UserprofileComponent.prototype.ratingMenuShow = function (event) {
+        var btnId = event.target.id;
+        var id = btnId.substring(0, btnId.length - 4);
+        document.getElementById(this.currRatingSection).classList.add("hide");
+        document.getElementById(this.currRatingSection + "-btn").classList.remove("menu-active");
+        document.getElementById(id).classList.remove("hide");
+        document.getElementById(btnId).classList.add("menu-active");
+        document.getElementById(id).classList.add("text-fadein");
+        this.currRatingSection = id;
+    };
+    UserprofileComponent.prototype.tabShow = function (event) {
+        var btnId = event.target.id;
+        var id = btnId.substring(0, btnId.length - 4);
+        document.getElementById(this.currTab).classList.add("hide");
+        document.getElementById(this.currTab + "-btn").classList.remove("tab-active");
+        document.getElementById(id).classList.remove("hide");
+        document.getElementById(id).classList.add("text-fadein");
+        document.getElementById(btnId).classList.add("tab-active");
+        this.currTab = id;
     };
     UserprofileComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -5818,7 +6070,7 @@ module.exports = "<mat-dialog-content>\n  <form #createSession=\"ngForm\" class=
 /***/ "../../../../../src/app/usersessions/create-session/create-session.component.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -6073,7 +6325,7 @@ var SessionDateTime = /** @class */ (function () {
 /***/ "../../../../../src/app/usersessions/usersessions.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+exports = module.exports = __webpack_require__("../../node_modules/css-loader/lib/css-base.js")(false);
 // imports
 
 
@@ -6464,8 +6716,6 @@ var map = {
 	"./be.js": "../../../../moment/locale/be.js",
 	"./bg": "../../../../moment/locale/bg.js",
 	"./bg.js": "../../../../moment/locale/bg.js",
-	"./bm": "../../../../moment/locale/bm.js",
-	"./bm.js": "../../../../moment/locale/bm.js",
 	"./bn": "../../../../moment/locale/bn.js",
 	"./bn.js": "../../../../moment/locale/bn.js",
 	"./bo": "../../../../moment/locale/bo.js",
@@ -6502,8 +6752,6 @@ var map = {
 	"./en-gb.js": "../../../../moment/locale/en-gb.js",
 	"./en-ie": "../../../../moment/locale/en-ie.js",
 	"./en-ie.js": "../../../../moment/locale/en-ie.js",
-	"./en-il": "../../../../moment/locale/en-il.js",
-	"./en-il.js": "../../../../moment/locale/en-il.js",
 	"./en-nz": "../../../../moment/locale/en-nz.js",
 	"./en-nz.js": "../../../../moment/locale/en-nz.js",
 	"./eo": "../../../../moment/locale/eo.js",
@@ -6511,8 +6759,6 @@ var map = {
 	"./es": "../../../../moment/locale/es.js",
 	"./es-do": "../../../../moment/locale/es-do.js",
 	"./es-do.js": "../../../../moment/locale/es-do.js",
-	"./es-us": "../../../../moment/locale/es-us.js",
-	"./es-us.js": "../../../../moment/locale/es-us.js",
 	"./es.js": "../../../../moment/locale/es.js",
 	"./et": "../../../../moment/locale/et.js",
 	"./et.js": "../../../../moment/locale/et.js",
@@ -6538,8 +6784,6 @@ var map = {
 	"./gl.js": "../../../../moment/locale/gl.js",
 	"./gom-latn": "../../../../moment/locale/gom-latn.js",
 	"./gom-latn.js": "../../../../moment/locale/gom-latn.js",
-	"./gu": "../../../../moment/locale/gu.js",
-	"./gu.js": "../../../../moment/locale/gu.js",
 	"./he": "../../../../moment/locale/he.js",
 	"./he.js": "../../../../moment/locale/he.js",
 	"./hi": "../../../../moment/locale/hi.js",
@@ -6588,16 +6832,12 @@ var map = {
 	"./mk.js": "../../../../moment/locale/mk.js",
 	"./ml": "../../../../moment/locale/ml.js",
 	"./ml.js": "../../../../moment/locale/ml.js",
-	"./mn": "../../../../moment/locale/mn.js",
-	"./mn.js": "../../../../moment/locale/mn.js",
 	"./mr": "../../../../moment/locale/mr.js",
 	"./mr.js": "../../../../moment/locale/mr.js",
 	"./ms": "../../../../moment/locale/ms.js",
 	"./ms-my": "../../../../moment/locale/ms-my.js",
 	"./ms-my.js": "../../../../moment/locale/ms-my.js",
 	"./ms.js": "../../../../moment/locale/ms.js",
-	"./mt": "../../../../moment/locale/mt.js",
-	"./mt.js": "../../../../moment/locale/mt.js",
 	"./my": "../../../../moment/locale/my.js",
 	"./my.js": "../../../../moment/locale/my.js",
 	"./nb": "../../../../moment/locale/nb.js",
@@ -6650,8 +6890,6 @@ var map = {
 	"./te.js": "../../../../moment/locale/te.js",
 	"./tet": "../../../../moment/locale/tet.js",
 	"./tet.js": "../../../../moment/locale/tet.js",
-	"./tg": "../../../../moment/locale/tg.js",
-	"./tg.js": "../../../../moment/locale/tg.js",
 	"./th": "../../../../moment/locale/th.js",
 	"./th.js": "../../../../moment/locale/th.js",
 	"./tl-ph": "../../../../moment/locale/tl-ph.js",
@@ -6666,8 +6904,6 @@ var map = {
 	"./tzm-latn": "../../../../moment/locale/tzm-latn.js",
 	"./tzm-latn.js": "../../../../moment/locale/tzm-latn.js",
 	"./tzm.js": "../../../../moment/locale/tzm.js",
-	"./ug-cn": "../../../../moment/locale/ug-cn.js",
-	"./ug-cn.js": "../../../../moment/locale/ug-cn.js",
 	"./uk": "../../../../moment/locale/uk.js",
 	"./uk.js": "../../../../moment/locale/uk.js",
 	"./ur": "../../../../moment/locale/ur.js",
