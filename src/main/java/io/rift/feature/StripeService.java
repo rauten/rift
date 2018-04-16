@@ -15,10 +15,16 @@ import io.rift.repository.RiftRepository;
 import io.rift.service.RifterSessionService;
 import io.rift.service.SessionRequestService;
 import io.rift.service.UsertableService;
+import org.apache.http.HttpResponse;
 import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -31,7 +37,7 @@ import java.util.concurrent.*;
 @Service
 public class StripeService {
 
-    public static final String STRIPE_APIKEY = "sk_live_1dYvYLmdp3maH1wTG8Ibgxb8";
+    public static final String STRIPE_APIKEY = "sk_test_6UoLLyUzJtTosIjqQHScr6Le";
 
     private final String getUserById = "getUserById";
     private final String getRifterGameById = "getRifterGameById";
@@ -473,13 +479,20 @@ public class StripeService {
     }
 
 
-    /*
-    public void handleChargeFailed(Request request, Response response) {
 
-        String payload = request.body();
-        String sigHeader = request.headers("Stripe-Signature");
-        Event event = null;
 
+    public Object handleChargeFailed(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Got it");
+        try {
+            BufferedReader bufferedReader = request.getReader();
+            APIResource.GSON.fromJson(bufferedReader, Event.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        response.setStatus(200);
+        return "";
+
+        /*
         try {
             event = Webhook.constructEvent(payload, sigHeader, "whsec_fjRJIo2VVVMMd7y4M0XxZMTPd8xk0pGK");
         } catch (JsonSyntaxException e) {
@@ -490,9 +503,10 @@ public class StripeService {
             response.status(400);
         }
         event = APIResource.GSON.fromJson(request.body(), Event.class);
+        */
 
     }
-    */
+
 //    public void handleChargeFailed(Request request, Response response) {
 //
 //        String payload = request.body();

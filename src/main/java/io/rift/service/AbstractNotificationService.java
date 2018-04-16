@@ -40,7 +40,7 @@ public abstract class AbstractNotificationService {
             notification.setCreatorId(resultSet.getInt(startPoint + 6));
             notification.setSeen(resultSet.getBoolean(startPoint + 7));
             notifications.add(notification);
-            if (notification.getCreatorId() != null) {
+            if (notification.getCreatorId() != null && info.equals("creator")) {
                 Object[] args = new Object[1];
                 args[0] = notification.getCreatorId();
                 ResultSet res = riftRepository.doQuery(getUserById, args);

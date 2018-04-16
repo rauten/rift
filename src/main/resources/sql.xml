@@ -89,7 +89,19 @@
         JOIN game ga
         ON r.game_id = ga.id
         WHERE n.creator_id = ?
+        LIMIT 20;
     </getUserActiviyAndUserSession>
+
+    <getPaginatedActivities>
+        SELECT *
+        FROM notification n JOIN riftergame r
+        ON n.session_id = r.id
+        JOIN game ga
+        ON r.game_id = ga.id
+        WHERE n.creator_id = ?
+        LIMIT 10
+        OFFSET ?;
+    </getPaginatedActivities>
 
     <getUserAndRifterSessions>
         SELECT *

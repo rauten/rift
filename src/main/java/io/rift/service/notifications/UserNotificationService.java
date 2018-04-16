@@ -24,7 +24,7 @@ public class UserNotificationService extends AbstractNotificationService {
         Object[] args = new Object[1];
         args[0] = riftId;
         ResultSet resultSet = riftRepository.doQuery(getUserNotifications, args);
-        List<Notification> notifications = super.populateNotifications(resultSet, 1, "");
+        List<Notification> notifications = super.populateNotifications(resultSet, 1, "creator");
         resultSet.close();
         return notifications;
     }

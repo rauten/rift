@@ -11,6 +11,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -87,5 +89,40 @@ public class StripeController {
     public boolean cancelFuturePayment(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable boolean nullifyIds) {
         return stripeService.cancelFuturePayment(sessionId, rifteeId, nullifyIds);
     }
+
+
+    /********************************************* WEBHOOK SECTION ****************************************************/
+    /*******************************************************************************************************************/
+
+    @RequestMapping(consumes="application/json",
+            produces="application/json",
+            method=RequestMethod.POST, value = "/stripe/webhook/customerCreated")
+    public String handleCustomerCreated(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Got it 1");
+        stripeService.handleChargeFailed(request, response);
+        return null;
+    }
+
+
+
+    @RequestMapping(consumes="application/json",
+            produces="application/json",
+            method=RequestMethod.POST, value = "/api/stripe/webhook/customerCreated")
+    public String handleCustomerCreated2(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Got it 2");
+        stripeService.handleChargeFailed(request, response);
+        return null;
+
+    }
+
+    @RequestMapping(consumes="application/json",
+            produces="application/json",
+            method=RequestMethod.POST, value = "http://localhost:4200/api/stripe/webhook/customerCreated")
+    public String handleCustomerCreated3(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("Got it 3");
+        stripeService.handleChargeFailed(request, response);
+        return null;
+    }
+
 
 }
