@@ -5,23 +5,18 @@
   border: 0px red solid;
 }
 
-a {
-  cursor: pointer;
-  text-decoration: none;
-}
-
 body {
   background-color: #1B2531;
   color: #F7F7F2;
   font-family: "Montserrat", sans-serif;
 }
 
-#profile-header {
+#header {
   margin: 0px auto;
   width: 840px;
 
 }
-#profile-header #overview {
+#header #overview {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -32,18 +27,20 @@ body {
 
 }
 
-#profile-header #overview .headshot {
+#header #overview .headshot {
   margin: 42px 15px 35px 40px;
   display: inline-block;
   order: 0;
+  width: 106px;
+  height: 106px;
 
 }
-#profile-header #overview #basic-details{
+#header #overview #basic-details{
   order: 1;
   margin-top: 52px;
 }
 
-#profile-header #overview #user-stats {
+#header #overview #user-stats {
   order: 2;
   display: inline-block;
   align-self: center;
@@ -76,17 +73,14 @@ body {
   font-size: 27px;
   margin-right: 10px;
 }
-.username {
+#header .username {
   font-size: 17px;
   font-weight: 500;
   opacity: 0.7;
 }
 
 .headshot {
-  width: 106px;
-  height: 106px;
-  border-radius: 53px;
-  background-size: contain;
+  border-radius: 50%;
 }
 .following-btn {
   padding: 5px;
@@ -116,7 +110,6 @@ body {
   text-align: center;
   line-height: 45px;
   vertical-align: middle;
-  cursor: pointer;
 }
 .tab-active {
   /**outline: 5px #1DA1F2 solid;
@@ -124,14 +117,17 @@ body {
   box-shadow: inset 0px -5px 0px 0px #1DA1F2;
 }
 .section {
-  margin-top: 20px;
+  margin: 20px auto 0px auto;
   background-color: transparent;
   width: 840px;
   border: 0px #18202A solid;
   overflow: hidden;
-
+  display: block
 }
-#info {
+.section .active {
+  display: block;
+}
+#info, #ratings {
   display: flex;
   background-color: #2E3E4F;
 }
@@ -194,6 +190,118 @@ table td:nth-child(2) {
 }
 .hide {
   display: none;
+}
+
+.rating-card {
+  border: 0px gray solid;
+  padding: 10px 0px;
+}
+.rating-card .card-header {
+  font-weight: 500;
+  font-size: 18px;
+}
+.rating-card .card-header .username {
+  color: #F6511D;
+
+}
+.rating-card p {
+  padding-top: 5px;
+}
+.rating-bar {
+  width: 230px;
+  height: 12px;
+  margin: 7px 0px;
+}
+
+.rating-bar .shadow {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.rating-bar .fill {
+  max-width: 100%;
+  min-width: 0%;
+  height: 100%;
+  background-color: #1DA1F2;
+  position: relative;
+  top: -100%;
+
+}
+.rating-bar table {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: -200%;
+}
+.rating-bar table td {
+  border: 2px #2E3E4F solid;
+}
+.rating-bar .score {
+  display: inline-block;
+  float: right;
+  height: 100%;
+  overflow: visible;
+  text-align: right;
+  font-size: 21px;
+  line-height: 100%;
+  vertical-align: middle;
+  font-weight: 500;
+  transform: translate(46px,-3px);
+}
+#overall-ratings {
+  display: flex;
+  justify-content: space-around;
+}
+.rating-feature {
+  width: 50%;
+  padding: 0px 15px;
+
+}
+.orange {
+  color: #F6511D
+}
+.green {
+  color: #29C016;
+}
+.green-bck {
+  background-color: #29C016 !important;
+}
+.orange-bck {
+  background-color: #F6511D !important;
+}
+.rating-feature>* {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+
+}
+.rating-feature .rating-bar .score {
+  display: none; /*Use big score instead*/
+
+}
+.rating-feature .big-score {
+  font-size: 45px;
+  font-weight: 500;
+}
+.rating-feature .rating-bar {
+  height: 20px !important;
+}
+.rating-feature .reviews-shortcut {
+  color: #F7F7F2;
+  opacity: 0.58;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+
+
+
+
+a {
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .text-fadein {

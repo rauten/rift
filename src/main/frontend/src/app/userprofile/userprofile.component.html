@@ -64,26 +64,26 @@
       <!--<div class="col-md-8">-->
         <!--<div class="profile-info-right">-->
           <!--<mat-tab-group>-->
-            <mat-tab label="activity">
-              <div class="media activity-item" *ngFor="let activity of currentUser.activities">
-                <a href="#" class="pull-left">
-                  <img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">
-                </a>
-                <div class="media-body">
-                  <p class="activity-title">
-                    <a href="#">{{currentUser.riftTag}}</a>
-                    {{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>
-                  </p>
-                  <small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>
-                </div>
-                <div class="btn-group pull-right activity-actions">
-                  <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-th"></i>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                </div>
-              </div>
-            </mat-tab>
+            <!--<mat-tab label="activity">-->
+              <!--<div class="media activity-item" *ngFor="let activity of currentUser.activities">-->
+                <!--<a href="#" class="pull-left">-->
+                  <!--<img src="{{currentUser.profilePic}}" alt="Avatar" class="media-object avatar">-->
+                <!--</a>-->
+                <!--<div class="media-body">-->
+                  <!--<p class="activity-title">-->
+                    <!--<a href="#">{{currentUser.riftTag}}</a>-->
+                    <!--{{activity.notificationContent}} <a [routerLink]="['../../session', activity.sessionId]">{{activity.title}}</a>-->
+                  <!--</p>-->
+                  <!--<small class="text-muted">{{activity.createdTime | date:'fullDate'}} at {{activity.createdTime | date:'shortTime'}}</small>-->
+                <!--</div>-->
+                <!--<div class="btn-group pull-right activity-actions">-->
+                  <!--<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">-->
+                    <!--<i class="fa fa-th"></i>-->
+                    <!--<span class="sr-only">Toggle Dropdown</span>-->
+                  <!--</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-tab>-->
             <!--<mat-tab label="sessions">-->
               <!--<div class="media" *ngFor="let session of currentUser.rifterSessions">-->
                 <!--<app-session-card-->
@@ -241,7 +241,113 @@
 </div>
 
 <div class="section hide" id="ratings">
-  blah
+  <div class="sidemenu">
+    <a id="overview-ratings-btn" class="menu-active" (click)="ratingMenuShow($event)">Overview</a>
+    <a id="rifter-ratings-btn" (click)="ratingMenuShow($event)">Rifter Rating</a>
+    <a id="riftee-ratings-btn" (click)="ratingMenuShow($event)">Riftee Rating</a> </div>
+  <div class="content-card" id="overview-ratings">
+    <div class="segment" id="overall-ratings">
+      <div class="rating-feature"> <span class="title">Rifter Rating</span>
+        <span class="big-score green">{{currentUser.rifterRating}}</span>
+        <div class="rating-bar"> <span class="score green" >3.7</span>
+          <div class="shadow"></div>
+          <div class="fill green-bck" [style.width]="rifterRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifterRatings}} Reviews »</a> </div>
+      <div class="rating-feature"> <span class="title">Riftee Rating</span>
+        <span class="big-score orange">{{currentUser.rifteeRating}}</span>
+        <div class="rating-bar"> <span class="score">3.7</span>
+          <div class="shadow"></div>
+          <div class="fill orange-bck" [style.width]="rifteeRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifteeRatings}} Reviews »</a> </div>
+    </div>
+    <div class="segment"><span class="title">Featured</span>
+      <div *ngFor="let rating of currentUser.ratings">
+        <app-user-review [rating]="rating"></app-user-review>
+      </div>
+    </div>
+  </div>
+  <div class="content-card hide" id="rifter-ratings">
+    <div class="segment">
+      <div class="rating-feature"> <span class="title">Rifter Rating</span>
+        <span class="big-score green">{{currentUser.rifterRating}}</span>
+        <div class="rating-bar"> <span class="score green" >3.7</span>
+          <div class="shadow"></div>
+          <div class="fill green-bck" [style.width]="rifterRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifterRatings}} Reviews »</a>
+      </div>
+      <div class="segment"><span class="title">What other Riftees have said about {{currentUser.riftTag}}</span>
+        <div *ngFor="let rating of currentUser.userRifterRatings">
+          <app-user-review [rating]="rating"></app-user-review>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="content-card hide" id="riftee-ratings">
+    <div class="segment">
+      <div class="rating-feature"> <span class="title">Riftee Rating</span>
+        <span class="big-score orange">{{currentUser.rifteeRating}}</span>
+        <div class="rating-bar"> <span class="score">3.7</span>
+          <div class="shadow"></div>
+          <div class="fill orange-bck" [style.width]="rifteeRatingPercentage+'%'"></div>
+          <table border="1">
+            <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <a href="" class="reviews-shortcut">{{numRifteeRatings}} Reviews »</a>
+      </div>
+      <div class="segment"><span class="title">What other Rifters have said about {{currentUser.riftTag}}</span>
+        <div *ngFor="let rating of currentUser.userRifteeRatings">
+          <app-user-review [rating]="rating"></app-user-review>
+        </div>
+      </div>
+    </div>
+    </div>
+
 </div>
 
 <div class="section hide" id="info">
@@ -322,9 +428,10 @@
   <div class="content-card hide" id="game-accounts">
     <div class="segment">
       <span class="title">Accounts</span>
-      <p>Account card here</p>
-      <p>Account card here</p>
-      <p>Account card here</p>
+      <div *ngFor="let account of currentUser.gameAccounts">
+        <app-game-account-card [account]="account" [isLoggedIn]="isLoggedIn"
+                               [currentUserRiftTag]="currentUser.riftTag" [loggedInUserRiftTag]="profile.nickname"></app-game-account-card>
+      </div>
     </div>
   </div>
 </div>

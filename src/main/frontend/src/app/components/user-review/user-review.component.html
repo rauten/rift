@@ -1,20 +1,26 @@
-<div class="col-sm-3">
-  <img src="{{rating.reviewerUsertable.profilePic}}" class="img-rounded profilePic">
-  <div class="review-block-name">
-    <a [routerLink] = "['../', rating.reviewerUsertable.riftTag]">
-      {{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>
-      @{{rating.reviewerUsertable.riftTag}}
-    </a>
-  </div>
-  <div class="review-block-date">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>
-</div>
-<div class="col-sm-9">
-  <div class="review-block-rate">
-    {{accountType}}<br>
-    <app-rating [rating]="rating.rating" [readonly]="true"></app-rating>
-  </div>
-  <div class="review-block-title">{{rating.reviewTitle}}</div>
-  <div class="review-block-description">{{rating.review}}</div>
-</div>
+<!--<div class="col-sm-3">-->
+  <!--<img src="{{rating.reviewerUsertable.profilePic}}" class="img-rounded profilePic">-->
+  <!--<div class="review-block-name">-->
+    <!--<a [routerLink] = "['../', rating.reviewerUsertable.riftTag]">-->
+      <!--{{rating.reviewerUsertable.firstName}} {{rating.reviewerUsertable.lastName}}<br>-->
+      <!--@{{rating.reviewerUsertable.riftTag}}-->
+    <!--</a>-->
+  <!--</div>-->
+  <!--<div class="review-block-date">{{rating.createdTime | date: longDate}}<br/>1 day ago</div>-->
+<!--</div>-->
+<!--<div class="col-sm-9">-->
+  <!--<div class="review-block-rate">-->
+    <!--{{accountType}}<br>-->
+    <!--<app-rating [rating]="rating.rating" [readonly]="true"></app-rating>-->
+  <!--</div>-->
+  <!--<div class="review-block-title">{{rating.reviewTitle}}</div>-->
+  <!--<div class="review-block-description">{{rating.review}}</div>-->
+<!--</div>-->
 
 <!---->
+
+<div class="rating-card">
+  <div class="card-header"><a class="username">@{{rating.reviewerUsertable.riftTag}}</a> on <span class="timestamp">{{rating.createdTime | date: "longDate"}}</span></div>
+  <p>{{rating.review}}</p>
+  <app-rating [rating]="rating.rating"></app-rating>
+</div>
