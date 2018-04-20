@@ -18,12 +18,14 @@ export class AppComponent {
   profile: any;
 
   ngOnInit() {
+    console.log("Running ngOnInit app component");
     this.profile = JSON.parse(localStorage.getItem("profile"));
+    console.log("this.profile in ngOnInit: " + this.profile);
     if(this.profile) {
       this.userprofileService.getUser(this.profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
-          this.notificationsService.pollNotifications(id, this.notificationList, false);
+          //this.notificationsService.pollNotifications(id, this.notificationList, false);
         });
       // this.getUserNotifications(this.profile.nickname);
     }
@@ -31,25 +33,32 @@ export class AppComponent {
 
   @HostListener('window:beforeunload', [ '$event' ])
   beforeUnloadHandler(event) {
+    console.log("Going 1");
     this.userprofileService.getUser(this.profile.nickname).subscribe(
       resBody => {
         let id = resBody.id;
-        this.notificationsService.stopPolling(id);
+        //But this.notificationsService.stopPolling(id);
       });
+  }
+
+  @HostListener('window:onbeforeunload', [ '$event' ])
+  onBeforeUnloadHandler(event) {
+    console.log("Going 2");
   }
 
 
   constructor(public auth: AuthService, private userprofileService: UserprofileService,
   private http: Http, private globals: Globals, private notificationsService: NotificationsService) {
-    this.profile = JSON.parse(localStorage.getItem("profile"));
     let notifications = this.notificationList;
     auth.handleAuthentication(function (data, createUser) {
-      let profile = JSON.parse(localStorage.getItem("profile"));
-      userprofileService.getUser(profile.nickname).subscribe(
+      this.profile = JSON.parse(localStorage.getItem("profile"));
+      console.log("data in constructor: " + data);
+      console.log("this.profile in constructor: " + this.profile);
+      userprofileService.getUser(this.profile.nickname).subscribe(
         resBody => {
           let id = resBody.id;
           pollNotifications(id);
-          getUserNotifications(profile.nickname);
+          getUserNotifications(this.profile.nickname);
         });
 
       if (createUser) {
@@ -62,7 +71,7 @@ export class AppComponent {
           };
           userprofileService.createUser(riftData);
       } else {
-        userprofileService.getUser(profile.nickname).subscribe(
+        userprofileService.getUser(this.profile.nickname).subscribe(
           resBody => {
             localStorage.setItem("loggedInUserID", resBody.id.toString());
           })

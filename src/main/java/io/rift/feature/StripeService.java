@@ -298,22 +298,6 @@ public class StripeService {
             transferArgs.add(2, sessionId);
             riftRepository.doUpdate(addChargeUpdate, transferArgs);
 
-            /*
-            Map<String, Object> params = new HashMap<>();
-            params.put("amount", amount);
-            params.put("currency", currency);
-            params.put("customer", customerId);
-            Map<String, Object> destinationParams = new HashMap<>();
-            Double transferAmount = amount * .01;
-            transferAmount = Math.floor(transferAmount);
-            double transferAmountDouble = transferAmount;
-            int transferAmountInt = (int) transferAmountDouble;
-            destinationParams.put("amount", transferAmountInt);
-            destinationParams.put("account", accountId);
-            params.put("destination", destinationParams);
-            Charge charge = Charge.create(params, RequestOptions.builder().setApiKey(STRIPE_APIKEY).build());
-            */
-
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
             return false;
@@ -346,7 +330,7 @@ public class StripeService {
 
     }
 
-    public String setFuturePayment(Integer sessionId, Integer rifteeId, Integer hostId, double partialCharge) throws SQLException {
+    public String setFutureTransfer(Integer sessionId, Integer rifteeId, Integer hostId, double partialCharge) throws SQLException {
         Object[] sessionArgs = new Object[1];
         sessionArgs[0] = sessionId;
         ResultSet resultSet = riftRepository.doQuery(getRifterGameById, sessionArgs);
@@ -416,7 +400,7 @@ public class StripeService {
         return "Success";
     }
 
-    public boolean cancelFuturePayment(Integer sessionId, Integer rifteeId, boolean nullifyIds) {
+    public boolean cancelFutureTransfer(Integer sessionId, Integer rifteeId, boolean nullifyIds) {
         try {
             double futureId = sessionRequestService.getFuturePaymentVal(sessionId, rifteeId);
             Future<?> futurePayment = futurePayments.futurePaymentMap().get(futureId);

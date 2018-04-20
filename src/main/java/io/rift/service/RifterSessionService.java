@@ -286,6 +286,13 @@ public class RifterSessionService {
     }
 
     public Boolean updateRifterSession(RifterSession rifterSession) throws SQLException, IOException, IntrospectionException, IllegalAccessException, InvocationTargetException {
+
+        // If the session is within six hours of starting, don't allow the rifter to edit the session.
+        // We can change the logic on this
+        if (rifterSession.getSessionTime().getTime() - System.currentTimeMillis() < 21600) {
+            return false;
+        }
+
         int rifterSessionId = rifterSession.getId();
         String str = updateRifterSessionStart;
         StringBuilder query = new StringBuilder(str);
@@ -328,8 +335,17 @@ public class RifterSessionService {
             query.append(values);
             query.append(updateRifterSessionEnd);
             args.add(rifterSessionId);
-            return riftRepository.doUpdate(query, args);
+            riftRepository.doUpdate(query, args);
         }
+
+        // Set all session requests for this session to have an edited timestamp. A new edit will override the previous timesetamp
+        // An edited timestamp creates a notification for all riftees involved and offers them the option to cancel with no charge (full refund) for two days or until the time of the session
+        // Question: Should we only set this for players who have been accepted.
+        List<Object> args2 = new ArrayList<>();
+        args2.add(rifterSession.getId());
+        StringBuilder query2 = new StringBuilder("UPDATE gamerequest SET edited = current_timestamp WHERE session_id = ?");
+        riftRepository.doUpdate(query2, args2);
+
         return true;
     }
 

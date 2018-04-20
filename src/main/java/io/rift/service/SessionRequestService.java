@@ -265,7 +265,7 @@ public class SessionRequestService {
         }
 
         if (sessionRequest.getAccepted() == 2) {
-            String result = stripeService.setFuturePayment(sessionRequest.getSessionId(), sessionRequest.getRifteeId(), sessionRequest.getHostId(), 1);
+            String result = stripeService.setFutureTransfer(sessionRequest.getSessionId(), sessionRequest.getRifteeId(), sessionRequest.getHostId(), 1);
             if (!result.equals("Success")) {
                 return result;
             }
@@ -337,6 +337,13 @@ public class SessionRequestService {
         args[0] = rifteeId;
         args[1] = sessionId;
         int sessionRequestStatus = getRequestStatus(sessionId, rifteeId);
+        ResultSet resultSet = riftRepository.doQuery(getSessionRequestBySessionAndRifteeId, args);
+        SessionRequest sessionRequest = new SessionRequest();
+        if (resultSet.next()) {
+            sessionRequest = populateSessionRequest(resultSet, 1);
+        }
+        Timestamp editedTime = sessionRequest.getEdited();
+        boolean fullRefund = false;
         if (sessionRequestStatus != -1) {
             if (sessionRequestStatus == 1) {
                 riftRepository.doDelete(deleteSessionRequest, args);
@@ -349,26 +356,37 @@ public class SessionRequestService {
                     args2[0] = sessionId;
                     RifterSession rifterSession = rifterSessionService.getRifterSessionBySessionId(sessionId);
                     Timestamp timestamp = rifterSession.getSessionTime();
-                    long seconds = (long)Math.ceil((timestamp.getTime() - currentTime.getTime())/1000.0);
-                    if (seconds >= 172800) {
-                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
+                    if (editedTime != null && (currentTime.getTime() - editedTime.getTime() <= 86400000L) && timestamp.getTime() >= (currentTime.getTime() + 3600000)) {
+                        fullRefund = true;
+                    }
+                    if (fullRefund) {
+                        stripeService.cancelFutureTransfer(sessionId, rifteeId, true);
+                        stripeService.issueRefund(sessionId, rifteeId, null);
+                    } else {
+                        long seconds = (long) Math.ceil((timestamp.getTime() - currentTime.getTime()) / 1000.0);
+                        if (seconds >= 172800) {
+                            stripeService.cancelFutureTransfer(sessionId, rifteeId, true);
+                            //stripeService.setFutureTransfer(sessionId, rifteeId, hostId, .85);
+
+                            stripeService.issueRefund(rifteeId, sessionId, (int)Math.floor(rifterSession.getSessionCost() * 85));
                         /*
                         Double futurePaymentVal = getFuturePaymentVal(sessionId, rifteeId);
                         Future<?> future = futurePayments.futurePaymentMap().get(futurePaymentVal);
                         future.cancel(true);
                         futurePayments.futurePaymentMap().remove(futurePaymentVal);
                         */
-                        return 2;
-                    } else if (seconds >= 43200) {
-                        stripeService.cancelFuturePayment(sessionId, rifteeId, true);
-
-                        // Charge the customer 50%
-                        stripeService.setFuturePayment(sessionId, rifteeId, hostId, .5);
-                        return 1;
-                    } else {
-                        // 0% refund, will still charge after the session. If session gets cancelled, the customer
-                        // is in luck, won't get charged
-                        return 0;
+                            return 2;
+                        } else if (seconds >= 43200) {
+                            stripeService.cancelFutureTransfer(sessionId, rifteeId, true);
+                            // Charge the customer 50%
+                            stripeService.setFutureTransfer(sessionId, rifteeId, hostId, .5);
+                            stripeService.issueRefund(rifteeId, sessionId, (int)Math.floor(rifterSession.getSessionCost() * 50));
+                            return 1;
+                        } else {
+                            // 0% refund, will still charge after the session. If session gets cancelled, the customer
+                            // is in luck, won't get charged
+                            return 0;
+                        }
                     }
                 }
             } else if (sessionRequestStatus == 0) {

@@ -68,6 +68,8 @@ public class Usertable {
     @JsonView(Views.UsertableAccountId.class)
     private String accountId;
 
+    private String macAddress;
+
     @JsonView(Views.UsertableNotificationList.class)
     private List<Notification> notificationList;
 

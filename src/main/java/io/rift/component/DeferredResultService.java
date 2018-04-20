@@ -38,7 +38,9 @@ public class DeferredResultService {
         System.out.println("Starting server");
         System.out.println("Subscribe: " + this.pollingConfig);
         BlockingQueue<DeferredResult<String>> blockingQueue = new LinkedBlockingQueue<>();
-        resultQueueMap.put(sessionId, blockingQueue);
+        if (!resultQueueMap.contains(sessionId)) {
+            resultQueueMap.put(sessionId, blockingQueue);
+        }
         LinkedBlockingQueue<Map<String, String>> theQueueBlockingQueue = new LinkedBlockingQueue<>();
         pollingConfig.theQueues().put(id + sessionId, theQueueBlockingQueue);
         startThread(sessionId, id);
@@ -184,12 +186,19 @@ public class DeferredResultService {
     }
 
     void getUpdate(DeferredResult<String> result, String sessionId) {
-        BlockingQueue<DeferredResult<String>> resultQueue = resultQueueMap.get(sessionId);
+        BlockingQueue<DeferredResult<String>> resultQueue;
+        try {
+            resultQueue = resultQueueMap.get(sessionId);
+        } catch (NullPointerException e) {
+            BlockingQueue<DeferredResult<String>> blockingQueue = new LinkedBlockingQueue<>();
+            resultQueueMap.put(sessionId, blockingQueue);
+            resultQueue = resultQueueMap.get(sessionId);
+        }
         resultQueue.add(result);
         //System.out.println("Size of queue at API call: " + pollingConfig.theQueues().get(sessionId).size());
     }
 
-    void shutdown(String sessionId, String id) {
+    public void shutdown(String sessionId, String id) {
         try {
             Hook hook = hooks.get(sessionId);
             hook.setKeepRunning(false);

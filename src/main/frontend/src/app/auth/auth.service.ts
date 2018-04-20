@@ -60,7 +60,9 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult, function () {
           let profileJson = localStorage.getItem('profile');
+          console.log("Profile json: " + profileJson);
           let profileJsonParse = JSON.parse(profileJson);
+          console.log("Profile json parse: " + profileJsonParse);
           if (!profileJsonParse.hasOwnProperty("http://riftgaming:auth0:com/app_metadata")) {
             let data = {
               "firstName" : profileJsonParse["http://riftgaming:auth0:com/user_metadata"].firstName,
@@ -69,6 +71,7 @@ export class AuthService {
               "auth0Token" : profileJsonParse.sub,
               "email" : profileJsonParse.email
             };
+            console.log("data 1: " + data);
             callback(data, true);
           } else {
             callback("", false);
@@ -96,6 +99,7 @@ export class AuthService {
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', expiresAt);
       localStorage.setItem('profile', JSON.stringify(profile));
+      console.log("Setting profile localStorage: " + JSON.stringify(profile));
       callback();
     })
   }

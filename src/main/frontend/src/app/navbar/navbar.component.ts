@@ -22,7 +22,9 @@ export class NavbarComponent implements OnInit {
 
   constructor(public auth: AuthService, private userProfileService: UserprofileService,
   private notificationService: NotificationsService, private globals: Globals, private sharedFunc: SharedFunctions) {
+    console.log("Setting this.profile in navbar constructor");
     this.profile = JSON.parse(localStorage.getItem('profile'));
+    console.log("Local storage profile in navbar constructor: " + localStorage.getItem('profile'));
     if(this.profile) {
       this.loggedInUser.firstName = this.profile["http://riftgaming:auth0:com/user_metadata"].firstName;
       this.loggedInUser.lastName  = this.profile["http://riftgaming:auth0:com/user_metadata"].lastName;

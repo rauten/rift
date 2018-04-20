@@ -242,10 +242,39 @@
         WHERE id = ?;
     </getBraintreeIdFromUserId>
 
+    <getMacAddresses>
+        SELECT address
+        FROM macaddress
+        WHERE user_id = ?;
+    </getMacAddresses>
+
+    <putMacAddress>
+        INSERT INTO macaddress
+        (user_id, address)
+        VALUES(?, ?);
+    </putMacAddress>
+
+    <getVerificationToken>
+        SELECT *
+        FROM verificationtoken
+        WHERE token = ? AND user_id = ?;
+    </getVerificationToken>
+
+    <putVerificationToken>
+        INSERT INTO verificationtoken
+        (token, user_id, expiration_time)
+        VALUES(?, ?, ?);
+    </putVerificationToken>
+
+    <deleteVerificationToken>
+        DELETE FROM verificationtoken
+        WHERE token = ? AND user_id = ?;
+    </deleteVerificationToken>
+
     <createUser>
         INSERT INTO usertable
-        (first_name, last_name, rift_tag, is_private, is_suspended, auth0_token, customer_id)
-        VALUES(?, ?, ?, false, false, ?, ?);
+        (first_name, last_name, rift_tag, is_private, is_suspended, auth0_token, customer_id, mac_address)
+        VALUES(?, ?, ?, false, false, ?, ?, ?);
     </createUser>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

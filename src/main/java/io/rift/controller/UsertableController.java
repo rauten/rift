@@ -2,6 +2,8 @@ package io.rift.controller;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.rift.component.DeferredResultService;
+import io.rift.component.DeviceVerificationService;
 import io.rift.feature.TwitchService;
 import io.rift.model.Notification;
 import io.rift.model.SessionRequest;
@@ -16,20 +18,33 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageInputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.awt.image.*;
 import java.beans.IntrospectionException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
+import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
-@CrossOrigin(origins = "http://go-rift.herokuapp.com")
+@CrossOrigin(origins = "localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class UsertableController {
@@ -54,6 +69,12 @@ public class UsertableController {
 
     @Autowired
     private TwitchService twitchService;
+
+    @Autowired
+    private DeferredResultService resultService;
+
+    @Autowired
+    private DeviceVerificationService deviceVerificationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/id")
     public Map<String, Integer> getRiftIdByRiftTag(@PathVariable String riftTag) throws SQLException {
@@ -258,11 +279,43 @@ public class UsertableController {
 
     @JsonView(Views.ProfilePageView.class)
     @RequestMapping(method = RequestMethod.GET, value = "/user/{riftTag}/profilePage")
-    public Usertable getUserProfilePage(@PathVariable String riftTag) throws SQLException{
-        System.out.println("At the top: " + System.currentTimeMillis());
+    public Usertable getUserProfilePage(@PathVariable String riftTag, WebRequest webRequest) throws SQLException {
         Usertable usertable = usertableService.getUserByRiftTag(riftTag);
-        return usertable;
-        /*
+        usertable.setEmail("rileyyauten@gmail.com");
+        usertable.setMacAddress("9k01ld901k");
+        /**
+         *
+         * Uncomment once Gordon has fixed the null login problem
+         */
+
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            NetworkInterface nwi = NetworkInterface.getByInetAddress(address);
+            byte[] macBytes = nwi.getHardwareAddress();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < macBytes.length; i++) {
+                sb.append(String.format("%02X%s", macBytes[i], (i < macBytes.length - 1) ? "-" : ""));
+            }
+            String macString = sb.toString();
+            System.out.println(macString);
+            if (usertable.getMacAddress() != null && !usertable.getMacAddress().equals(macString)) {
+                List<String> registeredMacAddresses = usertableService.getMacAddresses(usertable.getId());
+                if (!registeredMacAddresses.contains(macString)) {
+                    deviceVerificationService.verifyDevice(usertable, macString);
+                }
+            } else if (usertable.getMacAddress() == null) {
+                usertable.setMacAddress(macString);
+                try {
+                    usertableService.updateUser(usertable);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (UnknownHostException | SocketException e) {
+            e.printStackTrace();
+        }
+
         try {
             int id = usertable.getId();
             usertable.setRifteeSessions(sessionRequestService.getSessionRequestsAndInfoByUserId(id, "hostInfo&sessionInfo", Optional.empty(), Optional.empty()));
@@ -277,7 +330,7 @@ public class UsertableController {
             e.printStackTrace();
         }
         return usertable;
-        */
+
     }
 
 
@@ -300,6 +353,14 @@ public class UsertableController {
     @JsonView(Views.CreateUser.class)
     @RequestMapping(method = RequestMethod.PUT, value = "/user/createUser")
     public Boolean createUser(@RequestBody Usertable usertable) throws SQLException {
+        try {
+            List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
+            NetworkInterface ni = nis.get(0);
+            String macAddress = ni.getHardwareAddress().toString();
+            usertable.setMacAddress(macAddress);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         return usertableService.createUser(usertable);
     }
 
@@ -317,7 +378,67 @@ public class UsertableController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/user/putPicture/{keyBase}/{bucket}")
     public boolean putProfilePicture(@PathVariable String keyBase, @RequestBody String image, @PathVariable String bucket) throws URISyntaxException {
+
+        byte[] bytes = image.getBytes();
+        int[] ints = new int[bytes.length];
+        for (int i = 0; i < bytes.length; i++) {
+            ints[i] = bytes[i];
+        }
+        BufferedImage bufferedImage = new BufferedImage(528, 960, BufferedImage.TYPE_INT_ARGB_PRE);
+
+
+        //ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+
+        try {
+            BufferedImage img = new BufferedImage(528, 960, BufferedImage.TYPE_INT_RGB);
+            DataBuffer dataBuffer = new DataBufferInt(ints, ints.length);
+            Raster raster = Raster.createRaster(img.getSampleModel(), dataBuffer, null);
+            img.setData(raster);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedImage img = new BufferedImage(528, 960, BufferedImage.TYPE_INT_BGR);
+            DataBuffer dataBuffer = new DataBufferInt(ints, ints.length);
+            Raster raster = Raster.createRaster(img.getSampleModel(), dataBuffer, null);
+            img.setData(raster);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            BufferedImage img = new BufferedImage(528, 960, BufferedImage.TYPE_INT_ARGB_PRE);
+            DataBuffer dataBuffer = new DataBufferInt(ints, ints.length);
+            Raster raster = Raster.createRaster(img.getSampleModel(), dataBuffer, null);
+            img.setData(raster);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //InputStream in = byteArrayInputStream;
+        //BufferedImage bufferedImage = ImageIO.read(in);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(bytes.length);
+        System.out.println("First size of output: " + outputStream.size());
+
+        final JPEGImageWriteParam param = new JPEGImageWriteParam(null);
+        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(0.5f);
+
+        try (MemoryCacheImageOutputStream mcios = new MemoryCacheImageOutputStream(outputStream)) {
+            final ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+            writer.setOutput(mcios);
+            writer.write(null, new IIOImage(bufferedImage, null, null), param);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+        byte[] compressedBytes = outputStream.toByteArray();
+        String compressedImage = new String(compressedBytes);
+        System.out.println("New size of output: " + outputStream.size());
         return usertableService.putPicture(keyBase, image, bucket);
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/getPicture/{keyBase}/{bucket}")
@@ -326,6 +447,12 @@ public class UsertableController {
         String str = usertableService.getPicture(keyBase, bucket);
         imageMap.put("image", str);
         return imageMap;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/stop/{id}/{sessionId}")
+    public void stop(@PathVariable Integer id, @PathVariable String sessionId) throws SQLException {
+        usertableService.logout(id);
+        resultService.shutdown(sessionId, id.toString());
     }
 
 

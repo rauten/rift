@@ -8,11 +8,12 @@ import io.rift.service.notifications.BroadcastNotificationService;
 import io.rift.service.notifications.UserNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://go-rift.herokuapp.com")
+@CrossOrigin(origins = "localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class NotificationController {

@@ -65,7 +65,7 @@ public class UsertableService {
     @Autowired
     private StripeService stripeService;
 
-    public final int POPULATESIZE = 18;
+    public final int POPULATESIZE = 19;
 
 
     /****************************** GET *******************************/
@@ -112,6 +112,9 @@ public class UsertableService {
     private final String getBraintreeIdFromUserId = "getBraintreeIdFromUserId";
 
     private final String getListeningChannels = "getListeningChannels";
+
+    private final String getMacAddresses = "getMacAddresses";
+    private final String putMacAddress= "putMacAddress";
     /****************************** POST *******************************/
     /*******************************************************************/
     private final String createUser = "createUser";
@@ -215,6 +218,7 @@ public class UsertableService {
         usertable.setEmail(resultSet.getString(startPoint + 15));
         usertable.setCustomerId(resultSet.getString(startPoint + 16));
         usertable.setAccountId(resultSet.getString(startPoint + 17));
+        usertable.setMacAddress(resultSet.getString(startPoint + 18));
         if (info.equals("activity")) {
             usertable.setCreatorActivityList(activityNotificationService.populateNotifications(resultSet, POPULATESIZE, ""));
         } else if (info.equals("levenshtein")) {
@@ -314,7 +318,7 @@ public class UsertableService {
             Customer customer = Customer.create(params, requestOptions);
             return riftRepository.doInsert(createUser,
                     new Object[] {usertable.getFirstName(), usertable.getLastName(),
-                            usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token()), customer.getId()});
+                            usertable.getRiftTag(), formatAuth0Token(usertable.getAuth0Token()), customer.getId(), usertable.getMacAddress()});
             //setUserCustomerId(customer.getId(), riftTag);
         } catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException | APIException e) {
             e.printStackTrace();
@@ -408,6 +412,7 @@ public class UsertableService {
         */
         System.out.println();
         byte[] bytes = Base64.decodeBase64((base64Data.substring(base64Data.indexOf(",")+1)).getBytes());
+        System.out.println(bytes.length);
         InputStream fis = new ByteArrayInputStream(bytes);
 
         ObjectMetadata metadata = new ObjectMetadata();
@@ -438,5 +443,27 @@ public class UsertableService {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public List<String> getMacAddresses(int riftId) {
+        Object[] args = new Object[1];
+        args[0] = riftId;
+        List<String> macAddresses = new ArrayList<>();
+        ResultSet resultSet = riftRepository.doQuery(getMacAddresses, args);
+        try {
+            while (resultSet.next()) {
+                macAddresses.add(resultSet.getString(1));
+            }
+        } catch (SQLException | NullPointerException e) {
+            e.printStackTrace();
+        }
+        return macAddresses;
+    }
+
+    public void putMacAddress(Integer userId, String macAddress) {
+        Object[] args = new Object[2];
+        args[0] = userId;
+        args[1] = macAddress;
+        riftRepository.doInsert(putMacAddress, args);
     }
 }

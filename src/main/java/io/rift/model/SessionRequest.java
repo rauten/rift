@@ -3,6 +3,8 @@ package io.rift.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 @Data
 public class SessionRequest {
 
@@ -26,6 +28,8 @@ public class SessionRequest {
 
     @JsonView(Views.SessionRequestTransferId.class)
     private String transferId;
+
+    private Timestamp edited;
 
     @JsonView(Views.SessionRequestRifterSession.class)
     private RifterSession rifterSession;

@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://go-rift.herokuapp.com")
+@CrossOrigin(origins = "localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class StripeController {
@@ -85,9 +86,14 @@ public class StripeController {
         return stripeService.deleteCard(customerId, cardId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/cancelFuturePayment/session/{sessionId}/customer/{rifteeId}/{nullifyIds}")
-    public boolean cancelFuturePayment(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable boolean nullifyIds) {
-        return stripeService.cancelFuturePayment(sessionId, rifteeId, nullifyIds);
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/cancelFutureTransfer/session/{sessionId}/customer/{rifteeId}/{nullifyIds}")
+    public boolean cancelFutureTransfer(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable boolean nullifyIds) {
+        return stripeService.cancelFutureTransfer(sessionId, rifteeId, nullifyIds);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/stripe/issueRefund/{sessionId}/rifteeId/{rifteeId}/refundAmount/{amount}")
+    public boolean issueRefund(@PathVariable Integer sessionId, @PathVariable Integer rifteeId, @PathVariable Integer amount) throws SQLException {
+        return stripeService.issueRefund(rifteeId, sessionId, amount);
     }
 
 

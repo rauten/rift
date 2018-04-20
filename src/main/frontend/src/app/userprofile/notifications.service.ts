@@ -7,7 +7,7 @@ import {Notification} from "../models/notification";
 import {NOTIFICATION_CONTENT} from "../constants/notification-content";
 import {UserprofileService} from "./userprofile.service";
 import {Globals} from "../global/globals";
-
+import { Component, HostListener } from '@angular/core';
 
 @Injectable()
 export class NotificationsService {
@@ -21,7 +21,7 @@ export class NotificationsService {
   pollNotifications(riftId, notifications, login) {
     this.startUrl = "/api/matchupdate/begin/";
     this.pollUrl = "/api/matchupdate/deferred";
-    this.start(this.startUrl, this.pollUrl, riftId, notifications, login);
+    //this.start(this.startUrl, this.pollUrl, riftId, notifications, login);
   }
 
   start(start, poll, riftId, notifications, login) {
@@ -110,6 +110,7 @@ export class NotificationsService {
       }
     )
   }
+
 }
 
 
