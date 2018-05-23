@@ -1,5 +1,5 @@
--version: 0.0
--os: linux
--files:
--  - source: ./rift-backend-1.0-SNAPSHOT.jar
--    destination: /tmp
+version: 0.0
+os: linux
+files:
+  - source: ./rift-backend-1.0-SNAPSHOT.jar
+    destination: /tmp
