@@ -11,6 +11,6 @@ phases:
       - mvn package
 artifacts:
   files:
-    - target/rift-backend-1.0-SNAPSHOT.jar
+    - /opt/codedeploy-agent/deployment-root/a19fa707-2bdb-4974-9f9a-7b28379f31aa/d-C1WI4R7BT/deployment-archive/./rift-backend-1.0-SNAPSHOT.jar
     - appspec.yml
   discard-paths: yes
