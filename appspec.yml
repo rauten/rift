@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: ./rift-backend-1.0-SNAPSHOT.jar
+  - source: /target/rift-backend-1.0-SNAPSHOT.jar
     destination: /tmp/codedeploy-deployment-staging-area/
   - source: /scripts/configure_http_port.xsl
     destination: /tmp/codedeploy-deployment-staging-area/
